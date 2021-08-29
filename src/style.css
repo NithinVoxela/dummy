@@ -1,0 +1,22 @@
+html {
+  height: 100%;
+}
+
+body {
+  height: calc(100% - 64px);
+  position: relative;
+}
+
+#root {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.loadingBar {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}

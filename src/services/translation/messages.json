@@ -1,0 +1,10 @@
+{
+  "global-error-label": "Error",
+  "global-loading-label": "Loading",
+  "global-no-results-label": "No Results",
+  "dashboard-header-label": "Dashboard",
+  "alerts-header-label": "Alerts",
+  "welcome-text": "Welcome, {0}",
+  "settings-header-label": "Settings",
+  "log-out-label": "Logout"
+}

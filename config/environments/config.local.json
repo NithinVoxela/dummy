@@ -1,0 +1,14 @@
+{
+  "apiEndpoints": {
+    "frontEndApi": "https://jsonplaceholder.typicode.com/"
+  },
+  "externalLinks": {
+    "translationServiceEndpoint": "/messages.json"
+  },
+  "intervals": {
+    "searchInputDebounce": 1000
+  },
+  "constants": {
+    "maxRowsPerPage": 500
+  }
+}

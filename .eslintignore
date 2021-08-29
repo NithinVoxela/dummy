@@ -1,0 +1,6 @@
+node_modules
+coverage
+tests
+webpack.config.js
+build
+*.d.ts
