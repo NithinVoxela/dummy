@@ -1,44 +1,35 @@
 import { Theme } from "@material-ui/core";
 import { createStyles } from "@material-ui/core/styles";
 
-const ICON_SIZE = 25;
-
 export const styles = (theme?: Theme) =>
   createStyles({
-    root: {
-      display: "flex",
-      flexDirection: "column",
-      height: "calc(100% - 80px)"
-    },
-    sideMenuText: {
-      fontSize: 16
-    },
     item: {
-      paddingTop: 15,
-      paddingBottom: 15,
-      "&$selected, &$selected:hover": {
-        backgroundColor: theme.colors.SIDE_BAR_ITEM_SELECTED_COLOR,
-        "&::before": {
-          content: "''",
-          position: "absolute",
-          width: 4,
-          height: "100%",
-          backgroundColor: theme.colors.BUTTON_PRIMARY_COLOR
-        }
-      },
-      "&:hover": {
-        backgroundColor: theme.colors.SIDE_BAR_ITEM_SELECTED_COLOR
-      }
+      display: "flex",
+      paddingTop: 0,
+      paddingBottom: 0
+    },
+    button: {
+      color: theme.palette.text.secondary,
+      fontWeight: theme.typography.fontWeightMedium,
+      justifyContent: "flex-start",
+      letterSpacing: 0,
+      padding: "10px 8px",
+      textTransform: "none",
+      width: "100%"
     },
     icon: {
-      fontSize: ICON_SIZE,
-      marginLeft: Math.ceil((theme.sizes.SIDEBAR_WIDTH - ICON_SIZE) / 2)
+      marginRight: theme.spacing(1)
     },
-    userNameHidden: {
-      opacity: 0
+    title: {
+      marginRight: "auto"
     },
-    bottomListItem: {
-      marginTop: "auto"
-    },
-    selected: {}
+    active: {
+      color: theme.palette.primary.main,
+      "& $title": {
+        fontWeight: theme.typography.fontWeightMedium
+      },
+      "& $icon": {
+        color: theme.palette.primary.main
+      }
+    }
   });

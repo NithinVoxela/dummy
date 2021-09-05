@@ -7,7 +7,7 @@ interface IProps extends WithStyles<typeof styles> {}
 
 class DashboardComponent extends React.Component<IProps> {
   public render() {
-    return <div>Hello World!</div>;
+    return null;
   }
 }
 

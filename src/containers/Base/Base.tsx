@@ -1,6 +1,7 @@
 import { WithStyles } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import * as React from "react";
+import { useState } from "react";
 
 import { LoadingBar } from "containers/Loading";
 import { Notifier } from "containers/Notifier";
@@ -10,13 +11,22 @@ import { TopBar } from "containers/TopBar";
 import { styles } from "./styles";
 
 const BaseComponent: React.FC<WithStyles> = ({ classes, children }) => {
+  const [isMobileNavOpen, setMobileNavOpen] = useState(false);
+  const handleMobileNavOpen = () => {
+    setMobileNavOpen(true);
+  };
+  const handleMobileNavClose = () => {
+    setMobileNavOpen(false);
+  };
   return (
     <div className={classes.root}>
-      <Sidebar />
-      <main className={classes.content}>
-        <TopBar />
-        <div className={classes.mainContent}>{children}</div>
-      </main>
+      <TopBar onMobileNavOpen={handleMobileNavOpen} />
+      <Sidebar onMobileClose={handleMobileNavClose} openMobile={isMobileNavOpen} />
+      <div className={classes.wrapper}>
+        <div className={classes.container}>
+          <div className={classes.content}>{children}</div>
+        </div>
+      </div>
       <Notifier />
       <LoadingBar />
     </div>

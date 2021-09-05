@@ -1,7 +1,0 @@
-export enum COLORS {
-  WHITE_FFF = "#FFF",
-  BLACK_000 = "#000",
-  CORNFLOWER_BLUE = "#5B84F5",
-  PERANO = "#9EB4F0",
-  CORNFLOWER_3BEEDD = "#3BEEDD"
-}

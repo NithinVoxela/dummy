@@ -4,54 +4,54 @@ import { createStyles } from "@material-ui/core/styles";
 export const styles = (theme?: Theme) =>
   createStyles({
     "@global": {
-      body: {
-        fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif"
-      },
       "*": {
-        scrollbarWidth: "thin",
-        scrollbarColor: "#E1E4E5 #FFF"
+        boxSizing: "border-box",
+        margin: 0,
+        padding: 0
       },
-      "*::-webkit-scrollbar-corner": {
-        backgroundColor: "#FFF"
+      html: {
+        "-webkit-font-smoothing": "antialiased",
+        "-moz-osx-font-smoothing": "grayscale",
+        height: "100%",
+        width: "100%"
       },
-      "*::-webkit-scrollbar, *.scrollHidden::-webkit-scrollbar": {
-        width: 0,
-        height: 0,
-        backgroundColor: "#FFF"
+      body: {
+        backgroundColor: "#f4f6f8",
+        height: "100%",
+        width: "100%"
       },
-      "*:hover::-webkit-scrollbar, *.scrollVisible::-webkit-scrollbar": {
-        width: 9,
-        height: 9
+      a: {
+        textDecoration: "none"
       },
-      "*::-webkit-scrollbar-track": {
-        borderRadius: 16
-      },
-      "*::-webkit-scrollbar-thumb": {
-        backgroundColor: "#ABB0B6",
-        borderRadius: 16,
-        cursor: "pointer",
-        border: "1px solid #FFF"
+      "#root": {
+        height: "100%",
+        width: "100%"
       }
     },
     root: {
+      backgroundColor: theme.palette.background.default,
       display: "flex",
-      width: "100%",
+      height: "100%",
+      overflow: "hidden",
+      width: "100%"
+    },
+    wrapper: {
+      display: "flex",
+      flex: "1 1 auto",
+      overflow: "hidden",
+      paddingTop: 64,
+      [theme.breakpoints.up("lg")]: {
+        paddingLeft: 256
+      }
+    },
+    container: {
+      display: "flex",
+      flex: "1 1 auto",
       overflow: "hidden"
     },
     content: {
-      background: "#ABB0B6",
-      display: "flex",
-      flexGrow: 1,
-      flexFlow: "column",
-      overflowX: "auto"
-    },
-    mainContent: {
+      flex: "1 1 auto",
       height: "100%",
-      display: "flex",
-      flexDirection: "column",
-      zIndex: theme.zIndex.appBar + 1,
-      overflow: "auto",
-      transform: "translate(0)",
-      padding: 10
+      overflow: "auto"
     }
   });

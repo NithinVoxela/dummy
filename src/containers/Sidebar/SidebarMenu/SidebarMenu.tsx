@@ -1,8 +1,8 @@
-import { List, ListItem, ListItemIcon, ListItemText, WithStyles, withStyles } from "@material-ui/core";
+import { ListItem, Box, WithStyles, withStyles, Button } from "@material-ui/core";
 import { ListItemProps } from "@material-ui/core/ListItem";
-import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined";
-import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
+import classNames from "classnames";
 import * as React from "react";
+import { BarChart as DashboardIcon, AlertCircle as AlertCircleIcon } from "react-feather";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { RouterLink } from "components/RouterLink";
@@ -18,18 +18,9 @@ interface ILinkListItemProps extends ListItemProps {
   Icon: React.FC<any>;
 }
 
-interface IProps extends WithStyles<typeof styles>, RouteComponentProps {
-  onNavigationClick?: () => void;
-}
+interface IProps extends WithStyles<typeof styles>, RouteComponentProps {}
 
-const SidebarMenuComponent: React.FunctionComponent<IProps> = ({ classes, location, onNavigationClick }) => {
-  const handleClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (onNavigationClick) {
-      onNavigationClick();
-    }
-  };
-
+const SidebarMenuComponent: React.FunctionComponent<IProps> = ({ classes, location }) => {
   const isSelectedLink = (path: string): boolean => {
     return path === location.pathname;
   };
@@ -37,21 +28,15 @@ const SidebarMenuComponent: React.FunctionComponent<IProps> = ({ classes, locati
   const LinkedListItem: React.ReactType<ILinkListItemProps> = React.forwardRef(
     ({ component, Icon, ...props }, ref: any) => {
       return (
-        <ListItem
-          // @ts-ignore
-          button
-          classes={{ selected: classes.selected }}
-          component={RouterLink}
-          ref={ref}
-          selected={isSelectedLink(props.to)}
-          className={classes.item}
-          disableGutters
-          {...props}
-        >
-          <ListItemIcon>
-            <Icon className={classes.icon} />
-          </ListItemIcon>
-          <ListItemText secondary={props.label} className={classes.sideMenuText} />
+        <ListItem className={classes.item} disableGutters ref={ref}>
+          <Button
+            className={classNames(classes.button, { [classes.active]: isSelectedLink(props.to) })}
+            component={RouterLink}
+            to={props.to}
+          >
+            {Icon && <Icon className={classes.icon} size="20" />}
+            <span className={classes.title}>{props.label}</span>
+          </Button>
         </ListItem>
       );
     }
@@ -59,20 +44,20 @@ const SidebarMenuComponent: React.FunctionComponent<IProps> = ({ classes, locati
   LinkedListItem.displayName = "LinkedListItem";
 
   return (
-    <div className={classes.root} data-component="side-bar-menu">
-      <List disablePadding component="nav" onClick={handleClick}>
+    <Box height="100%" display="flex" flexDirection="column">
+      <Box p={2}>
         <LinkedListItem
           to={routes.dashboard.to}
           label={translationService.getMessageTranslation("dashboard-header-label", "Dashboard")}
-          Icon={DashboardOutlinedIcon}
+          Icon={DashboardIcon}
         />
         <LinkedListItem
           to={routes.alerts.to}
           label={translationService.getMessageTranslation("alerts-header-label", "Alerts")}
-          Icon={ReportProblemOutlinedIcon}
+          Icon={AlertCircleIcon}
         />
-      </List>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
