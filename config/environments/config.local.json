@@ -1,14 +1,17 @@
 {
   "apiEndpoints": {
-    "frontEndApi": "https://jsonplaceholder.typicode.com/"
+    "frontEndApi": "http://localhost:9090/cortexa-service/"
   },
   "externalLinks": {
     "translationServiceEndpoint": "/messages.json"
   },
   "intervals": {
-    "searchInputDebounce": 1000
+    "userLogout": 36000000
   },
   "constants": {
     "maxRowsPerPage": 500
+  },
+  "authenticationHeaders": {
+    "tenantId": "demo"
   }
 }

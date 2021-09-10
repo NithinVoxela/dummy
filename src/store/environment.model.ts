@@ -6,5 +6,11 @@ export interface IEnvironment {
   externalLinks: {
     translationServiceEndpoint: string;
   };
+  intervals: {
+    userLogout: number;
+  };
   constants: {};
+  authenticationHeaders: {
+    tenantId: string;
+  };
 }

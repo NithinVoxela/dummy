@@ -4,7 +4,6 @@ import * as React from "react";
 import { useState } from "react";
 
 import { LoadingBar } from "containers/Loading";
-import { Notifier } from "containers/Notifier";
 import { Sidebar } from "containers/Sidebar";
 import { TopBar } from "containers/TopBar";
 
@@ -27,7 +26,6 @@ const BaseComponent: React.FC<WithStyles> = ({ classes, children }) => {
           <div className={classes.content}>{children}</div>
         </div>
       </div>
-      <Notifier />
       <LoadingBar />
     </div>
   );

@@ -1,4 +1,5 @@
 import { INotification } from "models/notification.model";
+import { IUserAccount } from "models/user.model";
 import { IEnvironment } from "store/environment.model";
 import { ILoadingState } from "store/loading/loading.reducer";
 
@@ -12,4 +13,5 @@ export interface IApplicationState {
     open: boolean;
   };
   translation: ITranslationState;
+  userAccount: IUserAccount;
 }

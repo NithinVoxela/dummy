@@ -32,11 +32,31 @@ const hideLoading = () => {
   loading.style.display = "none";
 };
 
+let userLogoutTimerId: NodeJS.Timeout;
+const onUserActivity = (environment: IEnvironment) => {
+  clearTimeout(userLogoutTimerId);
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  userLogoutTimerId = setTimeout(async () => {
+    await AppStore.storePersistor.purge();
+  }, environment.intervals.userLogout);
+};
+
+const bootstrapUserLogout = (environment: IEnvironment) => {
+  const handleUserAcivity = () => {
+    onUserActivity(environment);
+  };
+  handleUserAcivity();
+  window.addEventListener("click", handleUserAcivity, true);
+  window.addEventListener("keydown", handleUserAcivity, true);
+};
+
 const render = async (Component: React.FunctionComponent<{ store: Store<IApplicationState, AnyAction> }>) => {
   const environment = await configurationService.getEnvironment();
   const store = bootstrapStore(environment);
+  AppStore.storePersistor.persist();
   HttpServiceFactory.createServices();
   void translationService.loadTranslations(store);
+  bootstrapUserLogout(environment);
   hideLoading();
 
   ReactDOM.render(<Component store={store} />, root);

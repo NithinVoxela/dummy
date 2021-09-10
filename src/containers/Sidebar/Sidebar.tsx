@@ -22,7 +22,7 @@ const SideBarComponent: React.FunctionComponent<IProps> = ({
     if (openMobile && handleMobileClose) {
       handleMobileClose();
     }
-  }, [location.pathname]);
+  }, [location.pathname, openMobile, handleMobileClose]);
 
   return (
     <>

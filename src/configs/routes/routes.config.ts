@@ -2,6 +2,8 @@ export interface IRoute {
   to: string;
 }
 
+const login: IRoute = { to: "/login" };
+
 const dashboard: IRoute = {
   to: "/"
 };
@@ -11,6 +13,7 @@ const alerts: IRoute = {
 };
 
 export const routes = {
+  login,
   dashboard,
   alerts
 };
