@@ -1,6 +1,4 @@
-import { IAuthModel } from "models/user.model";
-
-import { IUserAccount } from "./userAccount.reducer";
+import { IAuthModel, IUserAccount } from "models/user.model";
 
 export const LOGIN = "[USER_ACCOUNT] LOGIN";
 // export const AUTO_LOGIN = "[AUTH] AUTO_LOGIN";

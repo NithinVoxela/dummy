@@ -1,4 +1,4 @@
-import { ListItem, Box, WithStyles, withStyles, Button } from "@material-ui/core";
+import { ListItem, WithStyles, withStyles, List, ListItemText } from "@material-ui/core";
 import { ListItemProps } from "@material-ui/core/ListItem";
 import classNames from "classnames";
 import * as React from "react";
@@ -28,15 +28,14 @@ const SidebarMenuComponent: React.FunctionComponent<IProps> = ({ classes, locati
   const LinkedListItem: React.ReactType<ILinkListItemProps> = React.forwardRef(
     ({ component, Icon, ...props }, ref: any) => {
       return (
-        <ListItem className={classes.item} disableGutters ref={ref}>
-          <Button
-            className={classNames(classes.button, { [classes.active]: isSelectedLink(props.to) })}
-            component={RouterLink}
-            to={props.to}
-          >
-            {Icon && <Icon className={classes.icon} size="20" />}
-            <span className={classes.title}>{props.label}</span>
-          </Button>
+        <ListItem
+          ref={ref}
+          component={RouterLink}
+          to={props.to}
+          className={classNames(classes.item, isSelectedLink(props.to) && "active")}
+        >
+          {Icon && <Icon className={classes.icon} size="20" />}
+          <ListItemText className={classes.itemText}>{props.label}</ListItemText>
         </ListItem>
       );
     }
@@ -44,8 +43,8 @@ const SidebarMenuComponent: React.FunctionComponent<IProps> = ({ classes, locati
   LinkedListItem.displayName = "LinkedListItem";
 
   return (
-    <Box height="100%" display="flex" flexDirection="column">
-      <Box p={2}>
+    <List className={classes.container} disablePadding>
+      <div className={classes.items}>
         <LinkedListItem
           to={routes.dashboard.to}
           label={translationService.getMessageTranslation("dashboard-header-label", "Dashboard")}
@@ -56,8 +55,8 @@ const SidebarMenuComponent: React.FunctionComponent<IProps> = ({ classes, locati
           label={translationService.getMessageTranslation("alerts-header-label", "Alerts")}
           Icon={AlertCircleIcon}
         />
-      </Box>
-    </Box>
+      </div>
+    </List>
   );
 };
 

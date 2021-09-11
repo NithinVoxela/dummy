@@ -1,83 +1,76 @@
+import { blue, green, grey, red } from "@material-ui/core/colors";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+
+import { breakpoints } from "./breakpoints";
+import { overrides } from "./overrides";
+import { props } from "./props";
+import { shadows } from "./shadows";
+import { typography } from "./typography";
+
+const lightVariant = {
+  name: "Light",
+  palette: {
+    primary: {
+      main: blue[800],
+      contrastText: "#FFF"
+    },
+    secondary: {
+      main: blue[600],
+      contrastText: "#FFF"
+    }
+  },
+  header: {
+    color: grey[200],
+    background: blue[800],
+    search: {
+      color: grey[100]
+    },
+    indicator: {
+      background: red[700]
+    }
+  },
+  sidebar: {
+    color: grey[900],
+    background: "#FFF",
+    header: {
+      color: "#FFF",
+      background: blue[800],
+      brand: {
+        color: "#FFFFFF"
+      }
+    },
+    footer: {
+      color: grey[900],
+      background: grey[100],
+      online: {
+        background: green[500]
+      }
+    },
+    category: {
+      fontWeight: 600
+    },
+    badge: {
+      color: "#FFF",
+      background: green[600]
+    }
+  },
+  body: {
+    background: "#F7F9FC"
+  }
+};
 
 const createAppTheme = () => {
   return createMuiTheme({
-    palette: {
-      background: {
-        default: "#f4f6f8",
-        paper: "#ffffff"
-      },
-      primary: {
-        contrastText: "#ffffff",
-        main: "#2F65CB"
-      },
-      text: {
-        primary: "#172b4d",
-        secondary: "#6b778c"
-      }
-    },
-    shadows: [
-      "none",
-      "0 0 0 1px rgba(63,63,68,0.05), 0 1px 2px 0 rgba(63,63,68,0.15)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 2px 2px -2px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 3px 4px -2px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 3px 4px -2px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 4px 6px -2px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 4px 6px -2px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 4px 8px -2px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 5px 8px -2px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 6px 12px -4px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 7px 12px -4px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 6px 16px -4px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 7px 16px -4px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 8px 18px -8px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 9px 18px -8px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 10px 20px -8px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 11px 20px -8px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 12px 22px -8px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 13px 22px -8px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 14px 24px -8px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 16px 28px -8px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 18px 30px -8px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 20px 32px -8px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 22px 34px -8px rgba(0,0,0,0.25)",
-      "0 0 1px 0 rgba(0,0,0,0.31), 0 24px 36px -8px rgba(0,0,0,0.25)"
-    ],
-    typography: {
-      h1: {
-        fontWeight: 500,
-        fontSize: 35,
-        letterSpacing: "-0.24px"
-      },
-      h2: {
-        fontWeight: 500,
-        fontSize: 29,
-        letterSpacing: "-0.24px"
-      },
-      h3: {
-        fontWeight: 500,
-        fontSize: 24,
-        letterSpacing: "-0.06px"
-      },
-      h4: {
-        fontWeight: 500,
-        fontSize: 20,
-        letterSpacing: "-0.06px"
-      },
-      h5: {
-        fontWeight: 500,
-        fontSize: 16,
-        letterSpacing: "-0.05px"
-      },
-      h6: {
-        fontWeight: 500,
-        fontSize: 14,
-        letterSpacing: "-0.05px"
-      },
-      overline: {
-        fontWeight: 500
-      }
-    }
+    spacing: 4,
+    breakpoints,
+    overrides,
+    props,
+    typography,
+    shadows,
+    body: lightVariant.body,
+    header: lightVariant.header,
+    palette: lightVariant.palette,
+    sidebar: lightVariant.sidebar
   });
 };
 

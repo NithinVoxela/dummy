@@ -31,10 +31,6 @@ export const userAccountReducer = (state: IUserAccount = initialState, action = 
       return { ...state, ...action.payload };
     case actions.REMOVE_USER_ACCOUNT:
       return { ...initialState };
-    // case actions.SET_USER_ACCOUNT_ERROR:
-    //   return { ...state, error: action.payload };
-    // case actions.CLEAR_USER_ACCOUNT_ERROR:
-    //   return { ...state, error: null };
     default:
       return state;
   }

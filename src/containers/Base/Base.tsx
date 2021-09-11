@@ -1,4 +1,4 @@
-import { WithStyles } from "@material-ui/core";
+import { Hidden, Paper, WithStyles } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import * as React from "react";
 import { useState } from "react";
@@ -10,21 +10,29 @@ import { TopBar } from "containers/TopBar";
 import { styles } from "./styles";
 
 const BaseComponent: React.FC<WithStyles> = ({ classes, children }) => {
-  const [isMobileNavOpen, setMobileNavOpen] = useState(false);
-  const handleMobileNavOpen = () => {
-    setMobileNavOpen(true);
-  };
-  const handleMobileNavClose = () => {
-    setMobileNavOpen(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
   };
   return (
     <div className={classes.root}>
-      <TopBar onMobileNavOpen={handleMobileNavOpen} />
-      <Sidebar onMobileClose={handleMobileNavClose} openMobile={isMobileNavOpen} />
-      <div className={classes.wrapper}>
-        <div className={classes.container}>
-          <div className={classes.content}>{children}</div>
-        </div>
+      <div className={classes.drawer}>
+        <Hidden mdUp implementation="js">
+          <Sidebar
+            PaperProps={{ style: { width: 260 } }}
+            variant="temporary"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+          />
+        </Hidden>
+        <Hidden smDown implementation="css">
+          <Sidebar PaperProps={{ style: { width: 260 } }} />
+        </Hidden>
+      </div>
+      <div className={classes.appContent}>
+        <TopBar onDrawerToggle={handleDrawerToggle} />
+        <Paper>{children}</Paper>
       </div>
       <LoadingBar />
     </div>

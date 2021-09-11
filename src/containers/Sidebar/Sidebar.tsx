@@ -1,7 +1,8 @@
-import { Drawer, Hidden, WithStyles } from "@material-ui/core";
+import { Box, Drawer, ListItem, WithStyles } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import * as React from "react";
 import { useEffect } from "react";
+import { Layers } from "react-feather";
 import { useLocation } from "react-router-dom";
 
 import { SideBarMenu } from "./SidebarMenu";
@@ -15,7 +16,8 @@ interface IProps extends WithStyles {
 const SideBarComponent: React.FunctionComponent<IProps> = ({
   classes,
   onMobileClose: handleMobileClose,
-  openMobile
+  openMobile,
+  ...rest
 }) => {
   const location = useLocation();
   useEffect(() => {
@@ -25,30 +27,13 @@ const SideBarComponent: React.FunctionComponent<IProps> = ({
   }, [location.pathname, openMobile, handleMobileClose]);
 
   return (
-    <>
-      <Hidden lgUp>
-        <Drawer
-          anchor="left"
-          classes={{ paper: classes.mobileDrawer }}
-          onClose={handleMobileClose}
-          open={openMobile}
-          variant="temporary"
-        >
-          <SideBarMenu />
-        </Drawer>
-      </Hidden>
-      <Hidden mdDown>
-        <Drawer
-          anchor="left"
-          classes={{ paper: classes.desktopDrawer }}
-          open
-          variant="persistent"
-          onClick={handleMobileClose}
-        >
-          <SideBarMenu />
-        </Drawer>
-      </Hidden>
-    </>
+    <Drawer variant="permanent" className={classes.drawer} {...rest}>
+      <ListItem className={classes.brand}>
+        <Layers className={classes.brandIcon} />
+        <Box ml={1}>VOXELA</Box>
+      </ListItem>
+      <SideBarMenu />
+    </Drawer>
   );
 };
 

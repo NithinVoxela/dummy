@@ -1,18 +1,47 @@
+import { green } from "@material-ui/core/colors";
 import { createStyles } from "@material-ui/core/styles";
 
-export const styles = () =>
+export const styles = (theme: any) =>
   createStyles({
-    mobileDrawer: {
-      width: 256
+    drawer: {
+      borderRight: 0,
+      "& > div": {
+        borderRight: 0
+      },
+      position: "relative",
+      height: "100%"
     },
-    desktopDrawer: {
-      width: 256,
-      top: 64,
-      height: "calc(100% - 64px)"
+    brand: {
+      fontSize: theme.typography.h5.fontSize,
+      fontWeight: theme.typography.fontWeightMedium,
+      color: theme.sidebar.header.color,
+      backgroundColor: theme.sidebar.header.background,
+      fontFamily: theme.typography.fontFamily,
+      minHeight: 56,
+      paddingLeft: theme.spacing(6),
+      paddingRight: theme.spacing(6),
+
+      [theme.breakpoints.up("sm")]: {
+        minHeight: 64
+      }
     },
-    avatar: {
-      cursor: "pointer",
-      width: 64,
-      height: 64
+    brandIcon: {
+      marginRight: theme.spacing(2),
+      color: theme.sidebar.header.brand.color
+    },
+    brandChip: {
+      backgroundColor: green[700],
+      borderRadius: 5,
+      color: theme.palette.common.white,
+      fontSize: "60%",
+      height: 20,
+      marginLeft: 2,
+      marginBottom: 1,
+      padding: "4px 0",
+
+      "& span": {
+        paddingLeft: theme.spacing(1.5),
+        paddingRight: theme.spacing(1.5)
+      }
     }
   });
