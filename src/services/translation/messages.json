@@ -7,5 +7,7 @@
   "welcome-text": "Welcome, {0}",
   "settings-header-label": "Settings",
   "login-header-label": "Login",
-  "log-out-label": "Logout"
+  "log-out-label": "Logout",
+  "privacy-policy": "Privacy Policy",
+  "terms-of-use": "Terms Of Use"
 }

@@ -30,7 +30,7 @@ const SideBarComponent: React.FunctionComponent<IProps> = ({
     <Drawer variant="permanent" className={classes.drawer} {...rest}>
       <ListItem className={classes.brand}>
         <Layers className={classes.brandIcon} />
-        <Box ml={1}>VOXELA</Box>
+        <Box ml={1}>CORTEXA</Box>
       </ListItem>
       <SideBarMenu />
     </Drawer>

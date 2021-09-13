@@ -1,6 +1,6 @@
 import { Theme } from "@material-ui/core";
 import { createStyles } from "@material-ui/core/styles";
-import { darken, rgba } from "polished";
+import { darken, rgba, transitions } from "polished";
 
 export const styles = (theme?: Theme) =>
   createStyles({

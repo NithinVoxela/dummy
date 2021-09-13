@@ -4,7 +4,7 @@ import * as React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import userAvatar from "assets/avatar-1.jpg";
+import userAvatar from "assets/avatar-1.png";
 import { removeUserAccount } from "store/userAccount/userAccount.actions";
 
 import { useStyles } from "./styles";
@@ -34,7 +34,7 @@ const UserMenu: React.FC = () => {
   return (
     <>
       <Badge variant="dot" onClick={handleToggleMenu} className={classes.badge}>
-        <Avatar alt="Lucy Lavender" src={userAvatar} />
+        <Avatar alt="User" src={userAvatar} />
       </Badge>
       <Menu id="menu-appbar" anchorEl={anchorMenu} open={Boolean(anchorMenu)} onClose={handleCloseMenu}>
         <MenuItem onClick={handleCloseMenu}>Profile</MenuItem>

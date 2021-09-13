@@ -6,6 +6,7 @@ import * as Yup from "yup";
 
 import { IAuthModel } from "models/user.model";
 import { login } from "store/userAccount/userAccount.actions";
+import { translationService } from "services/translation/translation.service";
 
 import { useStyles } from "./styles";
 
@@ -38,13 +39,10 @@ export const Login = () => {
           >
             {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
               <form onSubmit={handleSubmit}>
-                <Box mb={3}>
+                <Box mb={3} display="flex" justifyContent="center">
                   <Typography color="textPrimary" variant="h2">
-                    Sign in
-                  </Typography>
-                  <Typography color="textSecondary" gutterBottom variant="body2">
-                    Sign in on the internal platform
-                  </Typography>
+                    Cortexa
+                  </Typography>                  
                 </Box>
                 <TextField
                   error={Boolean(touched.userName && errors.userName)}
@@ -74,13 +72,20 @@ export const Login = () => {
                 />
                 <Box my={2}>
                   <Button color="primary" fullWidth size="large" type="submit" variant="contained">
-                    Sign in now
+                    {translationService.getMessageTranslation("login-header-label", "Login")}
                   </Button>
                 </Box>
               </form>
             )}
           </Formik>
         </Container>
+      </Box>
+      <Box className={classes.footer}>
+        <Typography color="textSecondary" variant="body2"> Copyright 2021 Voxela.ai </Typography>   
+        <Typography color="textSecondary" variant="body2" className={classes.separator}> | </Typography>
+        <Typography color="textSecondary" variant="body2">{translationService.getMessageTranslation("privacy-policy", "Privacy Policy")}</Typography>
+        <Typography color="textSecondary" variant="body2" className={classes.separator}> | </Typography>
+        <Typography color="textSecondary" variant="body2">{translationService.getMessageTranslation("terms-of-use", "Terms Of Use")}</Typography>
       </Box>
     </Paper>
   );
