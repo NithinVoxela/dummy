@@ -34,10 +34,10 @@ export class HttpServiceFactory {
   }
 
   private static _createIamService() {
-    HttpServiceFactory._iamService.httpService = HttpServiceFactory._createHttpService("frontEndApi", true);
+    HttpServiceFactory._iamService.httpService = HttpServiceFactory._createHttpService("frontEndApi");
   }
 
-  private static _createHttpService(endpoint: string, includeToken?: boolean): AxiosInstance {
+  private static _createHttpService(endpoint: string): AxiosInstance {
     const appStore = AppStore.getInstance();
     if (!appStore) {
       return null;
@@ -51,10 +51,7 @@ export class HttpServiceFactory {
 
     const authenticationHeaders: any = {};
     authenticationHeaders["X-TenantID"] = environment.authenticationHeaders.tenantId;
-
-    if (includeToken) {
-      authenticationHeaders.Authorization = state.userAccount.token;
-    }
+    authenticationHeaders["X-AuthToken"] = state.userAccount.token;
 
     return axios.create({
       baseURL: environment.apiEndpoints[endpoint],

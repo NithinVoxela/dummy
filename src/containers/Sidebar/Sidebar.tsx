@@ -3,6 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import * as React from "react";
 import { useEffect } from "react";
 import { Layers } from "react-feather";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import { useLocation } from "react-router-dom";
 
 import { SideBarMenu } from "./SidebarMenu";
@@ -32,7 +33,9 @@ const SideBarComponent: React.FunctionComponent<IProps> = ({
         <Layers className={classes.brandIcon} />
         <Box ml={1}>CORTEXA</Box>
       </ListItem>
-      <SideBarMenu />
+      <PerfectScrollbar className={classes.scrollContainer}>
+        <SideBarMenu />
+      </PerfectScrollbar>
     </Drawer>
   );
 };

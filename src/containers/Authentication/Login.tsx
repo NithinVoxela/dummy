@@ -5,8 +5,8 @@ import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 
 import { IAuthModel } from "models/user.model";
-import { login } from "store/userAccount/userAccount.actions";
 import { translationService } from "services/translation/translation.service";
+import { login } from "store/userAccount/userAccount.actions";
 
 import { useStyles } from "./styles";
 
@@ -42,7 +42,7 @@ export const Login = () => {
                 <Box mb={3} display="flex" justifyContent="center">
                   <Typography color="textPrimary" variant="h2">
                     Cortexa
-                  </Typography>                  
+                  </Typography>
                 </Box>
                 <TextField
                   error={Boolean(touched.userName && errors.userName)}
@@ -81,11 +81,24 @@ export const Login = () => {
         </Container>
       </Box>
       <Box className={classes.footer}>
-        <Typography color="textSecondary" variant="body2"> Copyright 2021 Voxela.ai </Typography>   
-        <Typography color="textSecondary" variant="body2" className={classes.separator}> | </Typography>
-        <Typography color="textSecondary" variant="body2">{translationService.getMessageTranslation("privacy-policy", "Privacy Policy")}</Typography>
-        <Typography color="textSecondary" variant="body2" className={classes.separator}> | </Typography>
-        <Typography color="textSecondary" variant="body2">{translationService.getMessageTranslation("terms-of-use", "Terms Of Use")}</Typography>
+        <Typography color="textSecondary" variant="body2">
+          {" "}
+          Copyright 2021 Voxela.ai{" "}
+        </Typography>
+        <Typography color="textSecondary" variant="body2" className={classes.separator}>
+          {" "}
+          |{" "}
+        </Typography>
+        <Typography color="textSecondary" variant="body2">
+          {translationService.getMessageTranslation("privacy-policy", "Privacy Policy")}
+        </Typography>
+        <Typography color="textSecondary" variant="body2" className={classes.separator}>
+          {" "}
+          |{" "}
+        </Typography>
+        <Typography color="textSecondary" variant="body2">
+          {translationService.getMessageTranslation("terms-of-use", "Terms Of Use")}
+        </Typography>
       </Box>
     </Paper>
   );

@@ -2,6 +2,8 @@ import * as React from "react";
 import { Route } from "react-router-dom";
 
 import { IRoute, routes } from "configs/routes/routes.config";
+import { Camera } from "containers/Cameras/Camera";
+import { Cameras } from "containers/Cameras/Cameras";
 import { Dashboard } from "containers/Dashboard/Dashboard";
 
 interface IRouteCreaterOptions {
@@ -17,7 +19,9 @@ const routeCreater = (Component: React.ComponentType, { routeConfig, exact = tru
 
 const routeMap = [
   routeCreater(Dashboard, { routeConfig: routes.dashboard }),
-  routeCreater(Dashboard, { routeConfig: routes.alerts })
+  routeCreater(Dashboard, { routeConfig: routes.alerts }),
+  routeCreater(Cameras, { routeConfig: routes.cameras }),
+  routeCreater(Camera, { routeConfig: routes.camera })
 ];
 
 export const MainRoutes: React.FunctionComponent = () => (

@@ -1,5 +1,6 @@
-import { Hidden, Paper, WithStyles } from "@material-ui/core";
+import { Hidden, Paper, WithStyles, withWidth } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import { isWidthUp, WithWidthProps } from "@material-ui/core/withWidth";
 import * as React from "react";
 import { useState } from "react";
 
@@ -9,7 +10,9 @@ import { TopBar } from "containers/TopBar";
 
 import { styles } from "./styles";
 
-const BaseComponent: React.FC<WithStyles> = ({ classes, children }) => {
+interface IProps extends WithStyles, WithWidthProps {}
+
+const BaseComponent: React.FC<IProps> = ({ classes, children, width }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
@@ -32,11 +35,11 @@ const BaseComponent: React.FC<WithStyles> = ({ classes, children }) => {
       </div>
       <div className={classes.appContent}>
         <TopBar onDrawerToggle={handleDrawerToggle} />
-        <Paper>{children}</Paper>
+        <Paper style={{ padding: isWidthUp("lg", width) ? 40 : 20 }}>{children}</Paper>
       </div>
       <LoadingBar />
     </div>
   );
 };
 
-export const Base = withStyles(styles)(BaseComponent);
+export const Base = withWidth()(withStyles(styles)(BaseComponent));

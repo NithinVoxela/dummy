@@ -4,10 +4,20 @@
   "global-no-results-label": "No Results",
   "dashboard-header-label": "Dashboard",
   "alerts-header-label": "Alerts",
+  "cameras-header-label": "Cameras",
   "welcome-text": "Welcome, {0}",
   "settings-header-label": "Settings",
   "login-header-label": "Login",
   "log-out-label": "Logout",
   "privacy-policy": "Privacy Policy",
-  "terms-of-use": "Terms Of Use"
+  "terms-of-use": "Terms Of Use",
+  "table-search-bar": "Search",
+  "save-label": "Save",
+  "update-label": "Update",
+  "update-successfull-label": "Update Successful",
+  "you-have-updated-label": "You have updated",
+  "delete-successfull-label": "Delete Successful",
+  "you-have-deleted-label": "You have deleted",
+  "camera-saved-success-mesaage": "{0} registered Successfully.",
+  "global-success-label": "Success"
 }

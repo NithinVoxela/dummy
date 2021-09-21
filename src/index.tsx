@@ -54,8 +54,8 @@ const render = async (Component: React.FunctionComponent<{ store: Store<IApplica
   const environment = await configurationService.getEnvironment();
   const store = bootstrapStore(environment);
   AppStore.storePersistor.persist();
+  await translationService.loadTranslations(store);
   HttpServiceFactory.createServices();
-  void translationService.loadTranslations(store);
   bootstrapUserLogout(environment);
   hideLoading();
 

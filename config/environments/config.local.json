@@ -6,7 +6,8 @@
     "translationServiceEndpoint": "/messages.json"
   },
   "intervals": {
-    "userLogout": 36000000
+    "userLogout": 36000000,
+    "searchInputDebounce": 500
   },
   "constants": {
     "maxRowsPerPage": 500

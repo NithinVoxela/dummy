@@ -13,7 +13,7 @@ export class HttpService {
       .get(url, {
         params
       })
-      .then(res => res);
+      .then(res => res.data);
   }
 
   public post(url: string, body?: any): Promise<any> {

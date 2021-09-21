@@ -23,9 +23,8 @@ const initialState: IUserAccount = {
 export const userAccountReducer = (state: IUserAccount = initialState, action = {} as IStoreAction): IUserAccount => {
   switch (action.type) {
     case REHYDRATE_USER_ACCOUNT: {
-      const { payload } = action;
-      const userAccount: IUserAccount = payload ?? state;
-      return { ...userAccount };
+      const { payload: userAccount = initialState } = action;
+      return userAccount;
     }
     case actions.SET_USER_ACCOUNT:
       return { ...state, ...action.payload };

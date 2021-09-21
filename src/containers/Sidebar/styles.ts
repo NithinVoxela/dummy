@@ -43,5 +43,10 @@ export const styles = (theme: any) =>
         paddingLeft: theme.spacing(1.5),
         paddingRight: theme.spacing(1.5)
       }
+    },
+    scrollContainer: {
+      backgroundColor: theme.sidebar.background,
+      borderRight: "1px solid rgba(0, 0, 0, 0.12)",
+      height: "100%"
     }
   });

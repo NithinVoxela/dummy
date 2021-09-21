@@ -6,6 +6,9 @@ import { notifierReducer } from "containers/Notifier/store/notifier.reducer";
 import { sidebarReducer } from "containers/Sidebar/store/sidebar.reducer";
 import { loadingReducer } from "store/loading/loading.reducer";
 
+import { cameraReducer } from "./camera/camera.reducer";
+import { cameraFilterReducer } from "./camera/cameraFilters/cameraFilters.reducer";
+import { redirectReducer } from "./redirect/redirect.reducer";
 import { translationReducer } from "./translation/translation.reducer";
 import { userAccountReducer } from "./userAccount/userAccount.reducer";
 
@@ -20,7 +23,10 @@ const allReducers = {
   loading: loadingReducer,
   notifications: notifierReducer,
   sidebar: sidebarReducer,
-  userAccount: persistReducer(userAccountPersistConfiguration, userAccountReducer)
+  userAccount: persistReducer(userAccountPersistConfiguration, userAccountReducer),
+  cameraData: cameraReducer,
+  cameraFilters: cameraFilterReducer,
+  redirectConfig: redirectReducer
 };
 
 const rootReducer = combineReducers(allReducers);

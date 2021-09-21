@@ -1,0 +1,231 @@
+import { Typography, Grid, Breadcrumbs, Divider, Paper, Box, IconButton, Button } from "@material-ui/core";
+import { WithStyles, withStyles } from "@material-ui/core/styles";
+import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
+import SearchBar from "material-ui-search-bar";
+import * as React from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
+import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
+
+import { Table } from "components/Table/Table";
+import { ICameraDataModel } from "models/cameraData.model";
+import { IFilterParams } from "services/camera/camera.service";
+import * as actions from "store/camera/camera.actions";
+import { getCamerasList, getCamerasTotalCount } from "store/camera/camera.selector";
+import * as filterActions from "store/camera/cameraFilters/cameraFilters.actions";
+import { getCameraFilters } from "store/camera/cameraFilters/cameraFilters.selector";
+import { IApplicationState } from "store/state.model";
+
+import { styles } from "./styles";
+
+interface IDispatchToProps {
+  getCamerasLoadingRequest: typeof actions.getCamerasLoadingRequest;
+  deleteCameraRequest: typeof actions.deleteCameraRequest;
+  updateCameraFilters: typeof filterActions.updateCameraFilters;
+  cleanCameraFilters: typeof filterActions.cleanCameraFilters;
+}
+
+interface IStateToProps {
+  filters: IFilterParams;
+  cameras: ICameraDataModel[];
+  totalCount: number;
+}
+
+interface IProps extends IStateToProps, IDispatchToProps, WithStyles<typeof styles> {}
+
+type UseEffectParams = Parameters<typeof useEffect>;
+type DependencyList = UseEffectParams[1];
+const usePrevious = (value: DependencyList) => {
+  const ref = useRef<DependencyList>();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+};
+
+const tableColumns = [
+  { id: "publicId", numeric: false, disablePadding: false, disableSort: true, label: "Public ID", align: "left" },
+  { id: "name", numeric: false, disablePadding: false, disableSort: true, label: "Name", align: "left" },
+  { id: "cameraType", numeric: false, disablePadding: false, disableSort: true, label: "Camera Type", align: "left" },
+  { id: "description", numeric: false, disablePadding: false, disableSort: true, label: "Description", align: "left" },
+  { id: "model", numeric: false, disablePadding: false, disableSort: true, label: "Model", align: "left" },
+  {
+    id: "cameraStatus",
+    numeric: false,
+    disablePadding: false,
+    disableSort: true,
+    label: "Camera Status",
+    align: "left"
+  },
+  { id: "location", numeric: false, disablePadding: false, disableSort: true, label: "Location", align: "left" },
+  {
+    id: "installationDate",
+    numeric: false,
+    disablePadding: false,
+    disableSort: true,
+    label: "Installation Date",
+    align: "left"
+  },
+  {
+    id: "actions",
+    label: "Actions",
+    numeric: true,
+    disablePadding: false,
+    disableSort: true,
+    align: "center"
+  }
+];
+
+const CamerasComponent: React.FC<IProps> = ({
+  totalCount,
+  getCamerasLoadingRequest,
+  cleanCameraFilters,
+  updateCameraFilters,
+  deleteCameraRequest,
+  cameras,
+  filters,
+  classes
+}) => {
+  const history = useHistory();
+  const [searched, setSearched] = useState("");
+  const prevSearched = usePrevious(searched);
+  useEffect(() => {
+    getCamerasLoadingRequest(filters, { withDebounce: filters.keywords !== prevSearched });
+  }, [getCamerasLoadingRequest, filters, cleanCameraFilters, prevSearched]);
+
+  useEffect(() => {
+    return () => {
+      cleanCameraFilters();
+    };
+  }, [cleanCameraFilters]);
+
+  const handleEditClick = (id: string) => () => {
+    history.push(`/camera/${id}`);
+  };
+
+  const handleDeleteClick = (publicId: string, name: string) => () => {
+    deleteCameraRequest({ publicId, name });
+  };
+
+  const getRows = () => {
+    return cameras.map((row: any) => {
+      const { publicId, name, cameraType, description, model, cameraStatus, location, installationDate } = row;
+      return {
+        id: publicId,
+        data: {
+          publicId,
+          name,
+          cameraType,
+          description,
+          model,
+          cameraStatus,
+          location,
+          installationDate,
+          actions: (
+            <Box mr={2}>
+              <IconButton aria-label="edit" onClick={handleEditClick(publicId)}>
+                <EditIcon />
+              </IconButton>
+              <IconButton aria-label="delete" onClick={handleDeleteClick(publicId, name)}>
+                <DeleteIcon />
+              </IconButton>
+            </Box>
+          )
+        }
+      };
+    });
+  };
+
+  const handlePageChange = useCallback(
+    (pageNumber: number) => {
+      updateCameraFilters({ pageNumber });
+    },
+    [updateCameraFilters]
+  );
+
+  const handleChangeRowsPerPage = useCallback(
+    (event: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>) => {
+      updateCameraFilters({ pageSize: event.target.value });
+    },
+    [updateCameraFilters]
+  );
+
+  const handleSearch = useCallback(
+    (keywords: string) => {
+      setSearched(keywords);
+      updateCameraFilters({ keywords, pageNumber: 0, pageSize: 5 });
+    },
+    [setSearched, updateCameraFilters]
+  );
+
+  const handleCancelSearch = useCallback(() => {
+    setSearched("");
+    updateCameraFilters({ keywords: "", pageNumber: 0, pageSize: 5 });
+  }, [setSearched, updateCameraFilters]);
+
+  const handleAddCamera = useCallback(() => {
+    history.push("/camera");
+  }, [history]);
+
+  return (
+    <Paper elevation={4}>
+      <Grid justify="space-between" container spacing={10}>
+        <Grid item>
+          <Typography variant="h3" gutterBottom display="inline">
+            Cameras
+          </Typography>
+
+          <Breadcrumbs>
+            <Typography>Cameras List</Typography>
+          </Breadcrumbs>
+        </Grid>
+        <Grid item>
+          <div>
+            <Button variant="contained" color="primary" onClick={handleAddCamera}>
+              <AddIcon />
+              New Camera
+            </Button>
+          </div>
+        </Grid>
+      </Grid>
+
+      <Divider className={classes.divider} />
+      <Grid container spacing={6}>
+        <Grid item xs={12}>
+          <SearchBar
+            className={classes.searchContainer}
+            value={searched}
+            onChange={handleSearch}
+            onCancelSearch={handleCancelSearch}
+          />
+          <Table
+            rows={getRows()}
+            tableColumns={tableColumns}
+            pageNumber={filters.pageNumber}
+            pageSize={filters.pageSize}
+            onPageChange={handlePageChange}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+            totalCount={totalCount}
+          />
+        </Grid>
+      </Grid>
+    </Paper>
+  );
+};
+
+const mapDispatchToProps = {
+  getCamerasLoadingRequest: actions.getCamerasLoadingRequest,
+  deleteCameraRequest: actions.deleteCameraRequest,
+  updateCameraFilters: filterActions.updateCameraFilters,
+  cleanCameraFilters: filterActions.cleanCameraFilters
+};
+
+const mapStateToProps = (state: IApplicationState) => ({
+  filters: getCameraFilters(state),
+  cameras: getCamerasList(state),
+  totalCount: getCamerasTotalCount(state)
+});
+
+export const Cameras = withStyles(styles)(
+  connect<IStateToProps>(mapStateToProps, mapDispatchToProps)(CamerasComponent)
+);

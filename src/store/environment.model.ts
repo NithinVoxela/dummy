@@ -8,6 +8,7 @@ export interface IEnvironment {
   };
   intervals: {
     userLogout: number;
+    searchInputDebounce: number;
   };
   constants: {};
   authenticationHeaders: {
