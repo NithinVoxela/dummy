@@ -29,7 +29,7 @@ export const styles = () =>
       padding: 6
     },
     error: {
-      background: "#0096D5",
-      width: 600
+      background: "#d32f2f",
+      width: 400
     }
   });

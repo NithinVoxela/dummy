@@ -5,7 +5,6 @@ export const styles = () => {
     root: {
       padding: "1.5em 4em",
       margin: "auto",
-      boxShadow: "rgb(0 0 0 / 12%) 0px 1px 2px, rgb(0 0 0 / 5%) 0px 0px 0px 1px"
     },
     footer: {
       position: "absolute",
@@ -26,14 +25,17 @@ export const styles = () => {
       marginBottom: 4
     },
     textfield: {
-      width: "45%",
+      width: "47%",
       flexShrink: 0,
-      marginLeft: 15
+      marginLeft: 24
     },
     submitButton: {
       width: 100,
       flexShrink: 0,
-      marginLeft: 15
+      marginLeft: 24
+    },
+    form: {
+      padding: "16px"
     }
   });
 };

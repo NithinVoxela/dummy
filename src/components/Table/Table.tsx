@@ -108,52 +108,50 @@ class TableComponent extends React.Component<IProps, IState> {
   public render() {
     const { pageNumber, pageSize, order, orderBy } = this.state;
     const { rows, tableColumns, totalCount } = this.props;
-    return (
-      <div>
-        <Paper>
-          <MuiTable size="medium">
-            <TableHead>
-              <MuiTableRow>
-                {tableColumns.map((tableColumn: any) => (
-                  <TableCell
-                    key={tableColumn.id}
-                    align={tableColumn.align ?? "left"}
-                    padding={tableColumn.disablePadding ? "none" : "default"}
-                    sortDirection={orderBy === tableColumn.id ? order : false}
-                  >
-                    {tableColumn.disableSort ? (
-                      tableColumn.label
-                    ) : (
-                      <TableSortLabel
-                        active={orderBy === tableColumn.id}
-                        direction={orderBy === tableColumn.id ? order : "asc"}
-                        onClick={this.handleRequestSort(tableColumn.id)}
-                      >
-                        {tableColumn.label}
-                      </TableSortLabel>
-                    )}
-                  </TableCell>
-                ))}
-              </MuiTableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((rowData: ITableRow) => {
-                const { id } = rowData;
-                return <TableRow rowData={rowData} key={`table-row-${id}`} tableColumns={tableColumns} />;
-              })}
-            </TableBody>
-          </MuiTable>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={totalCount}
-            rowsPerPage={pageSize}
-            page={pageNumber}
-            onChangePage={this.handleChangePage}
-            onChangeRowsPerPage={this.handleChangeRowsPerPage}
-          />
-        </Paper>
-      </div>
+    return (     
+      <Paper>
+        <MuiTable size="medium">
+          <TableHead>
+            <MuiTableRow>
+              {tableColumns.map((tableColumn: any) => (
+                <TableCell
+                  key={tableColumn.id}
+                  align={tableColumn.align ?? "left"}
+                  padding={tableColumn.disablePadding ? "none" : "default"}
+                  sortDirection={orderBy === tableColumn.id ? order : false}
+                >
+                  {tableColumn.disableSort ? (
+                    tableColumn.label
+                  ) : (
+                    <TableSortLabel
+                      active={orderBy === tableColumn.id}
+                      direction={orderBy === tableColumn.id ? order : "asc"}
+                      onClick={this.handleRequestSort(tableColumn.id)}
+                    >
+                      {tableColumn.label}
+                    </TableSortLabel>
+                  )}
+                </TableCell>
+              ))}
+            </MuiTableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((rowData: ITableRow) => {
+              const { id } = rowData;
+              return <TableRow rowData={rowData} key={`table-row-${id}`} tableColumns={tableColumns} />;
+            })}
+          </TableBody>
+        </MuiTable>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={totalCount}
+          rowsPerPage={pageSize}
+          page={pageNumber}
+          onChangePage={this.handleChangePage}
+          onChangeRowsPerPage={this.handleChangeRowsPerPage}
+        />
+      </Paper>      
     );
   }
 }

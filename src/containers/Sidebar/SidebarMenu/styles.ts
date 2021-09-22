@@ -1,5 +1,6 @@
 import { Theme } from "@material-ui/core";
 import { createStyles } from "@material-ui/core/styles";
+import { fontWeight } from "@material-ui/system";
 import { darken, rgba } from "polished";
 
 export const styles = (theme?: Theme) =>
@@ -23,7 +24,7 @@ export const styles = (theme?: Theme) =>
         fontSize: 20,
         width: 20,
         height: 20,
-        opacity: 0.5
+        opacity: 1
       },
 
       "&:hover": {
@@ -34,7 +35,8 @@ export const styles = (theme?: Theme) =>
         backgroundColor: darken(0.05, theme.sidebar.background),
 
         "& span": {
-          color: theme.sidebar.color
+          color: theme.sidebar.color,
+          fontWeight:  theme.typography.fontWeightMedium
         }
       }
     },

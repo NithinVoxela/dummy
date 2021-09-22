@@ -1,7 +1,6 @@
 export const typography = {
   useNextVariants: true,
   fontFamily: [
-    "Nunito",
     "-apple-system",
     "BlinkMacSystemFont",
     '"Segoe UI"',
@@ -48,7 +47,7 @@ export const typography = {
     lineHeight: 1.2
   },
   body1: {
-    fontSize: 14
+    fontSize: "1rem"
   },
   button: {
     textTransform: "none"

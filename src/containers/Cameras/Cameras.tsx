@@ -1,4 +1,4 @@
-import { Typography, Grid, Breadcrumbs, Divider, Paper, Box, IconButton, Button } from "@material-ui/core";
+import { Typography, Grid, Breadcrumbs, Card, Divider, Box, IconButton, Button, Tooltip } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import SearchBar from "material-ui-search-bar";
@@ -46,7 +46,7 @@ const usePrevious = (value: DependencyList) => {
 const tableColumns = [
   { id: "publicId", numeric: false, disablePadding: false, disableSort: true, label: "Public ID", align: "left" },
   { id: "name", numeric: false, disablePadding: false, disableSort: true, label: "Name", align: "left" },
-  { id: "cameraType", numeric: false, disablePadding: false, disableSort: true, label: "Camera Type", align: "left" },
+  { id: "cameraType", numeric: false, disablePadding: false, disableSort: true, label: "Type", align: "left" },
   { id: "description", numeric: false, disablePadding: false, disableSort: true, label: "Description", align: "left" },
   { id: "model", numeric: false, disablePadding: false, disableSort: true, label: "Model", align: "left" },
   {
@@ -54,7 +54,7 @@ const tableColumns = [
     numeric: false,
     disablePadding: false,
     disableSort: true,
-    label: "Camera Status",
+    label: "Status",
     align: "left"
   },
   { id: "location", numeric: false, disablePadding: false, disableSort: true, label: "Location", align: "left" },
@@ -123,12 +123,16 @@ const CamerasComponent: React.FC<IProps> = ({
           installationDate,
           actions: (
             <Box mr={2}>
-              <IconButton aria-label="edit" onClick={handleEditClick(publicId)}>
-                <EditIcon />
-              </IconButton>
-              <IconButton aria-label="delete" onClick={handleDeleteClick(publicId, name)}>
-                <DeleteIcon />
-              </IconButton>
+              <Tooltip title={"Edit"}>
+                <IconButton aria-label="edit" onClick={handleEditClick(publicId)}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={"Delete"}>
+                <IconButton aria-label="delete" onClick={handleDeleteClick(publicId, name)}>
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
             </Box>
           )
         }
@@ -168,7 +172,7 @@ const CamerasComponent: React.FC<IProps> = ({
   }, [history]);
 
   return (
-    <Paper elevation={4}>
+    <>
       <Grid justify="space-between" container spacing={10}>
         <Grid item>
           <Typography variant="h3" gutterBottom display="inline">
@@ -176,7 +180,7 @@ const CamerasComponent: React.FC<IProps> = ({
           </Typography>
 
           <Breadcrumbs>
-            <Typography>Cameras List</Typography>
+            <Typography>Camera List</Typography>
           </Breadcrumbs>
         </Grid>
         <Grid item>
@@ -198,18 +202,20 @@ const CamerasComponent: React.FC<IProps> = ({
             onChange={handleSearch}
             onCancelSearch={handleCancelSearch}
           />
-          <Table
-            rows={getRows()}
-            tableColumns={tableColumns}
-            pageNumber={filters.pageNumber}
-            pageSize={filters.pageSize}
-            onPageChange={handlePageChange}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-            totalCount={totalCount}
-          />
+          <Card>
+            <Table
+              rows={getRows()}
+              tableColumns={tableColumns}
+              pageNumber={filters.pageNumber}
+              pageSize={filters.pageSize}
+              onPageChange={handlePageChange}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+              totalCount={totalCount}
+            />
+          </Card>
         </Grid>
       </Grid>
-    </Paper>
+    </>
   );
 };
 

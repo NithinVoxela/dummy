@@ -30,7 +30,7 @@ const lightVariant = {
     }
   },
   sidebar: {
-    color: grey[900],
+    color: "#6b778c",
     background: "#FFF",
     header: {
       color: "#FFF",
@@ -40,7 +40,7 @@ const lightVariant = {
       }
     },
     footer: {
-      color: grey[900],
+      color: "#6b778c",
       background: grey[100],
       online: {
         background: green[500]
@@ -55,7 +55,7 @@ const lightVariant = {
     }
   },
   body: {
-    background: "#F7F9FC"
+    background: "#f4f6f8"
   }
 };
 

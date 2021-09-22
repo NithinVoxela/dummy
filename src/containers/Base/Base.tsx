@@ -1,4 +1,4 @@
-import { Hidden, Paper, WithStyles, withWidth } from "@material-ui/core";
+import { Hidden, Box, WithStyles, withWidth } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { isWidthUp, WithWidthProps } from "@material-ui/core/withWidth";
 import * as React from "react";
@@ -35,7 +35,7 @@ const BaseComponent: React.FC<IProps> = ({ classes, children, width }) => {
       </div>
       <div className={classes.appContent}>
         <TopBar onDrawerToggle={handleDrawerToggle} />
-        <Paper style={{ padding: isWidthUp("lg", width) ? 40 : 20 }}>{children}</Paper>
+        <Box style={{ padding: isWidthUp("lg", width) ? 40 : 20 }}>{children}</Box>
       </div>
       <LoadingBar />
     </div>
