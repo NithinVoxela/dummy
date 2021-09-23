@@ -5,7 +5,7 @@ import { IStoreAction } from "store/action.model";
 
 import * as actions from "./userAccount.actions";
 
-const initialState: IUserAccount = {
+export const initialState: IUserAccount = {
   userName: null,
   email: null,
   mobileNo: null,

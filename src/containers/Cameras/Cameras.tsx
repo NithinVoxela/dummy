@@ -10,6 +10,7 @@ import { useHistory } from "react-router-dom";
 import { Table } from "components/Table/Table";
 import { ICameraDataModel } from "models/cameraData.model";
 import { IFilterParams } from "services/camera/camera.service";
+import { formatDateTime } from "src/helpers/dateTime";
 import * as actions from "store/camera/camera.actions";
 import { getCamerasList, getCamerasTotalCount } from "store/camera/camera.selector";
 import * as filterActions from "store/camera/cameraFilters/cameraFilters.actions";
@@ -21,6 +22,7 @@ import { styles } from "./styles";
 interface IDispatchToProps {
   getCamerasLoadingRequest: typeof actions.getCamerasLoadingRequest;
   deleteCameraRequest: typeof actions.deleteCameraRequest;
+  resetCameraList: typeof actions.resetCameraList;
   updateCameraFilters: typeof filterActions.updateCameraFilters;
   cleanCameraFilters: typeof filterActions.cleanCameraFilters;
 }
@@ -82,6 +84,7 @@ const CamerasComponent: React.FC<IProps> = ({
   cleanCameraFilters,
   updateCameraFilters,
   deleteCameraRequest,
+  resetCameraList,
   cameras,
   filters,
   classes
@@ -96,8 +99,9 @@ const CamerasComponent: React.FC<IProps> = ({
   useEffect(() => {
     return () => {
       cleanCameraFilters();
+      resetCameraList();
     };
-  }, [cleanCameraFilters]);
+  }, [cleanCameraFilters, resetCameraList]);
 
   const handleEditClick = (id: string) => () => {
     history.push(`/camera/${id}`);
@@ -120,15 +124,15 @@ const CamerasComponent: React.FC<IProps> = ({
           model,
           cameraStatus,
           location,
-          installationDate,
+          installationDate: formatDateTime(installationDate),
           actions: (
             <Box mr={2}>
-              <Tooltip title={"Edit"}>
+              <Tooltip title="Edit">
                 <IconButton aria-label="edit" onClick={handleEditClick(publicId)}>
                   <EditIcon />
                 </IconButton>
               </Tooltip>
-              <Tooltip title={"Delete"}>
+              <Tooltip title="Delete">
                 <IconButton aria-label="delete" onClick={handleDeleteClick(publicId, name)}>
                   <DeleteIcon />
                 </IconButton>
@@ -222,6 +226,7 @@ const CamerasComponent: React.FC<IProps> = ({
 const mapDispatchToProps = {
   getCamerasLoadingRequest: actions.getCamerasLoadingRequest,
   deleteCameraRequest: actions.deleteCameraRequest,
+  resetCameraList: actions.resetCameraList,
   updateCameraFilters: filterActions.updateCameraFilters,
   cleanCameraFilters: filterActions.cleanCameraFilters
 };

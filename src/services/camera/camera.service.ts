@@ -11,6 +11,10 @@ export interface IFilterParams {
   // sortOrder?: SortDirectionType;
 }
 
+// function sleep(ms) {
+//   return new Promise(resolve => setTimeout(resolve, ms));
+// }
+
 class CameraService {
   private static _instance: CameraService;
   private _httpService: HttpService;
@@ -27,6 +31,7 @@ class CameraService {
   }
 
   public getCamreas = async (filterParams: IFilterParams) => {
+    // await sleep(5000);
     const { pageNumber, pageSize, ...params } = CameraService._instance.sanitizeFilters(filterParams);
     const cameras = await CameraService._instance._httpService.post(
       `camera/view/search?pageNumber=${pageNumber}&pageSize=${pageSize}&sortAscending=true`,

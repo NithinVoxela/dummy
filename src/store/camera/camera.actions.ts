@@ -11,6 +11,7 @@ export const REGISTER_CAMERA_REQUEST = "[CAMERA] REGISTER_CAMERA_REQUEST";
 export const UPDATE_CAMERA_REQUEST = "[CAMERA] UPDATE_CAMERA_REQUEST";
 export const GET_CAMERA_REQUEST = "[CAMERA] GET_CAMERA_REQUEST";
 export const DELETE_CAMERA_REQUEST = "[CAMERA] DELETE_CAMERA_REQUEST";
+export const RESET_CAMERA_LIST = "[CAMERA] RESET_CAMERA_LIST";
 
 export const getCamerasLoadingRequest = (filterParams: IFilterParams, options?: ICameraRequestOptions) => ({
   type: GET_CAMERAS_LOADING_REQUEST,
@@ -46,4 +47,8 @@ export const getCameraRequest = (payload: { publicId: string }) => ({
 export const deleteCameraRequest = (payload: { publicId: string; name: string }) => ({
   type: DELETE_CAMERA_REQUEST,
   payload
+});
+
+export const resetCameraList = () => ({
+  type: RESET_CAMERA_LIST
 });

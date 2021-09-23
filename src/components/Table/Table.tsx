@@ -10,6 +10,9 @@ import {
 } from "@material-ui/core";
 import * as React from "react";
 
+import { LoadingBar } from "containers/Loading";
+import { translationService } from "services/translation/translation.service";
+
 import { TableRow } from "./TableRow";
 
 export type CellType = string | number | React.ReactNode | { component: JSX.Element; sortValue?: unknown };
@@ -108,7 +111,7 @@ class TableComponent extends React.Component<IProps, IState> {
   public render() {
     const { pageNumber, pageSize, order, orderBy } = this.state;
     const { rows, tableColumns, totalCount } = this.props;
-    return (     
+    return (
       <Paper>
         <MuiTable size="medium">
           <TableHead>
@@ -140,6 +143,18 @@ class TableComponent extends React.Component<IProps, IState> {
               const { id } = rowData;
               return <TableRow rowData={rowData} key={`table-row-${id}`} tableColumns={tableColumns} />;
             })}
+            {rows?.length === 0 && (
+              <TableRow>
+                <TableCell padding="default" align="center" colSpan={tableColumns.length}>
+                  {translationService.getMessageTranslation("no-records-available-label", "No results found")}
+                </TableCell>
+              </TableRow>
+            )}
+            <TableRow>
+              <TableCell padding="default" align="center" colSpan={tableColumns.length}>
+                <LoadingBar />
+              </TableCell>
+            </TableRow>
           </TableBody>
         </MuiTable>
         <TablePagination
@@ -151,7 +166,7 @@ class TableComponent extends React.Component<IProps, IState> {
           onChangePage={this.handleChangePage}
           onChangeRowsPerPage={this.handleChangeRowsPerPage}
         />
-      </Paper>      
+      </Paper>
     );
   }
 }

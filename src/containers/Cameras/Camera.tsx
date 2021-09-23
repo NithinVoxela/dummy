@@ -269,29 +269,35 @@ const CameraComponent: React.FC<IProps> = ({
                 <div>
                   <TextField
                     error={Boolean(touched.passPhrase && errors.passPhrase)}
-                      helperText={touched.passPhrase && errors.passPhrase}
-                      className={classes.textfield}
-                      label="Pass Phrase"
-                      margin="normal"
-                      name="passPhrase"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      type="text"
-                      value={values.passPhrase}
-                      variant="outlined"
-                    />
-                  </div>
-                  <Box mt={2}>
-                    <Button color="primary" size="large" type="submit" variant="contained" className={classes.submitButton}>
-                      {isAddMode
-                        ? translationService.getMessageTranslation("save-label", "Save")
-                        : translationService.getMessageTranslation("update-label", "Update")}
-                    </Button>
-                  </Box>
-                </form>
-              );
-            }}
-          </Formik>
+                    helperText={touched.passPhrase && errors.passPhrase}
+                    className={classes.textfield}
+                    label="Pass Phrase"
+                    margin="normal"
+                    name="passPhrase"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    type="text"
+                    value={values.passPhrase}
+                    variant="outlined"
+                  />
+                </div>
+                <Box mt={2}>
+                  <Button
+                    color="primary"
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                    className={classes.submitButton}
+                  >
+                    {isAddMode
+                      ? translationService.getMessageTranslation("save-label", "Save")
+                      : translationService.getMessageTranslation("update-label", "Update")}
+                  </Button>
+                </Box>
+              </form>
+            );
+          }}
+        </Formik>
       </Paper>
     </>
   );

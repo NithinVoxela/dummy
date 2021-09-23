@@ -4,7 +4,7 @@ export const styles = () => {
   return createStyles({
     root: {
       padding: "1.5em 4em",
-      margin: "auto",
+      margin: "auto"
     },
     footer: {
       position: "absolute",

@@ -1,6 +1,5 @@
 import { Theme } from "@material-ui/core";
 import { createStyles } from "@material-ui/core/styles";
-import { fontWeight } from "@material-ui/system";
 import { darken, rgba } from "polished";
 
 export const styles = (theme?: Theme) =>
@@ -36,7 +35,7 @@ export const styles = (theme?: Theme) =>
 
         "& span": {
           color: theme.sidebar.color,
-          fontWeight:  theme.typography.fontWeightMedium
+          fontWeight: theme.typography.fontWeightMedium
         }
       }
     },

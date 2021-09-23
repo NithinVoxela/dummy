@@ -1,5 +1,4 @@
 import { WithStyles, withStyles } from "@material-ui/core";
-import Modal from "@material-ui/core/Modal";
 import * as React from "react";
 import { connect } from "react-redux";
 
@@ -16,13 +15,11 @@ interface IStateToProps {
 interface IProps extends WithStyles, IStateToProps {}
 
 const LoadingBarComponent: React.FC<IProps> = ({ classes, loading }) => {
-  return (
-    <Modal open={loading}>
-      <div className={classes.loadingContainer}>
-        <img src={loadingIcon} />
-      </div>
-    </Modal>
-  );
+  return loading ? (
+    <div className={classes.loadingContainer}>
+      <img src={loadingIcon} />
+    </div>
+  ) : null;
 };
 
 const mapStateToProps = (state: IApplicationState) => ({

@@ -4,7 +4,6 @@ import { isWidthUp, WithWidthProps } from "@material-ui/core/withWidth";
 import * as React from "react";
 import { useState } from "react";
 
-import { LoadingBar } from "containers/Loading";
 import { Sidebar } from "containers/Sidebar";
 import { TopBar } from "containers/TopBar";
 
@@ -37,7 +36,6 @@ const BaseComponent: React.FC<IProps> = ({ classes, children, width }) => {
         <TopBar onDrawerToggle={handleDrawerToggle} />
         <Box style={{ padding: isWidthUp("lg", width) ? 40 : 20 }}>{children}</Box>
       </div>
-      <LoadingBar />
     </div>
   );
 };

@@ -74,14 +74,14 @@ export const overrides = {
       }
     }
   },
-  MuiTableCell: {    
+  MuiTableCell: {
     root: {
-      borderBottom: '1px solid rgba(145, 158, 171, 0.24)',      
+      borderBottom: "1px solid rgba(145, 158, 171, 0.24)"
     },
     head: {
       fontSize: "0.875rem",
       color: "rgba(0, 0, 0, 0.87)"
-    }    
+    }
   },
   MuiPaper: {
     elevation1: {

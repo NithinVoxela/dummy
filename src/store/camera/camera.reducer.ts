@@ -32,6 +32,8 @@ export const cameraReducer = (state: ICameraModel = initialState, action = {} as
       return { ...state, ...action.payload };
     case actions.GET_CAMERA_SUCCESS:
       return { ...state, ...action.payload };
+    case actions.RESET_CAMERA_LIST:
+      return { ...state, cameras: [], totalCount: 0 };
     default:
       return state;
   }
