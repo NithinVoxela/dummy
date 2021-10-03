@@ -1,6 +1,7 @@
 export enum NUMBERS {
   TWO = 2,
   TWENTY = 20,
+  SIXTY = 60,
   SEVENTY = 70,
   HUNDRED = 100,
   ONE_THOUSAND = 1000,

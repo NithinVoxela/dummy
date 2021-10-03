@@ -4,6 +4,7 @@ import SearchBar from "material-ui-search-bar";
 import * as React from "react";
 import { connect } from "react-redux";
 
+import { DateTimeRangeInput } from "components/DateTimeRangeInput";
 import { VirtualizedMasonry } from "components/Masonry/VirtualizedMasonry";
 import { IAlertDataModel } from "models/alertData.model";
 import { IAlertFilterParams } from "services/alert/alert.service";
@@ -122,10 +123,24 @@ class AlertsComponent extends React.Component<IProps, IState> {
     });
   };
 
+  public handleDateTimeChange = (datePickerModel: any) => {
+    const { updateFilterParams } = this.props;
+    const { fromDateTime, toDateTime, dateTimeDisplayValue } = datePickerModel;
+    updateFilterParams({
+      dateRange: {
+        startDate: fromDateTime,
+        endDate: toDateTime
+      },
+      dateTimeDisplayValue,
+      pageNumber: 0,
+      pageSize: 20
+    });
+  };
+
   public render() {
     const {
       classes,
-      filters: { pageSize, pageNumber },
+      filters: { pageSize, pageNumber, dateTimeDisplayValue },
       totalCount
     } = this.props;
     const list = this.getList();
@@ -153,6 +168,17 @@ class AlertsComponent extends React.Component<IProps, IState> {
               value={location}
               onChange={this.handleSearch}
               onCancelSearch={this.handleCancelSearch}
+            />
+          </div>
+          <div>
+            <DateTimeRangeInput
+              onDateTimeFilterChange={this.handleDateTimeChange}
+              dateTimeDisplayValue={dateTimeDisplayValue}
+              initialFromDateTime={new Date()}
+              initialToDateTime={new Date()}
+              disableFutureDates
+              disableEarlierDates
+              minWidth="lg"
             />
           </div>
         </div>

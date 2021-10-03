@@ -1,6 +1,7 @@
 import { AlertLogModel } from "models/alert.model";
 import { HttpService } from "services/http/http.service";
 import { HttpServiceFactory } from "services/http/http.serviceFactory";
+import { formatDate } from "src/helpers/dateTime";
 
 export interface IAlertFilterParams {
   cameraName?: string;
@@ -11,6 +12,7 @@ export interface IAlertFilterParams {
     endDate: Date;
   };
   location?: string;
+  dateTimeDisplayValue?: string;
 }
 
 class AlertService {
@@ -53,8 +55,8 @@ class AlertService {
       }),
       ...(filterParams.dateRange.startDate &&
         filterParams.dateRange.endDate && {
-          startDate: filterParams.dateRange.startDate,
-          endDate: filterParams.dateRange.endDate
+          startDate: formatDate(filterParams.dateRange.startDate),
+          endDate: formatDate(filterParams.dateRange.endDate)
         })
     };
   };

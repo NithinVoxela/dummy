@@ -11,6 +11,7 @@ const initialState: IAlertFilterParams = {
     startDate: null,
     endDate: null
   },
+  dateTimeDisplayValue: null,
   location: ""
 };
 

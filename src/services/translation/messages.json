@@ -20,5 +20,9 @@
   "you-have-deleted-label": "You have deleted",
   "camera-saved-success-mesaage": "{0} registered Successfully.",
   "global-success-label": "Success",
-  "no-records-available-label": "No records available"
+  "no-records-available-label": "No records available",
+  "select-date-label": "Select Date Range",
+  "calendar-apply": "Apply",
+  "calendar-from": "From",
+  "calendar-to": "to"
 }
