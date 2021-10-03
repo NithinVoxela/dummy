@@ -10,7 +10,7 @@ import { useHistory } from "react-router-dom";
 import { Table } from "components/Table/Table";
 import { ICameraDataModel } from "models/cameraData.model";
 import { IFilterParams } from "services/camera/camera.service";
-import { formatDateTime } from "src/helpers/dateTime";
+import { formatDateInWords } from "src/helpers/dateTime";
 import * as actions from "store/camera/camera.actions";
 import { getCamerasList, getCamerasTotalCount } from "store/camera/camera.selector";
 import * as filterActions from "store/camera/cameraFilters/cameraFilters.actions";
@@ -124,7 +124,7 @@ const CamerasComponent: React.FC<IProps> = ({
           model,
           cameraStatus,
           location,
-          installationDate: formatDateTime(installationDate),
+          installationDate: formatDateInWords(installationDate),
           actions: (
             <Box mr={2}>
               <Tooltip title="Edit">

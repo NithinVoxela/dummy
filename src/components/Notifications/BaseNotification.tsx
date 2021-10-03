@@ -16,7 +16,7 @@ interface IProps extends StyledComponentProps {
 
 const BaseNotificationComponent: React.FunctionComponent<IProps> = ({
   classes,
-  variant = "error",
+  variant = "success",
   notification,
   onClose: handleClose
 }) => {

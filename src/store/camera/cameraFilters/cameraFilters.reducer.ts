@@ -5,7 +5,7 @@ import * as actions from "./cameraFilters.actions";
 
 const initialState: IFilterParams = {
   keywords: "",
-  pageSize: 5,
+  pageSize: 10,
   pageNumber: 0
   // sortBy: null,
   // sortOrder: "ASC"

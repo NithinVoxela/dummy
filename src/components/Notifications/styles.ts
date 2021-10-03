@@ -6,7 +6,9 @@ export const styles = () =>
       flexWrap: "nowrap",
       alignItems: "flex-start",
       margin: "8px 0",
-      wordBreak: "break-word"
+      wordBreak: "break-word",
+      background: "#EDF7ED",
+      width: 400
     },
     action: {
       color: "#FFF",
@@ -14,16 +16,17 @@ export const styles = () =>
       marginRight: -16
     },
     header: {
-      color: "#FFF"
+      color: "#000"
     },
     message: {
-      color: "#FFF",
+      color: "#000",
       fontSize: 15,
       lineHeight: 1.25,
       letterSpacing: 0.2
     },
     closeIcon: {
-      fontSize: 18
+      fontSize: 18,
+      color: "#000"
     },
     closeButton: {
       padding: 6

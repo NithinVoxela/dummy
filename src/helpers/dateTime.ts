@@ -5,7 +5,7 @@ export const formatDateTime = (date: Date) => {
 };
 
 export const formatDateInWords = (date: Date) => {
-  return format(new Date(date), "MMM d', ' YYY");
+  return format(new Date(date), "d MMMM', ' yyyy',' h':'mm a");
 };
 
 export const formatTimeAgo = (date: Date) => {

@@ -49,7 +49,7 @@ export const registerCamera = function*({ payload }: IStoreAction) {
         )
       })
     );
-    yield put(redirectActions.redirectTo(`camera/${camera.publicId}`));
+    yield put(redirectActions.redirectTo(`cameras`));
   } catch (err) {
     yield put(handleError(err));
   }
