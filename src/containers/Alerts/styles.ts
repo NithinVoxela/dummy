@@ -25,5 +25,19 @@ export const styles = (theme?: Theme) =>
     searchContainer: {
       height: 50,
       marginBottom: 4
+    },
+    formControl: {
+      width: 240,
+      padding: 8,
+      borderRadius: 8,
+      backgroundColor: "rgba(0, 0, 0, 0.09)"
+    },
+    label: {
+      marginTop: 8,
+      minHeight: 28,
+      marginLeft: 8
+    },
+    filterContainer: {
+      marginBottom: 16
     }
   });

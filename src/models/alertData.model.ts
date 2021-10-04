@@ -7,6 +7,9 @@ export class AlertDataModel implements IAlertDataModel {
   public mediaUrl: string;
   public videoDuration: number;
   public severity: string;
+  public cameraName: string;
+  public cameraLocation: string;
+  public fileName: string;
 
   public constructor(model: IAlertDataModel) {
     this.cameraId = model.cameraId;
@@ -17,6 +20,9 @@ export class AlertDataModel implements IAlertDataModel {
     this.mediaUrl = model.mediaUrl;
     this.videoDuration = model.videoDuration;
     this.severity = model.severity;
+    this.cameraName = model.cameraName;
+    this.cameraLocation = model.cameraLocation;
+    this.fileName = model.fileName;
   }
 }
 
@@ -29,4 +35,7 @@ export interface IAlertDataModel {
   mediaUrl?: string;
   videoDuration?: number;
   severity?: string;
+  cameraName?: string;
+  cameraLocation?: string;
+  fileName?: string;
 }

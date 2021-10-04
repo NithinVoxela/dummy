@@ -1,4 +1,15 @@
-import { Breadcrumbs, Divider, Grid, Typography } from "@material-ui/core";
+import {
+  Breadcrumbs,
+  Card,
+  CardContent,
+  Divider,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography
+} from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import SearchBar from "material-ui-search-bar";
 import * as React from "react";
@@ -19,6 +30,8 @@ import { IApplicationState } from "store/state.model";
 
 import { styles } from "./styles";
 
+const SEVERITY = ["HIGH", "MEDIUM", "LOW"];
+
 interface IDispatchToProps {
   getAlertLogLoadingRequest: typeof actions.getAlertLogLoadingRequest;
   getAlertLogNextPageRequest: typeof actions.getAlertLogNextPageRequest;
@@ -35,6 +48,7 @@ interface IStateToProps {
 
 interface IState {
   location: string;
+  severity: string;
 }
 
 interface IProps extends IStateToProps, IDispatchToProps, WithStyles<typeof styles> {}
@@ -43,7 +57,8 @@ class AlertsComponent extends React.Component<IProps, IState> {
   public constructor(props: IProps) {
     super(props);
     this.state = {
-      location: props?.filters?.location
+      location: "",
+      severity: null
     };
   }
 
@@ -83,13 +98,13 @@ class AlertsComponent extends React.Component<IProps, IState> {
   public getList() {
     const { alerts } = this.props;
     return alerts.map((alert: IAlertDataModel) => {
-      const { id, mediaUrl, alertTime, severity } = alert;
+      const { id, mediaUrl, alertTime, severity, cameraName, cameraLocation, fileName } = alert;
       return {
         id,
         media: mediaUrl,
-        cameraName: `Camera ${id}`,
-        location: "Pune",
-        type: isImageURL(mediaUrl) ? "image" : "video",
+        cameraName,
+        location: cameraLocation,
+        type: isImageURL(fileName) ? "image" : "video",
         alertTime: formatDateInWords(alertTime),
         severity
       };
@@ -137,14 +152,27 @@ class AlertsComponent extends React.Component<IProps, IState> {
     });
   };
 
+  public handleSeverityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const filteredValue = event.target.value;
+    const { updateFilterParams } = this.props;
+    this.setState({ severity: filteredValue }, () => {
+      updateFilterParams({ severity: filteredValue, pageNumber: 0, pageSize: 20 });
+    });
+  };
+
   public render() {
     const {
       classes,
-      filters: { pageSize, pageNumber, dateTimeDisplayValue },
+      filters: {
+        pageSize,
+        pageNumber,
+        dateTimeDisplayValue,
+        dateRange: { startDate, endDate }
+      },
       totalCount
     } = this.props;
     const list = this.getList();
-    const { location } = this.state;
+    const { location, severity } = this.state;
     return (
       <>
         <Grid justify="space-between" container spacing={10}>
@@ -160,28 +188,44 @@ class AlertsComponent extends React.Component<IProps, IState> {
         </Grid>
 
         <Divider className={classes.divider} />
+        <Card className={classes.filterContainer}>
+          <CardContent>
+            <div className={classes.topbarContainer}>
+              <div>
+                <SearchBar
+                  className={classes.searchContainer}
+                  value={location}
+                  onChange={this.handleSearch}
+                  onCancelSearch={this.handleCancelSearch}
+                />
+              </div>
+              <div>
+                <DateTimeRangeInput
+                  onDateTimeFilterChange={this.handleDateTimeChange}
+                  dateTimeDisplayValue={dateTimeDisplayValue}
+                  initialFromDateTime={startDate || new Date()}
+                  initialToDateTime={endDate || new Date()}
+                  disableFutureDates
+                  disableEarlierDates
+                  minWidth="lg"
+                />
+              </div>
+              <div>
+                <FormControl className={classes.formControl}>
+                  <InputLabel className={classes.label}>Severity</InputLabel>
+                  <Select value={severity} onChange={this.handleSeverityChange}>
+                    {SEVERITY.map(s => (
+                      <MenuItem value={s} key={s}>
+                        {s}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-        <div className={classes.topbarContainer}>
-          <div>
-            <SearchBar
-              className={classes.searchContainer}
-              value={location}
-              onChange={this.handleSearch}
-              onCancelSearch={this.handleCancelSearch}
-            />
-          </div>
-          <div>
-            <DateTimeRangeInput
-              onDateTimeFilterChange={this.handleDateTimeChange}
-              dateTimeDisplayValue={dateTimeDisplayValue}
-              initialFromDateTime={new Date()}
-              initialToDateTime={new Date()}
-              disableFutureDates
-              disableEarlierDates
-              minWidth="lg"
-            />
-          </div>
-        </div>
         <Grid container spacing={6}>
           <Grid item xs={12}>
             {list?.length ? (

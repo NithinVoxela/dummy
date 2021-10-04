@@ -13,6 +13,7 @@ export interface IAlertFilterParams {
   };
   location?: string;
   dateTimeDisplayValue?: string;
+  severity?: string;
 }
 
 class AlertService {
@@ -53,10 +54,15 @@ class AlertService {
       ...(filterParams.location && {
         location: filterParams.location
       }),
+      ...(filterParams.severity && {
+        severity: filterParams.severity
+      }),
       ...(filterParams.dateRange.startDate &&
         filterParams.dateRange.endDate && {
-          startDate: formatDate(filterParams.dateRange.startDate),
-          endDate: formatDate(filterParams.dateRange.endDate)
+          dateRange: {
+            startDate: formatDate(filterParams.dateRange.startDate),
+            endDate: formatDate(filterParams.dateRange.endDate)
+          }
         })
     };
   };
