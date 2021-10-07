@@ -16,7 +16,7 @@ import { NUMBERS } from "configs/constants";
 import { styles } from "./styles";
 
 export const CARD = {
-  WIDTH: 345,
+  WIDTH: 300,
   HEIGHT: 300
 };
 

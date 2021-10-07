@@ -45,8 +45,7 @@ const usePrevious = (value: DependencyList) => {
   return ref.current;
 };
 
-const tableColumns = [
-  { id: "publicId", numeric: false, disablePadding: false, disableSort: true, label: "Public ID", align: "left" },
+const tableColumns = [  
   { id: "name", numeric: false, disablePadding: false, disableSort: true, label: "Name", align: "left" },
   { id: "cameraType", numeric: false, disablePadding: false, disableSort: true, label: "Type", align: "left" },
   { id: "description", numeric: false, disablePadding: false, disableSort: true, label: "Description", align: "left" },
@@ -117,7 +116,6 @@ const CamerasComponent: React.FC<IProps> = ({
       return {
         id: publicId,
         data: {
-          publicId,
           name,
           cameraType,
           description,
@@ -205,6 +203,7 @@ const CamerasComponent: React.FC<IProps> = ({
             value={searched}
             onChange={handleSearch}
             onCancelSearch={handleCancelSearch}
+            placeholder="Search by name..."
           />
           <Card>
             <Table

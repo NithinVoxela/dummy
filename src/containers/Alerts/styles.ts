@@ -18,7 +18,7 @@ export const styles = (theme?: Theme) =>
       display: "flex",
       justifyContent: "space-between",
       paddingRight: 34,
-      paddingBottom: 34,
+      paddingBottom: 0,
       flexWrap: "wrap",
       flexGrow: 1
     },
@@ -28,16 +28,16 @@ export const styles = (theme?: Theme) =>
     },
     formControl: {
       width: 240,
-      padding: 8,
-      borderRadius: 8,
+      padding: "8px 8px 0px 8px",
+      borderRadius: 4,
       backgroundColor: "rgba(0, 0, 0, 0.09)"
     },
     label: {
-      marginTop: 8,
+      marginTop: 0,
       minHeight: 28,
       marginLeft: 8
     },
     filterContainer: {
-      marginBottom: 16
+      marginBottom: 30
     }
   });

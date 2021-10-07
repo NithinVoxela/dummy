@@ -197,6 +197,7 @@ class AlertsComponent extends React.Component<IProps, IState> {
                   value={location}
                   onChange={this.handleSearch}
                   onCancelSearch={this.handleCancelSearch}
+                  placeholder="Search by location..."
                 />
               </div>
               <div>

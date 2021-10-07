@@ -7,8 +7,12 @@ export const formatDate = (date: Date) => {
   return format(new Date(date), "yyyy-MM-dd");
 };
 
+export const formatOnlyDateInWords = (date: Date) => {
+  return format(new Date(date), "do MMM yyyy'");
+};
+
 export const formatDateInWords = (date: Date) => {
-  return format(new Date(date), "d MMMM', ' yyyy',' h':'mm a");
+  return format(new Date(date), "do MMM yyyy',' h':'mm a");
 };
 
 export const formatTimeAgo = (date: Date) => {
@@ -35,5 +39,5 @@ export const getDisplayValueForCustom = (from: Date, to: Date) => {
   const fromWord = translationService.getMessageTranslation("calendar-from", "From");
   const toWord = translationService.getMessageTranslation("calendar-to", "to");
 
-  return `${fromWord} ${formatDate(from)} ${toWord} ${formatDate(to)}`;
+  return `${fromWord} ${formatOnlyDateInWords(from)} ${toWord} ${formatOnlyDateInWords(to)}`;
 };
