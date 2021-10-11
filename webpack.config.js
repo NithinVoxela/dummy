@@ -36,6 +36,7 @@ if (process.env.NODE_ENV === "local") {
     ],
   });
 }
+
 const CopyWebpackPluginMessages = new CopyWebpackPlugin({
   patterns: [
     {
@@ -53,6 +54,14 @@ const CopyCriticalPathAssetsConfig = new CopyWebpackPlugin({
     {
       from: path.join(__dirname, "src/assets/icons/loader.svg"),
       to: path.join(__dirname, "/build/loading.svg"),
+    },
+    {
+      from: path.join(__dirname, `src/services/translation/messages.json`),
+      to: path.join(__dirname, "/build/messages.json"),
+    },
+    {
+      from: path.join(__dirname, `config/environments/config.${process.env.NODE_ENV === "production" ? 'prod' : 'local'}.json`),
+      to: path.join(__dirname, "/build/config.json"),
     },
   ],
 });
