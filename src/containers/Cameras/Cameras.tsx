@@ -126,13 +126,13 @@ const CamerasComponent: React.FC<IProps> = ({
           actions: (
             <Box mr={2}>
               <Tooltip title="Edit">
-                <IconButton aria-label="edit" onClick={handleEditClick(publicId)}>
-                  <EditIcon />
+                <IconButton aria-label="edit" onClick={handleEditClick(publicId)} size="small">
+                  <EditIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
               <Tooltip title="Delete">
-                <IconButton aria-label="delete" onClick={handleDeleteClick(publicId, name)}>
-                  <DeleteIcon />
+                <IconButton aria-label="delete" onClick={handleDeleteClick(publicId, name)} size="small">
+                  <DeleteIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
             </Box>

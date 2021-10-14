@@ -8,5 +8,9 @@ export const styles = (_theme?: Theme) =>
       width: "100%",
       alignItems: "center",
       justifyContent: "center"
+    },
+    loaderIcon: {
+      width: 80,
+      height: 80
     }
   });
