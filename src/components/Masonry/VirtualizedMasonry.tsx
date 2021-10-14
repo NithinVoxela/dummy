@@ -1,4 +1,4 @@
-import { Card, CardContent, CardMedia, Typography, WithStyles } from "@material-ui/core";
+import { Card, CardContent, CardMedia, Chip, Typography, WithStyles } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import * as React from "react";
 import {
@@ -18,6 +18,12 @@ import { styles } from "./styles";
 export const CARD = {
   WIDTH: 300,
   HEIGHT: 350
+};
+
+export const SEVERITY_COLORS = {
+  High: "#ed6c02",
+  Critical: "#d32f2f",
+  Low: "#0288d1"
 };
 
 export interface IBaseVirtualizedMasonryProps {
@@ -106,11 +112,15 @@ class MasonryComponent extends React.Component<IProps> {
               {alertTime}
             </Typography>
             <Typography component="p" className={classes.severity}>
-              {severity}
+              <Chip label={severity}  style={{backgroundColor: SEVERITY_COLORS[severity], color: "#fff"}} size="small" />
             </Typography>
           </div>
-          <Typography component="p" className={classes.cardInfo}>{cameraName}</Typography>
-          <Typography component="p" className={classes.cardInfo} title={location}><b>Location:</b> {location}</Typography>
+          <Typography component="p" className={classes.cardInfo} title={cameraName}>
+            <b>Camera:</b> {cameraName}
+          </Typography>
+          <Typography component="p" className={classes.cardInfo} title={location}>
+            <b>Location:</b> {location}
+          </Typography>
         </CardContent>
       </Card>
     ) : null;

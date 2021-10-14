@@ -10,7 +10,8 @@ export const styles = () =>
       height: 225
     },
     video: {
-      height: "100%"
+      height: "100%",
+      minHeight: 225
     },
     cardInfo: {
       textOverflow: "ellipsis",
@@ -24,6 +25,6 @@ export const styles = () =>
       flex: 5
     },
     severity: {
-      flex: 1
+      flex: 1     
     }
   });

@@ -17,7 +17,7 @@ interface IProps extends WithStyles, IStateToProps {}
 const LoadingBarComponent: React.FC<IProps> = ({ classes, loading }) => {
   return loading ? (
     <div className={classes.loadingContainer}>
-      <img src={loadingIcon} />
+      <img src={loadingIcon} className={classes.loaderIcon} />
     </div>
   ) : null;
 };
