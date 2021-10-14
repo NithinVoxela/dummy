@@ -17,6 +17,7 @@ export const styles = () =>
     tooltip: {
       maxWidth: "none",
       backgroundColor: "#FFF",
+      border: "1px solid rgb(21, 101, 192)",
       color: "rgb(21, 101, 192)",
       lineHeight: 1.25
     },
@@ -37,7 +38,7 @@ export const styles = () =>
     },
     // eslint-disable-next-line @typescript-eslint/naming-convention
     minWidth_lg: {
-      width: 500
+      width: 350
     },
     // eslint-disable-next-line @typescript-eslint/naming-convention
     minWidth_auto: {

@@ -51,7 +51,7 @@ interface IState {
   severity: string;
 }
 
-interface IProps extends IStateToProps, IDispatchToProps, WithStyles<typeof styles> {}
+interface IProps extends IStateToProps, IDispatchToProps, WithStyles<typeof styles> { }
 
 class AlertsComponent extends React.Component<IProps, IState> {
   public constructor(props: IProps) {
@@ -191,38 +191,32 @@ class AlertsComponent extends React.Component<IProps, IState> {
         <Card className={classes.filterContainer}>
           <CardContent>
             <div className={classes.topbarContainer}>
-              <div>
-                <SearchBar
-                  className={classes.searchContainer}
-                  value={location}
-                  onChange={this.handleSearch}
-                  onCancelSearch={this.handleCancelSearch}
-                  placeholder="Search by location..."
-                />
-              </div>
-              <div>
-                <DateTimeRangeInput
-                  onDateTimeFilterChange={this.handleDateTimeChange}
-                  dateTimeDisplayValue={dateTimeDisplayValue}
-                  initialFromDateTime={startDate || new Date()}
-                  initialToDateTime={endDate || new Date()}
-                  disableFutureDates
-                  disableEarlierDates
-                  minWidth="lg"
-                />
-              </div>
-              <div>
-                <FormControl className={classes.formControl}>
-                  <InputLabel className={classes.label}>Severity</InputLabel>
-                  <Select value={severity} onChange={this.handleSeverityChange}>
-                    {SEVERITY.map(s => (
-                      <MenuItem value={s} key={s}>
-                        {s}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </div>
+              <SearchBar
+                className={classes.searchContainer}
+                value={location}
+                onChange={this.handleSearch}
+                onCancelSearch={this.handleCancelSearch}
+                placeholder="Search by location..."
+              />
+              <DateTimeRangeInput
+                onDateTimeFilterChange={this.handleDateTimeChange}
+                dateTimeDisplayValue={dateTimeDisplayValue}
+                initialFromDateTime={startDate || new Date()}
+                initialToDateTime={endDate || new Date()}
+                disableFutureDates
+                disableEarlierDates
+                minWidth="lg"
+              />
+              <FormControl className={classes.formControl}>
+                <InputLabel className={classes.label}>Severity</InputLabel>
+                <Select value={severity} onChange={this.handleSeverityChange}>
+                  {SEVERITY.map(s => (
+                    <MenuItem value={s} key={s}>
+                      {s}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </div>
           </CardContent>
         </Card>

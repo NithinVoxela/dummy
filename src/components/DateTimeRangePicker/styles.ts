@@ -39,12 +39,12 @@ export const styles = () =>
     },
     filtersContainer: {
       flex: 1,
-      borderBottom: "1px solid rgb(21, 101, 192)",
-      borderRight: "1px solid rgb(21, 101, 192)"
+      // borderBottom: "1px solid rgb(21, 101, 192)",
+      // borderRight: "1px solid rgb(21, 101, 192)"
     },
     dayPickerContainer: {
-      borderBottom: `1px solid rgb(21, 101, 192)`,
-      borderLeft: "1px solid rgb(21, 101, 192)"
+      // borderBottom: `1px solid rgb(21, 101, 192)`,
+      // borderLeft: "1px solid rgb(21, 101, 192)"
     },
     applyButton: {
       padding: "10px 5px 10px 15px"

@@ -7,11 +7,15 @@ export const styles = () =>
       boxShadow: "0  5px 10px rgba(154,160,185,0.05), 0 15px 40px rgba(166,173,201,0.2)"
     },
     image: {
-      height: 0,
-      paddingTop: "56.25%"
+      height: 225
     },
     video: {
       height: "100%"
+    },
+    cardInfo: {
+      textOverflow: "ellipsis",
+      overflow: "hidden",
+      whiteSpace: "nowrap"
     },
     header: {
       display: "flex"

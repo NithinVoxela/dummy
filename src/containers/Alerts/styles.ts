@@ -30,7 +30,7 @@ export const styles = (theme?: Theme) =>
       width: 240,
       padding: "8px 8px 0px 8px",
       borderRadius: 4,
-      backgroundColor: "rgba(0, 0, 0, 0.09)"
+      // backgroundColor: "rgba(0, 0, 0, 0.09)"
     },
     label: {
       marginTop: 0,

@@ -17,7 +17,7 @@ import { styles } from "./styles";
 
 export const CARD = {
   WIDTH: 300,
-  HEIGHT: 300
+  HEIGHT: 350
 };
 
 export interface IBaseVirtualizedMasonryProps {
@@ -109,8 +109,8 @@ class MasonryComponent extends React.Component<IProps> {
               {severity}
             </Typography>
           </div>
-          <Typography component="p">{cameraName}</Typography>
-          <Typography component="p">{location}</Typography>
+          <Typography component="p" className={classes.cardInfo}>{cameraName}</Typography>
+          <Typography component="p" className={classes.cardInfo} title={location}><b>Location:</b> {location}</Typography>
         </CardContent>
       </Card>
     ) : null;
