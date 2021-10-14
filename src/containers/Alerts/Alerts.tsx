@@ -8,6 +8,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  TextField,
   Typography
 } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
@@ -29,6 +30,7 @@ import { getAlertLogFilter } from "store/alert/alertLogFilters/alertLogFilters.s
 import { IApplicationState } from "store/state.model";
 
 import { styles } from "./styles";
+import classNames from "classnames";
 
 const SEVERITY = ["HIGH", "MEDIUM", "LOW"];
 
@@ -207,16 +209,34 @@ class AlertsComponent extends React.Component<IProps, IState> {
                 disableEarlierDates
                 minWidth="lg"
               />
-              <FormControl className={classes.formControl}>
-                <InputLabel className={classes.label}>Severity</InputLabel>
-                <Select value={severity} onChange={this.handleSeverityChange}>
-                  {SEVERITY.map(s => (
-                    <MenuItem value={s} key={s}>
-                      {s}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <TextField
+                select
+                value={severity}
+                onChange={this.handleSeverityChange}
+                variant="filled"
+                className={classes.formControl}
+                InputProps={{
+                  // startAdornment: type === "search" && (
+                  //   <InputAdornment position="start">
+                  //     <SearchOutlinedIcon />
+                  //   </InputAdornment>
+                  // ),
+                  classes: { root: classes.inputRoot, focused: classes.focused },
+                  disableUnderline: true
+                }}
+                InputLabelProps={{
+                  className: classNames(classes.severityLabel),
+                  filled: true,
+                  shrink: true
+                }}
+                label={"Severity"}
+              >
+                {SEVERITY.map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </TextField>
             </div>
           </CardContent>
         </Card>

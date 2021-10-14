@@ -1,4 +1,4 @@
-import { ClickAwayListener, InputAdornment, Tooltip, WithStyles } from "@material-ui/core";
+import { ClickAwayListener, IconButton, InputAdornment, Tooltip, WithStyles } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
@@ -11,6 +11,7 @@ import { translationService } from "services/translation/translation.service";
 import { getTimeInSeconds } from "src/helpers/dateTime";
 
 import { styles } from "./styles";
+import { Close } from "@material-ui/icons";
 
 export interface IDateTimePickerModel {
   fromDateTime: Date;
@@ -73,23 +74,31 @@ class DateTimeRangeInputComponent extends React.PureComponent<IProps, IState> {
   };
 
   public getAdornment = () => {
-    const { classes, calendar } = this.props;
+    const { classes, calendar, dateTimeDisplayValue } = this.props;
 
     return calendar === "start"
       ? {
-          startAdornment: (
-            <InputAdornment position="start">
-              <DateRangeIcon className={classes.icon} />
-            </InputAdornment>
-          )
-        }
+        startAdornment: (
+          <InputAdornment position="start">
+            <DateRangeIcon className={classes.icon} />
+          </InputAdornment>
+        )
+      }
       : {
-          endAdornment: (
+        endAdornment: (
+          <>
+            {!!dateTimeDisplayValue && (<IconButton
+              onClick={() => this.dateTimeHandler({ fromDateTime: null, toDateTime: null, dateTimeDisplayValue: "" })}
+              style={{ margin: "-0.5em" }}
+            >
+              <Close className={classes.icon} />
+            </IconButton>)}
             <InputAdornment position="end">
               <DateRangeIcon className={classes.icon} />
             </InputAdornment>
-          )
-        };
+          </>
+        )
+      };
   };
 
   public render() {

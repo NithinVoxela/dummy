@@ -28,16 +28,46 @@ export const styles = (theme?: Theme) =>
     },
     formControl: {
       width: 240,
-      padding: "8px 8px 0px 8px",
-      borderRadius: 4,
-      // backgroundColor: "rgba(0, 0, 0, 0.09)"
+      // "& .MuiSelect-select:focus": {
+      //   backgroundColor: "#fff",
+      //   border: "1px solid rgba(0, 0, 0, 0.09)",
+      //   borderLeft: 0,
+      //   outline: "none"
+      // }
     },
     label: {
       marginTop: 0,
       minHeight: 28,
       marginLeft: 8
     },
+    severityLabel: {
+      fontSize: 14,
+      fontWeight: 400,
+      paddingBottom: 10,
+      minHeight: 28,
+      "& .icon": {
+        fontSize: 21,
+        marginRight: 10
+      },
+      display: "flex",
+      alignItems: "center"
+    },
+    focused: {
+      // backgroundColor: "#fff"
+      // display: "none"
+      outline: "none",
+      boxShadow: "none"
+    },
     filterContainer: {
       marginBottom: 30
+    },
+    inputRoot: {
+      height: 50,
+      backgroundColor: "#fff",
+      border: "1px solid rgba(0, 0, 0, 0.09)",
+
+      "&:hover": {
+        backgroundColor: "#fff",
+      }
     }
   });

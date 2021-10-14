@@ -44,6 +44,8 @@ const TextInputComponent: React.FC<ITextInputProps> = ({
             <SearchOutlinedIcon />
           </InputAdornment>
         ),
+        classes: { root: classes.inputRoot },
+        disableUnderline: true,
         ...InputProps
       }}
       InputLabelProps={{
