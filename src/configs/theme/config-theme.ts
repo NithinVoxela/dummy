@@ -11,7 +11,7 @@ const lightVariant = {
   name: "Light",
   palette: {
     primary: {
-      main: blue[800],
+      main: "#0088ff",
       contrastText: "#FFF"
     },
     secondary: {
@@ -21,7 +21,7 @@ const lightVariant = {
   },
   header: {
     color: grey[200],
-    background: blue[800],
+    background: "#0088ff",
     search: {
       color: grey[100]
     },
@@ -34,7 +34,7 @@ const lightVariant = {
     background: "#FFF",
     header: {
       color: "#FFF",
-      background: blue[800],
+      background: "#0088ff",
       brand: {
         color: "#FFFFFF"
       }

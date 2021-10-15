@@ -9,8 +9,6 @@ export const styles = () =>
       }
     },
     icon: {
-      paddingTop: 12,
-      fontSize: 34,
       "&:hover": {
         cursor: "pointer"
       }
@@ -39,7 +37,7 @@ export const styles = () =>
     },
     // eslint-disable-next-line @typescript-eslint/naming-convention
     minWidth_lg: {
-      width: 360
+      width: 300
     },
     // eslint-disable-next-line @typescript-eslint/naming-convention
     minWidth_auto: {

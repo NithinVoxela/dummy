@@ -1,10 +1,12 @@
 import { Grid, Hidden, Menu, MenuItem, AppBar, IconButton, Toolbar, Avatar, Badge } from "@material-ui/core";
+import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 import MenuIcon from "@material-ui/icons/Menu";
+import NotificationsIcon from "@material-ui/icons/Notifications";
 import * as React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import userAvatar from "assets/avatar-1.png";
+import { AppStore } from "store/configureStore";
 import { removeUserAccount } from "store/userAccount/userAccount.actions";
 
 import { useStyles } from "./styles";
@@ -31,10 +33,20 @@ const UserMenu: React.FC = () => {
     setAnchorMenu(null);
   };
 
+  const getUserName = () => {
+    const appStore = AppStore.getInstance();
+    if (!appStore) {
+      return null;
+    }
+
+    const state = appStore.getState();
+    return state.userAccount.userName?.charAt(0)?.toUpperCase();
+  };
+
   return (
     <>
       <Badge variant="dot" onClick={handleToggleMenu} className={classes.badge}>
-        <Avatar alt="User" src={userAvatar} />
+        <Avatar alt="User" className={classes.small}>{getUserName()}</Avatar>
       </Badge>
       <Menu id="menu-appbar" anchorEl={anchorMenu} open={Boolean(anchorMenu)} onClose={handleCloseMenu}>
         <MenuItem onClick={handleCloseMenu}>Profile</MenuItem>
@@ -59,6 +71,11 @@ const TopBarComponent: React.FunctionComponent<IProps> = ({ onDrawerToggle: hand
             </Grid>
           </Hidden>
           <Grid item xs />
+          <Grid item>
+            <Badge color="error" badgeContent={7} className={classes.alertCount}>
+              <NotificationsIcon />
+            </Badge>
+          </Grid>
           <Grid item>
             <UserMenu />
           </Grid>

@@ -36,8 +36,5 @@ export const firstDayOfPreviousMonth = () => {
 };
 
 export const getDisplayValueForCustom = (from: Date, to: Date) => {
-  const fromWord = translationService.getMessageTranslation("calendar-from", "From");
-  const toWord = translationService.getMessageTranslation("calendar-to", "to");
-
-  return `${fromWord} ${formatOnlyDateInWords(from)} ${toWord} ${formatOnlyDateInWords(to)}`;
+  return `${formatOnlyDateInWords(from)} - ${formatOnlyDateInWords(to)}`;
 };

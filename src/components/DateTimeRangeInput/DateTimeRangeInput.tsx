@@ -78,27 +78,31 @@ class DateTimeRangeInputComponent extends React.PureComponent<IProps, IState> {
 
     return calendar === "start"
       ? {
-        startAdornment: (
-          <InputAdornment position="start">
-            <DateRangeIcon className={classes.icon} />
-          </InputAdornment>
-        )
-      }
-      : {
-        endAdornment: (
-          <>
-            {!!dateTimeDisplayValue && (<IconButton
-              onClick={() => this.dateTimeHandler({ fromDateTime: null, toDateTime: null, dateTimeDisplayValue: "" })}
-              style={{ margin: "-0.5em" }}
-            >
-              <Close className={classes.icon} />
-            </IconButton>)}
-            <InputAdornment position="end">
+          startAdornment: (
+            <InputAdornment position="start">
               <DateRangeIcon className={classes.icon} />
             </InputAdornment>
-          </>
-        )
-      };
+          )
+        }
+      : {
+          endAdornment: (
+            <>
+              {!!dateTimeDisplayValue && (
+                <IconButton
+                  onClick={() =>
+                    this.dateTimeHandler({ fromDateTime: null, toDateTime: null, dateTimeDisplayValue: "" })
+                  }
+                  style={{ margin: "-0.5em" }}
+                >
+                  <Close className={classes.icon} fontSize="small" />
+                </IconButton>
+              )}
+              <InputAdornment position="end">
+                <DateRangeIcon className={classes.icon} fontSize="small" />
+              </InputAdornment>
+            </>
+          )
+        };
   };
 
   public render() {

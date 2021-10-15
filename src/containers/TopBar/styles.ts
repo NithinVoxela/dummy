@@ -10,16 +10,15 @@ export const useStyles = makeStyles((theme: Theme) => {
     },
     badge: {
       cursor: "pointer",
-      marginRight: theme.spacing(1),
-      "& span": {
-        backgroundColor: theme.sidebar.footer.online.background,
-        border: `1.5px solid ${theme.palette.common.white}`,
-        height: 12,
-        width: 12,
-        borderRadius: "50%",
-        right: "12%",
-        top: "80%"
-      }
+      marginRight: theme.spacing(1)     
+    },
+    alertCount: {
+      cursor: "pointer",
+      marginRight: theme.spacing(6)
+    },
+    small: {
+      width: theme.spacing(8.5),
+      height: theme.spacing(8.5)
     }
   });
 });

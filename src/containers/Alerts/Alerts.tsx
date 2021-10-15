@@ -191,7 +191,7 @@ class AlertsComponent extends React.Component<IProps, IState> {
 
         <Divider className={classes.divider} />
         <Card className={classes.filterContainer}>
-          <CardContent>
+          <CardContent className={classes.filterContent}>
             <div className={classes.topbarContainer}>
               <SearchBar
                 className={classes.searchContainer}
