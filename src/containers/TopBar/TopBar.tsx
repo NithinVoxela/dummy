@@ -1,5 +1,4 @@
 import { Grid, Hidden, Menu, MenuItem, AppBar, IconButton, Toolbar, Avatar, Badge } from "@material-ui/core";
-import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import * as React from "react";
