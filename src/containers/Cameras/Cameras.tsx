@@ -1,4 +1,15 @@
-import { Typography, Grid, Breadcrumbs, Card, Divider, Box, IconButton, Button, Tooltip } from "@material-ui/core";
+import {
+  Typography,
+  Grid,
+  Breadcrumbs,
+  Card,
+  Divider,
+  Box,
+  IconButton,
+  Button,
+  Tooltip,
+  CardContent
+} from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import SearchBar from "material-ui-search-bar";
@@ -45,7 +56,7 @@ const usePrevious = (value: DependencyList) => {
   return ref.current;
 };
 
-const tableColumns = [  
+const tableColumns = [
   { id: "name", numeric: false, disablePadding: false, disableSort: true, label: "Name", align: "left" },
   { id: "cameraType", numeric: false, disablePadding: false, disableSort: true, label: "Type", align: "left" },
   { id: "description", numeric: false, disablePadding: false, disableSort: true, label: "Description", align: "left" },
@@ -196,15 +207,22 @@ const CamerasComponent: React.FC<IProps> = ({
       </Grid>
 
       <Divider className={classes.divider} />
+
+      <Card className={classes.filterContainer}>
+        <CardContent className={classes.filterContent}>
+          <div className={classes.topbarContainer}>
+            <SearchBar
+              className={classes.searchContainer}
+              value={searched}
+              onChange={handleSearch}
+              onCancelSearch={handleCancelSearch}
+              placeholder="Search by name..."
+            />
+          </div>
+        </CardContent>
+      </Card>
       <Grid container spacing={6}>
         <Grid item xs={12}>
-          <SearchBar
-            className={classes.searchContainer}
-            value={searched}
-            onChange={handleSearch}
-            onCancelSearch={handleCancelSearch}
-            placeholder="Search by name..."
-          />
           <Card>
             <Table
               rows={getRows()}

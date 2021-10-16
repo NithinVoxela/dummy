@@ -20,7 +20,7 @@ export const styles = () =>
       border: "1px solid rgba(0, 0, 0, 0.09)",
 
       "&:hover": {
-        backgroundColor: "#fff",
+        backgroundColor: "#fff"
       }
     }
   });

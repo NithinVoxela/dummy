@@ -3,21 +3,22 @@ import {
   Card,
   CardContent,
   Divider,
-  FormControl,
   Grid,
-  InputLabel,
+  IconButton,
   MenuItem,
-  Select,
   TextField,
   Typography
 } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
+import { Close } from "@material-ui/icons";
+import classNames from "classnames";
 import SearchBar from "material-ui-search-bar";
 import * as React from "react";
 import { connect } from "react-redux";
 
 import { DateTimeRangeInput } from "components/DateTimeRangeInput";
 import { VirtualizedMasonry } from "components/Masonry/VirtualizedMasonry";
+import { LoadingBar } from "containers/Loading";
 import { IAlertDataModel } from "models/alertData.model";
 import { IAlertFilterParams } from "services/alert/alert.service";
 import { translationService } from "services/translation/translation.service";
@@ -30,7 +31,6 @@ import { getAlertLogFilter } from "store/alert/alertLogFilters/alertLogFilters.s
 import { IApplicationState } from "store/state.model";
 
 import { styles } from "./styles";
-import classNames from "classnames";
 
 const SEVERITY = ["HIGH", "MEDIUM", "LOW"];
 
@@ -53,7 +53,7 @@ interface IState {
   severity: string;
 }
 
-interface IProps extends IStateToProps, IDispatchToProps, WithStyles<typeof styles> { }
+interface IProps extends IStateToProps, IDispatchToProps, WithStyles<typeof styles> {}
 
 class AlertsComponent extends React.Component<IProps, IState> {
   public constructor(props: IProps) {
@@ -162,6 +162,13 @@ class AlertsComponent extends React.Component<IProps, IState> {
     });
   };
 
+  public handleClearSeverity = () => {
+    const { updateFilterParams } = this.props;
+    this.setState({ severity: null }, () => {
+      updateFilterParams({ severity: null, pageNumber: 0, pageSize: 20 });
+    });
+  };
+
   public render() {
     const {
       classes,
@@ -216,11 +223,15 @@ class AlertsComponent extends React.Component<IProps, IState> {
                 variant="filled"
                 className={classes.formControl}
                 InputProps={{
-                  // startAdornment: type === "search" && (
-                  //   <InputAdornment position="start">
-                  //     <SearchOutlinedIcon />
-                  //   </InputAdornment>
-                  // ),
+                  endAdornment: (
+                    <>
+                      {severity && (
+                        <IconButton onClick={this.handleClearSeverity} style={{ margin: "-0.5em" }}>
+                          <Close className={classes.icon} fontSize="small" />
+                        </IconButton>
+                      )}
+                    </>
+                  ),
                   classes: { root: classes.inputRoot, focused: classes.focused },
                   disableUnderline: true
                 }}
@@ -229,9 +240,9 @@ class AlertsComponent extends React.Component<IProps, IState> {
                   filled: true,
                   shrink: true
                 }}
-                label={"Severity"}
+                label="Severity"
               >
-                {SEVERITY.map((option) => (
+                {SEVERITY.map(option => (
                   <MenuItem key={option} value={option}>
                     {option}
                   </MenuItem>
@@ -257,6 +268,7 @@ class AlertsComponent extends React.Component<IProps, IState> {
               </Typography>
             )}
           </Grid>
+          <LoadingBar />
         </Grid>
       </>
     );

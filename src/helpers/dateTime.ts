@@ -1,7 +1,6 @@
 import { format, formatDistanceToNowStrict } from "date-fns";
 
 import { NUMBERS } from "configs/constants";
-import { translationService } from "services/translation/translation.service";
 
 export const formatDate = (date: Date) => {
   return format(new Date(date), "yyyy-MM-dd");

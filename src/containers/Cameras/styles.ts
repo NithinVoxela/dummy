@@ -20,9 +20,19 @@ export const styles = () => {
       marginTop: 24,
       marginBottom: 24
     },
+    topbarContainer: {
+      display: "flex",
+      justifyContent: "space-between",
+      paddingRight: 34,
+      paddingBottom: 0,
+      flexWrap: "wrap",
+      flexGrow: 1
+    },
     searchContainer: {
       height: 50,
-      marginBottom: 4
+      marginBottom: 4,
+      boxShadow: "none",
+      border: "1px solid #e8e8e8"
     },
     textfield: {
       width: "47%",
@@ -36,6 +46,12 @@ export const styles = () => {
     },
     form: {
       padding: "16px"
+    },
+    filterContent: {
+      paddingBottom: "16px !important"
+    },
+    filterContainer: {
+      marginBottom: 24
     }
   });
 };

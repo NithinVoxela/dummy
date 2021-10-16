@@ -1,23 +1,18 @@
-import * as React from "react";
-
 import { Button, Menu, MenuItem } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
-
-import {
-  Loop as LoopIcon,
-  FilterList as FilterListIcon
-} from "@material-ui/icons";
+import { Loop as LoopIcon, FilterList as FilterListIcon } from "@material-ui/icons";
+import * as React from "react";
 
 import { styles } from "./styles";
 
 interface IState {
-  anchorEl: any
+  anchorEl: any;
 }
 
 interface IProps extends WithStyles<typeof styles> {}
 
 class ActionsComponent extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+  public constructor(props: IProps) {
     super(props);
 
     this.state = {
@@ -25,15 +20,15 @@ class ActionsComponent extends React.Component<IProps, IState> {
     };
   }
 
-  handleClick = (event: any) => {
+  public handleClick = (event: any) => {
     this.setState({ anchorEl: event.currentTarget });
   };
 
-  handleClose = () => {
+  public handleClose = () => {
     this.setState({ anchorEl: null });
   };
 
-  render() {
+  public render() {
     const { anchorEl } = this.state;
     const { classes } = this.props;
     return (
@@ -55,12 +50,7 @@ class ActionsComponent extends React.Component<IProps, IState> {
         >
           Today: October 14
         </Button>
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={this.handleClose}
-        >
+        <Menu id="simple-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={this.handleClose}>
           <MenuItem onClick={this.handleClose}>Today</MenuItem>
           <MenuItem onClick={this.handleClose}>Yesterday</MenuItem>
           <MenuItem onClick={this.handleClose}>Last 7 days</MenuItem>

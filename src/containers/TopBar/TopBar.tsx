@@ -45,7 +45,9 @@ const UserMenu: React.FC = () => {
   return (
     <>
       <Badge variant="dot" onClick={handleToggleMenu} className={classes.badge}>
-        <Avatar alt="User" className={classes.small}>{getUserName()}</Avatar>
+        <Avatar alt="User" className={classes.small}>
+          {getUserName()}
+        </Avatar>
       </Badge>
       <Menu id="menu-appbar" anchorEl={anchorMenu} open={Boolean(anchorMenu)} onClose={handleCloseMenu}>
         <MenuItem onClick={handleCloseMenu}>Profile</MenuItem>

@@ -1,75 +1,37 @@
-import * as React from "react";
-
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  IconButton
-} from "@material-ui/core";
-
+import { Card, CardContent, CardHeader, IconButton } from "@material-ui/core";
+import { WithStyles, withStyles, WithTheme } from "@material-ui/core/styles";
 import { fade } from "@material-ui/core/styles/colorManipulator";
-
+import * as React from "react";
 import { Line } from "react-chartjs-2";
-
 import { MoreVertical } from "react-feather";
-import { WithStyles, withStyles } from "@material-ui/core/styles";
 
 import { styles } from "./styles";
 
-interface IProps extends WithStyles<typeof styles> { }
+interface IProps extends WithStyles<typeof styles>, WithTheme {}
 
 class LineChartComponent extends React.Component<IProps> {
   public options: any;
   public data: any;
 
-  constructor(props: IProps) {
+  public constructor(props: IProps) {
     super(props);
-
+    const { theme } = this.props;
     this.data = (canvas: any) => {
       const ctx = canvas.getContext("2d");
 
       const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-      gradient.addColorStop(
-        0,
-        fade(this.props.theme.palette.secondary.main, 0.0875)
-      );
+      gradient.addColorStop(0, fade(theme.palette.secondary.main, 0.0875));
       gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
 
       return {
-        labels: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec"
-        ],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
         datasets: [
           {
             label: "Alerts",
             fill: true,
             backgroundColor: gradient,
-            borderColor: this.props.theme.palette.secondary.main,
-            data: [
-              2115,
-              1562,
-              1584,
-              1892,
-              1587,
-              1923,
-              2566,
-              2448,
-              2805,
-              3438,
-              2917,
-              3327
-            ]
+            borderColor: theme.palette.secondary.main,
+            data: [2115, 1562, 1584, 1892, 1587, 1923, 2566, 2448, 2805, 3438, 2917, 3327]
           }
         ]
       };
@@ -117,10 +79,10 @@ class LineChartComponent extends React.Component<IProps> {
     };
   }
 
-  render() {
+  public render() {
     const { classes } = this.props;
     return (
-      <Card style={{marginBottom: 3}}>
+      <Card style={{ marginBottom: 3 }}>
         <CardHeader
           action={
             <IconButton aria-label="settings">

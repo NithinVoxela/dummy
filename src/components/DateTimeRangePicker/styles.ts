@@ -38,7 +38,7 @@ export const styles = () =>
       display: "flex"
     },
     filtersContainer: {
-      flex: 1,
+      flex: 1
       // borderBottom: "1px solid rgb(21, 101, 192)",
       // borderRight: "1px solid rgb(21, 101, 192)"
     },

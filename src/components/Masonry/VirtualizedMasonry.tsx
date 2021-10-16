@@ -112,7 +112,11 @@ class MasonryComponent extends React.Component<IProps> {
               {alertTime}
             </Typography>
             <Typography component="p" className={classes.severity}>
-              <Chip label={severity}  style={{backgroundColor: SEVERITY_COLORS[severity], color: "#fff"}} size="small" />
+              <Chip
+                label={severity}
+                style={{ backgroundColor: SEVERITY_COLORS[severity], color: "#fff" }}
+                size="small"
+              />
             </Typography>
           </div>
           <Typography component="p" className={classes.cardInfo} title={cameraName}>

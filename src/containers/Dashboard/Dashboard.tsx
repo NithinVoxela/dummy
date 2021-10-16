@@ -1,17 +1,18 @@
 import { Grid, Typography } from "@material-ui/core";
+import { green, red } from "@material-ui/core/colors";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import * as React from "react";
-import { Actions } from "./Actions";
-import { Stats } from "./Stats";
-import { green, red } from "@material-ui/core/colors";
-
-import { styles } from "./styles";
-import { LineChart } from "./LineChart";
-import { DoughnutChart } from "./DoughnutChart";
-import { IUserAccount } from "models/user.model";
 import { connect } from "react-redux";
-import { getUserAccount } from "store/userAccount/userAccount.selector";
+
+import { IUserAccount } from "models/user.model";
 import { IApplicationState } from "store/state.model";
+import { getUserAccount } from "store/userAccount/userAccount.selector";
+
+import { Actions } from "./Actions";
+import { DoughnutChart } from "./DoughnutChart";
+import { LineChart } from "./LineChart";
+import { Stats } from "./Stats";
+import { styles } from "./styles";
 
 interface IStateToProps {
   user: IUserAccount;
@@ -19,24 +20,23 @@ interface IStateToProps {
 
 interface IProps extends IStateToProps, WithStyles<typeof styles> {}
 
-const DashboardComponent: React.FC<IProps> =  ({ classes, user }) => {
-  return(
-    <>
-      <Grid justify="space-between" container spacing={6}>
-        <Grid item>
-          <Typography variant="h3" display="inline" className={classes.typography}>
-          Welcome back, {user.userName}! 
-          </Typography>
-          <Typography variant="body2" display="inline" className={classes.typography}>
-            We've missed you.
-          </Typography>
-        </Grid>
+const DashboardComponent: React.FC<IProps> = ({ classes, user }) => {
+  return (
+    <Grid justify="space-between" container spacing={6}>
+      <Grid item>
+        <Typography variant="h3" display="inline" className={classes.typography}>
+          Welcome back, {user.userName}!
+        </Typography>
+        <Typography variant="body2" display="inline" className={classes.typography}>
+          We've missed you.
+        </Typography>
+      </Grid>
 
-        <Grid item>
-          <Actions />
-        </Grid>
+      <Grid item>
+        <Actions />
+      </Grid>
 
-        <Grid container spacing={6}>
+      <Grid container spacing={6}>
         <Grid item xs={12} sm={12} md={6} lg={3} xl>
           <Stats
             title="Alerts Today"
@@ -82,10 +82,9 @@ const DashboardComponent: React.FC<IProps> =  ({ classes, user }) => {
           <DoughnutChart />
         </Grid>
       </Grid>
-      </Grid>
-    </>
-  )
-}
+    </Grid>
+  );
+};
 
 const mapStateToProps = (state: IApplicationState) => ({
   user: getUserAccount(state)

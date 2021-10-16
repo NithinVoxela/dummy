@@ -29,13 +29,10 @@ export const styles = (theme?: Theme) =>
       border: "1px solid #e8e8e8"
     },
     formControl: {
-      width: 240
-      // "& .MuiSelect-select:focus": {
-      //   backgroundColor: "#fff",
-      //   border: "1px solid rgba(0, 0, 0, 0.09)",
-      //   borderLeft: 0,
-      //   outline: "none"
-      // }
+      width: 240,
+      "& .MuiSelect-select:focus": {
+        backgroundColor: "unset"
+      }
     },
     label: {
       marginTop: 0,
@@ -55,8 +52,6 @@ export const styles = (theme?: Theme) =>
       alignItems: "center"
     },
     focused: {
-      // backgroundColor: "#fff"
-      // display: "none"
       outline: "none",
       boxShadow: "none"
     },
@@ -65,7 +60,7 @@ export const styles = (theme?: Theme) =>
     },
     inputRoot: {
       height: 50,
-      backgroundColor: "#fff",
+      backgroundColor: "#fff!important",
       border: "1px solid rgba(0, 0, 0, 0.09)",
 
       "&:hover": {
@@ -74,5 +69,11 @@ export const styles = (theme?: Theme) =>
     },
     filterContent: {
       paddingBottom: "16px !important"
+    },
+    icon: {
+      marginRight: 16,
+      "&:hover": {
+        cursor: "pointer"
+      }
     }
   });

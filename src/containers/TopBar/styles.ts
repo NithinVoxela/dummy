@@ -10,7 +10,7 @@ export const useStyles = makeStyles((theme: Theme) => {
     },
     badge: {
       cursor: "pointer",
-      marginRight: theme.spacing(1)     
+      marginRight: theme.spacing(1)
     },
     alertCount: {
       cursor: "pointer",

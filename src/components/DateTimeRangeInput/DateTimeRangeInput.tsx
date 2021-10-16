@@ -1,5 +1,6 @@
 import { ClickAwayListener, IconButton, InputAdornment, Tooltip, WithStyles } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import { Close } from "@material-ui/icons";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import classNames from "classnames";
@@ -11,7 +12,6 @@ import { translationService } from "services/translation/translation.service";
 import { getTimeInSeconds } from "src/helpers/dateTime";
 
 import { styles } from "./styles";
-import { Close } from "@material-ui/icons";
 
 export interface IDateTimePickerModel {
   fromDateTime: Date;
