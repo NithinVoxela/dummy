@@ -226,7 +226,7 @@ class AlertsComponent extends React.Component<IProps, IState> {
                   endAdornment: (
                     <>
                       {severity && (
-                        <IconButton onClick={this.handleClearSeverity} style={{ margin: "-0.5em" }}>
+                        <IconButton onClick={this.handleClearSeverity} style={{ margin: "-0.5em" }} size="small" component="span" >
                           <Close className={classes.icon} fontSize="small" />
                         </IconButton>
                       )}

@@ -20,10 +20,15 @@ const camera: IRoute = {
   to: "/camera/:id?"
 };
 
+const liveStream: IRoute = {
+  to: "/stream"
+};
+
 export const routes = {
   login,
   dashboard,
   alerts,
   cameras,
-  camera
+  camera,
+  liveStream
 };

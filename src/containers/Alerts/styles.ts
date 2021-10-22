@@ -45,8 +45,7 @@ export const styles = (theme?: Theme) =>
       paddingBottom: 10,
       minHeight: 28,
       "& .icon": {
-        fontSize: 21,
-        marginRight: 10
+        fontSize: 21
       },
       display: "flex",
       alignItems: "center"
