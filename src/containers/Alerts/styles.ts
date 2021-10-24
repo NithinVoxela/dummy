@@ -74,5 +74,26 @@ export const styles = (theme?: Theme) =>
       "&:hover": {
         cursor: "pointer"
       }
+    },
+    alertSummary: {
+      alignItems: "center",
+      display: "flex",
+      justifyContent: "center",
+      padding: 24
+    },
+    mediaCard: {
+      marginTop: 24,
+      padding: 24
+    },
+    image: {
+      height: 225
+    },
+    video: {
+      height: "100%",
+      minHeight: 225
+    },
+    alertSummaryValue: {
+      textAlign: "center",
+      marginTop: 12
     }
   });

@@ -11,7 +11,6 @@ import { rootSaga } from "store/sagas";
 import { IApplicationState } from "store/state.model";
 
 import { App } from "./App";
-import { registerServiceWorker } from "./serviceWorker";
 
 const root = document.getElementById("root");
 

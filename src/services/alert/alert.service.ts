@@ -34,7 +34,7 @@ class AlertService {
   public getAlertLog = async (filterParams: IAlertFilterParams) => {
     const { pageNumber, pageSize, ...params } = this.sanitizeFilters(filterParams);
     const alerts = await AlertService._instance._httpService.put(
-      `alert/search?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+      `alert/search?pageNumber=${pageNumber}&pageSize=${pageSize}&sortAscending=false`,
       params
     );
     const alertsData = {
@@ -42,6 +42,11 @@ class AlertService {
       totalCount: alerts.totalCount
     };
     return new AlertLogModel(alertsData);
+  };
+
+  public getAlert = async ({ publicId }: { publicId: string }) => {
+    const alert = await AlertService._instance._httpService.get(`alert/view/${publicId}`);
+    return alert;
   };
 
   public sanitizeFilters = (filterParams: IAlertFilterParams) => {

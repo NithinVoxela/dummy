@@ -4,9 +4,12 @@ import { useState } from "react";
 import { hot } from "react-hot-loader/root";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import { AnyAction, Store } from "redux";
 import { PersistGate } from "redux-persist/integration/react";
+import "react-toastify/dist/ReactToastify.css";
 
+import { Notification } from "components/Toastify";
 import { AuthGuard } from "containers/Authentication/AuthGuard";
 import { BaseComponent } from "containers/Base";
 import { Notifier } from "containers/Notifier";
@@ -22,18 +25,17 @@ interface IProps {
 }
 
 let AppComponent = ({ store }: IProps) => {
-  const [isTokenFound, setTokenFound] = useState(false);
-  getToken(setTokenFound);
+  getToken();
 
-
-  const [show, setShow] = useState(false);
+  const notify = (notification: any) => toast(<Notification notification={notification} />);
 
   onMessageListener()
-    .then((message: any) => {
-      setShow(true);
-      console.log(message);
+    .then(payload => {
+      notify(payload);
+      // setNotification();
+      console.log(payload);
     })
-    .catch((err: any) => console.log("failed: ", err));
+    .catch(err => console.log("failed: ", err));
 
   return (
     <PersistGate persistor={AppStore.storePersistor} loading={null}>
@@ -42,11 +44,10 @@ let AppComponent = ({ store }: IProps) => {
           <CssBaseline />
           <BrowserRouter>
             <Notifier />
+            <ToastContainer hideProgressBar newestOnTop />
             <AuthGuard>
               <BaseComponent>
                 <MainRoutes />
-                {isTokenFound && <h1> Notification permission enabled 👍🏻 </h1>}
-                {!isTokenFound && <h1> Need notification permission ❗️ </h1>}
               </BaseComponent>
             </AuthGuard>
           </BrowserRouter>

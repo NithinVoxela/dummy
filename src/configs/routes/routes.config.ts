@@ -12,6 +12,10 @@ const alerts: IRoute = {
   to: "/alerts"
 };
 
+const alertDetails: IRoute = {
+  to: "/alerts/:id?"
+};
+
 const cameras: IRoute = {
   to: "/cameras"
 };
@@ -28,6 +32,7 @@ export const routes = {
   login,
   dashboard,
   alerts,
+  alertDetails,
   cameras,
   camera,
   liveStream

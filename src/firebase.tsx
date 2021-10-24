@@ -3,6 +3,7 @@
 import firebase from "firebase/app";
 import "firebase/messaging";
 
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://fcm.google.com/docs/web/setup#available-libraries
 
@@ -22,19 +23,21 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-export const getToken = (setTokenFound: (arg0: boolean) => void) => {
+
+const publicKey = "BAQXUDweyA3-FEedhT1epSmC5Vha28mUSF9d_tqz5h5O_xrQGI90PcNMJQBok6hw6xwnEWo4FtnHxpHsf3hJC3U";
+
+export const getToken = () => {
   return messaging
-    .getToken({ vapidKey: "GENERATED_MESSAGING_KEY" })
+    .getToken({ vapidKey: publicKey })
     .then((currentToken: any) => {
       if (currentToken) {
         console.log("current token for client: ", currentToken);
-        setTokenFound(true);
+       
+        sessionStorage.setItem("messagingToken", currentToken);
         // Track the token -> client mapping, by sending to backend server
         // show on the UI that permission is secured
       } else {
-        console.log("No registration token available. Request permission to generate one.");
-        setTokenFound(false);
-        // shows on the UI that permission is required
+        console.log("No registration token available. Request permission to generate one.");        
       }
     })
     .catch((err: any) => {

@@ -25,5 +25,8 @@
   "calendar-apply": "Apply",
   "calendar-from": "From",
   "calendar-to": "to",
-  "livestream-header-label": "Live Stream"
+  "livestream-header-label": "Live Stream",
+  "view-details-label": "View Details",
+  "alerts-list-label": "Alert List",
+  "alerts-details-label": "Alert Details"
 }

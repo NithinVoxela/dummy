@@ -1,6 +1,26 @@
 importScripts('https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/8.2.0/firebase-messaging.js');
 
+// serviceworker.js
+self.addEventListener('notificationclick', function(event) {
+  // Close notification.
+  event.notification.close();
+
+  // Example: Open window after 3 seconds.
+  // (doing so is a terrible user experience by the way, because
+  //  the user is left wondering what happens for 3 seconds.)
+  var promise = new Promise(function(resolve) {
+      setTimeout(resolve, 3000);
+  }).then(function() {
+      // return the promise returned by openWindow, just in case.
+      // Opening any origin only works in Chrome 43+.
+      return clients.openWindow('https://google.com');
+  });
+
+  // Now wait for the promise to keep the permission alive.
+  event.waitUntil(promise);
+});
+
 const config = {
   apiKey: "AIzaSyA0_ie6XfEqSkfR01h9XbFrb0HefbrfPH0",
   authDomain: "cortexa-mvp.firebaseapp.com",
@@ -14,18 +34,21 @@ const config = {
 firebase.initializeApp(config);
 const messaging = firebase.messaging();
 
-messaging.setBackgroundMessageHandler(function(payload) {
+messaging.onBackgroundMessage((payload) => {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
-  const notificationTitle = payload.data.title;
+  // Customize notification here
+  let details = {};
+  try {
+    details = JSON.parse(payload?.notification?.body);
+  } catch {
+    details = {};
+  }
+  const notificationTitle = payload?.notification?.title;
   const notificationOptions = {
-    body: payload.data.body,
-    icon: '/firebase-logo.png'
+    body: details?.text,
+    icon: './favicon.ico',
   };
-  return self.registration.showNotification(notificationTitle,
-    notificationOptions);
-});
 
-self.addEventListener('notificationclick', event => {
-  console.log(event)
-  return event;
+  self.registration.showNotification(notificationTitle,
+    notificationOptions); 
 });
