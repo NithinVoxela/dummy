@@ -1,14 +1,15 @@
-import { Typography, Grid, Breadcrumbs, Divider, Card, Link, Chip, CardMedia, Button } from "@material-ui/core";
+import { Typography, Grid, Breadcrumbs, Divider, Card, Link, Chip, CardMedia } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Redirect, RouteComponentProps, withRouter } from "react-router";
+import { RouteComponentProps, withRouter } from "react-router";
 import { NavLink as RouterNavLink } from "react-router-dom";
 
 import { IAlertDataModel } from "models/alertData.model";
 import { translationService } from "services/translation/translation.service";
 import { SEVERITY_COLORS } from "src/Constants";
+import { formatDateInWords } from "src/helpers/dateTime";
 import { isImageURL } from "src/helpers/fileType";
 import * as actions from "store/alert/alert.actions";
 import { getAlert } from "store/alert/alert.selector";
@@ -77,7 +78,7 @@ const AlertDetailsComponent: React.FC<IProps> = ({
                 LOCATION
               </Typography>
               <Typography color="textPrimary" variant="body1" className={classes.alertSummaryValue}>
-                -
+                {alert?.cameraLocation || "-"}
               </Typography>
             </div>
           </Grid>
@@ -87,7 +88,7 @@ const AlertDetailsComponent: React.FC<IProps> = ({
                 CAMERA
               </Typography>
               <Typography color="textPrimary" variant="body1" className={classes.alertSummaryValue}>
-                -
+                {alert?.cameraName || "-"}
               </Typography>
             </div>
           </Grid>
@@ -97,7 +98,7 @@ const AlertDetailsComponent: React.FC<IProps> = ({
                 ALERT CREATED ON
               </Typography>
               <Typography color="textPrimary" variant="body1" className={classes.alertSummaryValue}>
-                -
+                {alert?.alertTime ? formatDateInWords(alert.alertTime) : "-"}
               </Typography>
             </div>
           </Grid>
@@ -108,7 +109,7 @@ const AlertDetailsComponent: React.FC<IProps> = ({
               </Typography>
               <Typography component="p" className={classes.alertSummaryValue}>
                 <Chip
-                  label="High"
+                  label={alert?.severity || "-"}
                   style={{ backgroundColor: SEVERITY_COLORS.High, color: "#fff", minWidth: 75 }}
                   size="medium"
                 />
@@ -121,7 +122,7 @@ const AlertDetailsComponent: React.FC<IProps> = ({
                 TYPE
               </Typography>
               <Typography color="textPrimary" variant="body1" className={classes.alertSummaryValue}>
-                -
+                {alert?.type || "-"}
               </Typography>
             </div>
           </Grid>

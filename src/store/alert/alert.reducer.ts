@@ -29,6 +29,8 @@ export const alertLogReducer = (state: IAlertLogState = initialState, action = {
       };
     case actions.CLEAN_ALERT_LOGS:
       return initialState;
+    case actions.GET_ALERT_SUCCESS:
+      return { ...state, ...action.payload };
     default:
       return state;
   }

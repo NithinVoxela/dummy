@@ -5,6 +5,7 @@ importScripts('https://www.gstatic.com/firebasejs/8.2.0/firebase-messaging.js');
 self.addEventListener('notificationclick', function(event) {
   // Close notification.
   event.notification.close();
+  const url = event?.notification?.data?.FCM_MSG?.data?.url || "https://google.com";
 
   // Example: Open window after 3 seconds.
   // (doing so is a terrible user experience by the way, because
@@ -14,7 +15,7 @@ self.addEventListener('notificationclick', function(event) {
   }).then(function() {
       // return the promise returned by openWindow, just in case.
       // Opening any origin only works in Chrome 43+.
-      return clients.openWindow('https://google.com');
+      return clients.openWindow(url);
   });
 
   // Now wait for the promise to keep the permission alive.

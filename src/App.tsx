@@ -1,6 +1,5 @@
 import { CssBaseline } from "@material-ui/core";
 import * as React from "react";
-import { useState } from "react";
 import { hot } from "react-hot-loader/root";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";

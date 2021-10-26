@@ -1,6 +1,7 @@
 export const typography = {
   useNextVariants: true,
   fontFamily: [
+    "Nunito",
     "-apple-system",
     "BlinkMacSystemFont",
     '"Segoe UI"',

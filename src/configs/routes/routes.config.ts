@@ -13,7 +13,7 @@ const alerts: IRoute = {
 };
 
 const alertDetails: IRoute = {
-  to: "/alerts/:id?"
+  to: "/alerts/:id"
 };
 
 const cameras: IRoute = {

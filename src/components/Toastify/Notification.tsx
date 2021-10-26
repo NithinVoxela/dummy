@@ -3,7 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import { translationService } from "services/translation/translation.service";
 import * as React from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { NavLink as RouterNavLink } from "react-router-dom";
 
 import { styles } from "./styles";
 
@@ -11,13 +11,9 @@ interface IProps extends StyledComponentProps {
   notification: any;
 }
 
+const NavLink = React.forwardRef((props, ref) => <RouterNavLink innerRef={ref} {...props} />);
+
 const BaseNotificationComponent: React.FunctionComponent<IProps> = ({ classes, notification }) => {
-  let details = {};
-  // try {
-  //   details = JSON.parse(notification);
-  // } catch {
-  //   details = {};
-  // }
   return (
     <Box className={classes.root}>
       <Box style={{ width: "100%" }}>
@@ -26,8 +22,9 @@ const BaseNotificationComponent: React.FunctionComponent<IProps> = ({ classes, n
         <div>
           <Link
             color="primary"
-            component={RouterLink}
-            to={`/alerts/${details?.alertId}`}
+            component={NavLink}
+            exact
+            to={`/alerts/${notification?.data?.objectId}`}
             variant="subtitle2"
             underline="always"
             className={classes.action}

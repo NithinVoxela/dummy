@@ -61,11 +61,11 @@ const SidebarMenuComponent: React.FunctionComponent<IProps> = ({ classes, locati
           label={translationService.getMessageTranslation("cameras-header-label", "Cameras")}
           Icon={VideoIcon}
         />
-        <LinkedListItem
+        {/* <LinkedListItem
           to={routes.liveStream.to}
           label={translationService.getMessageTranslation("livestream-header-label", "Live Stream")}
           Icon={Cast}
-        />
+        /> */}
       </div>
     </List>
   );

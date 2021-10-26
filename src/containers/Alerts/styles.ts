@@ -6,8 +6,8 @@ export const styles = (theme?: Theme) =>
       height: "100%"
     },
     divider: {
-      marginTop: 24,
-      marginBottom: 24
+      marginTop: 4,
+      marginBottom: 16
     },
     noResults: {
       textAlign: "center",
@@ -83,14 +83,15 @@ export const styles = (theme?: Theme) =>
     },
     mediaCard: {
       marginTop: 24,
-      padding: 24
+      padding: 24,
+      minHeight: 400
     },
     image: {
-      height: 225
+      minHeight: 400
     },
     video: {
       height: "100%",
-      minHeight: 225
+      minHeight: 400
     },
     alertSummaryValue: {
       textAlign: "center",
