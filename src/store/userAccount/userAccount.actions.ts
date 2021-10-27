@@ -1,10 +1,12 @@
-import { IAuthModel, IUserAccount } from "models/user.model";
+import { IAuthModel, IUserAccount, IDeviceModel } from "models/user.model";
 
 export const LOGIN = "[USER_ACCOUNT] LOGIN";
 // export const AUTO_LOGIN = "[AUTH] AUTO_LOGIN";
 // export const SIGNUP = "[AUTH] SIGNUP";
 export const SET_USER_ACCOUNT = "[USER_ACCOUNT] SET_USER_ACCOUNT";
 export const REMOVE_USER_ACCOUNT = "[USER_ACCOUNT] REMOVE_USER_ACCOUNT";
+export const REGISTER_USER_DEVICE = "[USER_ACCOUNT] REGISTER_USER_DEVICE";
+export const REGISTER_USER_DEVICE_SUCCESS = "[USER_ACCOUNT] REGISTER_USER_DEVICE_SUCCESS";
 // export const SET_USER_ACCOUNT_ERROR = "[USER_ACCOUNT] SET_USER_ACCOUNT_ERROR";
 // export const CLEAR_USER_ACCOUNT_ERROR = "[USER_ACCOUNT] CLEAR_USER_ACCOUNT_ERROR";
 // export const LOGOUT = "[AUTH] LOGOUT";
@@ -29,6 +31,16 @@ export const setUserAccount = (payload: IUserAccount) => ({
 
 export const removeUserAccount = () => ({
   type: REMOVE_USER_ACCOUNT
+});
+
+export const userDeviceRegistration = (payload: IDeviceModel) => ({
+  type: REGISTER_USER_DEVICE,
+  payload
+});
+
+export const registerDeviceSuccess = (payload: Partial<IDeviceModel>) => ({
+  type: REGISTER_USER_DEVICE_SUCCESS,
+  payload
 });
 
 // export const setUserAccountError = (payload: string) => ({

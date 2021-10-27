@@ -60,6 +60,10 @@ const CopyCriticalPathAssetsConfig = new CopyWebpackPlugin({
       to: path.join(__dirname, "/build/messages.json"),
     },
     {
+      from: path.join(__dirname, `firebase-messaging-sw.js`),
+      to: path.join(__dirname, "/build/firebase-messaging-sw.js"),
+    },
+    {
       from: path.join(__dirname, `config/environments/config.${process.env.NODE_ENV === "production" ? 'prod' : 'local'}.json`),
       to: path.join(__dirname, "/build/config.json"),
     },

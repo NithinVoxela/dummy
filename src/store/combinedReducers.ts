@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { persistReducer, PersistConfig } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import storageSession from "redux-persist/lib/storage/session";
 
 import { notifierReducer } from "containers/Notifier/store/notifier.reducer";
 import { sidebarReducer } from "containers/Sidebar/store/sidebar.reducer";
@@ -16,7 +16,7 @@ import { userAccountReducer } from "./userAccount/userAccount.reducer";
 
 export const userAccountPersistConfiguration: PersistConfig<unknown> = {
   key: "userAccount",
-  storage
+  storage: storageSession
 };
 
 const allReducers = {

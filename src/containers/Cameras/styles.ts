@@ -17,8 +17,8 @@ export const styles = () => {
       padding: "0.5em"
     },
     divider: {
-      marginTop: 24,
-      marginBottom: 24
+      marginTop: 4,
+      marginBottom: 16
     },
     topbarContainer: {
       display: "flex",
@@ -51,7 +51,7 @@ export const styles = () => {
       paddingBottom: "16px !important"
     },
     filterContainer: {
-      marginBottom: 24
+      marginBottom: 16
     }
   });
 };

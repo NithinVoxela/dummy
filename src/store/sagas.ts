@@ -3,7 +3,11 @@ import { all } from "redux-saga/effects";
 import { watchErrorHandle } from "containers/Notifier/store/errorHandler.saga";
 import { watchRemoveNotification } from "containers/Notifier/store/notifier.saga";
 
-import { watchGetAlertLogNextPageRequest, watchGetAlertsLoadingRequest } from "./alert/alert.saga";
+import {
+  watchGetAlertLogNextPageRequest,
+  watchGetAlertsLoadingRequest,
+  watchGetAlertRequest
+} from "./alert/alert.saga";
 import {
   watchDeleteCameraRequest,
   watchGetCameraRequest,
@@ -11,7 +15,7 @@ import {
   watchRegisterCameraRequest,
   watchUpdateCameraRequest
 } from "./camera/camera.saga";
-import { watchLoginRequest } from "./userAccount/userAccount.saga";
+import { watchLoginRequest, watchrRgisterDeviceRequest } from "./userAccount/userAccount.saga";
 
 export const rootSaga = function*(): any {
   yield all([
@@ -24,6 +28,8 @@ export const rootSaga = function*(): any {
     watchUpdateCameraRequest(),
     watchDeleteCameraRequest(),
     watchGetAlertsLoadingRequest(),
-    watchGetAlertLogNextPageRequest()
+    watchGetAlertLogNextPageRequest(),
+    watchGetAlertRequest(),
+    watchrRgisterDeviceRequest()
   ]);
 };

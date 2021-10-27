@@ -2,6 +2,7 @@ import { call, fork, put, takeEvery, takeLatest } from "redux-saga/effects";
 
 import { handleError } from "containers/Notifier/store/errorHandler.action";
 import { IAlertLogModel } from "models/alert.model";
+import { IAlertDataModel } from "models/alertData.model";
 import { alertService } from "services/alert/alert.service";
 import { IStoreAction } from "store/action.model";
 import * as actions from "store/alert/alert.actions";
@@ -41,4 +42,17 @@ export const getAlertLogNextPage = function*({ payload }: IStoreAction) {
 
 export const watchGetAlertLogNextPageRequest = function*() {
   yield takeEvery(actions.GET_ALERT_LOG_NEXT_PAGE_REQUEST, getAlertLogNextPage);
+};
+
+export const getAlert = function*({ payload }: IStoreAction) {
+  try {
+    const alert: IAlertDataModel = yield call(alertService.getAlert, payload);
+    yield put(actions.getAlertSuccess({ alert }));
+  } catch (err) {
+    yield put(handleError(err));
+  }
+};
+
+export const watchGetAlertRequest = function*() {
+  yield takeLatest(actions.GET_ALERT_REQUEST, getAlert);
 };
