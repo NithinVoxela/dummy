@@ -17,3 +17,8 @@ export interface IAuthModel {
   userName: string;
   userPassword: string;
 }
+
+export interface IDeviceModel {
+  fireBaseId: string;
+  deviceType: string;
+}

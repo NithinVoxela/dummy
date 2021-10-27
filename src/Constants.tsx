@@ -5,3 +5,5 @@ export const SEVERITY_COLORS = {
   Critical: "#d32f2f",
   Low: "#0288d1"
 };
+
+export const DEVICE_TYPE = "WEB";

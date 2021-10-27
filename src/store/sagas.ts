@@ -15,7 +15,7 @@ import {
   watchRegisterCameraRequest,
   watchUpdateCameraRequest
 } from "./camera/camera.saga";
-import { watchLoginRequest } from "./userAccount/userAccount.saga";
+import { watchLoginRequest, watchrRgisterDeviceRequest } from "./userAccount/userAccount.saga";
 
 export const rootSaga = function*(): any {
   yield all([
@@ -29,6 +29,7 @@ export const rootSaga = function*(): any {
     watchDeleteCameraRequest(),
     watchGetAlertsLoadingRequest(),
     watchGetAlertLogNextPageRequest(),
-    watchGetAlertRequest()
+    watchGetAlertRequest(),
+    watchrRgisterDeviceRequest()
   ]);
 };

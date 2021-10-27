@@ -1,6 +1,7 @@
 import { call, put, fork, takeLatest } from "redux-saga/effects";
 
 import { handleError } from "containers/Notifier/store/errorHandler.action";
+import { deviceService } from "services/userAccount/device.service";
 import { userAccountService } from "services/userAccount/userAccount.service";
 import { IStoreAction } from "store/action.model";
 import { loadingSaga } from "store/sagaUtils";
@@ -22,4 +23,17 @@ export const loginLoading = function*(action: IStoreAction) {
 
 export const watchLoginRequest = function*() {
   yield takeLatest(actions.LOGIN, login);
+};
+
+export const registerDevice = function*({ payload }: IStoreAction) {
+  try {
+    const device = yield call(deviceService.registerDevice, payload);
+    yield put(actions.registerDeviceSuccess(device));
+  } catch (err) {
+    yield put(handleError(err));
+  }
+};
+
+export const watchrRgisterDeviceRequest = function*() {
+  yield takeLatest(actions.REGISTER_USER_DEVICE, registerDevice);
 };
