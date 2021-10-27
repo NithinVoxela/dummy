@@ -13,6 +13,6 @@
       "maxRowsPerPage": 500
     },
     "authenticationHeaders": {
-      "tenantId": "demo"
+      "tenantId": "cortexa-demo"
     }
   }
