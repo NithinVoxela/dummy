@@ -1,6 +1,6 @@
 {
     "apiEndpoints": {
-      "frontEndApi": "http://localhost:8080/cortexa-service/api/v2/"
+      "frontEndApi": "http://cortexa-demo.voxela.ai/cortexa-service/api/v2/"
     },
     "externalLinks": {
       "translationServiceEndpoint": "/messages.json"
