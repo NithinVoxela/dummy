@@ -116,7 +116,6 @@
     "redux-persist": "^6.0.0",
     "redux-saga": "1.0.2",
     "reselect": "^4.0.0",
-    "streamedian": "git://github.com/Streamedian/html5_rtsp_player.git",
     "uuid": "8.3.2",
     "yup": "^0.32.9"
   }
