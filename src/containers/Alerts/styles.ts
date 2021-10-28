@@ -6,8 +6,8 @@ export const styles = (theme?: Theme) =>
       height: "100%"
     },
     divider: {
-      marginTop: 24,
-      marginBottom: 24
+      marginTop: 4,
+      marginBottom: 16
     },
     noResults: {
       textAlign: "center",
@@ -45,8 +45,7 @@ export const styles = (theme?: Theme) =>
       paddingBottom: 10,
       minHeight: 28,
       "& .icon": {
-        fontSize: 21,
-        marginRight: 10
+        fontSize: 21
       },
       display: "flex",
       alignItems: "center"
@@ -75,5 +74,27 @@ export const styles = (theme?: Theme) =>
       "&:hover": {
         cursor: "pointer"
       }
+    },
+    alertSummary: {
+      alignItems: "center",
+      display: "flex",
+      justifyContent: "center",
+      padding: 24
+    },
+    mediaCard: {
+      marginTop: 24,
+      padding: 24,
+      minHeight: 400
+    },
+    image: {
+      minHeight: 400
+    },
+    video: {
+      height: "100%",
+      minHeight: 400
+    },
+    alertSummaryValue: {
+      textAlign: "center",
+      marginTop: 12
     }
   });

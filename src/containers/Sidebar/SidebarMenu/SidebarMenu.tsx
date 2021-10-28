@@ -1,8 +1,9 @@
 import { ListItem, WithStyles, withStyles, List, ListItemText } from "@material-ui/core";
 import { ListItemProps } from "@material-ui/core/ListItem";
+import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import classNames from "classnames";
 import * as React from "react";
-import { BarChart as DashboardIcon, AlertCircle as AlertCircleIcon, Video as VideoIcon } from "react-feather";
+import { BarChart as DashboardIcon, AlertCircle as AlertCircleIcon, Video as VideoIcon, Cast } from "react-feather";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { RouterLink } from "components/RouterLink";
@@ -60,6 +61,11 @@ const SidebarMenuComponent: React.FunctionComponent<IProps> = ({ classes, locati
           label={translationService.getMessageTranslation("cameras-header-label", "Cameras")}
           Icon={VideoIcon}
         />
+        {/* <LinkedListItem
+          to={routes.liveStream.to}
+          label={translationService.getMessageTranslation("livestream-header-label", "Live Stream")}
+          Icon={Cast}
+        /> */}
       </div>
     </List>
   );

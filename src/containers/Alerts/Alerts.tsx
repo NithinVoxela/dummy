@@ -22,6 +22,7 @@ import { LoadingBar } from "containers/Loading";
 import { IAlertDataModel } from "models/alertData.model";
 import { IAlertFilterParams } from "services/alert/alert.service";
 import { translationService } from "services/translation/translation.service";
+import { SEVERITY } from "src/Constants";
 import { formatDateInWords } from "src/helpers/dateTime";
 import { isImageURL } from "src/helpers/fileType";
 import * as actions from "store/alert/alert.actions";
@@ -31,8 +32,6 @@ import { getAlertLogFilter } from "store/alert/alertLogFilters/alertLogFilters.s
 import { IApplicationState } from "store/state.model";
 
 import { styles } from "./styles";
-
-const SEVERITY = ["HIGH", "MEDIUM", "LOW"];
 
 interface IDispatchToProps {
   getAlertLogLoadingRequest: typeof actions.getAlertLogLoadingRequest;
@@ -226,7 +225,12 @@ class AlertsComponent extends React.Component<IProps, IState> {
                   endAdornment: (
                     <>
                       {severity && (
-                        <IconButton onClick={this.handleClearSeverity} style={{ margin: "-0.5em" }}>
+                        <IconButton
+                          onClick={this.handleClearSeverity}
+                          style={{ margin: "-0.5em" }}
+                          size="small"
+                          component="span"
+                        >
                           <Close className={classes.icon} fontSize="small" />
                         </IconButton>
                       )}

@@ -1,14 +1,21 @@
 import { IAlertLogModel } from "models/alert.model";
+import { IAlertDataModel } from "models/alertData.model";
 import { IStoreAction } from "store/action.model";
 
 import * as actions from "./alert.actions";
 
 export interface IAlertLogState {
   alertLog: IAlertLogModel;
+  alert: IAlertDataModel;
+}
+
+export interface IAlertState extends IAlertLogModel {
+  alert: IAlertDataModel;
 }
 
 const initialState: IAlertLogState = {
-  alertLog: { alerts: [], totalCount: 0 }
+  alertLog: { alerts: [], totalCount: 0 },
+  alert: {}
 };
 
 export const alertLogReducer = (state: IAlertLogState = initialState, action = {} as IStoreAction): IAlertLogState => {
@@ -22,6 +29,8 @@ export const alertLogReducer = (state: IAlertLogState = initialState, action = {
       };
     case actions.CLEAN_ALERT_LOGS:
       return initialState;
+    case actions.GET_ALERT_SUCCESS:
+      return { ...state, ...action.payload };
     default:
       return state;
   }

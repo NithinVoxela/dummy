@@ -26,10 +26,7 @@ const DashboardComponent: React.FC<IProps> = ({ classes, user }) => {
       <Grid item>
         <Typography variant="h3" display="inline" className={classes.typography}>
           Welcome back, {user.userName}!
-        </Typography>
-        <Typography variant="body2" display="inline" className={classes.typography}>
-          We've missed you.
-        </Typography>
+        </Typography>       
       </Grid>
 
       <Grid item>
@@ -37,7 +34,7 @@ const DashboardComponent: React.FC<IProps> = ({ classes, user }) => {
       </Grid>
 
       <Grid container spacing={6}>
-        <Grid item xs={12} sm={12} md={6} lg={3} xl>
+        <Grid item xs={12} sm={12} md={6} lg={4} xl>
           <Stats
             title="Alerts Today"
             amount="2532"
@@ -46,16 +43,7 @@ const DashboardComponent: React.FC<IProps> = ({ classes, user }) => {
             percentagecolor={green[500]}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={3} xl>
-          <Stats
-            title="Visitors"
-            amount="170.212"
-            chip="Annual"
-            percentageText="-14% since last week"
-            percentagecolor={red[500]}
-          />
-        </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={3} xl>
+        <Grid item xs={12} sm={12} md={6} lg={4} xl>
           <Stats
             title="Total Alerts"
             amount="24300"
@@ -64,7 +52,7 @@ const DashboardComponent: React.FC<IProps> = ({ classes, user }) => {
             percentagecolor={green[500]}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={3} xl>
+        <Grid item xs={12} sm={12} md={6} lg={4} xl>
           <Stats
             title="Storage Used"
             amount="12/15 GB"

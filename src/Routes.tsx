@@ -3,9 +3,11 @@ import { Route } from "react-router-dom";
 
 import { IRoute, routes } from "configs/routes/routes.config";
 import { Alerts } from "containers/Alerts/Alerts";
+import { AlertDetails } from "containers/Alerts/AlertDetails";
 import { Camera } from "containers/Cameras/Camera";
 import { Cameras } from "containers/Cameras/Cameras";
 import { Dashboard } from "containers/Dashboard/Dashboard";
+import { LiveStream } from "containers/LiveStream/LiveStream";
 
 interface IRouteCreaterOptions {
   routeConfig: IRoute;
@@ -21,8 +23,10 @@ const routeCreater = (Component: React.ComponentType, { routeConfig, exact = tru
 const routeMap = [
   routeCreater(Dashboard, { routeConfig: routes.dashboard }),
   routeCreater(Alerts, { routeConfig: routes.alerts }),
+  routeCreater(AlertDetails, { routeConfig: routes.alertDetails }),
   routeCreater(Cameras, { routeConfig: routes.cameras }),
-  routeCreater(Camera, { routeConfig: routes.camera })
+  routeCreater(Camera, { routeConfig: routes.camera }),
+  routeCreater(LiveStream, { routeConfig: routes.liveStream })
 ];
 
 export const MainRoutes: React.FunctionComponent = () => (
