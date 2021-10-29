@@ -18,7 +18,7 @@ class DeviceService {
   }
 
   public registerDevice = async (payload: IDeviceModel) => {
-    const device = await DeviceService._instance._httpService.post("device/registration/", payload);
+    const device = await DeviceService._instance._httpService.post("device/registration/save", payload);
     return device;
   };
 }
