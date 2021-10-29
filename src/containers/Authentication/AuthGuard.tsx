@@ -45,7 +45,9 @@ const AuthGuardComponent: React.FunctionComponent<IProps> = ({ user, children })
     } else {
       history.push("/");
     }
-    registerDevice();
+    if (user?.userName) {
+      registerDevice();
+    }
   }, [user]);
   return (
     <Switch>
