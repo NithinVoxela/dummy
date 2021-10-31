@@ -31,20 +31,19 @@ const AuthGuardComponent: React.FunctionComponent<IProps> = ({ user, children })
   const dispatch = useDispatch();
 
   const registerDevice = () => {
+    const token = sessionStorage.getItem("messagingToken");
     const params = {
       deviceType: DEVICE_TYPE,
-      fireBaseId: sessionStorage.getItem("messagingToken")
+      fireBaseId: token
     };
-    dispatch(userDeviceRegistration(params));
+    if (token) {
+      dispatch(userDeviceRegistration(params));
+    }
   };
 
   useEffect(() => {
     HttpServiceFactory.createServices();
-    if (state?.from) {
-      history.push(state.from);
-    } else {
-      history.push("/");
-    }
+    history.push(history.location);
     if (user?.userName) {
       registerDevice();
     }

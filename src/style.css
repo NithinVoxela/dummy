@@ -5,6 +5,7 @@ html {
 body {
   height: calc(100% - 64px);
   position: relative;
+  background-color: rgb(247, 249, 252) !important;
 }
 
 #root {

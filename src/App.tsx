@@ -31,8 +31,6 @@ let AppComponent = ({ store }: IProps) => {
   onMessageListener()
     .then(payload => {
       notify(payload);
-      // setNotification();
-      console.log(payload);
     })
     .catch(err => console.log("failed: ", err));
 

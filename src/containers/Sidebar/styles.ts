@@ -46,8 +46,6 @@ export const styles = (theme: any) =>
     },
     scrollContainer: {
       backgroundColor: theme.sidebar.background,
-      borderRight: "1px solid rgba(0, 0, 0, 0.12)",
-      boxShadow: "rgb(63 63 68 / 5%) 0px 0px 0px 1px, rgb(63 63 68 / 15%) 0px 1px 2px 0px",
       height: "100%"
     }
   });

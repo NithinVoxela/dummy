@@ -1,6 +1,7 @@
 import { Box, Button, Container, Paper, TextField, Typography } from "@material-ui/core";
 import { Formik } from "formik";
 import * as React from "react";
+import Helmet from "react-helmet";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 
@@ -19,7 +20,8 @@ export const Login = () => {
   };
 
   return (
-    <Paper className={classes.root} elevation={2}>
+    <Paper className={classes.root}>
+      <Helmet title="Login" />
       <Box display="flex" flexDirection="column" height="100%" justifyContent="center">
         <Container maxWidth="sm">
           <Formik
@@ -39,9 +41,14 @@ export const Login = () => {
           >
             {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
               <form onSubmit={handleSubmit}>
-                <Box mb={3} display="flex" justifyContent="center">
+                <Box mb={1} display="flex" justifyContent="center">
                   <Typography color="textPrimary" variant="h2">
                     Cortexa
+                  </Typography>
+                </Box>
+                <Box mb={2} display="flex" justifyContent="center">
+                  <Typography component="h2" variant="body1" align="center">
+                    Sign in to your account
                   </Typography>
                 </Box>
                 <TextField

@@ -4,8 +4,7 @@ export const useStyles = makeStyles(() => {
   return createStyles({
     root: {
       padding: "1.5em 4em",
-      margin: "auto",
-      boxShadow: "rgb(0 0 0 / 12%) 0px 1px 2px, rgb(0 0 0 / 5%) 0px 0px 0px 1px"
+      margin: "auto"
     },
     footer: {
       position: "absolute",

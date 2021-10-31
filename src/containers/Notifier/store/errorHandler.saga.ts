@@ -14,6 +14,7 @@ export const getErrorMessage = (response: AxiosResponse, payload: { message: str
   let errorMessage = "";
   const errorResponse = response && Object.entries(response.data || {}).find(a => a[0] !== "code" && a[1] !== false);
   if (errorResponse) {
+    errorResponse[1] = response?.data?.message;
     errorMessage = errorResponse[1] as string;
   }
   return errorMessage || payload.message;

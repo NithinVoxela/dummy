@@ -73,19 +73,5 @@ export const overrides = {
         fontWeight: 400
       }
     }
-  },
-  MuiTableCell: {
-    root: {
-      borderBottom: "1px solid rgba(145, 158, 171, 0.24)"
-    },
-    head: {
-      fontSize: "0.875rem",
-      color: "rgba(0, 0, 0, 0.87)"
-    }
-  },
-  MuiPaper: {
-    elevation1: {
-      boxShadow: "rgb(0 0 0 / 12%) 0px 1px 2px, rgb(0 0 0 / 5%) 0px 0px 0px 1px"
-    }
   }
 };

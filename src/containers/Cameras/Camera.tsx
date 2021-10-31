@@ -1,5 +1,17 @@
 /* eslint-disable complexity */
-import { Typography, Grid, Breadcrumbs, Divider, Paper, Link, Box, TextField, Button } from "@material-ui/core";
+import {
+  Typography,
+  Grid,
+  Breadcrumbs,
+  Divider,
+  Paper,
+  Link,
+  Box,
+  TextField,
+  Button,
+  Select,
+  MenuItem
+} from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import { Formik } from "formik";
 import * as React from "react";
@@ -181,7 +193,22 @@ const CameraComponent: React.FC<IProps> = ({
                   />
                 </div>
                 <div>
-                  <TextField
+                  <Select
+                    error={Boolean(touched.cameraType && errors.cameraType)}
+                    helperText={touched.cameraType && errors.cameraType}
+                    label="Camera Type"
+                    margin="normal"
+                    name="cameraType"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    type="text"
+                    value={values.cameraType}
+                    variant="outlined"
+                    className={classes.selectField}
+                  >
+                    <MenuItem value="IPCAMERA">IP Camera</MenuItem>
+                  </Select>
+                  {/* <TextField
                     error={Boolean(touched.cameraType && errors.cameraType)}
                     helperText={touched.cameraType && errors.cameraType}
                     className={classes.textfield}
@@ -193,7 +220,7 @@ const CameraComponent: React.FC<IProps> = ({
                     type="text"
                     value={values.cameraType}
                     variant="outlined"
-                  />
+                  /> */}
                   <TextField
                     error={Boolean(touched.brand && errors.brand)}
                     helperText={touched.brand && errors.brand}

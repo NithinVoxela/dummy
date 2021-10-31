@@ -11,7 +11,7 @@ const lightVariant = {
   name: "Light",
   palette: {
     primary: {
-      main: "#1565c0",
+      main: blue[800],
       contrastText: "#FFF"
     },
     secondary: {
@@ -21,7 +21,7 @@ const lightVariant = {
   },
   header: {
     color: grey[200],
-    background: "#1565c0",
+    background: blue[800],
     search: {
       color: grey[100]
     },
@@ -30,17 +30,17 @@ const lightVariant = {
     }
   },
   sidebar: {
-    color: "#6b778c",
+    color: grey[900],
     background: "#FFF",
     header: {
       color: "#FFF",
-      background: "#1565c0",
+      background: blue[800],
       brand: {
         color: "#FFFFFF"
       }
     },
     footer: {
-      color: "#6b778c",
+      color: grey[900],
       background: grey[100],
       online: {
         background: green[500]
@@ -55,7 +55,7 @@ const lightVariant = {
     }
   },
   body: {
-    background: "#f4f6f8"
+    background: "#F7F9FC"
   }
 };
 

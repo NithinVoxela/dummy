@@ -48,7 +48,7 @@ export const typography = {
     lineHeight: 1.2
   },
   body1: {
-    fontSize: "1rem"
+    fontSize: 14
   },
   button: {
     textTransform: "none"
