@@ -73,5 +73,10 @@ export const overrides = {
         fontWeight: 400
       }
     }
+  },
+  MuiPaper: {
+    rounded: {
+      borderRadius: 6
+    }
   }
 };
