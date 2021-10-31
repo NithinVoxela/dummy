@@ -14,6 +14,7 @@ import { WithStyles, withStyles } from "@material-ui/core/styles";
 import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import SearchBar from "material-ui-search-bar";
 import * as React from "react";
+import Helmet from "react-helmet";
 import { useCallback, useEffect, useState, useRef } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -186,6 +187,7 @@ const CamerasComponent: React.FC<IProps> = ({
 
   return (
     <>
+      <Helmet title="Cameras" />
       <Grid justify="space-between" container spacing={10}>
         <Grid item>
           <Typography variant="h3" gutterBottom display="inline">

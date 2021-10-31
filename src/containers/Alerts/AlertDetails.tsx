@@ -1,6 +1,7 @@
 import { Typography, Grid, Breadcrumbs, Divider, Card, Link, Chip, CardMedia } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import * as React from "react";
+import Helmet from "react-helmet";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router";
@@ -53,6 +54,7 @@ const AlertDetailsComponent: React.FC<IProps> = ({
   const mediaUrl = alert?.mediaUrl;
   return (
     <>
+      <Helmet title="Alerts" />
       <Grid justify="space-between" container spacing={10}>
         <Grid item>
           <Typography variant="h3" gutterBottom display="inline">

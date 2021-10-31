@@ -14,6 +14,7 @@ import { Close } from "@material-ui/icons";
 import classNames from "classnames";
 import SearchBar from "material-ui-search-bar";
 import * as React from "react";
+import Helmet from "react-helmet";
 import { connect } from "react-redux";
 
 import { DateTimeRangeInput } from "components/DateTimeRangeInput";
@@ -183,6 +184,7 @@ class AlertsComponent extends React.Component<IProps, IState> {
     const { location, severity } = this.state;
     return (
       <>
+        <Helmet title="Alerts" />
         <Grid justify="space-between" container spacing={10}>
           <Grid item>
             <Typography variant="h3" gutterBottom display="inline">

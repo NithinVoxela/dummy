@@ -15,6 +15,7 @@ import {
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import { Formik } from "formik";
 import * as React from "react";
+import Helmet from "react-helmet";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Redirect, RouteComponentProps, withRouter } from "react-router";
@@ -97,6 +98,7 @@ const CameraComponent: React.FC<IProps> = ({
 
   return (
     <>
+      <Helmet title="Cameras" />
       <Grid justify="space-between" container spacing={10}>
         <Grid item>
           <Typography variant="h3" gutterBottom display="inline">
