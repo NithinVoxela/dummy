@@ -1,4 +1,5 @@
 import {
+  Box,
   Paper,
   Table as MuiTable,
   TableBody,
@@ -45,6 +46,7 @@ interface IProps {
   pageNumber: number;
   tableColumns: any;
   totalCount: number;
+  isLoading: boolean;
 }
 
 export enum OrderKeys {
@@ -110,54 +112,59 @@ class TableComponent extends React.Component<IProps, IState> {
 
   public render() {
     const { pageNumber, pageSize, order, orderBy } = this.state;
-    const { rows, tableColumns, totalCount } = this.props;
+    const { rows, tableColumns, totalCount, isLoading = false } = this.props;
     return (
-      <Paper>
-        <MuiTable size="medium">
-          <TableHead>
-            <MuiTableRow>
-              {tableColumns.map((tableColumn: any) => (
-                <TableCell
-                  key={tableColumn.id}
-                  align={tableColumn.align ?? "left"}
-                  padding={tableColumn.disablePadding ? "none" : "default"}
-                  sortDirection={orderBy === tableColumn.id ? order : false}
-                >
-                  {tableColumn.disableSort ? (
-                    tableColumn.label
-                  ) : (
-                    <TableSortLabel
-                      active={orderBy === tableColumn.id}
-                      direction={orderBy === tableColumn.id ? order : "asc"}
-                      onClick={this.handleRequestSort(tableColumn.id)}
-                    >
-                      {tableColumn.label}
-                    </TableSortLabel>
-                  )}
-                </TableCell>
-              ))}
-            </MuiTableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((rowData: ITableRow) => {
-              const { id } = rowData;
-              return <TableRow rowData={rowData} key={`table-row-${id}`} tableColumns={tableColumns} />;
-            })}
-            {rows?.length === 0 && (
-              <TableRow>
-                <TableCell padding="default" align="center" colSpan={tableColumns.length}>
-                  {translationService.getMessageTranslation("no-records-available-label", "No results found")}
-                </TableCell>
-              </TableRow>
-            )}
-            <TableRow>
-              <TableCell padding="default" align="center" colSpan={tableColumns.length}>
-                <LoadingBar />
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </MuiTable>
+      <Paper elevation={0} style={{ borderRadius: 0, borderTop: "1px solid #e0e0e0" }}>
+        <Box style={{ minHeight: 400 }}>
+          <MuiTable size="medium">
+            <TableHead>
+              <MuiTableRow>
+                {tableColumns.map((tableColumn: any) => (
+                  <TableCell
+                    key={tableColumn.id}
+                    align={tableColumn.align ?? "left"}
+                    padding={tableColumn.disablePadding ? "none" : "default"}
+                    sortDirection={orderBy === tableColumn.id ? order : false}
+                  >
+                    {tableColumn.disableSort ? (
+                      tableColumn.label
+                    ) : (
+                      <TableSortLabel
+                        active={orderBy === tableColumn.id}
+                        direction={orderBy === tableColumn.id ? order : "asc"}
+                        onClick={this.handleRequestSort(tableColumn.id)}
+                      >
+                        {tableColumn.label}
+                      </TableSortLabel>
+                    )}
+                  </TableCell>
+                ))}
+              </MuiTableRow>
+            </TableHead>
+            <TableBody>
+              { isLoading && 
+                <TableRow>
+                  <TableCell padding="default" align="center" colSpan={tableColumns.length}>
+                    <LoadingBar />
+                  </TableCell>
+                </TableRow>
+              }
+              {rows.map((rowData: ITableRow) => {
+                const { id } = rowData;
+                return <TableRow rowData={rowData} key={`table-row-${id}`} tableColumns={tableColumns} />;
+              })}
+              {rows?.length === 0 && (
+                <TableRow>
+                  <TableCell padding="default" align="center" colSpan={tableColumns.length}>
+                    {translationService.getMessageTranslation("no-records-available-label", "No results found")}
+                  </TableCell>
+                </TableRow>
+              )}              
+            </TableBody>
+          </MuiTable>
+        </Box>
         <TablePagination
+          style={{ borderTop: "1px solid #e0e0e0" }}
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={totalCount}

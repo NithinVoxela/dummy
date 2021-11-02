@@ -3,7 +3,8 @@ import { createStyles } from "@material-ui/core/styles";
 export const styles = () =>
   createStyles({
     card: {
-      maxWidth: 300
+      maxWidth: 300,
+      cursor: "pointer"
     },
     image: {
       height: 225
@@ -25,5 +26,14 @@ export const styles = () =>
     },
     severity: {
       flex: 1
+    },
+    newBadge: {
+      position: "absolute",
+      top: 14,
+      left: -22,
+      height: 24,
+      padding: "0px 16px",
+      transform: "scale(1) translate(50%, 0%)",
+      borderRadius: 4
     }
   });

@@ -33,7 +33,7 @@ class NotifierComponent extends React.PureComponent<IProps> {
   };
 
   public render() {
-    const { classes, notifications, autoHideDuration = NUMBERS.FIVE_THOUSAND } = this.props;
+    const { classes, notifications, autoHideDuration = NUMBERS.THREE_THOUSAND } = this.props;
     return (
       <div className={classes.root}>
         {notifications.map(notification => (
@@ -42,7 +42,7 @@ class NotifierComponent extends React.PureComponent<IProps> {
             classes={{
               root: classes.snackbar
             }}
-            autoHideDuration={notification.header === "Error" ? null : autoHideDuration}
+            autoHideDuration={autoHideDuration}
             anchorOrigin={{
               vertical: "top",
               horizontal: "right"

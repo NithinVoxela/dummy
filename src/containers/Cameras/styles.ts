@@ -29,10 +29,12 @@ export const styles = () => {
       flexGrow: 1
     },
     searchContainer: {
-      height: 50,
+      height: 40,
       marginBottom: 4,
       boxShadow: "none",
-      border: "1px solid #e8e8e8"
+      border: "1px solid #e8e8e8",
+      width: 400,
+      borderRadius: 6
     },
     textfield: {
       width: "47%",
@@ -62,6 +64,12 @@ export const styles = () => {
       width: "47%",
       flexShrink: 0,
       marginLeft: 24
+    },
+    searchIcon: {
+      background: "transparent",
+      "&:hover": {
+        background: "transparent !important"
+      }
     }
   });
 };

@@ -3,6 +3,7 @@ import {
   Grid,
   Breadcrumbs,
   Card,
+  CardHeader,
   Divider,
   Box,
   IconButton,
@@ -14,8 +15,8 @@ import { WithStyles, withStyles } from "@material-ui/core/styles";
 import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import SearchBar from "material-ui-search-bar";
 import * as React from "react";
-import Helmet from "react-helmet";
 import { useCallback, useEffect, useState, useRef } from "react";
+import Helmet from "react-helmet";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 
@@ -103,8 +104,11 @@ const CamerasComponent: React.FC<IProps> = ({
   const history = useHistory();
   const [searched, setSearched] = useState("");
   const prevSearched = usePrevious(searched);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
+    setIsLoading(true);
     getCamerasLoadingRequest(filters, { withDebounce: filters.keywords !== prevSearched });
+    setIsLoading(false);
   }, [getCamerasLoadingRequest, filters, cleanCameraFilters, prevSearched]);
 
   useEffect(() => {
@@ -156,29 +160,37 @@ const CamerasComponent: React.FC<IProps> = ({
 
   const handlePageChange = useCallback(
     (pageNumber: number) => {
+      setIsLoading(true);
       updateCameraFilters({ pageNumber });
+      setIsLoading(false);
     },
     [updateCameraFilters]
   );
 
   const handleChangeRowsPerPage = useCallback(
     (event: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>) => {
+      setIsLoading(true);
       updateCameraFilters({ pageSize: event.target.value });
+      setIsLoading(false);
     },
     [updateCameraFilters]
   );
 
   const handleSearch = useCallback(
     (keywords: string) => {
+      setIsLoading(true);
       setSearched(keywords);
       updateCameraFilters({ keywords, pageNumber: 0, pageSize: 5 });
+      setIsLoading(false);
     },
     [setSearched, updateCameraFilters]
   );
 
   const handleCancelSearch = useCallback(() => {
+    setIsLoading(true);
     setSearched("");
     updateCameraFilters({ keywords: "", pageNumber: 0, pageSize: 5 });
+    setIsLoading(false);
   }, [setSearched, updateCameraFilters]);
 
   const handleAddCamera = useCallback(() => {
@@ -193,10 +205,6 @@ const CamerasComponent: React.FC<IProps> = ({
           <Typography variant="h3" gutterBottom display="inline">
             Cameras
           </Typography>
-
-          <Breadcrumbs>
-            <Typography>Camera List</Typography>
-          </Breadcrumbs>
         </Grid>
         <Grid item>
           <div>
@@ -210,22 +218,21 @@ const CamerasComponent: React.FC<IProps> = ({
 
       <Divider className={classes.divider} />
 
-      <Card className={classes.filterContainer}>
-        <CardContent className={classes.filterContent}>
-          <div className={classes.topbarContainer}>
-            <SearchBar
-              className={classes.searchContainer}
-              value={searched}
-              onChange={handleSearch}
-              onCancelSearch={handleCancelSearch}
-              placeholder="Search by name..."
-            />
-          </div>
-        </CardContent>
-      </Card>
+      <Box className={classes.filterContainer} />
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <Card>
+            <CardHeader title="Camera List" style={{ paddingBottom: 4 }} />
+            <Box style={{ padding: "8px 16px" }}>
+              <SearchBar
+                className={classes.searchContainer}
+                value={searched}
+                onChange={handleSearch}
+                onCancelSearch={handleCancelSearch}
+                placeholder="Search by Name..."
+                classes={{ searchIconButton: classes.searchIcon, iconButton: classes.searchIcon }}
+              />
+            </Box>
             <Table
               rows={getRows()}
               tableColumns={tableColumns}
@@ -234,6 +241,7 @@ const CamerasComponent: React.FC<IProps> = ({
               onPageChange={handlePageChange}
               onChangeRowsPerPage={handleChangeRowsPerPage}
               totalCount={totalCount}
+              isLoading={isLoading}
             />
           </Card>
         </Grid>

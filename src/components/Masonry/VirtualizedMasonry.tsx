@@ -1,6 +1,7 @@
-import { Card, CardContent, CardMedia, Chip, Typography, WithStyles } from "@material-ui/core";
+import { Badge, Card, CardContent, CardMedia, Chip, Typography, WithStyles } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import * as React from "react";
+import { withRouter } from "react-router-dom";
 import {
   CellMeasurer,
   CellMeasurerCache,
@@ -99,12 +100,17 @@ class MasonryComponent extends React.Component<IProps> {
   };
 
   public cellRenderer = config => {
-    const { classes, list } = this.props;
+    const { classes, list, history } = this.props;
     const { index, key, parent, style } = config;
-    const { media = null, cameraName = null, location = null, type = null, alertTime = null, severity = null } =
+    const { media = null, cameraName = null, location = null, type = null, alertTime = null, severity = null, id } =
       list?.[index] || {};
+
+    const handleCardClick = () => {
+      history.push(`/alerts/${id}`);
+    };
     const content = media ? (
-      <Card className={classes.card} raised>
+      <Card className={classes.card} raised onClick={handleCardClick}>
+        <Badge color="secondary" className={classes.newBadge} badgeContent="NEW" />
         <CardMedia className={classes[type]} component={type} controls image={media} />
         <CardContent>
           <div className={classes.header}>
@@ -201,4 +207,4 @@ class MasonryComponent extends React.Component<IProps> {
   }
 }
 
-export const VirtualizedMasonry = withStyles(styles)(MasonryComponent);
+export const VirtualizedMasonry = withStyles(styles)(withRouter(MasonryComponent));

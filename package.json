@@ -91,7 +91,7 @@
     "@material-ui/styles": "4.3.0",
     "@material-ui/system": "4.3.3",
     "@material-ui/types": "4.1.1",
-    "@material-ui/utils": "4.3.0",
+    "@material-ui/utils": "4.3.0",    
     "@types/react-router": "^5.1.16",
     "axios": "0.21.1",
     "chart.js": "^3.5.1",
