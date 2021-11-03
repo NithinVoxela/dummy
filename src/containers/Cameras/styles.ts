@@ -17,7 +17,7 @@ export const styles = () => {
       padding: "0.5em"
     },
     divider: {
-      marginTop: 4,
+      marginTop: 8,
       marginBottom: 16
     },
     topbarContainer: {

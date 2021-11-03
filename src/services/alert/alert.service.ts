@@ -49,6 +49,11 @@ class AlertService {
     return alert;
   };
 
+  public markAsRead = async ({ id }: { id: string }) => {
+    const alert = await AlertService._instance._httpService.put(`alert/${id}/markRead`);
+    return alert;
+  };
+
   public sanitizeFilters = (filterParams: IAlertFilterParams) => {
     return {
       pageNumber: filterParams.pageNumber,

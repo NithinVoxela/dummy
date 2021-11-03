@@ -3,8 +3,7 @@ import { createStyles } from "@material-ui/core/styles";
 export const styles = () =>
   createStyles({
     card: {
-      maxWidth: 300,
-      cursor: "pointer"
+      width: 330
     },
     image: {
       height: 225

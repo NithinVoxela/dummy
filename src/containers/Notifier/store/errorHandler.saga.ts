@@ -30,13 +30,13 @@ export const handleError = function*({
     error: { response }
   }
 }: IStoreAction) {
-  if (response.status === 401) {
+  if (response?.status === 401) {
     void AppStore.storePersistor.purge();
     yield put(userAccountActions.setUserAccount(userAccountInitialState));
   }
   if (["production", "development"].includes(process.env.NODE_ENV)) {
     // eslint-disable-next-line no-console
-    console.error(payload.error);
+    console.error(payload?.error);
   }
 
   yield put(

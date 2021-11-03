@@ -16,6 +16,7 @@ import SearchBar from "material-ui-search-bar";
 import * as React from "react";
 import Helmet from "react-helmet";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 import { DateTimeRangeInput } from "components/DateTimeRangeInput";
 import { VirtualizedMasonry } from "components/Masonry/VirtualizedMasonry";
@@ -40,6 +41,7 @@ interface IDispatchToProps {
   cleanAlertLogs: typeof actions.cleanAlertLogs;
   updateFilterParams: typeof filterActions.updateAlertLogFilter;
   cleanFilterParams: typeof filterActions.cleanAlertLogFilter;
+  markAsReadRequest: typeof actions.markAsRead;
 }
 
 interface IStateToProps {
@@ -100,7 +102,7 @@ class AlertsComponent extends React.Component<IProps, IState> {
   public getList() {
     const { alerts } = this.props;
     return alerts.map((alert: IAlertDataModel) => {
-      const { id, mediaUrl, alertTime, severity, cameraName, cameraLocation, fileName } = alert;
+      const { id, mediaUrl, alertTime, severity, cameraName, cameraLocation, fileName, hasRead } = alert;
       return {
         id,
         media: mediaUrl,
@@ -108,7 +110,8 @@ class AlertsComponent extends React.Component<IProps, IState> {
         location: cameraLocation,
         type: isImageURL(fileName) ? "image" : "video",
         alertTime: formatDateInWords(alertTime),
-        severity
+        severity,
+        hasRead
       };
     });
   }
@@ -169,6 +172,16 @@ class AlertsComponent extends React.Component<IProps, IState> {
     });
   };
 
+  public viewDetails = (id: any) => {
+    this.props.history.push(`/alerts/${id}`);
+  };
+
+  public markAsRead = (id: any) => {
+    const { markAsReadRequest } = this.props;
+    markAsReadRequest({ id }); 
+       
+  };
+
   public render() {
     const {
       classes,
@@ -190,10 +203,6 @@ class AlertsComponent extends React.Component<IProps, IState> {
             <Typography variant="h3" gutterBottom display="inline">
               Alerts
             </Typography>
-
-            <Breadcrumbs>
-              <Typography>Alert List</Typography>
-            </Breadcrumbs>
           </Grid>
         </Grid>
 
@@ -267,6 +276,8 @@ class AlertsComponent extends React.Component<IProps, IState> {
                 totalCount={totalCount}
                 offset={pageSize * pageNumber + 1}
                 nextPageCallback={this.onGetNextPage}
+                viewDetails={this.viewDetails}
+                markAsRead={this.markAsRead.bind(this)}
               />
             ) : (
               <Typography className={classes.noResults}>
@@ -286,7 +297,8 @@ const mapDispatchToProps = {
   getAlertLogNextPageRequest: actions.getAlertLogNextPageRequest,
   cleanAlertLogs: actions.cleanAlertLogs,
   updateFilterParams: filterActions.updateAlertLogFilter,
-  cleanFilterParams: filterActions.cleanAlertLogFilter
+  cleanFilterParams: filterActions.cleanAlertLogFilter,
+  markAsReadRequest: actions.markAsRead
 };
 
 const mapStateToProps = (state: IApplicationState) => ({
@@ -296,5 +308,5 @@ const mapStateToProps = (state: IApplicationState) => ({
 });
 
 export const Alerts = withStyles(styles)(
-  connect<IStateToProps, IDispatchToProps>(mapStateToProps, mapDispatchToProps)(AlertsComponent)
+  connect<IStateToProps, IDispatchToProps>(mapStateToProps, mapDispatchToProps)(withRouter(AlertsComponent))
 );

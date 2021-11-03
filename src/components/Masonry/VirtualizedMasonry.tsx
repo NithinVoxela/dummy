@@ -1,7 +1,6 @@
-import { Badge, Card, CardContent, CardMedia, Chip, Typography, WithStyles } from "@material-ui/core";
+import { Badge, Button, Card, CardActions, CardContent, CardMedia, Chip, Typography, WithStyles } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import * as React from "react";
-import { withRouter } from "react-router-dom";
 import {
   CellMeasurer,
   CellMeasurerCache,
@@ -17,7 +16,7 @@ import { NUMBERS } from "configs/constants";
 import { styles } from "./styles";
 
 export const CARD = {
-  WIDTH: 300,
+  WIDTH: 316,
   HEIGHT: 350
 };
 
@@ -100,19 +99,23 @@ class MasonryComponent extends React.Component<IProps> {
   };
 
   public cellRenderer = config => {
-    const { classes, list, history } = this.props;
+    const { classes, list, viewDetails, markAsRead } = this.props;
     const { index, key, parent, style } = config;
-    const { media = null, cameraName = null, location = null, type = null, alertTime = null, severity = null, id } =
+    const { media = null, cameraName = null, location = null, type = null, alertTime = null, severity = null, id, hasRead } =
       list?.[index] || {};
 
     const handleCardClick = () => {
-      history.push(`/alerts/${id}`);
+      viewDetails(id);
+    };
+
+    const handleReadClick = () => {
+      markAsRead(id);
     };
     const content = media ? (
-      <Card className={classes.card} raised onClick={handleCardClick}>
-        <Badge color="secondary" className={classes.newBadge} badgeContent="NEW" />
+      <Card className={classes.card} raised>
+        { !hasRead && <Badge color="secondary" className={classes.newBadge} badgeContent="NEW" /> }
         <CardMedia className={classes[type]} component={type} controls image={media} />
-        <CardContent>
+        <CardContent style={{ padding: "12px 16px" }}>
           <div className={classes.header}>
             <Typography gutterBottom variant="headline" component="h3" className={classes.alertTime}>
               {alertTime}
@@ -130,8 +133,18 @@ class MasonryComponent extends React.Component<IProps> {
           </Typography>
           <Typography component="p" className={classes.cardInfo} title={location}>
             <b>Location:</b> {location}
-          </Typography>
+          </Typography>          
         </CardContent>
+        <CardActions>
+          { !hasRead &&
+            <Button size="small" color="primary" onClick={handleReadClick}>
+              Mark As Read
+            </Button>
+          }
+          <Button size="small" color="primary" onClick={handleCardClick}>
+            View Details
+          </Button>
+      </CardActions>
       </Card>
     ) : null;
     return (
@@ -207,4 +220,4 @@ class MasonryComponent extends React.Component<IProps> {
   }
 }
 
-export const VirtualizedMasonry = withStyles(styles)(withRouter(MasonryComponent));
+export const VirtualizedMasonry = withStyles(styles)(MasonryComponent);

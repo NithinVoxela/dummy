@@ -1,4 +1,4 @@
-import { call, fork, put, takeEvery, takeLatest } from "redux-saga/effects";
+import { call, fork, put, select, takeEvery, takeLatest } from "redux-saga/effects";
 
 import { handleError } from "containers/Notifier/store/errorHandler.action";
 import { IAlertLogModel } from "models/alert.model";
@@ -7,6 +7,8 @@ import { alertService } from "services/alert/alert.service";
 import { IStoreAction } from "store/action.model";
 import * as actions from "store/alert/alert.actions";
 import { delayedSaga, loadingSaga } from "store/sagaUtils";
+
+import { getAlertLogFilter } from './alertLogFilters/alertLogFilters.selector';
 
 export const getAlertLog = function*({ payload }: IStoreAction) {
   try {
@@ -55,4 +57,16 @@ export const getAlert = function*({ payload }: IStoreAction) {
 
 export const watchGetAlertRequest = function*() {
   yield takeLatest(actions.GET_ALERT_REQUEST, getAlert);
+};
+
+export const markAsRead = function*({ payload }: IStoreAction) {
+  try {
+    const alert: IAlertDataModel = yield call(alertService.markAsRead, payload);
+  } catch (err) {
+    yield put(handleError(err));
+  }
+};
+
+export const watchMarkAsReadRequest = function*() {
+  yield takeLatest(actions.MARK_AS_READ, markAsRead);
 };

@@ -20,6 +20,7 @@ import { styles } from "./styles";
 
 interface IDispatchToProps {
   getAlertRequest: typeof actions.getAlertRequest;
+  markAsReadRequest: typeof actions.markAsReadRequest;
 }
 
 interface IStateToProps {
@@ -37,6 +38,7 @@ const NavLink = React.forwardRef((props, ref) => <RouterNavLink innerRef={ref} {
 const AlertDetailsComponent: React.FC<IProps> = ({
   classes,
   getAlertRequest,
+  markAsReadRequest,
   alert: alertInfo,
   match: {
     params: { id }
@@ -47,8 +49,14 @@ const AlertDetailsComponent: React.FC<IProps> = ({
     getAlertRequest({ publicId: id });
   }, [getAlertRequest, id]);
   useEffect(() => {
-    setAlert(alertInfo);
+    setAlert(alertInfo);   
   }, [alertInfo]);
+
+  useEffect(() => {    
+    if (alert.hasOwnProperty("hasRead") && !alert.hasRead) {
+      markAsReadRequest({ id });
+    }
+  }, [alert]);
 
   const type = isImageURL(alert?.fileName) ? "image" : "video";
   const mediaUrl = alert?.mediaUrl;
@@ -139,7 +147,8 @@ const AlertDetailsComponent: React.FC<IProps> = ({
 };
 
 const mapDispatchToProps = {
-  getAlertRequest: actions.getAlertRequest
+  getAlertRequest: actions.getAlertRequest,
+  markAsReadRequest: actions.markAsRead
 };
 
 const mapStateToProps = (state: IApplicationState) => ({

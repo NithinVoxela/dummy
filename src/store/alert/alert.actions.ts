@@ -9,7 +9,8 @@ export const GET_ALERT_LOG_NEXT_PAGE_REQUEST = "[ALERT_LOG] GET_ALERT_LOG_NEXT_P
 export const GET_ALERT_LOG_NEXT_PAGE_SUCCESS = "[ALERT_LOG] GET_ALERT_LOG_NEXT_PAGE_SUCCESS";
 export const CLEAN_ALERT_LOGS = "[ALERT_LOG] CLEAN_ALERT_LOGS";
 export const GET_ALERT_REQUEST = "[ALERT_LOG] GET_ALERT_REQUEST";
-export const GET_ALERT_SUCCESS = "[ALERT_LOG] GET_ALERT_SUCCESS";
+export const GET_ALERT_SUCCESS = "[ALERT_LOG] GET_ALERT_SUCCESS"; //
+export const MARK_AS_READ = "[ALERT_LOG] MARK_AS_READ";
 
 export const getAlertLogLoadingRequest = (filterParams: IAlertFilterParams, options?: IAlertRequestOptions) => ({
   type: GET_ALERT_LOG_LOADING_REQUEST,
@@ -43,5 +44,10 @@ export const getAlertRequest = (payload: { publicId: string }) => ({
 
 export const getAlertSuccess = (payload: Partial<IAlertState>) => ({
   type: GET_ALERT_SUCCESS,
+  payload
+});
+
+export const markAsRead = (payload: Partial<IAlertState>) => ({
+  type: MARK_AS_READ,
   payload
 });

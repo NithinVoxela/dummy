@@ -10,6 +10,7 @@ export class AlertDataModel implements IAlertDataModel {
   public cameraName: string;
   public cameraLocation: string;
   public fileName: string;
+  public hasRead: boolean;
 
   public constructor(model: IAlertDataModel) {
     this.cameraId = model.cameraId;
@@ -23,6 +24,7 @@ export class AlertDataModel implements IAlertDataModel {
     this.cameraName = model.cameraName;
     this.cameraLocation = model.cameraLocation;
     this.fileName = model.fileName;
+    this.hasRead = model.hasRead;
   }
 }
 
@@ -38,4 +40,5 @@ export interface IAlertDataModel {
   cameraName?: string;
   cameraLocation?: string;
   fileName?: string;
+  hasRead?: boolean;
 }

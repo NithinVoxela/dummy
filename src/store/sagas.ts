@@ -6,7 +6,8 @@ import { watchRemoveNotification } from "containers/Notifier/store/notifier.saga
 import {
   watchGetAlertLogNextPageRequest,
   watchGetAlertsLoadingRequest,
-  watchGetAlertRequest
+  watchGetAlertRequest,
+  watchMarkAsReadRequest
 } from "./alert/alert.saga";
 import {
   watchDeleteCameraRequest,
@@ -30,6 +31,7 @@ export const rootSaga = function*(): any {
     watchGetAlertsLoadingRequest(),
     watchGetAlertLogNextPageRequest(),
     watchGetAlertRequest(),
-    watchrRgisterDeviceRequest()
+    watchrRgisterDeviceRequest(),
+    watchMarkAsReadRequest()
   ]);
 };

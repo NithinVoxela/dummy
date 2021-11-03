@@ -6,7 +6,7 @@ export const styles = (theme?: Theme) =>
       height: "100%"
     },
     divider: {
-      marginTop: 4,
+      marginTop: 8,
       marginBottom: 16
     },
     noResults: {
