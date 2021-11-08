@@ -105,10 +105,10 @@ const CamerasComponent: React.FC<IProps> = ({
   const [searched, setSearched] = useState("");
   const prevSearched = usePrevious(searched);
   const [isLoading, setIsLoading] = useState(false);
+  
   useEffect(() => {
     setIsLoading(true);
     getCamerasLoadingRequest(filters, { withDebounce: filters.keywords !== prevSearched });
-    setIsLoading(false);
   }, [getCamerasLoadingRequest, filters, cleanCameraFilters, prevSearched]);
 
   useEffect(() => {
@@ -117,6 +117,10 @@ const CamerasComponent: React.FC<IProps> = ({
       resetCameraList();
     };
   }, [cleanCameraFilters, resetCameraList]);
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, [cameras, setIsLoading]);
 
   const handleEditClick = (id: string) => () => {
     history.push(`/camera/${id}`);
@@ -159,38 +163,37 @@ const CamerasComponent: React.FC<IProps> = ({
   };
 
   const handlePageChange = useCallback(
-    (pageNumber: number) => {
-      setIsLoading(true);
+    (pageNumber: number) => {      
       updateCameraFilters({ pageNumber });
-      setIsLoading(false);
+      
     },
     [updateCameraFilters]
   );
 
   const handleChangeRowsPerPage = useCallback(
     (event: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>) => {
-      setIsLoading(true);
+      
       updateCameraFilters({ pageSize: event.target.value });
-      setIsLoading(false);
+     
     },
     [updateCameraFilters]
   );
 
   const handleSearch = useCallback(
     (keywords: string) => {
-      setIsLoading(true);
+     
       setSearched(keywords);
       updateCameraFilters({ keywords, pageNumber: 0, pageSize: 5 });
-      setIsLoading(false);
+      
     },
     [setSearched, updateCameraFilters]
   );
 
   const handleCancelSearch = useCallback(() => {
-    setIsLoading(true);
+    
     setSearched("");
     updateCameraFilters({ keywords: "", pageNumber: 0, pageSize: 5 });
-    setIsLoading(false);
+    
   }, [setSearched, updateCameraFilters]);
 
   const handleAddCamera = useCallback(() => {

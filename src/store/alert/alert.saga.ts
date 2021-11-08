@@ -9,6 +9,8 @@ import * as actions from "store/alert/alert.actions";
 import { delayedSaga, loadingSaga } from "store/sagaUtils";
 
 import { getAlertLogFilter } from './alertLogFilters/alertLogFilters.selector';
+import { translationService } from "services/translation/translation.service";
+import { addNotification } from "containers/Notifier/store/notifier.action";
 
 export const getAlertLog = function*({ payload }: IStoreAction) {
   try {
@@ -62,6 +64,17 @@ export const watchGetAlertRequest = function*() {
 export const markAsRead = function*({ payload }: IStoreAction) {
   try {
     const alert: IAlertDataModel = yield call(alertService.markAsRead, payload);
+    yield put(
+      addNotification({
+        header: translationService.getMessageTranslation("alert-read-success-title", "Alert"),
+        message: `${translationService.getMessageTranslation("alert-read-success-desc", "Alert updated successfully.")}`
+      })
+    );
+    const filterParams = yield select(getAlertLogFilter);
+    yield fork(getAlertLog, {
+      type: "",
+      payload: {...filterParams, pageNumber: 0, pageSize: ((filterParams.pageNumber + 1) * filterParams.pageSize)}
+    });
   } catch (err) {
     yield put(handleError(err));
   }

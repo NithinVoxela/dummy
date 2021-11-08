@@ -1,4 +1,14 @@
-import { Badge, Button, Card, CardActions, CardContent, CardMedia, Chip, Typography, WithStyles } from "@material-ui/core";
+import {
+  Badge,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Chip,
+  Typography,
+  WithStyles
+} from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import * as React from "react";
 import {
@@ -12,12 +22,13 @@ import {
 } from "react-virtualized";
 
 import { NUMBERS } from "configs/constants";
+import { translationService } from "services/translation/translation.service";
 
 import { styles } from "./styles";
 
 export const CARD = {
   WIDTH: 316,
-  HEIGHT: 350
+  HEIGHT: 330
 };
 
 export const SEVERITY_COLORS = {
@@ -48,6 +59,13 @@ class MasonryComponent extends React.Component<IProps> {
     gutterSize: 40,
     overscanByPixels: CARD.HEIGHT
   };
+
+  public componentDidUpdate(prevProps: IProps) {
+    const { list } = this.props;
+    if (prevProps.list !== list) {
+      this.cache.clearAll();
+    }
+  }
 
   public getPositionerConfig = (width: number) => {
     const { gutterSize } = this.config;
@@ -101,8 +119,16 @@ class MasonryComponent extends React.Component<IProps> {
   public cellRenderer = config => {
     const { classes, list, viewDetails, markAsRead } = this.props;
     const { index, key, parent, style } = config;
-    const { media = null, cameraName = null, location = null, type = null, alertTime = null, severity = null, id, hasRead } =
-      list?.[index] || {};
+    const {
+      media = null,
+      cameraName = null,
+      location = null,
+      type = null,
+      alertTime = null,
+      severity = null,
+      id,
+      hasRead
+    } = list?.[index] || {};
 
     const handleCardClick = () => {
       viewDetails(id);
@@ -113,9 +139,15 @@ class MasonryComponent extends React.Component<IProps> {
     };
     const content = media ? (
       <Card className={classes.card} raised>
-        { !hasRead && <Badge color="secondary" className={classes.newBadge} badgeContent="NEW" /> }
+        {!hasRead && (
+          <Badge
+            color="secondary"
+            className={classes.newBadge}
+            badgeContent={translationService.getMessageTranslation("alert-new", "NEW")}
+          />
+        )}
         <CardMedia className={classes[type]} component={type} controls image={media} />
-        <CardContent style={{ padding: "12px 16px" }}>
+        <CardContent style={{ padding: "6px 16px" }}>
           <div className={classes.header}>
             <Typography gutterBottom variant="headline" component="h3" className={classes.alertTime}>
               {alertTime}
@@ -129,22 +161,22 @@ class MasonryComponent extends React.Component<IProps> {
             </Typography>
           </div>
           <Typography component="p" className={classes.cardInfo} title={cameraName}>
-            <b>Camera:</b> {cameraName}
+            <b>{translationService.getMessageTranslation("alert-camera-details", "Camera")}:</b> {cameraName}
           </Typography>
           <Typography component="p" className={classes.cardInfo} title={location}>
-            <b>Location:</b> {location}
-          </Typography>          
+            <b>{translationService.getMessageTranslation("alert-location-details", "Location")}:</b> {location}
+          </Typography>
         </CardContent>
-        <CardActions>
-          { !hasRead &&
+        <CardActions style={{ padding: "4px 8px" }}>
+          {!hasRead && (
             <Button size="small" color="primary" onClick={handleReadClick}>
-              Mark As Read
+              {translationService.getMessageTranslation("alert-mark-read", "Mark As Read")}
             </Button>
-          }
+          )}
           <Button size="small" color="primary" onClick={handleCardClick}>
-            View Details
+            {translationService.getMessageTranslation("alert-view-details", "View Details")}
           </Button>
-      </CardActions>
+        </CardActions>
       </Card>
     ) : null;
     return (

@@ -62,7 +62,8 @@ class AlertsComponent extends React.Component<IProps, IState> {
     super(props);
     this.state = {
       location: "",
-      severity: null
+      severity: null,
+      list: []
     };
   }
 
@@ -72,7 +73,7 @@ class AlertsComponent extends React.Component<IProps, IState> {
   }
 
   public componentDidUpdate(prevProps: IProps) {
-    const { getAlertLogNextPageRequest, getAlertLogLoadingRequest, filters } = this.props;
+    const { getAlertLogNextPageRequest, getAlertLogLoadingRequest, filters, alerts } = this.props;
     const { location, pageNumber } = filters;
 
     const { filters: prevFilters } = prevProps;
@@ -91,6 +92,9 @@ class AlertsComponent extends React.Component<IProps, IState> {
         getAlertLogLoadingRequest(filters, options);
       }
     }
+    if(prevProps.alerts != alerts) {
+      this.setList();
+    }    
   }
 
   public componentWillUnmount() {
@@ -99,9 +103,10 @@ class AlertsComponent extends React.Component<IProps, IState> {
     cleanAlertLogs();
   }
 
-  public getList() {
+  public setList() {
     const { alerts } = this.props;
-    return alerts.map((alert: IAlertDataModel) => {
+
+    const alertData = alerts.map((alert: IAlertDataModel) => {
       const { id, mediaUrl, alertTime, severity, cameraName, cameraLocation, fileName, hasRead } = alert;
       return {
         id,
@@ -114,6 +119,8 @@ class AlertsComponent extends React.Component<IProps, IState> {
         hasRead
       };
     });
+
+    this.setState({ list: alertData });
   }
 
   public onGetNextPage = () => {
@@ -178,8 +185,8 @@ class AlertsComponent extends React.Component<IProps, IState> {
 
   public markAsRead = (id: any) => {
     const { markAsReadRequest } = this.props;
+    this.setState({ list: [] });
     markAsReadRequest({ id }); 
-       
   };
 
   public render() {
@@ -193,8 +200,7 @@ class AlertsComponent extends React.Component<IProps, IState> {
       },
       totalCount
     } = this.props;
-    const list = this.getList();
-    const { location, severity } = this.state;
+    const { location, severity, list } = this.state;
     return (
       <>
         <Helmet title="Alerts" />
@@ -271,7 +277,7 @@ class AlertsComponent extends React.Component<IProps, IState> {
           <Grid item xs={12}>
             {list?.length ? (
               <VirtualizedMasonry
-                list={this.getList()}
+                list={list}
                 limit={pageSize}
                 totalCount={totalCount}
                 offset={pageSize * pageNumber + 1}

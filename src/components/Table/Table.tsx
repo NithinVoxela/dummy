@@ -12,6 +12,7 @@ import {
 import * as React from "react";
 
 import { LoadingBar } from "containers/Loading";
+import loadingIcon from "assets/icons/loader.svg";
 import { translationService } from "services/translation/translation.service";
 
 import { TableRow } from "./TableRow";
@@ -145,15 +146,15 @@ class TableComponent extends React.Component<IProps, IState> {
               { isLoading && 
                 <TableRow>
                   <TableCell padding="default" align="center" colSpan={tableColumns.length}>
-                    <LoadingBar />
+                    <img src={loadingIcon} style={{ height: 80, width: 80 }} />
                   </TableCell>
                 </TableRow>
               }
-              {rows.map((rowData: ITableRow) => {
+              { !isLoading && rows.map((rowData: ITableRow) => {
                 const { id } = rowData;
                 return <TableRow rowData={rowData} key={`table-row-${id}`} tableColumns={tableColumns} />;
               })}
-              {rows?.length === 0 && (
+              {!isLoading && rows?.length === 0 && (
                 <TableRow>
                   <TableCell padding="default" align="center" colSpan={tableColumns.length}>
                     {translationService.getMessageTranslation("no-records-available-label", "No results found")}

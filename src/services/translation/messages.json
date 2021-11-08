@@ -28,5 +28,12 @@
   "livestream-header-label": "Live Stream",
   "view-details-label": "View Details",
   "alerts-list-label": "Alert List",
-  "alerts-details-label": "Alert Details"
+  "alerts-details-label": "Alert Details",
+  "alert-read-success-title": "Alert",
+  "alert-read-success-desc": "Alert updated successfully.",
+  "alert-mark-read": "Mark As Read",
+  "alert-view-details": "View Details",
+  "alert-camera-details": "Camera",
+  "alert-location-details": "Location",
+  "alert-new": "NEW"
 }
