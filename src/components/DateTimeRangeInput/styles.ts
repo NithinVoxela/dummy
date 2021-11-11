@@ -4,13 +4,16 @@ export const styles = () =>
   createStyles({
     dateTimePicker: {
       width: "100%",
+      border: "1px solid #bdbec4",
+      borderRadius: "6px",
       "& input": {
-        cursor: "pointer"
-      }
+        cursor: "pointer",        
+      },     
     },
     icon: {
       "&:hover": {
-        cursor: "pointer"
+        cursor: "pointer",
+        background: "transparent !important"
       }
     },
     tooltip: {
@@ -42,5 +45,11 @@ export const styles = () =>
     // eslint-disable-next-line @typescript-eslint/naming-convention
     minWidth_auto: {
       width: "100%"
+    },
+    closeBtn: {
+      background: "transparent",
+      "&:hover": {
+        background: "transparent !important"
+      }
     }
   });

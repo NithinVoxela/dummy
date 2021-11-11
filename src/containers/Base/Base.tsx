@@ -34,7 +34,7 @@ const BaseComponent: React.FC<IProps> = ({ classes, children, width }) => {
       </div>
       <div className={classes.appContent}>
         <TopBar onDrawerToggle={handleDrawerToggle} />
-        <Box style={{ padding: isWidthUp("lg", width) ? 40 : 20 }}>{children}</Box>
+        <Box style={{ padding: isWidthUp("lg", width) ? "40px" : "20px" }}>{children}</Box>
       </div>
     </div>
   );

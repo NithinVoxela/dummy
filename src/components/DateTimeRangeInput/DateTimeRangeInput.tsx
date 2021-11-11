@@ -88,7 +88,7 @@ class DateTimeRangeInputComponent extends React.PureComponent<IProps, IState> {
           endAdornment: (
             <>
               {!!dateTimeDisplayValue && (
-                <IconButton
+                <IconButton className={classes.closeBtn}
                   onClick={() =>
                     this.dateTimeHandler({ fromDateTime: null, toDateTime: null, dateTimeDisplayValue: "" })
                   }

@@ -16,20 +16,20 @@ export const styles = (theme?: Theme) =>
     },
     topbarContainer: {
       display: "flex",
-      justifyContent: "space-between",
+      justifyContent: "flex-start",
       paddingRight: 34,
       paddingBottom: 0,
       flexWrap: "wrap",
       flexGrow: 1
     },
     searchContainer: {
-      height: 50,
-      marginBottom: 4,
+      height: 52,
       boxShadow: "none",
-      border: "1px solid #e8e8e8"
+      border: "1px solid #bdbec4",
+      width: 400
     },
     formControl: {
-      width: 240,
+      width: 300,
       "& .MuiSelect-select:focus": {
         backgroundColor: "unset"
       }
@@ -44,6 +44,7 @@ export const styles = (theme?: Theme) =>
       fontWeight: 400,
       paddingBottom: 10,
       minHeight: 28,
+      marginLeft: 0,
       "& .icon": {
         fontSize: 21
       },
@@ -55,12 +56,13 @@ export const styles = (theme?: Theme) =>
       boxShadow: "none"
     },
     filterContainer: {
-      marginBottom: 30
+      marginBottom: 12
     },
     inputRoot: {
       height: 50,
       backgroundColor: "#fff!important",
-      border: "1px solid rgba(0, 0, 0, 0.09)",
+      border: "1px solid #bdbec4",
+      borderRadius: 6,
 
       "&:hover": {
         backgroundColor: "#fff"
@@ -96,5 +98,11 @@ export const styles = (theme?: Theme) =>
     alertSummaryValue: {
       textAlign: "center",
       marginTop: 12
+    },
+    searchIcon: {
+      background: "transparent",
+      "&:hover": {
+        background: "transparent !important"
+      }
     }
   });

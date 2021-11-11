@@ -27,8 +27,8 @@ import { translationService } from "services/translation/translation.service";
 import { styles } from "./styles";
 
 export const CARD = {
-  WIDTH: 316,
-  HEIGHT: 330
+  WIDTH: 335,
+  HEIGHT: 350
 };
 
 export const SEVERITY_COLORS = {
@@ -56,16 +56,10 @@ class MasonryComponent extends React.Component<IProps> {
 
   public config: any = {
     columnWidth: CARD.WIDTH,
-    gutterSize: 40,
+    gutterSize: 20,
     overscanByPixels: CARD.HEIGHT
   };
 
-  public componentDidUpdate(prevProps: IProps) {
-    const { list } = this.props;
-    if (prevProps.list !== list) {
-      this.cache.clearAll();
-    }
-  }
 
   public getPositionerConfig = (width: number) => {
     const { gutterSize } = this.config;

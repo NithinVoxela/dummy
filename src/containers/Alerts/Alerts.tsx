@@ -1,7 +1,6 @@
 import {
   Breadcrumbs,
-  Card,
-  CardContent,
+  Box,
   Divider,
   Grid,
   IconButton,
@@ -213,8 +212,8 @@ class AlertsComponent extends React.Component<IProps, IState> {
         </Grid>
 
         <Divider className={classes.divider} />
-        <Card className={classes.filterContainer}>
-          <CardContent className={classes.filterContent}>
+        <Box className={classes.filterContainer}>
+          <Box className={classes.filterContent}>
             <div className={classes.topbarContainer}>
               <SearchBar
                 className={classes.searchContainer}
@@ -222,56 +221,62 @@ class AlertsComponent extends React.Component<IProps, IState> {
                 onChange={this.handleSearch}
                 onCancelSearch={this.handleCancelSearch}
                 placeholder="Search by location..."
+                classes={{ searchIconButton: classes.searchIcon, iconButton: classes.searchIcon }}
               />
-              <DateTimeRangeInput
-                onDateTimeFilterChange={this.handleDateTimeChange}
-                dateTimeDisplayValue={dateTimeDisplayValue}
-                initialFromDateTime={startDate || new Date()}
-                initialToDateTime={endDate || new Date()}
-                disableFutureDates
-                disableEarlierDates
-                minWidth="lg"
-              />
-              <TextField
-                select
-                value={severity}
-                onChange={this.handleSeverityChange}
-                variant="filled"
-                className={classes.formControl}
-                InputProps={{
-                  endAdornment: (
-                    <>
-                      {severity && (
-                        <IconButton
-                          onClick={this.handleClearSeverity}
-                          style={{ margin: "-0.5em" }}
-                          size="small"
-                          component="span"
-                        >
-                          <Close className={classes.icon} fontSize="small" />
-                        </IconButton>
-                      )}
-                    </>
-                  ),
-                  classes: { root: classes.inputRoot, focused: classes.focused },
-                  disableUnderline: true
-                }}
-                InputLabelProps={{
-                  className: classNames(classes.severityLabel),
-                  filled: true,
-                  shrink: true
-                }}
-                label="Severity"
-              >
-                {SEVERITY.map(option => (
-                  <MenuItem key={option} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </TextField>
+              <Box style={{ marginLeft : 24 }}>
+                <DateTimeRangeInput
+                  onDateTimeFilterChange={this.handleDateTimeChange}
+                  dateTimeDisplayValue={dateTimeDisplayValue}
+                  initialFromDateTime={startDate || new Date()}
+                  initialToDateTime={endDate || new Date()}
+                  disableFutureDates
+                  disableEarlierDates
+                  minWidth="lg"
+                />
+              </Box>
+              <Box style={{ marginLeft : 24 }}>
+                <TextField
+                  select
+                  value={severity}
+                  onChange={this.handleSeverityChange}
+                  variant="filled"
+                  className={classes.formControl}
+                  InputProps={{
+                    endAdornment: (
+                      <>
+                        {severity && (
+                          <IconButton
+                            className={classes.searchIcon}
+                            onClick={this.handleClearSeverity}
+                            style={{ margin: "-0.5em" }}
+                            size="small"
+                            component="span"
+                          >
+                            <Close className={classes.icon} fontSize="small" />
+                          </IconButton>
+                        )}
+                      </>
+                    ),
+                    classes: { root: classes.inputRoot, focused: classes.focused },
+                    disableUnderline: true
+                  }}
+                  InputLabelProps={{
+                    className: classNames(classes.severityLabel),
+                    filled: true,
+                    shrink: true
+                  }}
+                  label="Severity"
+                >
+                  {SEVERITY.map(option => (
+                    <MenuItem key={option} value={option}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Box>
             </div>
-          </CardContent>
-        </Card>
+          </Box>
+        </Box>
 
         <Grid container spacing={6}>
           <Grid item xs={12}>

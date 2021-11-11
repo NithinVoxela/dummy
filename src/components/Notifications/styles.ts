@@ -7,8 +7,10 @@ export const styles = () =>
       alignItems: "flex-start",
       margin: "8px 0",
       wordBreak: "break-word",
-      background: "#EDF7ED",
-      width: 400
+      background: "#2e7d32",
+      width: 400,
+      color: "#FFF",
+      fontWeight: 500
     },
     action: {
       color: "#FFF",
@@ -16,11 +18,12 @@ export const styles = () =>
       marginRight: -16
     },
     header: {
-      color: "#000"
+      color: "#FFF",
+      fontWeight: 500
     },
     message: {
-      color: "#000",
-      fontSize: 15,
+      color: "#FFF",
+      fontSize: 14,
       lineHeight: 1.25,
       letterSpacing: 0.2
     },
@@ -33,6 +36,8 @@ export const styles = () =>
     },
     error: {
       background: "#d32f2f",
-      width: 400
+      width: 400,
+      color: "#fff",
+      fontWeight: 500
     }
   });
