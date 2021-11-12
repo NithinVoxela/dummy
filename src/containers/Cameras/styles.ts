@@ -70,6 +70,15 @@ export const styles = () => {
       "&:hover": {
         background: "transparent !important"
       }
+    },
+    linkBtn: {
+      padding: 0,
+      minWidth: "auto",
+      display: "flex",
+      alignItems: "center",
+      "&:hover": {
+        background: "transparent !important"
+      }
     }
   });
 };

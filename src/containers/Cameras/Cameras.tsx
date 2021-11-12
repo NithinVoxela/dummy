@@ -8,11 +8,11 @@ import {
   Box,
   IconButton,
   Button,
-  Tooltip,
-  CardContent
+  Tooltip
 } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
+import LaunchOutlinedIcon from '@material-ui/icons/LaunchOutlined';
 import SearchBar from "material-ui-search-bar";
 import * as React from "react";
 import { useCallback, useEffect, useState, useRef } from "react";
@@ -105,7 +105,7 @@ const CamerasComponent: React.FC<IProps> = ({
   const [searched, setSearched] = useState("");
   const prevSearched = usePrevious(searched);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   useEffect(() => {
     setIsLoading(true);
     getCamerasLoadingRequest(filters, { withDebounce: filters.keywords !== prevSearched });
@@ -130,9 +130,23 @@ const CamerasComponent: React.FC<IProps> = ({
     deleteCameraRequest({ publicId, name });
   };
 
+  const openStreamUrl = (streamUrl: string) => {
+    window.open(streamUrl, "_blank");
+  };
+
   const getRows = () => {
     return cameras.map((row: any) => {
-      const { publicId, name, cameraType, description, model, cameraStatus, location, installationDate } = row;
+      const {
+        publicId,
+        name,
+        cameraType,
+        description,
+        model,
+        cameraStatus,
+        location,
+        installationDate,
+        streamUrl
+      } = row;
       return {
         id: publicId,
         data: {
@@ -140,7 +154,18 @@ const CamerasComponent: React.FC<IProps> = ({
           cameraType,
           description,
           model,
-          cameraStatus,
+          cameraStatus: (
+            <>
+              {streamUrl?.trim()?.length > 0 && cameraStatus === "Online" ? (
+                <Button color="primary" size="small" className={classes.linkBtn} onClick={() => openStreamUrl(streamUrl)}>
+                  {cameraStatus}
+                  <LaunchOutlinedIcon color="primary" fontSize="small" style={{ fontSize: 14, marginLeft: 2, marginTop: 2 }} />
+                </Button>
+              ) : (
+                <>{ cameraStatus }</>
+              )}
+            </>
+          ),
           location,
           installationDate: formatDateInWords(installationDate),
           actions: (
@@ -163,37 +188,30 @@ const CamerasComponent: React.FC<IProps> = ({
   };
 
   const handlePageChange = useCallback(
-    (pageNumber: number) => {      
+    (pageNumber: number) => {
       updateCameraFilters({ pageNumber });
-      
     },
     [updateCameraFilters]
   );
 
   const handleChangeRowsPerPage = useCallback(
     (event: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>) => {
-      
       updateCameraFilters({ pageSize: event.target.value });
-     
     },
     [updateCameraFilters]
   );
 
   const handleSearch = useCallback(
     (keywords: string) => {
-     
       setSearched(keywords);
       updateCameraFilters({ keywords, pageNumber: 0, pageSize: 5 });
-      
     },
     [setSearched, updateCameraFilters]
   );
 
   const handleCancelSearch = useCallback(() => {
-    
     setSearched("");
     updateCameraFilters({ keywords: "", pageNumber: 0, pageSize: 5 });
-    
   }, [setSearched, updateCameraFilters]);
 
   const handleAddCamera = useCallback(() => {
