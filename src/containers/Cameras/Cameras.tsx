@@ -59,10 +59,6 @@ const usePrevious = (value: DependencyList) => {
 };
 
 const tableColumns = [
-  { id: "name", numeric: false, disablePadding: false, disableSort: true, label: "Name", align: "left" },
-  { id: "cameraType", numeric: false, disablePadding: false, disableSort: true, label: "Type", align: "left" },
-  { id: "description", numeric: false, disablePadding: false, disableSort: true, label: "Description", align: "left" },
-  { id: "model", numeric: false, disablePadding: false, disableSort: true, label: "Model", align: "left" },
   {
     id: "cameraStatus",
     numeric: false,
@@ -71,7 +67,9 @@ const tableColumns = [
     label: "Status",
     align: "left"
   },
-  { id: "location", numeric: false, disablePadding: false, disableSort: true, label: "Location", align: "left" },
+  { id: "name", numeric: false, disablePadding: false, disableSort: true, label: "Name", align: "left" },
+  { id: "cameraType", numeric: false, disablePadding: false, disableSort: true, label: "Type", align: "left" },
+  { id: "description", numeric: false, disablePadding: false, disableSort: true, label: "Description", align: "left" },
   {
     id: "installationDate",
     numeric: false,
@@ -150,10 +148,6 @@ const CamerasComponent: React.FC<IProps> = ({
       return {
         id: publicId,
         data: {
-          name,
-          cameraType,
-          description,
-          model,
           cameraStatus: (
             <>
               {streamUrl?.trim()?.length > 0 && cameraStatus === "Online" ? (
@@ -166,7 +160,9 @@ const CamerasComponent: React.FC<IProps> = ({
               )}
             </>
           ),
-          location,
+          name,
+          cameraType,
+          description,
           installationDate: formatDateInWords(installationDate),
           actions: (
             <Box mr={2}>

@@ -56,14 +56,14 @@ export const styles = () => {
       marginBottom: 16
     },
     selectField: {
-      marginTop: 16,
       height: 56,
       border: "1px solid #e8e8e8",
-      padding: "18.5px 14px",
+      padding: "14px 14px",
       borderRadius: 4,
       width: "47%",
       flexShrink: 0,
-      marginLeft: 24
+      marginLeft: 24,
+      marginTop: 16
     },
     searchIcon: {
       background: "transparent",

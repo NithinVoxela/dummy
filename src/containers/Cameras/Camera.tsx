@@ -10,16 +10,18 @@ import {
   TextField,
   Button,
   Select,
-  MenuItem
+  MenuItem,
+  FormControl,
+  InputLabel
 } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import { Formik } from "formik";
 import * as React from "react";
-import Helmet from "react-helmet";
 import { useEffect, useState } from "react";
+import Helmet from "react-helmet";
 import { connect } from "react-redux";
 import { Redirect, RouteComponentProps, withRouter } from "react-router";
-import { NavLink as RouterNavLink } from "react-router-dom";
+import { NavLink as RouterNavLink, useHistory } from "react-router-dom";
 import * as Yup from "yup";
 
 import { ICameraDataModel } from "models/cameraData.model";
@@ -73,6 +75,7 @@ const CameraComponent: React.FC<IProps> = ({
     location: "",
     installationDate: ""
   });
+  const history = useHistory();
   useEffect(() => {
     !isAddMode && getCameraRequest({ publicId: id });
   }, [getCameraRequest, id, isAddMode]);
@@ -93,6 +96,7 @@ const CameraComponent: React.FC<IProps> = ({
         ...params
       };
       updateCameraRequest(updatedParams);
+      history.push(`/cameras`);
     }
   };
 
@@ -179,6 +183,7 @@ const CameraComponent: React.FC<IProps> = ({
                     type="text"
                     value={values.name}
                     variant="outlined"
+                    required
                   />
                   <TextField
                     error={Boolean(touched.description && errors.description)}
@@ -192,37 +197,31 @@ const CameraComponent: React.FC<IProps> = ({
                     type="text"
                     value={values.description}
                     variant="outlined"
+                    required
                   />
                 </div>
                 <div>
-                  <Select
-                    error={Boolean(touched.cameraType && errors.cameraType)}
-                    helperText={touched.cameraType && errors.cameraType}
-                    label="Camera Type"
-                    margin="normal"
-                    name="cameraType"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    type="text"
-                    value={values.cameraType}
-                    variant="outlined"
-                    className={classes.selectField}
-                  >
-                    <MenuItem value="IPCAMERA">IP Camera</MenuItem>
-                  </Select>
-                  {/* <TextField
-                    error={Boolean(touched.cameraType && errors.cameraType)}
-                    helperText={touched.cameraType && errors.cameraType}
-                    className={classes.textfield}
-                    label="Camera Type"
-                    margin="normal"
-                    name="cameraType"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    type="text"
-                    value={values.cameraType}
-                    variant="outlined"
-                  /> */}
+                  <FormControl variant="outlined" required className={classes.selectField}>
+                    <InputLabel htmlFor="camera-select-label">Camera Type</InputLabel>
+                    <Select
+                      error={Boolean(touched.cameraType && errors.cameraType)}
+                      helperText={touched.cameraType && errors.cameraType}
+                      label="Camera Type"
+                      name="cameraType"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      type="text"
+                      value={values.cameraType}
+                      variant="outlined"
+                      inputProps={{
+                        id: "camera-select-label"
+                      }}
+                      style={{ marginTop: 0 }}
+                    >
+                      <MenuItem value="IPCamera">IP Camera</MenuItem>
+                    </Select>
+                  </FormControl>
+
                   <TextField
                     error={Boolean(touched.brand && errors.brand)}
                     helperText={touched.brand && errors.brand}
@@ -235,6 +234,7 @@ const CameraComponent: React.FC<IProps> = ({
                     type="text"
                     value={values.brand}
                     variant="outlined"
+                    required
                   />
                 </div>
                 <div>
@@ -250,6 +250,7 @@ const CameraComponent: React.FC<IProps> = ({
                     type="text"
                     value={values.model}
                     variant="outlined"
+                    required
                   />
                   <TextField
                     error={Boolean(touched.installationDate && errors.installationDate)}
@@ -280,6 +281,7 @@ const CameraComponent: React.FC<IProps> = ({
                     type="text"
                     value={values.streamUrl}
                     variant="outlined"
+                    required
                   />
                   <TextField
                     error={Boolean(touched.location && errors.location)}
@@ -293,6 +295,7 @@ const CameraComponent: React.FC<IProps> = ({
                     type="text"
                     value={values.location}
                     variant="outlined"
+                    required
                   />
                 </div>
                 <div>
@@ -308,7 +311,24 @@ const CameraComponent: React.FC<IProps> = ({
                     type="text"
                     value={values.passPhrase}
                     variant="outlined"
+                    required
                   />
+                  {!isAddMode && (
+                    <TextField
+                      className={classes.textfield}
+                      label="Camera ID"
+                      margin="normal"
+                      name="cameraId"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      type="text"
+                      value={id}
+                      variant="outlined"
+                      inputProps={{
+                        readOnly: true
+                      }}
+                    />
+                  )}
                 </div>
                 <Box mt={2}>
                   <Button
