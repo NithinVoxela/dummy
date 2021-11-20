@@ -37,14 +37,14 @@ if (process.env.NODE_ENV === "local") {
   });
 }
 
-const CopyWebpackPluginMessages = new CopyWebpackPlugin({
-  patterns: [
-    {
-      from: path.join(__dirname, `src/services/translation/messages.json`),
-      to: path.join(__dirname, "/build/messages.json"),
-    },
-  ],
-});
+// const CopyWebpackPluginMessages = new CopyWebpackPlugin({
+//   patterns: [
+//     {
+//       from: path.join(__dirname, `src/services/translation/messages.json`),
+//       to: path.join(__dirname, "/build/messages.json"),
+//     },
+//   ],
+// });
 const CopyCriticalPathAssetsConfig = new CopyWebpackPlugin({
   patterns: [
     {
@@ -56,8 +56,8 @@ const CopyCriticalPathAssetsConfig = new CopyWebpackPlugin({
       to: path.join(__dirname, "/build/loading.svg"),
     },
     {
-      from: path.join(__dirname, `src/services/translation/messages.json`),
-      to: path.join(__dirname, "/build/messages.json"),
+      from: path.join(__dirname, `src/services/translation/locale/`),
+      to: path.join(__dirname, "/build/locale/"),
     },
     {
       from: path.join(__dirname, `firebase-messaging-sw.js`),
@@ -175,8 +175,7 @@ module.exports = {
     ]
     : [
       IndexHTMLWebpackPluginConfig,
-      CopyWebpackPluginConfig,
-      CopyWebpackPluginMessages,
+      CopyWebpackPluginConfig,      
       CircularDependencyPluginConfig,
       CopyCriticalPathAssetsConfig,
       new webpack.HotModuleReplacementPlugin(),

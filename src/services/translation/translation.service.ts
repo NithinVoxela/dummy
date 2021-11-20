@@ -7,7 +7,7 @@ import { getEnvironment } from "store/environment/environment.selectors";
 import { IApplicationState } from "store/state.model";
 import * as translationActions from "store/translation/translation.actions";
 
-import * as messages from "./messages.json";
+import * as messages from "./locale/messages_en-US.json";
 
 export const textNotFound = "Text not found";
 
@@ -27,8 +27,9 @@ class TranslationService {
   public loadTranslations = (store: Store<IApplicationState, AnyAction>) => {
     const state = store.getState();
     const { translationServiceEndpoint } = getEnvironment(state).externalLinks;
+    const locale = navigator.language || navigator.userLanguage || "en-US";
     return TranslationService._instance.httpService
-      .get(translationServiceEndpoint)
+      .get(translationServiceEndpoint + `messages${locale ? `_${locale}` : ""}.json`)
       .then(res => {
         store.dispatch(translationActions.loadTranslatedMessages(res.data));
       })
