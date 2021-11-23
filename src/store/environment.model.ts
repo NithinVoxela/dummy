@@ -1,8 +1,5 @@
 export interface IEnvironment {
   production: boolean;
-  apiEndpoints: {
-    frontEndApi: string;
-  };
   externalLinks: {
     translationServiceEndpoint: string;
   };
@@ -11,7 +8,4 @@ export interface IEnvironment {
     searchInputDebounce: number;
   };
   constants: {};
-  authenticationHeaders: {
-    tenantId: string;
-  };
 }

@@ -1,7 +1,4 @@
 {
-  "apiEndpoints": {
-    "frontEndApi": "https://cortexa-demo.voxela.ai/cortexa-service/api/v2/"
-  },
   "externalLinks": {
     "translationServiceEndpoint": "locale/"
   },
@@ -11,8 +8,5 @@
   },
   "constants": {
     "maxRowsPerPage": 500
-  },
-  "authenticationHeaders": {
-    "tenantId": "cortexa-demo"
   }
 }

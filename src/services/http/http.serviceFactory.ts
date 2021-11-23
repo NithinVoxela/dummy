@@ -30,14 +30,14 @@ export class HttpServiceFactory {
   }
 
   private static _createCoreService() {
-    HttpServiceFactory._coreService.httpService = HttpServiceFactory._createHttpService("frontEndApi");
+    HttpServiceFactory._coreService.httpService = HttpServiceFactory._createHttpService();
   }
 
   private static _createIamService() {
-    HttpServiceFactory._iamService.httpService = HttpServiceFactory._createHttpService("frontEndApi");
+    HttpServiceFactory._iamService.httpService = HttpServiceFactory._createHttpService();
   }
 
-  private static _createHttpService(endpoint: string): AxiosInstance {
+  private static _createHttpService(): AxiosInstance {
     const appStore = AppStore.getInstance();
     if (!appStore) {
       return null;
@@ -50,15 +50,30 @@ export class HttpServiceFactory {
     }
 
     const authenticationHeaders: any = {};
-    authenticationHeaders["X-TenantID"] = environment.authenticationHeaders.tenantId;
     authenticationHeaders["X-AuthToken"] = state.userAccount.token;
 
+    const apiEndPoint = HttpServiceFactory._getTenantUrl();
     return axios.create({
-      baseURL: environment.apiEndpoints[endpoint],
+      baseURL: apiEndPoint,
       headers: {
         common: authenticationHeaders
       },
       paramsSerializer: stringify
     });
+  }
+
+  private static _getTenantUrl() {
+    const environment = {
+      protocal: window.location.protocol,
+      host: window.location.hostname,
+      port: window.location.port
+    };
+    const BASE_URL =
+      (environment.protocal.indexOf(":") > 0 ? environment.protocal + "//" : environment.protocal + "://") +
+      environment.host +
+      (environment.port && environment.port !== "" ? ":" + environment.port : "") +
+      "/cortexa-service/api/v2/";
+    // const BASE_URL = "http://localhost:9090/cortexa-service/api/v2/";
+    return BASE_URL;
   }
 }
