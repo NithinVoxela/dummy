@@ -12,7 +12,8 @@ import {
 } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
-import LaunchOutlinedIcon from '@material-ui/icons/LaunchOutlined';
+import AppsOutlinedIcon from "@material-ui/icons/AppsOutlined";
+import LaunchOutlinedIcon from "@material-ui/icons/LaunchOutlined";
 import SearchBar from "material-ui-search-bar";
 import * as React from "react";
 import { useCallback, useEffect, useState, useRef } from "react";
@@ -23,6 +24,7 @@ import { useHistory } from "react-router-dom";
 import { Table } from "components/Table/Table";
 import { ICameraDataModel } from "models/cameraData.model";
 import { IFilterParams } from "services/camera/camera.service";
+import { translationService } from "services/translation/translation.service";
 import { formatDateInWords } from "src/helpers/dateTime";
 import * as actions from "store/camera/camera.actions";
 import { getCamerasList, getCamerasTotalCount } from "store/camera/camera.selector";
@@ -58,35 +60,6 @@ const usePrevious = (value: DependencyList) => {
   return ref.current;
 };
 
-const tableColumns = [
-  {
-    id: "cameraStatus",
-    numeric: false,
-    disablePadding: false,
-    disableSort: true,
-    label: "Status",
-    align: "left"
-  },
-  { id: "name", numeric: false, disablePadding: false, disableSort: true, label: "Name", align: "left" },
-  { id: "cameraType", numeric: false, disablePadding: false, disableSort: true, label: "Type", align: "left" },
-  { id: "description", numeric: false, disablePadding: false, disableSort: true, label: "Description", align: "left" },
-  {
-    id: "installationDate",
-    numeric: false,
-    disablePadding: false,
-    disableSort: true,
-    label: "Installation Date",
-    align: "left"
-  },
-  {
-    id: "actions",
-    label: "Actions",
-    numeric: true,
-    disablePadding: false,
-    disableSort: true,
-    align: "center"
-  }
-];
 
 const CamerasComponent: React.FC<IProps> = ({
   totalCount,
@@ -103,6 +76,57 @@ const CamerasComponent: React.FC<IProps> = ({
   const [searched, setSearched] = useState("");
   const prevSearched = usePrevious(searched);
   const [isLoading, setIsLoading] = useState(false);
+
+  const tableColumns = [
+    {
+      id: "cameraStatus",
+      numeric: false,
+      disablePadding: false,
+      disableSort: true,
+      label: translationService.getMessageTranslation("camera-status-label", "Status"),
+      align: "left"
+    },
+    {
+      id: "name",
+      numeric: false,
+      disablePadding: false,
+      disableSort: true,
+      label: translationService.getMessageTranslation("camera-name-label", "Name"),
+      align: "left"
+    },
+    {
+      id: "cameraType",
+      numeric: false,
+      disablePadding: false,
+      disableSort: true,
+      label: translationService.getMessageTranslation("camera-type-label", "Type"),
+      align: "left"
+    },
+    {
+      id: "description",
+      numeric: false,
+      disablePadding: false,
+      disableSort: true,
+      label: translationService.getMessageTranslation("camera-desc-label", "Description"),
+      align: "left"
+    },
+    {
+      id: "installationDate",
+      numeric: false,
+      disablePadding: false,
+      disableSort: true,
+      label: translationService.getMessageTranslation("camera-installation-label", "Installation Date"),
+      align: "left"
+    },
+    {
+      id: "actions",
+      label: translationService.getMessageTranslation("camera-action-label", "Actions"),
+      numeric: true,
+      disablePadding: false,
+      disableSort: true,
+      align: "center"
+    }
+  ];
 
   useEffect(() => {
     setIsLoading(true);
@@ -122,6 +146,10 @@ const CamerasComponent: React.FC<IProps> = ({
 
   const handleEditClick = (id: string) => () => {
     history.push(`/camera/${id}`);
+  };
+
+  const handleAppsClick = (id: string) => () => {
+    history.push(`/camera/${id}/apps`);
   };
 
   const handleDeleteClick = (publicId: string, name: string) => () => {
@@ -151,12 +179,21 @@ const CamerasComponent: React.FC<IProps> = ({
           cameraStatus: (
             <>
               {streamUrl?.trim()?.length > 0 && cameraStatus === "Online" ? (
-                <Button color="primary" size="small" className={classes.linkBtn} onClick={() => openStreamUrl(streamUrl)}>
-                  {cameraStatus}
-                  <LaunchOutlinedIcon color="primary" fontSize="small" style={{ fontSize: 14, marginLeft: 2, marginTop: 2 }} />
+                <Button
+                  color="primary"
+                  size="small"
+                  className={classes.linkBtn}
+                  onClick={() => openStreamUrl(streamUrl)}
+                >
+                  {translationService.getMessageTranslation("camera-online-label", "Online")}
+                  <LaunchOutlinedIcon
+                    color="primary"
+                    fontSize="small"
+                    style={{ fontSize: 14, marginLeft: 2, marginTop: 2 }}
+                  />
                 </Button>
               ) : (
-                <>{ cameraStatus }</>
+                <>{translationService.getMessageTranslation("camera-offline-label", "Offline")}</>
               )}
             </>
           ),
@@ -166,14 +203,19 @@ const CamerasComponent: React.FC<IProps> = ({
           installationDate: formatDateInWords(installationDate),
           actions: (
             <Box mr={2}>
-              <Tooltip title="Edit">
+              <Tooltip title={translationService.getMessageTranslation("camera-edit-label", "Edit")}>
                 <IconButton aria-label="edit" onClick={handleEditClick(publicId)} size="small">
                   <EditIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="Delete">
+              <Tooltip title={translationService.getMessageTranslation("camera-delete-label", "Delete")}>
                 <IconButton aria-label="delete" onClick={handleDeleteClick(publicId, name)} size="small">
                   <DeleteIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={translationService.getMessageTranslation("camera-apps-header-label", "Camera Apps")}>
+                <IconButton aria-label="apps" onClick={handleAppsClick(publicId)} size="small">
+                  <AppsOutlinedIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
             </Box>
@@ -220,14 +262,14 @@ const CamerasComponent: React.FC<IProps> = ({
       <Grid justify="space-between" container spacing={10}>
         <Grid item>
           <Typography variant="h3" gutterBottom display="inline">
-            Cameras
+            {translationService.getMessageTranslation("alert-cameras-label", "Cameras")}
           </Typography>
         </Grid>
         <Grid item>
           <div>
             <Button variant="contained" color="primary" onClick={handleAddCamera}>
               <AddIcon />
-              New Camera
+              {translationService.getMessageTranslation("alert-new-camera-label", "New Camera")}
             </Button>
           </div>
         </Grid>
@@ -239,14 +281,17 @@ const CamerasComponent: React.FC<IProps> = ({
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <Card>
-            <CardHeader title="Camera List" style={{ paddingBottom: 4 }} />
+            <CardHeader
+              title={translationService.getMessageTranslation("alert-camera-list-label", "Camera List")}
+              style={{ paddingBottom: 4 }}
+            />
             <Box style={{ padding: "8px 16px" }}>
               <SearchBar
                 className={classes.searchContainer}
                 value={searched}
                 onChange={handleSearch}
                 onCancelSearch={handleCancelSearch}
-                placeholder="Search by Name..."
+                placeholder={translationService.getMessageTranslation("alert-search-txt-label", "Search by Name...")}
                 classes={{ searchIconButton: classes.searchIcon, iconButton: classes.searchIcon }}
               />
             </Box>

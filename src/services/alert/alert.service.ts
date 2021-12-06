@@ -11,7 +11,7 @@ export interface IAlertFilterParams {
     startDate: Date;
     endDate: Date;
   };
-  location?: string;
+  name?: string;
   dateTimeDisplayValue?: string;
   severity?: string;
 }

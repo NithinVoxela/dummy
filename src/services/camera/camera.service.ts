@@ -64,6 +64,21 @@ class CameraService {
     return camera;
   };
 
+  public updateCameraApp = async (payload: any) => {
+    const url = `camera/${payload.cameraId}/mlapp/${payload.appId}/configure`;
+    delete payload.cameraId;
+    delete payload.appId;
+    const cameras = await CameraService._instance._httpService.post(url, payload);
+    return cameras;
+  };
+
+  public addCameraApp = async (payload: any) => {
+    const url = `camera/${payload.cameraId}/add/mlapp`;
+    delete payload.cameraId;
+    const cameras = await CameraService._instance._httpService.post(url, payload);
+    return cameras;
+  };
+
   public sanitizeFilters = (filterParams: IFilterParams) => {
     return {
       name: filterParams.keywords,

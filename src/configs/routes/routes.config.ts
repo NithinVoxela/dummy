@@ -28,6 +28,14 @@ const liveStream: IRoute = {
   to: "/stream"
 };
 
+const cameraAppsList: IRoute = {
+  to: "/camera/:id/apps"
+};
+
+const cameraAppsDetails: IRoute = {
+  to: "/camera/:id/apps/:appId/settings"
+};
+
 export const routes = {
   login,
   dashboard,
@@ -35,5 +43,7 @@ export const routes = {
   alertDetails,
   cameras,
   camera,
-  liveStream
+  liveStream,
+  cameraAppsList,
+  cameraAppsDetails
 };

@@ -116,3 +116,54 @@ export const deleteCamera = function*({ payload }: IStoreAction) {
 export const watchDeleteCameraRequest = function*() {
   yield takeLatest(actions.DELETE_CAMERA_REQUEST, deleteCamera);
 };
+
+export const updateCameraApp = function*({ payload }: IStoreAction) {
+  try {
+    const camera: ICameraDataModel = yield call(cameraService.updateCameraApp, payload);
+    yield put(actions.getCameraSuccess({ camera }));
+    yield fork(getCamera, {
+      type: "",
+      payload: camera
+    });
+    yield put(
+      addNotification({
+        header: translationService.getMessageTranslation("update-successfull-label", "App update Successful"),
+        message: `${translationService.getMessageTranslation("you-have-updated-label", "You have updated ml app.")} ${
+          camera.name
+        }`
+      })
+    );
+  } catch (err) {
+    yield put(handleError(err));
+  }
+};
+
+export const watchUpdateCameraAppRequest = function*() {
+  yield takeLatest(actions.UPDATE_CAMERA_APP_REQUEST, updateCameraApp);
+};
+
+export const addCameraApp = function*({ payload }: IStoreAction) {
+  try {
+    const camera: ICameraDataModel = yield call(cameraService.addCameraApp, payload);
+    yield put(actions.getCameraSuccess({ camera }));
+    yield fork(getCamera, {
+      type: "",
+      payload: camera
+    });
+    yield put(
+      addNotification({
+        header: translationService.getMessageTranslation("update-successfull-label", "App configured Successful"),
+        message: `${translationService.getMessageTranslation(
+          "you-have-updated-label",
+          "You have configured a ml app."
+        )} ${camera.name}`
+      })
+    );
+  } catch (err) {
+    yield put(handleError(err));
+  }
+};
+
+export const watchaddCameraAppRequest = function*() {
+  yield takeLatest(actions.ADD_CAMERA_APP_REQUEST, addCameraApp);
+};

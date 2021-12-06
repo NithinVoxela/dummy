@@ -2,9 +2,11 @@ import * as React from "react";
 import { Route } from "react-router-dom";
 
 import { IRoute, routes } from "configs/routes/routes.config";
-import { Alerts } from "containers/Alerts/Alerts";
 import { AlertDetails } from "containers/Alerts/AlertDetails";
+import { Alerts } from "containers/Alerts/Alerts";
 import { Camera } from "containers/Cameras/Camera";
+import { CameraApps } from "containers/Cameras/CameraApps";
+import { CameraAppSettings } from "containers/Cameras/CameraAppSettings";
 import { Cameras } from "containers/Cameras/Cameras";
 import { Dashboard } from "containers/Dashboard/Dashboard";
 import { LiveStream } from "containers/LiveStream/LiveStream";
@@ -26,7 +28,9 @@ const routeMap = [
   routeCreater(AlertDetails, { routeConfig: routes.alertDetails }),
   routeCreater(Cameras, { routeConfig: routes.cameras }),
   routeCreater(Camera, { routeConfig: routes.camera }),
-  routeCreater(LiveStream, { routeConfig: routes.liveStream })
+  routeCreater(LiveStream, { routeConfig: routes.liveStream }),
+  routeCreater(CameraApps, { routeConfig: routes.cameraAppsList }),
+  routeCreater(CameraAppSettings, { routeConfig: routes.cameraAppsDetails })
 ];
 
 export const MainRoutes: React.FunctionComponent = () => (

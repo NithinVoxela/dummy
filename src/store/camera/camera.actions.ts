@@ -12,6 +12,8 @@ export const UPDATE_CAMERA_REQUEST = "[CAMERA] UPDATE_CAMERA_REQUEST";
 export const GET_CAMERA_REQUEST = "[CAMERA] GET_CAMERA_REQUEST";
 export const DELETE_CAMERA_REQUEST = "[CAMERA] DELETE_CAMERA_REQUEST";
 export const RESET_CAMERA_LIST = "[CAMERA] RESET_CAMERA_LIST";
+export const UPDATE_CAMERA_APP_REQUEST = "[CAMERA] UPDATE_CAMERA_APP_REQUEST";
+export const ADD_CAMERA_APP_REQUEST = "[CAMERA] ADD_CAMERA_APP_REQUEST";
 
 export const getCamerasLoadingRequest = (filterParams: IFilterParams, options?: ICameraRequestOptions) => ({
   type: GET_CAMERAS_LOADING_REQUEST,
@@ -51,4 +53,14 @@ export const deleteCameraRequest = (payload: { publicId: string; name: string })
 
 export const resetCameraList = () => ({
   type: RESET_CAMERA_LIST
+});
+
+export const updateCameraAppRequest = (payload: any) => ({
+  type: UPDATE_CAMERA_APP_REQUEST,
+  payload
+});
+
+export const addCameraAppRequest = (payload: any) => ({
+  type: ADD_CAMERA_APP_REQUEST,
+  payload
 });

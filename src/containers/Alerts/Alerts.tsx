@@ -206,7 +206,7 @@ class AlertsComponent extends React.Component<IProps, IState> {
         <Grid justify="space-between" container spacing={10}>
           <Grid item>
             <Typography variant="h3" gutterBottom display="inline">
-              Alerts
+              {translationService.getMessageTranslation("alerts-header-label", "Alerts")}
             </Typography>
           </Grid>
         </Grid>
@@ -220,7 +220,7 @@ class AlertsComponent extends React.Component<IProps, IState> {
                 value={location}
                 onChange={this.handleSearch}
                 onCancelSearch={this.handleCancelSearch}
-                placeholder="Search by location..."
+                placeholder={translationService.getMessageTranslation("alerts-search-location-label", "Search by location...")}
                 classes={{ searchIconButton: classes.searchIcon, iconButton: classes.searchIcon }}
               />
               <Box style={{ marginLeft : 24 }}>
@@ -265,11 +265,11 @@ class AlertsComponent extends React.Component<IProps, IState> {
                     filled: true,
                     shrink: true
                   }}
-                  label="Severity"
+                  label={translationService.getMessageTranslation("alerts-severity-label", "Severity")}
                 >
                   {SEVERITY.map(option => (
                     <MenuItem key={option} value={option}>
-                      {option}
+                      {translationService.getMessageTranslation(`alerts-${option.toLowerCase()}-label`, option)}
                     </MenuItem>
                   ))}
                 </TextField>

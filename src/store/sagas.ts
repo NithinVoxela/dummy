@@ -14,7 +14,9 @@ import {
   watchGetCameraRequest,
   watchGetCamerasLoadingRequest,
   watchRegisterCameraRequest,
-  watchUpdateCameraRequest
+  watchUpdateCameraRequest,
+  watchUpdateCameraAppRequest,
+  watchaddCameraAppRequest
 } from "./camera/camera.saga";
 import { watchLoginRequest, watchrRgisterDeviceRequest } from "./userAccount/userAccount.saga";
 
@@ -32,6 +34,8 @@ export const rootSaga = function*(): any {
     watchGetAlertLogNextPageRequest(),
     watchGetAlertRequest(),
     watchrRgisterDeviceRequest(),
-    watchMarkAsReadRequest()
+    watchMarkAsReadRequest(),
+    watchUpdateCameraAppRequest(),
+    watchaddCameraAppRequest()
   ]);
 };

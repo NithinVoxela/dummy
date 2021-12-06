@@ -5,6 +5,7 @@ import * as React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
+import { translationService } from "services/translation/translation.service";
 import { AppStore } from "store/configureStore";
 import { removeUserAccount } from "store/userAccount/userAccount.actions";
 
@@ -50,8 +51,12 @@ const UserMenu: React.FC = () => {
         </Avatar>
       </Badge>
       <Menu id="menu-appbar" anchorEl={anchorMenu} open={Boolean(anchorMenu)} onClose={handleCloseMenu}>
-        <MenuItem onClick={handleCloseMenu}>Profile</MenuItem>
-        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        <MenuItem onClick={handleCloseMenu}>
+          {translationService.getMessageTranslation("camera-profile-label", "Profile")}
+        </MenuItem>
+        <MenuItem onClick={handleLogout}>
+          {translationService.getMessageTranslation("camera-logout-label", "Logout")}
+        </MenuItem>
       </Menu>
     </>
   );

@@ -1,4 +1,4 @@
-export const SEVERITY = ["HIGH", "MEDIUM", "LOW"];
+export const SEVERITY = ["Critical", "High", "Medium", "Low"];
 
 export const SEVERITY_COLORS = {
   High: "#ed6c02",

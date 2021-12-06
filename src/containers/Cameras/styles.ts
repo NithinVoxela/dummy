@@ -1,4 +1,5 @@
 import { createStyles } from "@material-ui/core";
+import { height } from "@material-ui/system";
 
 export const styles = () => {
   return createStyles({
@@ -42,9 +43,10 @@ export const styles = () => {
       marginLeft: 24
     },
     submitButton: {
-      width: 100,
+      minWidth: 100,
       flexShrink: 0,
-      marginLeft: 24
+      marginLeft: 24,
+      marginRight: 12
     },
     form: {
       padding: "16px"
@@ -79,6 +81,39 @@ export const styles = () => {
       "&:hover": {
         background: "transparent !important"
       }
+    },
+    appCard: {
+      marginRight: 24
+    },
+    noData: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      width: "100%",
+      height: "100%"
+    },
+    appSettingform: {
+      padding: "24px 40px"
+    },
+    appNotifications: {
+      marginTop: 16
+    },
+    checkbox: {
+      height: 30,
+      boxSizing: "border-box",
+      "&:hover": {
+        background: "transparent !important"
+      }
+    },
+    fieldLable: {
+      paddingBottom: 4
+    },
+    saveButton: {
+      minWidth: 100,
+      marginRight: 12
+    },
+    emailInput: {
+      minHeight: 50
     }
   });
 };

@@ -85,7 +85,7 @@ const AlertDetailsComponent: React.FC<IProps> = ({
           <Grid item md={2} xs={12} className={classes.alertSummary}>
             <div>
               <Typography color="textPrimary" variant="h6">
-                LOCATION
+                {translationService.getMessageTranslation("alert-location-details", "LOCATION").toUpperCase()}
               </Typography>
               <Typography color="textPrimary" variant="body1" className={classes.alertSummaryValue}>
                 {alert?.cameraLocation || "-"}
@@ -95,7 +95,7 @@ const AlertDetailsComponent: React.FC<IProps> = ({
           <Grid item md={2} xs={12} className={classes.alertSummary}>
             <div>
               <Typography color="textPrimary" variant="h6">
-                CAMERA
+              {translationService.getMessageTranslation("alert-camera-details", "CAMERA").toUpperCase()}
               </Typography>
               <Typography color="textPrimary" variant="body1" className={classes.alertSummaryValue}>
                 {alert?.cameraName || "-"}
@@ -105,7 +105,7 @@ const AlertDetailsComponent: React.FC<IProps> = ({
           <Grid item md={3} xs={12} className={classes.alertSummary}>
             <div>
               <Typography color="textPrimary" variant="h6">
-                ALERT CREATED ON
+                {translationService.getMessageTranslation("alert-created-on-details", "ALERT CREATED ON")}
               </Typography>
               <Typography color="textPrimary" variant="body1" className={classes.alertSummaryValue}>
                 {alert?.alertTime ? formatDateInWords(alert.alertTime) : "-"}
@@ -115,7 +115,7 @@ const AlertDetailsComponent: React.FC<IProps> = ({
           <Grid item md={2} xs={12} className={classes.alertSummary}>
             <div>
               <Typography color="textPrimary" variant="h6">
-                SEVERITY
+                {translationService.getMessageTranslation("alerts-severity-label", "SEVERITY").toUpperCase()}
               </Typography>
               <Typography component="p" className={classes.alertSummaryValue}>
                 <Chip
@@ -129,10 +129,10 @@ const AlertDetailsComponent: React.FC<IProps> = ({
           <Grid item md={2} xs={12} className={classes.alertSummary}>
             <div>
               <Typography color="textPrimary" variant="h6">
-                TYPE
+              {translationService.getMessageTranslation("camera-type-label", "TYPE").toUpperCase()}
               </Typography>
               <Typography color="textPrimary" variant="body1" className={classes.alertSummaryValue}>
-                {alert?.type || "-"}
+                {translationService.getMessageTranslation(`alerts-${alert?.type?.toLowerCase()}-label`, alert?.type) || "-"}
               </Typography>
             </div>
           </Grid>

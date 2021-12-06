@@ -10,6 +10,7 @@ export class CameraDataModel implements ICameraDataModel {
   public passPhrase: string;
   public location: string;
   public installationDate: string;
+  public appDtos: any;
 
   public constructor(model: ICameraDataModel) {
     this.publicId = model.publicId;
@@ -24,6 +25,7 @@ export class CameraDataModel implements ICameraDataModel {
     this.passPhrase = model.passPhrase;
     this.location = model.location;
     this.installationDate = model.installationDate;
+    this.appDtos = model.appDtos;
   }
 }
 
@@ -39,4 +41,5 @@ export interface ICameraDataModel {
   passPhrase: string;
   location: string;
   installationDate: string;
+  appDtos: any;
 }

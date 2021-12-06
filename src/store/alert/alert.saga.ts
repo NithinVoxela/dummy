@@ -1,16 +1,16 @@
 import { call, fork, put, select, takeEvery, takeLatest } from "redux-saga/effects";
 
 import { handleError } from "containers/Notifier/store/errorHandler.action";
+import { addNotification } from "containers/Notifier/store/notifier.action";
 import { IAlertLogModel } from "models/alert.model";
 import { IAlertDataModel } from "models/alertData.model";
 import { alertService } from "services/alert/alert.service";
+import { translationService } from "services/translation/translation.service";
 import { IStoreAction } from "store/action.model";
 import * as actions from "store/alert/alert.actions";
 import { delayedSaga, loadingSaga } from "store/sagaUtils";
 
-import { getAlertLogFilter } from './alertLogFilters/alertLogFilters.selector';
-import { translationService } from "services/translation/translation.service";
-import { addNotification } from "containers/Notifier/store/notifier.action";
+import { getAlertLogFilter } from "./alertLogFilters/alertLogFilters.selector";
 
 export const getAlertLog = function*({ payload }: IStoreAction) {
   try {
@@ -73,7 +73,7 @@ export const markAsRead = function*({ payload }: IStoreAction) {
     const filterParams = yield select(getAlertLogFilter);
     yield fork(getAlertLog, {
       type: "",
-      payload: {...filterParams, pageNumber: 0, pageSize: ((filterParams.pageNumber + 1) * filterParams.pageSize)}
+      payload: { ...filterParams, pageNumber: 0, pageSize: (filterParams.pageNumber + 1) * filterParams.pageSize }
     });
   } catch (err) {
     yield put(handleError(err));

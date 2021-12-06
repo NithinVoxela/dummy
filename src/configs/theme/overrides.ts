@@ -78,5 +78,10 @@ export const overrides = {
     rounded: {
       borderRadius: 6
     }
+  },
+  MuiFormLabel: {
+    root: {
+      color: "rgba(0, 0, 0, 0.87)"
+    }
   }
 };
