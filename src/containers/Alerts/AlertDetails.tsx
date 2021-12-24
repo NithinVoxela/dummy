@@ -59,7 +59,7 @@ const AlertDetailsComponent: React.FC<IProps> = ({
   }, [alert]);
 
   const type = isImageURL(alert?.fileName) ? "image" : "video";
-  const mediaUrl = alert?.mediaUrl;
+  const mediaUrl = alert?.preSignedUrl;
   return (
     <>
       <Helmet title="Alerts" />
