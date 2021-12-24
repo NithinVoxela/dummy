@@ -7,7 +7,9 @@ import {
   watchGetAlertLogNextPageRequest,
   watchGetAlertsLoadingRequest,
   watchGetAlertRequest,
-  watchMarkAsReadRequest
+  watchMarkAsReadRequest,
+  watchGetDashboardAlertLogRequest,
+  watchGetDashboardCameraAlertLogRequest
 } from "./alert/alert.saga";
 import {
   watchDeleteCameraRequest,
@@ -36,6 +38,8 @@ export const rootSaga = function*(): any {
     watchrRgisterDeviceRequest(),
     watchMarkAsReadRequest(),
     watchUpdateCameraAppRequest(),
-    watchaddCameraAppRequest()
+    watchaddCameraAppRequest(),
+    watchGetDashboardAlertLogRequest(),
+    watchGetDashboardCameraAlertLogRequest()
   ]);
 };

@@ -28,6 +28,7 @@ const routeMap = [
   routeCreater(AlertDetails, { routeConfig: routes.alertDetails }),
   routeCreater(Cameras, { routeConfig: routes.cameras }),
   routeCreater(Camera, { routeConfig: routes.camera }),
+  routeCreater(Camera, { routeConfig: routes.addCamera }),
   routeCreater(LiveStream, { routeConfig: routes.liveStream }),
   routeCreater(CameraApps, { routeConfig: routes.cameraAppsList }),
   routeCreater(CameraAppSettings, { routeConfig: routes.cameraAppsDetails })

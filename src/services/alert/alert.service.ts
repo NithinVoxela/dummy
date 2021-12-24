@@ -76,6 +76,24 @@ class AlertService {
         })
     };
   };
+
+  public getDashboardAlertLog = async () => {
+    const alerts = await AlertService._instance._httpService.get(`alert/view/camera-alert/dashboard/latest-alerts`);
+    const alertsData = {
+      alerts,
+      totalCount: alerts.length
+    };
+    return alertsData;
+  };
+
+  public getDashboardCameraAlertLog = async () => {
+    const alerts = await AlertService._instance._httpService.get(`alert/view/camera-alert/dashboard`);
+    const alertsData = {
+      alerts,
+      totalCount: alerts.length
+    };
+    return alertsData;
+  };
 }
 
 export const alertService = AlertService.getInstance();

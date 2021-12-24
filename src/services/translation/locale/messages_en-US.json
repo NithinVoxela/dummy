@@ -91,5 +91,6 @@
   "alert-critical-label": "Critical",
   "alert-high-label": "High",
   "alert-medium-label": "Medium",
-  "alert-low-label": "Low"
+  "alert-low-label": "Low",
+  "no-activity-label": "No activity"
 }

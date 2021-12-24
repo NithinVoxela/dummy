@@ -83,3 +83,30 @@ export const markAsRead = function*({ payload }: IStoreAction) {
 export const watchMarkAsReadRequest = function*() {
   yield takeLatest(actions.MARK_AS_READ, markAsRead);
 };
+
+
+export const getDashboardAlertLog = function*({ payload }: IStoreAction) {
+  try {
+    const dashboardAlerts: any = yield call(alertService.getDashboardAlertLog, payload);
+    yield put(actions.getDashboardAlertSuccess(dashboardAlerts));
+  } catch (err) {
+    yield put(handleError(err));
+  }
+};
+
+export const watchGetDashboardAlertLogRequest = function*() {
+  yield takeEvery(actions.GET_DASHBOARD_ALERT_REQUEST, getDashboardAlertLog);
+};
+
+export const getDashboardCameraAlertLog = function*({ payload }: IStoreAction) {
+  try {
+    const dashboardCameraAlerts: any = yield call(alertService.getDashboardCameraAlertLog, payload);
+    yield put(actions.getDashboardCameraAlertSuccess(dashboardCameraAlerts));
+  } catch (err) {
+    yield put(handleError(err));
+  }
+};
+
+export const watchGetDashboardCameraAlertLogRequest = function*() {
+  yield takeEvery(actions.GET_DASHBOARD_CAMERA_ALERT_REQUEST, getDashboardCameraAlertLog);
+};

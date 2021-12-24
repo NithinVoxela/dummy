@@ -23,18 +23,13 @@ import {
 
 import { NUMBERS } from "configs/constants";
 import { translationService } from "services/translation/translation.service";
+import { SEVERITY_COLORS } from "src/Constants";
 
 import { styles } from "./styles";
 
 export const CARD = {
   WIDTH: 335,
   HEIGHT: 350
-};
-
-export const SEVERITY_COLORS = {
-  High: "#ed6c02",
-  Critical: "#d32f2f",
-  Low: "#0288d1"
 };
 
 export interface IBaseVirtualizedMasonryProps {
@@ -59,7 +54,6 @@ class MasonryComponent extends React.Component<IProps> {
     gutterSize: 20,
     overscanByPixels: CARD.HEIGHT
   };
-
 
   public getPositionerConfig = (width: number) => {
     const { gutterSize } = this.config;

@@ -4,7 +4,8 @@ import { green, red } from "@material-ui/core/colors";
 export const styles = (theme: Theme) =>
   createStyles({
     root: {
-      height: "100%"
+      height: "100%",
+      minHeight: 150
     },
     button: {
       padding: 8
@@ -87,5 +88,9 @@ export const styles = (theme: Theme) =>
     redText: {
       color: red[400],
       fontWeight: theme.typography.fontWeightMedium
+    },
+    card: {
+      cursor: "pointer",
+      minHeight: 150
     }
   });

@@ -90,6 +90,7 @@ const CameraComponent: React.FC<IProps> = ({
   const handleRegister = (params: ICameraDataModel) => {
     if (isAddMode) {
       registerCameraRequest(params);
+      history.push(`/cameras`);
     } else {
       const updatedParams = {
         ...cameraInfo,

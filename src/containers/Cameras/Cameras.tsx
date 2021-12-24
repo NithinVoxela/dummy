@@ -253,7 +253,7 @@ const CamerasComponent: React.FC<IProps> = ({
   }, [setSearched, updateCameraFilters]);
 
   const handleAddCamera = useCallback(() => {
-    history.push("/camera");
+    history.push("/addCamera");
   }, [history]);
 
   return (

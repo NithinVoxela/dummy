@@ -24,6 +24,11 @@ const camera: IRoute = {
   to: "/camera/:id?"
 };
 
+const addCamera: IRoute = {
+  to: "/addCamera"
+};
+
+
 const liveStream: IRoute = {
   to: "/stream"
 };
@@ -45,5 +50,6 @@ export const routes = {
   camera,
   liveStream,
   cameraAppsList,
-  cameraAppsDetails
+  cameraAppsDetails,
+  addCamera
 };
