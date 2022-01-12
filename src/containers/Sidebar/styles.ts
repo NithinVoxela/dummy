@@ -26,8 +26,8 @@ export const styles = (theme: any) =>
       }
     },
     brandIcon: {
-      marginRight: theme.spacing(2),
-      color: theme.sidebar.header.brand.color
+      color: theme.sidebar.header.brand.color,
+      maxHeight: 36
     },
     brandChip: {
       backgroundColor: green[700],

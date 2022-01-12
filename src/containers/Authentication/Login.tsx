@@ -5,6 +5,7 @@ import Helmet from "react-helmet";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 
+import { Logo } from "containers/Sidebar/SidebarMenu/Logo/index";
 import { IAuthModel } from "models/user.model";
 import { translationService } from "services/translation/translation.service";
 import { login } from "store/userAccount/userAccount.actions";
@@ -42,7 +43,8 @@ export const Login = () => {
             {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
               <form onSubmit={handleSubmit}>
                 <Box mb={1} display="flex" justifyContent="center">
-                  <Typography color="textPrimary" variant="h2">
+                  <Logo />
+                  <Typography color="textPrimary" variant="h2" style={{ marginLeft: 4 }}>
                     Cortexa
                   </Typography>
                 </Box>
