@@ -112,7 +112,7 @@ class AlertsComponent extends React.Component<IProps, IState> {
         media: mediaUrl,
         cameraName,
         location: cameraLocation,
-        type: isImageURL(fileName) ? "image" : "video",
+        type: "image",
         alertTime: formatDateInWords(alertTime),
         severity,
         hasRead,
