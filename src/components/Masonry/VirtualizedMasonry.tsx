@@ -115,7 +115,8 @@ class MasonryComponent extends React.Component<IProps> {
       alertTime = null,
       severity = null,
       id,
-      hasRead
+      hasRead,
+      preSignedUrl = null
     } = list?.[index] || {};
 
     const handleCardClick = () => {
@@ -134,7 +135,7 @@ class MasonryComponent extends React.Component<IProps> {
             badgeContent={translationService.getMessageTranslation("alert-new", "NEW")}
           />
         )}
-        <CardMedia className={classes[type]} component={type} controls image={media} />
+        <CardMedia className={classes[type]} component={type} controls image={preSignedUrl} />
         <CardContent style={{ padding: "6px 16px" }}>
           <div className={classes.header}>
             <Typography gutterBottom variant="headline" component="h3" className={classes.alertTime}>

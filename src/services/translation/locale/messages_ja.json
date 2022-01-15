@@ -92,5 +92,6 @@
   "alert-high-label": "高い",
   "alert-medium-label": "普通",
   "alert-low-label": "低い",
-  "no-activity-label": "活動なし"
+  "no-activity-label": "活動なし",
+  "camera-extra-config-label": "追加構成"
 }

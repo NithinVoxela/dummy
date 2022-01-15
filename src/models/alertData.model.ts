@@ -11,6 +11,7 @@ export class AlertDataModel implements IAlertDataModel {
   public cameraLocation: string;
   public fileName: string;
   public hasRead: boolean;
+  public preSignedUrl: string;
 
   public constructor(model: IAlertDataModel) {
     this.cameraId = model.cameraId;
@@ -25,6 +26,7 @@ export class AlertDataModel implements IAlertDataModel {
     this.cameraLocation = model.cameraLocation;
     this.fileName = model.fileName;
     this.hasRead = model.hasRead;
+    this.preSignedUrl = model.preSignedUrl;
   }
 }
 
@@ -41,4 +43,5 @@ export interface IAlertDataModel {
   cameraLocation?: string;
   fileName?: string;
   hasRead?: boolean;
+  preSignedUrl?: string;
 }

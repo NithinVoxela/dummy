@@ -3,7 +3,7 @@ import CardContent from "@material-ui/core/CardContent";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import AccountBoxOutlinedIcon from "@material-ui/icons/AccountBoxOutlined";
 import AirlineSeatFlatAngledIcon from "@material-ui/icons/AirlineSeatFlatAngled";
-import DriveEtaOutlinedIcon from "@material-ui/icons/DriveEtaOutlined";
+import DirectionsWalkIcon from "@material-ui/icons/DirectionsWalk";
 import WbSunnyOutlinedIcon from "@material-ui/icons/WbSunnyOutlined";
 import { capitalize } from "lodash";
 import * as React from "react";
@@ -69,11 +69,11 @@ const DashboardComponent: React.FC<IProps> = ({
   }, [cleanAlertLogs]);
 
   const renderIcon = type => {
-    if (type === "Vehicle Detection") {
-      return <DriveEtaOutlinedIcon fontSize="large" />;
-    } else if (type === "Fall Detection") {
+    if (type === "MotionDetection") {
+      return <DirectionsWalkIcon fontSize="large" />;
+    } else if (type === "FallDetection") {
       return <AirlineSeatFlatAngledIcon fontSize="large" />;
-    } else if (type === "Person Detection") {
+    } else if (type === "PersonDetection") {
       return <AccountBoxOutlinedIcon fontSize="large" />;
     } else {
       return <WbSunnyOutlinedIcon fontSize="large" />;

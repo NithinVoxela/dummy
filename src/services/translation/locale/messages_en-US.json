@@ -92,5 +92,6 @@
   "alert-high-label": "High",
   "alert-medium-label": "Medium",
   "alert-low-label": "Low",
-  "no-activity-label": "No activity"
+  "no-activity-label": "No activity",
+  "camera-extra-config-label": "Extra Config"
 }

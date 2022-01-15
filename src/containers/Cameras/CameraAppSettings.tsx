@@ -40,12 +40,12 @@ const NavLink = React.forwardRef((props, ref) => <RouterNavLink innerRef={ref} {
 const marks = [
   {
     value: 0,
-    label: '0',
+    label: "0"
   },
   {
     value: 100,
-    label: '100',
-  },
+    label: "100"
+  }
 ];
 
 interface IDispatchToProps {
@@ -93,8 +93,8 @@ const CameraAppSettingsComponent: React.FC<IProps> = ({
   const [desktopAlert, setDesktopAlert] = useState(false);
   const [email, setEmail] = useState(false);
   const [emailList, setEmailList] = useState("");
+  const [extraConfig, setExtraConfig] = useState("");
   const history = useHistory();
-  const [value, setValue] = React.useState(30);
 
   useEffect(() => {
     !isAddMode && getCameraRequest({ publicId: id });
@@ -103,10 +103,11 @@ const CameraAppSettingsComponent: React.FC<IProps> = ({
     setCamera(cameraInfo);
     const app = cameraInfo.appDtos?.find((item: any) => item?.id == appId);
     setMlApp(app);
-    setSensitivity(app?.config?.sensitivity ? parseInt(app.config.sensitivity) : 0);
+    setSensitivity(app?.config?.sensitivity ? parseInt(app.config.sensitivity * 100) : 0);
     setDesktopAlert(app?.config?.allowDesktopAlert);
     setEmail(app?.config?.allowEmailAlert);
     setEmailList(app?.config?.notifyEmails);
+    setExtraConfig(app?.config?.customJsonData);
   }, [cameraInfo]);
 
   if (redirectTo) {
@@ -129,16 +130,21 @@ const CameraAppSettingsComponent: React.FC<IProps> = ({
     setEmailList(event.target.value);
   };
 
+  const handleExtraConfigChange = (event: any) => {
+    setExtraConfig(event.target.value);
+  };
+
   const handleAppEnable = () => {
     if (mlApp?.config) {
       const payload = {
         ...mlApp.config,
         cameraId: id,
         appId: mlApp.app.id,
-        sensitivity,
+        sensitivity: sensitivity / 100,
         allowDesktopAlert: desktopAlert,
         allowEmailAlert: email,
-        notifyEmails: emailList
+        notifyEmails: emailList,
+        customJsonData: extraConfig
       };
       updateCameraAppRequest(payload);
       history.push(`/camera/${id}/apps`);
@@ -229,6 +235,20 @@ const CameraAppSettingsComponent: React.FC<IProps> = ({
               }
               label={translationService.getMessageTranslation("camera-email-address-label", "List of Email Addresses")}
               labelPlacement="start"
+            />
+          </FormControl>
+        </Box>
+        <Box className={classes.appNotifications}>
+          <FormControl component="fieldset">
+            <FormLabel component="label" color="primary" classes={{ root: classes.fieldLable }}>
+              {translationService.getMessageTranslation("camera-extra-config-label", "Extra Config")}:{" "}
+            </FormLabel>
+            <TextareaAutosize
+              aria-label="extra-config"
+              minRows={3}
+              value={extraConfig}
+              style={{ minHeight: 50, minWidth: 250, marginTop: 8 }}
+              onChange={handleExtraConfigChange}
             />
           </FormControl>
         </Box>

@@ -106,7 +106,7 @@ class AlertsComponent extends React.Component<IProps, IState> {
     const { alerts } = this.props;
 
     const alertData = alerts.map((alert: IAlertDataModel) => {
-      const { id, mediaUrl, alertTime, severity, cameraName, cameraLocation, fileName, hasRead } = alert;
+      const { id, mediaUrl, alertTime, severity, cameraName, cameraLocation, fileName, hasRead, preSignedUrl } = alert;
       return {
         id,
         media: mediaUrl,
@@ -115,7 +115,8 @@ class AlertsComponent extends React.Component<IProps, IState> {
         type: isImageURL(fileName) ? "image" : "video",
         alertTime: formatDateInWords(alertTime),
         severity,
-        hasRead
+        hasRead,
+        preSignedUrl
       };
     });
 
