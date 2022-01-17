@@ -27,8 +27,8 @@ class TranslationService {
   public loadTranslations = (store: Store<IApplicationState, AnyAction>) => {
     const state = store.getState();
     const { translationServiceEndpoint } = getEnvironment(state).externalLinks;
-    // const locale = navigator.language || navigator.userLanguage || "en-US";
-    const locale = "en-US";
+    const locale = navigator.language || navigator.userLanguage || "en-US";
+    // const locale = "en-US";
     return TranslationService._instance.httpService
       .get(translationServiceEndpoint + `messages${locale ? `_${locale}` : ""}.json`)
       .then(res => {
