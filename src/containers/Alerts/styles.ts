@@ -105,5 +105,11 @@ export const styles = (theme?: Theme) =>
       "&:hover": {
         background: "transparent !important"
       }
+    },
+    linkBtn: {
+      padding: 0,
+      "&:hover": {
+        background: "transparent !important"
+      }
     }
   });

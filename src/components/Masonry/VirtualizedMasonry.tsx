@@ -10,6 +10,7 @@ import {
   WithStyles
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import LaunchOutlinedIcon from "@material-ui/icons/LaunchOutlined";
 import * as React from "react";
 import {
   CellMeasurer,
@@ -116,7 +117,8 @@ class MasonryComponent extends React.Component<IProps> {
       severity = null,
       id,
       hasRead,
-      preSignedUrl = null
+      preSignedUrl = null,
+      streamUrl = null
     } = list?.[index] || {};
 
     const handleCardClick = () => {
@@ -126,6 +128,27 @@ class MasonryComponent extends React.Component<IProps> {
     const handleReadClick = () => {
       markAsRead(id);
     };
+
+    const openStreamUrl = (streamUrl: string) => {
+      window.open(streamUrl, "_blank");
+    };
+
+    const renderCameraName = () => (
+      <>
+        {streamUrl?.trim()?.length > 0 ? (
+          <Button color="primary" size="small" className={classes.linkBtn} onClick={() => openStreamUrl(streamUrl)}>
+            {cameraName}
+            <LaunchOutlinedIcon
+              color="primary"
+              fontSize="small"
+              style={{ fontSize: 14, marginLeft: 2, marginTop: 2 }}
+            />
+          </Button>
+        ) : (
+          <>{cameraName}</>
+        )}
+      </>
+    );
     const content = media ? (
       <Card className={classes.card} raised>
         {!hasRead && (
@@ -135,7 +158,7 @@ class MasonryComponent extends React.Component<IProps> {
             badgeContent={translationService.getMessageTranslation("alert-new", "NEW")}
           />
         )}
-        <CardMedia className={classes[type]} component={type} controls image={preSignedUrl} />
+        <CardMedia className={classes[type]} component={type} controls image={preSignedUrl} onClick={handleCardClick} />
         <CardContent style={{ padding: "6px 16px" }}>
           <div className={classes.header}>
             <Typography gutterBottom variant="headline" component="h3" className={classes.alertTime}>
@@ -150,7 +173,7 @@ class MasonryComponent extends React.Component<IProps> {
             </Typography>
           </div>
           <Typography component="p" className={classes.cardInfo} title={cameraName}>
-            <b>{translationService.getMessageTranslation("alert-camera-details", "Camera")}:</b> {cameraName}
+            <b>{translationService.getMessageTranslation("alert-camera-details", "Camera")}:</b> {renderCameraName()}
           </Typography>
           <Typography component="p" className={classes.cardInfo} title={location}>
             <b>{translationService.getMessageTranslation("alert-location-details", "Location")}:</b> {location}

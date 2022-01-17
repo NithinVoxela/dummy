@@ -1,13 +1,4 @@
-import {
-  Breadcrumbs,
-  Box,
-  Divider,
-  Grid,
-  IconButton,
-  MenuItem,
-  TextField,
-  Typography
-} from "@material-ui/core";
+import { Breadcrumbs, Box, Divider, Grid, IconButton, MenuItem, TextField, Typography } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import { Close } from "@material-ui/icons";
 import classNames from "classnames";
@@ -91,9 +82,9 @@ class AlertsComponent extends React.Component<IProps, IState> {
         getAlertLogLoadingRequest(filters, options);
       }
     }
-    if(prevProps.alerts != alerts) {
+    if (prevProps.alerts != alerts) {
       this.setList();
-    }    
+    }
   }
 
   public componentWillUnmount() {
@@ -106,7 +97,18 @@ class AlertsComponent extends React.Component<IProps, IState> {
     const { alerts } = this.props;
 
     const alertData = alerts.map((alert: IAlertDataModel) => {
-      const { id, mediaUrl, alertTime, severity, cameraName, cameraLocation, fileName, hasRead, preSignedUrl } = alert;
+      const {
+        id,
+        mediaUrl,
+        alertTime,
+        severity,
+        cameraName,
+        cameraLocation,
+        fileName,
+        hasRead,
+        preSignedUrl,
+        streamUrl
+      } = alert;
       return {
         id,
         media: mediaUrl,
@@ -116,7 +118,8 @@ class AlertsComponent extends React.Component<IProps, IState> {
         alertTime: formatDateInWords(alertTime),
         severity,
         hasRead,
-        preSignedUrl
+        preSignedUrl,
+        streamUrl
       };
     });
 
@@ -186,7 +189,7 @@ class AlertsComponent extends React.Component<IProps, IState> {
   public markAsRead = (id: any) => {
     const { markAsReadRequest } = this.props;
     this.setState({ list: [] });
-    markAsReadRequest({ id }); 
+    markAsReadRequest({ id });
   };
 
   public render() {
@@ -221,10 +224,13 @@ class AlertsComponent extends React.Component<IProps, IState> {
                 value={location}
                 onChange={this.handleSearch}
                 onCancelSearch={this.handleCancelSearch}
-                placeholder={translationService.getMessageTranslation("alerts-search-location-label", "Search by camera name...")}
+                placeholder={translationService.getMessageTranslation(
+                  "alerts-search-location-label",
+                  "Search by camera name..."
+                )}
                 classes={{ searchIconButton: classes.searchIcon, iconButton: classes.searchIcon }}
               />
-              <Box style={{ marginRight : 24, marginBottom: 8 }}>
+              <Box style={{ marginRight: 24, marginBottom: 8 }}>
                 <DateTimeRangeInput
                   onDateTimeFilterChange={this.handleDateTimeChange}
                   dateTimeDisplayValue={dateTimeDisplayValue}

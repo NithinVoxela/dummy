@@ -96,5 +96,9 @@
   "camera-extra-config-label": "Extra Config",
   "username-label": "Username",
   "signin-header-label": "Sign in to your account",
-  "password-label": "Password"
+  "password-label": "Password",
+  "alerts-PersonDetection-title-label": "Person Detected",
+  "alerts-MotionDetection-title-label": "Motion Detected",
+  "alerts-PersonDetection-desc-label": "Person Detected on camera",
+  "alerts-MotionDetection-desc-label": "Motion Detected on camera"
 }

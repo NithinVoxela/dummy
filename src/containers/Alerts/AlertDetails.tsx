@@ -1,8 +1,9 @@
-import { Typography, Grid, Breadcrumbs, Divider, Card, Link, Chip, CardMedia } from "@material-ui/core";
+import { Button, Typography, Grid, Breadcrumbs, Divider, Card, Link, Chip, CardMedia } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
+import LaunchOutlinedIcon from "@material-ui/icons/LaunchOutlined";
 import * as React from "react";
-import Helmet from "react-helmet";
 import { useEffect, useState } from "react";
+import Helmet from "react-helmet";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router";
 import { NavLink as RouterNavLink } from "react-router-dom";
@@ -49,17 +50,37 @@ const AlertDetailsComponent: React.FC<IProps> = ({
     getAlertRequest({ publicId: id });
   }, [getAlertRequest, id]);
   useEffect(() => {
-    setAlert(alertInfo);   
+    setAlert(alertInfo);
   }, [alertInfo]);
 
-  useEffect(() => {    
+  useEffect(() => {
     if (alert.hasOwnProperty("hasRead") && !alert.hasRead) {
       markAsReadRequest({ id });
     }
   }, [alert]);
 
+  const openStreamUrl = (streamUrl: string) => {
+    window.open(streamUrl, "_blank");
+  };
+
   const type = isImageURL(alert?.fileName) ? "image" : "video";
   const mediaUrl = alert?.preSignedUrl;
+  const cameraName = alert?.cameraName || "-";
+  const streamUrl = alert?.streamUrl;
+
+  const renderCameraName = () => (
+    <>
+      {streamUrl?.trim()?.length > 0 ? (
+        <Button color="primary" size="small" className={classes.linkBtn} onClick={() => openStreamUrl(streamUrl)}>
+          {cameraName}
+          <LaunchOutlinedIcon color="primary" fontSize="small" style={{ fontSize: 14, marginLeft: 2, marginTop: 2 }} />
+        </Button>
+      ) : (
+        <>{cameraName}</>
+      )}
+    </>
+  );
+
   return (
     <>
       <Helmet title="Alerts" />
@@ -95,10 +116,10 @@ const AlertDetailsComponent: React.FC<IProps> = ({
           <Grid item md={2} xs={12} className={classes.alertSummary}>
             <div>
               <Typography color="textPrimary" variant="h6">
-              {translationService.getMessageTranslation("alert-camera-details", "CAMERA").toUpperCase()}
+                {translationService.getMessageTranslation("alert-camera-details", "CAMERA").toUpperCase()}
               </Typography>
               <Typography color="textPrimary" variant="body1" className={classes.alertSummaryValue}>
-                {alert?.cameraName || "-"}
+                {renderCameraName()}
               </Typography>
             </div>
           </Grid>
@@ -129,10 +150,11 @@ const AlertDetailsComponent: React.FC<IProps> = ({
           <Grid item md={2} xs={12} className={classes.alertSummary}>
             <div>
               <Typography color="textPrimary" variant="h6">
-              {translationService.getMessageTranslation("camera-type-label", "TYPE").toUpperCase()}
+                {translationService.getMessageTranslation("camera-type-label", "TYPE").toUpperCase()}
               </Typography>
               <Typography color="textPrimary" variant="body1" className={classes.alertSummaryValue}>
-                {translationService.getMessageTranslation(`alerts-${alert?.type?.toLowerCase()}-label`, alert?.type) || "-"}
+                {translationService.getMessageTranslation(`alerts-${alert?.type?.toLowerCase()}-label`, alert?.type) ||
+                  "-"}
               </Typography>
             </div>
           </Grid>

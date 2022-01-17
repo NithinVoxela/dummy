@@ -6,7 +6,8 @@ export const styles = () =>
       width: 330
     },
     image: {
-      height: 225
+      height: 225,
+      cursor: "pointer"
     },
     video: {
       height: "100%",
