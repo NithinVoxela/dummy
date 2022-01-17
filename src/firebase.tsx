@@ -18,16 +18,19 @@ const firebaseConfig = {
   measurementId: "G-5BYHVF1VW7"
 };
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const messaging = firebase.messaging();
+let messaging: any = null;
+if (firebase.messaging.isSupported()) {
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  messaging = firebase.messaging();
+}
 
 const publicKey = "BAQXUDweyA3-FEedhT1epSmC5Vha28mUSF9d_tqz5h5O_xrQGI90PcNMJQBok6hw6xwnEWo4FtnHxpHsf3hJC3U";
 
 export const getToken = () => {
   return messaging
-    .getToken({ vapidKey: publicKey })
-    .then((currentToken: any) => {
+    ?.getToken({ vapidKey: publicKey })
+    ?.then((currentToken: any) => {
       if (currentToken) {
         sessionStorage.setItem("messagingToken", currentToken);
         // Track the token -> client mapping, by sending to backend server
@@ -44,7 +47,7 @@ export const getToken = () => {
 
 export const onMessageListener = () =>
   new Promise(resolve => {
-    messaging.onMessage((payload: unknown) => {
+    messaging?.onMessage((payload: unknown) => {
       resolve(payload);
     });
   });

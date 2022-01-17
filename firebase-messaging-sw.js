@@ -32,10 +32,14 @@ const config = {
   measurementId: "G-5BYHVF1VW7"
 };
 
-firebase.initializeApp(config);
-const messaging = firebase.messaging();
+let messaging = null;
+if (firebase.messaging.isSupported()) {
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  messaging = firebase.messaging();
+}
 
-messaging.onBackgroundMessage((payload) => {
+messaging?.onBackgroundMessage((payload) => {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
   // Customize notification here
   let details = {};
