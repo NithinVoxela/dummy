@@ -10,12 +10,13 @@ import { Notification } from "components/Toastify";
 import { Sidebar } from "containers/Sidebar";
 import { TopBar } from "containers/TopBar";
 import { translationService } from "services/translation/translation.service";
+import { getAPIUrl } from "src/Constants";
 
 import { styles } from "./styles";
 
 interface IProps extends WithStyles, WithWidthProps {}
 
-const SOCKET_URL = "http://localhost:9090/cortexa-service/api/v2/ws-message";
+const SOCKET_URL = `${getAPIUrl()}ws-message`;
 
 const notify = (notification: any) => toast(<Notification notification={notification} />);
 

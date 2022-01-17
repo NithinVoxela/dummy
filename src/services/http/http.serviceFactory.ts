@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from "axios";
 import { stringify } from "qs";
 
 import { HttpService } from "services/http/http.service";
+import { getAPIUrl } from "src/Constants";
 import { AppStore } from "store/configureStore";
 
 export class HttpServiceFactory {
@@ -52,7 +53,7 @@ export class HttpServiceFactory {
     const authenticationHeaders: any = {};
     authenticationHeaders["X-AuthToken"] = state.userAccount.token;
 
-    const apiEndPoint = HttpServiceFactory._getTenantUrl();
+    const apiEndPoint = getAPIUrl();
     return axios.create({
       baseURL: apiEndPoint,
       headers: {
@@ -60,20 +61,5 @@ export class HttpServiceFactory {
       },
       paramsSerializer: stringify
     });
-  }
-
-  private static _getTenantUrl() {
-    const environment = {
-      protocal: window.location.protocol,
-      host: window.location.hostname,
-      port: window.location.port
-    };
-    const BASE_URL =
-      (environment.protocal.indexOf(":") > 0 ? environment.protocal + "//" : environment.protocal + "://") +
-      environment.host +
-      (environment.port && environment.port !== "" ? ":" + environment.port : "") +
-      "/cortexa-service/api/v2/";
-    // const BASE_URL = "http://localhost:9090/cortexa-service/api/v2/";
-    return BASE_URL;
   }
 }
