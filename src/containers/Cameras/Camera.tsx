@@ -88,6 +88,7 @@ const CameraComponent: React.FC<IProps> = ({
   }
 
   const handleRegister = (params: ICameraDataModel) => {
+    params.cameraStatus = "Online";
     if (isAddMode) {
       registerCameraRequest(params);
       history.push(`/cameras`);

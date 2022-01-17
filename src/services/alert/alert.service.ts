@@ -62,7 +62,7 @@ class AlertService {
         cameraName: filterParams.cameraName
       }),
       ...(filterParams.location && {
-        location: filterParams.location
+        cameraName: filterParams.location
       }),
       ...(filterParams.severity && {
         severity: filterParams.severity

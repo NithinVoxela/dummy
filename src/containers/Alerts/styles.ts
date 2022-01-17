@@ -26,7 +26,8 @@ export const styles = (theme?: Theme) =>
       height: 52,
       boxShadow: "none",
       border: "1px solid #bdbec4",
-      width: 400
+      width: 340,
+      marginRight: 24
     },
     formControl: {
       width: 300,

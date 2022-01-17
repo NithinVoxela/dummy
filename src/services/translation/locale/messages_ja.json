@@ -85,7 +85,7 @@
   "camera-camera-id-label": "カメラID",
   "camera-profile-label": "プロファイル",
   "camera-logout-label": "ログアウト",
-  "alerts-search-location-label": "場所から検索",
+  "alerts-search-location-label": "カメラ名で検索...",
   "alerts-severity-label": "重要性",
   "alert-created-on-details": "アラート日時",
   "alert-critical-label": "緊急性",

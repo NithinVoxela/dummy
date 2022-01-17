@@ -50,7 +50,7 @@ interface IStateToProps {
 }
 
 interface IState {
-  location: string;
+  name: string;
   severity: string;
 }
 
@@ -60,7 +60,7 @@ class AlertsComponent extends React.Component<IProps, IState> {
   public constructor(props: IProps) {
     super(props);
     this.state = {
-      location: "",
+      name: "",
       severity: null,
       list: []
     };
@@ -138,14 +138,14 @@ class AlertsComponent extends React.Component<IProps, IState> {
 
   public handleSearch = (location: string) => {
     const { updateFilterParams } = this.props;
-    this.setState({ location }, () => {
+    this.setState({ name: location }, () => {
       updateFilterParams({ location, pageNumber: 0, pageSize: 20 });
     });
   };
 
   public handleCancelSearch = () => {
     const { updateFilterParams } = this.props;
-    this.setState({ location: "" }, () => {
+    this.setState({ name: "" }, () => {
       updateFilterParams({ location: "", pageNumber: 0, pageSize: 20 });
     });
   };
@@ -200,7 +200,7 @@ class AlertsComponent extends React.Component<IProps, IState> {
       },
       totalCount
     } = this.props;
-    const { location, severity, list } = this.state;
+    const { name: location, severity, list } = this.state;
     return (
       <>
         <Helmet title="Alerts" />
@@ -221,10 +221,10 @@ class AlertsComponent extends React.Component<IProps, IState> {
                 value={location}
                 onChange={this.handleSearch}
                 onCancelSearch={this.handleCancelSearch}
-                placeholder={translationService.getMessageTranslation("alerts-search-location-label", "Search by location...")}
+                placeholder={translationService.getMessageTranslation("alerts-search-location-label", "Search by camera name...")}
                 classes={{ searchIconButton: classes.searchIcon, iconButton: classes.searchIcon }}
               />
-              <Box style={{ marginLeft : 24 }}>
+              <Box style={{ marginRight : 24, marginBottom: 8 }}>
                 <DateTimeRangeInput
                   onDateTimeFilterChange={this.handleDateTimeChange}
                   dateTimeDisplayValue={dateTimeDisplayValue}
@@ -235,7 +235,7 @@ class AlertsComponent extends React.Component<IProps, IState> {
                   minWidth="lg"
                 />
               </Box>
-              <Box style={{ marginLeft : 24 }}>
+              <Box>
                 <TextField
                   select
                   value={severity}

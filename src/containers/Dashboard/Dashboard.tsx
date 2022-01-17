@@ -84,7 +84,7 @@ const DashboardComponent: React.FC<IProps> = ({
     return (
       <Grid item xs={2} key={`${prefix}-${item?.alertId}`}>
         <Card className={item?.alertId ? classes.card : classes.root} onClick={() => handleCardClick(item?.alertId)}>
-          <CardContent style={{ textAlign: "center" }}>
+          <CardContent style={{ textAlign: "center", padding: 8 }}>
             <Box style={{ display: "flex", justifyContent: "flex-end", minHeight: 25 }}>
               <Typography component="div" className={classes.severity}>
                 {item?.severity && (

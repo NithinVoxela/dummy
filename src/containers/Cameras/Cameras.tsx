@@ -102,14 +102,14 @@ const CamerasComponent: React.FC<IProps> = ({
       label: translationService.getMessageTranslation("camera-type-label", "Type"),
       align: "left"
     },
-    {
-      id: "description",
-      numeric: false,
-      disablePadding: false,
-      disableSort: true,
-      label: translationService.getMessageTranslation("camera-desc-label", "Description"),
-      align: "left"
-    },
+    // {
+    //   id: "description",
+    //   numeric: false,
+    //   disablePadding: false,
+    //   disableSort: true,
+    //   label: translationService.getMessageTranslation("camera-desc-label", "Description"),
+    //   align: "left"
+    // },
     {
       id: "installationDate",
       numeric: false,
@@ -199,7 +199,7 @@ const CamerasComponent: React.FC<IProps> = ({
           ),
           name,
           cameraType,
-          description,
+          // description,
           installationDate: formatDateInWords(installationDate),
           actions: (
             <Box mr={2}>

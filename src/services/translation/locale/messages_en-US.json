@@ -85,7 +85,7 @@
   "camera-camera-id-label": "Camera ID",
   "camera-profile-label": "Profile",
   "camera-logout-label": "Logout",
-  "alerts-search-location-label": "Search by location...",
+  "alerts-search-location-label": "Search by camera name...",
   "alerts-severity-label": "Severity",
   "alert-created-on-details": "ALERT CREATED ON",
   "alert-critical-label": "Critical",

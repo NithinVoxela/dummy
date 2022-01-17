@@ -91,6 +91,7 @@ export const styles = (theme: Theme) =>
     },
     card: {
       cursor: "pointer",
-      minHeight: 150
+      minHeight: 150,
+      height: "100%"
     }
   });
