@@ -50,14 +50,14 @@ export const Login = () => {
                 </Box>
                 <Box mb={2} display="flex" justifyContent="center">
                   <Typography component="h2" variant="body1" align="center">
-                    Sign in to your account
+                    {translationService.getMessageTranslation("signin-header-label", "Sign in to your account")}
                   </Typography>
                 </Box>
                 <TextField
                   error={Boolean(touched.userName && errors.userName)}
                   fullWidth
                   helperText={touched.userName && errors.userName}
-                  label="Username"
+                  label={translationService.getMessageTranslation("username-label", "Username")}
                   margin="normal"
                   name="userName"
                   onBlur={handleBlur}
@@ -70,7 +70,7 @@ export const Login = () => {
                   error={Boolean(touched.userPassword && errors.userPassword)}
                   fullWidth
                   helperText={touched.userPassword && errors.userPassword}
-                  label="Password"
+                  label={translationService.getMessageTranslation("password-label", "Password")}
                   margin="normal"
                   name="userPassword"
                   onBlur={handleBlur}
@@ -92,7 +92,7 @@ export const Login = () => {
       <Box className={classes.footer}>
         <Typography color="textSecondary" variant="body2">
           {" "}
-          Copyright 2021 Voxela.ai{" "}
+          Voxela.ai &copy; 2022{" "}
         </Typography>
         <Typography color="textSecondary" variant="body2" className={classes.separator}>
           {" "}

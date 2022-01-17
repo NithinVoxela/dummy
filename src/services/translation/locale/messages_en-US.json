@@ -93,5 +93,8 @@
   "alert-medium-label": "Medium",
   "alert-low-label": "Low",
   "no-activity-label": "No activity",
-  "camera-extra-config-label": "Extra Config"
+  "camera-extra-config-label": "Extra Config",
+  "username-label": "Username",
+  "signin-header-label": "Sign in to your account",
+  "password-label": "Password"
 }

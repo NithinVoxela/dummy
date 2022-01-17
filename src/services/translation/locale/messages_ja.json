@@ -93,5 +93,8 @@
   "alert-medium-label": "普通",
   "alert-low-label": "低い",
   "no-activity-label": "活動なし",
-  "camera-extra-config-label": "追加構成"
+  "camera-extra-config-label": "追加構成",
+  "signin-header-label": "アカウントにサインインします",
+  "username-label": "ユーザー名",
+  "password-label": "パスワード"
 }
