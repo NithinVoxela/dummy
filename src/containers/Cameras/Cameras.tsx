@@ -79,19 +79,19 @@ const CamerasComponent: React.FC<IProps> = ({
 
   const tableColumns = [
     {
-      id: "cameraStatus",
-      numeric: false,
-      disablePadding: false,
-      disableSort: true,
-      label: translationService.getMessageTranslation("camera-status-label", "Status"),
-      align: "left"
-    },
-    {
       id: "name",
       numeric: false,
       disablePadding: false,
       disableSort: true,
       label: translationService.getMessageTranslation("camera-name-label", "Name"),
+      align: "left"
+    },
+    {
+      id: "cameraStatus",
+      numeric: false,
+      disablePadding: false,
+      disableSort: true,
+      label: translationService.getMessageTranslation("camera-status-label", "Status"),
       align: "left"
     },
     {
@@ -176,6 +176,7 @@ const CamerasComponent: React.FC<IProps> = ({
       return {
         id: publicId,
         data: {
+          name,
           cameraStatus: (
             <>
               {streamUrl?.trim()?.length > 0 && cameraStatus === "Online" ? (
@@ -197,7 +198,6 @@ const CamerasComponent: React.FC<IProps> = ({
               )}
             </>
           ),
-          name,
           cameraType,
           // description,
           installationDate: formatDateInWords(installationDate),

@@ -2,7 +2,7 @@ import { WithStyles } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import * as React from "react";
 
-import logo from "assets/icons/voxela-logo.svg";
+import logo from "assets/icons/voxela_logo_dashboard.png";
 
 import { styles } from "./styles";
 
