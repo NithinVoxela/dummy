@@ -100,5 +100,9 @@
   "alerts-PersonDetection-title-label": "Person Detected",
   "alerts-MotionDetection-title-label": "Motion Detected",
   "alerts-PersonDetection-desc-label": "Person Detected on camera",
-  "alerts-MotionDetection-desc-label": "Motion Detected on camera"
+  "alerts-MotionDetection-desc-label": "Motion Detected on camera",
+  "alerts-severity-critical-label": "Critical",
+  "alerts-severity-high-label": "High",
+  "alerts-severity-medium-label": "Medium",
+  "alerts-severity-low-label": "Low"
 }

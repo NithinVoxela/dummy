@@ -192,6 +192,10 @@ class AlertsComponent extends React.Component<IProps, IState> {
     markAsReadRequest({ id });
   };
 
+  public getSeverityLabel = (option: any) => {
+    return translationService.getMessageTranslation(`alerts-severity-${option.toLowerCase()}-label`, option);
+  };
+
   public render() {
     const {
       classes,
@@ -276,7 +280,7 @@ class AlertsComponent extends React.Component<IProps, IState> {
                 >
                   {SEVERITY.map(option => (
                     <MenuItem key={option} value={option}>
-                      {translationService.getMessageTranslation(`alerts-${option.toLowerCase()}-label`, option)}
+                      {this.getSeverityLabel(option)}
                     </MenuItem>
                   ))}
                 </TextField>
