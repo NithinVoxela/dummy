@@ -51,7 +51,7 @@ class NotifierComponent extends React.PureComponent<IProps> {
             onClose={this.handleClose(notification.id)}
           >
             <BaseNotification
-              variant={notification.header === "Error" ? "error" : "success"}
+              variant={notification.type === "Error" ? "error" : "success"}
               notification={notification}
               onClose={this.handleClose(notification.id)}
             />

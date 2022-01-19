@@ -42,7 +42,8 @@ export const handleError = function*({
   yield put(
     addNotification({
       header: translationService.getMessageTranslation("global-error-label", ErrorValues.error),
-      message: getErrorMessage(response, payload)
+      message: getErrorMessage(response, payload),
+      type: ErrorValues.error
     })
   );
 };

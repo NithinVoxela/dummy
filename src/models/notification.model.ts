@@ -3,4 +3,5 @@ export interface INotification {
   active?: boolean;
   header: string;
   message: string;
+  type: string;
 }
