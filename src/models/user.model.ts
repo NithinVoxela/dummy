@@ -1,3 +1,5 @@
+import { IAlertLogModel } from "./alert.model";
+
 export interface IUserAccount {
   userName: string;
   email: string;
@@ -11,6 +13,7 @@ export interface IUserAccount {
   token: string;
   password: string;
   deleted: boolean;
+  alertLog: IAlertLogModel;
 }
 
 export interface IAuthModel {

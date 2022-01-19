@@ -17,11 +17,14 @@ export const initialState: IUserAccount = {
   dateFormat: null,
   token: null,
   password: null,
-  deleted: false
+  deleted: false,
+  alertLog: { alerts: [], totalCount: 0 }
 };
 
 export const userAccountReducer = (state: IUserAccount = initialState, action = {} as IStoreAction): IUserAccount => {
   switch (action.type) {
+    case actions.USER_ALERT_COUNT_SUCCESS:
+      return { ...state, alertLog: { ...state.alertLog, ...action.payload } };
     case REHYDRATE_USER_ACCOUNT: {
       const { payload: userAccount = initialState } = action;
       return userAccount;

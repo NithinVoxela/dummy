@@ -104,5 +104,9 @@
   "alerts-severity-critical-label": "Critical",
   "alerts-severity-high-label": "High",
   "alerts-severity-medium-label": "Medium",
-  "alerts-severity-low-label": "Low"
+  "alerts-severity-low-label": "Low",
+  "alert-refresh-label": "Refresh",
+  "alerts-new-activity-label": "New activity detected",
+  "alerts-new-activity-desc-label": "New activity detected on camera.",
+  "alerts-view-alert-label": "View Alerts"
 }

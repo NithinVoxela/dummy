@@ -20,7 +20,11 @@ import {
   watchUpdateCameraAppRequest,
   watchaddCameraAppRequest
 } from "./camera/camera.saga";
-import { watchLoginRequest, watchrRgisterDeviceRequest } from "./userAccount/userAccount.saga";
+import {
+  watchLoginRequest,
+  watchrRgisterDeviceRequest,
+  watchrUserAlertCountRequest
+} from "./userAccount/userAccount.saga";
 
 export const rootSaga = function*(): any {
   yield all([
@@ -36,6 +40,7 @@ export const rootSaga = function*(): any {
     watchGetAlertLogNextPageRequest(),
     watchGetAlertRequest(),
     watchrRgisterDeviceRequest(),
+    watchrUserAlertCountRequest(),
     watchMarkAsReadRequest(),
     watchUpdateCameraAppRequest(),
     watchaddCameraAppRequest(),

@@ -1,6 +1,6 @@
-import { Breadcrumbs, Box, Divider, Grid, IconButton, MenuItem, TextField, Typography } from "@material-ui/core";
+import { Box, Button, Divider, Grid, IconButton, MenuItem, TextField, Typography } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
-import { Close } from "@material-ui/icons";
+import { Close, RefreshOutlined } from "@material-ui/icons";
 import classNames from "classnames";
 import SearchBar from "material-ui-search-bar";
 import * as React from "react";
@@ -16,7 +16,6 @@ import { IAlertFilterParams } from "services/alert/alert.service";
 import { translationService } from "services/translation/translation.service";
 import { SEVERITY } from "src/Constants";
 import { formatDateInWords } from "src/helpers/dateTime";
-import { isImageURL } from "src/helpers/fileType";
 import * as actions from "store/alert/alert.actions";
 import { getAlertLogTotalCount, getAlerts } from "store/alert/alert.selector";
 import * as filterActions from "store/alert/alertLogFilters/alertLogFilters.actions";
@@ -182,6 +181,11 @@ class AlertsComponent extends React.Component<IProps, IState> {
     });
   };
 
+  public handleRefreshClick = () => {
+    const { filters, updateFilterParams } = this.props;
+    updateFilterParams({ ...filters });
+  };
+
   public viewDetails = (id: any) => {
     this.props.history.push(`/alerts/${id}`);
   };
@@ -216,6 +220,14 @@ class AlertsComponent extends React.Component<IProps, IState> {
             <Typography variant="h3" gutterBottom display="inline">
               {translationService.getMessageTranslation("alerts-header-label", "Alerts")}
             </Typography>
+          </Grid>
+          <Grid item>
+            <div>
+              <Button variant="contained" color="primary" onClick={this.handleRefreshClick}>
+                <RefreshOutlined />
+                {translationService.getMessageTranslation("alert-refresh-label", "Refresh")}
+              </Button>
+            </div>
           </Grid>
         </Grid>
 

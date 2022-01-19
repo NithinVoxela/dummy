@@ -104,5 +104,9 @@
   "alerts-severity-critical-label": "致命的",
   "alerts-severity-high-label": "高い",
   "alerts-severity-medium-label": "中くらい",
-  "alerts-severity-low-label": "低い"
+  "alerts-severity-low-label": "低い",
+  "alert-refresh-label": "更新",
+  "alerts-new-activity-label": "新しいアクティビティが検出されました",
+  "alerts-new-activity-desc-label": "カメラで新しいアクティビティが検出されました。",
+  "alerts-view-alert-label": "アラートを表示"
 }

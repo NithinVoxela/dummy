@@ -47,7 +47,7 @@ const AuthGuardComponent: React.FunctionComponent<IProps> = ({ user, children })
     if (user?.userName) {
       registerDevice();
     }
-  }, [user]);
+  }, [user.userName]);
   return (
     <Switch>
       <Route path={routes.login.to} exact>

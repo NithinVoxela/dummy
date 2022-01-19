@@ -2,16 +2,29 @@ import { Grid, Hidden, Menu, MenuItem, AppBar, IconButton, Toolbar, Avatar, Badg
 import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import * as React from "react";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, connect } from "react-redux";
+import { withRouter } from "react-router";
+import { toast } from "react-toastify";
 
+import { Notification } from "components/Toastify";
+import { IUserAccount } from "models/user.model";
 import { translationService } from "services/translation/translation.service";
 import { AppStore } from "store/configureStore";
-import { removeUserAccount } from "store/userAccount/userAccount.actions";
+import { IApplicationState } from "store/state.model";
+import { removeUserAccount, userAlertCount } from "store/userAccount/userAccount.actions";
+import { getUserAccount } from "store/userAccount/userAccount.selector";
 
 import { useStyles } from "./styles";
 
-interface IProps {
+export const REFRESH_INTERVAL = 30 * 1000;
+interface IDispatchToProps {}
+
+interface IStateToProps {
+  user: IUserAccount;
+}
+
+interface IProps extends IStateToProps, IDispatchToProps {
   onDrawerToggle: () => void;
 }
 
@@ -62,8 +75,48 @@ const UserMenu: React.FC = () => {
   );
 };
 
-const TopBarComponent: React.FunctionComponent<IProps> = ({ onDrawerToggle: handleDrawerToggle }) => {
+const notify = (notification: any) => toast(<Notification notification={notification} />);
+
+const TopBarComponent: React.FC<IProps> = ({ onDrawerToggle: handleDrawerToggle, user }) => {
   const classes = useStyles({});
+  const dispatch = useDispatch();
+  const [alertCount, setAlertCount] = useState(null);
+
+  const notification = {
+    title: translationService.getMessageTranslation(`alerts-new-activity-label`, "New activity detected"),
+    body: translationService.getMessageTranslation(
+      `alerts-new-activity-desc-label`,
+      "New activity detected on camera."
+    ),
+    actionLabel: translationService.getMessageTranslation(`alerts-view-alert-label`, "View Alerts"),
+    actionUrl: "/alerts"
+  };
+
+  const refreshAlertCount = () => {
+    dispatch(userAlertCount({ pageNumber: 0, pageSize: 1, dateRange: { startDate: null, endDate: null } }));
+  };
+  useEffect(() => {
+    refreshAlertCount();
+    const refreshPage = setInterval(() => {
+      refreshAlertCount();
+    }, REFRESH_INTERVAL);
+
+    return () => {
+      clearInterval(refreshPage);
+    };
+  }, [userAlertCount]);
+
+  useEffect(() => {
+    const count = user?.alertLog?.totalCount || 0;
+    if (alertCount && count > alertCount) {
+      const payload = {
+        isCustom: true,
+        notification
+      };
+      notify(payload);
+    }
+    setAlertCount(user?.alertLog?.totalCount);
+  }, [user]);
 
   return (
     <AppBar position="sticky" elevation={0} className={classes.appBar}>
@@ -91,4 +144,13 @@ const TopBarComponent: React.FunctionComponent<IProps> = ({ onDrawerToggle: hand
   );
 };
 
-export const TopBar = TopBarComponent;
+const mapDispatchToProps = {};
+
+const mapStateToProps = (state: IApplicationState) => ({
+  user: getUserAccount(state)
+});
+
+export const TopBar = connect<IStateToProps, IDispatchToProps>(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(TopBarComponent));

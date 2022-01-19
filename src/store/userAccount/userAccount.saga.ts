@@ -1,6 +1,8 @@
 import { call, put, fork, takeLatest } from "redux-saga/effects";
 
 import { handleError } from "containers/Notifier/store/errorHandler.action";
+import { IAlertLogModel } from "models/alert.model";
+import { alertService } from "services/alert/alert.service";
 import { deviceService } from "services/userAccount/device.service";
 import { userAccountService } from "services/userAccount/userAccount.service";
 import { IStoreAction } from "store/action.model";
@@ -36,4 +38,17 @@ export const registerDevice = function*({ payload }: IStoreAction) {
 
 export const watchrRgisterDeviceRequest = function*() {
   yield takeLatest(actions.REGISTER_USER_DEVICE, registerDevice);
+};
+
+export const getAlertCount = function*({ payload }: IStoreAction) {
+  try {
+    const alerts: IAlertLogModel = yield call(alertService.getAlertLog, payload);
+    yield put(actions.userAlertCountSuccess(alerts));
+  } catch (err) {
+    yield put(handleError(err));
+  }
+};
+
+export const watchrUserAlertCountRequest = function*() {
+  yield takeLatest(actions.USER_ALERT_COUNT, getAlertCount);
 };

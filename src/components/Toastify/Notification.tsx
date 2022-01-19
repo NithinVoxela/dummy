@@ -1,9 +1,9 @@
-import { Button, Link, StyledComponentProps, Typography, Box } from "@material-ui/core";
+import { Link, StyledComponentProps, Typography, Box } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
-import { translationService } from "services/translation/translation.service";
 import * as React from "react";
 import { NavLink as RouterNavLink } from "react-router-dom";
+
+import { translationService } from "services/translation/translation.service";
 
 import { styles } from "./styles";
 
@@ -24,12 +24,14 @@ const BaseNotificationComponent: React.FunctionComponent<IProps> = ({ classes, n
             color="primary"
             component={NavLink}
             exact
-            to={`/alerts/${notification?.data?.objectId}`}
+            to={notification?.notification?.actionUrl || `/alerts/${notification?.data?.objectId}`}
             variant="subtitle2"
             underline="always"
             className={classes.action}
           >
-            {translationService.getMessageTranslation("view-details-label", "View Details")}...
+            {notification?.notification?.actionLabel ||
+              translationService.getMessageTranslation("view-details-label", "View Details")}
+            ...
           </Link>
         </div>
       </Box>
