@@ -97,7 +97,7 @@ export const styles = (theme?: Theme) =>
       minHeight: 400
     },
     alertSummaryValue: {
-      textAlign: "center",
+      textAlign: "left",
       marginTop: 12
     },
     searchIcon: {

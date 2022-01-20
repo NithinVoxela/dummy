@@ -2,16 +2,28 @@ import { format, formatDistanceToNowStrict } from "date-fns";
 
 import { NUMBERS } from "configs/constants";
 
+const convertUTCDateToLocalDate = inputDate => {
+  const newDate = new Date(inputDate.getTime() + inputDate.getTimezoneOffset() * 60 * 1000);
+
+  const offset = inputDate.getTimezoneOffset() / 60;
+  const hours = inputDate.getHours();
+
+  newDate.setHours(hours - offset);
+
+  return newDate;
+};
+
 export const formatDate = (date: Date) => {
-  return format(new Date(date), "yyyy-MM-dd");
+  return format(convertUTCDateToLocalDate(new Date(date)), "yyyy-MM-dd");
 };
 
 export const formatOnlyDateInWords = (date: Date) => {
-  return format(new Date(date), "do MMM yyyy'");
+  return format(convertUTCDateToLocalDate(new Date(date)), "do MMM yyyy'");
 };
 
+
 export const formatDateInWords = (date: Date) => {
-  return format(new Date(date), "do MMM yyyy',' h':'mm a");
+  return format(convertUTCDateToLocalDate(new Date(date)), "do MMM yyyy',' h':'mm a");
 };
 
 export const formatTimeAgo = (date: Date) => {
