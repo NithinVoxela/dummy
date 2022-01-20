@@ -22,7 +22,7 @@ self.addEventListener('notificationclick', function(event) {
   event.waitUntil(promise);
 });
 
-const config = {
+const firebaseConfig = {
   apiKey: "AIzaSyA0_ie6XfEqSkfR01h9XbFrb0HefbrfPH0",
   authDomain: "cortexa-mvp.firebaseapp.com",
   projectId: "cortexa-mvp",
