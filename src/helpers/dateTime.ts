@@ -21,9 +21,12 @@ export const formatOnlyDateInWords = (date: Date) => {
   return format(convertUTCDateToLocalDate(new Date(date)), "do MMM yyyy'");
 };
 
-
 export const formatDateInWords = (date: Date) => {
   return format(convertUTCDateToLocalDate(new Date(date)), "do MMM yyyy',' h':'mm a");
+};
+
+export const formatDateInWordsWithoutTZ = (date: Date) => {
+  return format(new Date(date), "do MMM yyyy");
 };
 
 export const formatTimeAgo = (date: Date) => {
@@ -47,5 +50,5 @@ export const firstDayOfPreviousMonth = () => {
 };
 
 export const getDisplayValueForCustom = (from: Date, to: Date) => {
-  return `${formatOnlyDateInWords(from)} - ${formatOnlyDateInWords(to)}`;
+  return `${formatDateInWordsWithoutTZ(from)} - ${formatDateInWordsWithoutTZ(to)}`;
 };

@@ -1,4 +1,4 @@
-export const SEVERITY = ["Critical", "High", "Medium", "Low"];
+export const SEVERITY = ["High", "Medium", "Low"];
 
 export const SEVERITY_COLORS = {
   High: "#ed6c02",
@@ -20,6 +20,6 @@ export const getAPIUrl = () => {
     environment.host +
     (environment.port && environment.port !== "" ? ":" + environment.port : "") +
     "/cortexa-service/api/v2/";
-  // const BASE_URL = "http://localhost:9090/cortexa-service/api/v2/";
+  // const BASE_URL = "http://127.0.0.1:9090/cortexa-service/api/v2/";
   return BASE_URL;
 };
