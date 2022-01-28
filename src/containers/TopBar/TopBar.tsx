@@ -130,11 +130,11 @@ const TopBarComponent: React.FC<IProps> = ({ onDrawerToggle: handleDrawerToggle,
             </Grid>
           </Hidden>
           <Grid item xs />
-          <Grid item>
+          {/* <Grid item>
             <Badge color="error" badgeContent={7} className={classes.alertCount}>
               <NotificationsIcon />
             </Badge>
-          </Grid>
+          </Grid> */}
           <Grid item>
             <UserMenu />
           </Grid>

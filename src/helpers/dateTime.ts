@@ -3,14 +3,7 @@ import { format, formatDistanceToNowStrict } from "date-fns";
 import { NUMBERS } from "configs/constants";
 
 const convertUTCDateToLocalDate = inputDate => {
-  const newDate = new Date(inputDate.getTime() + inputDate.getTimezoneOffset() * 60 * 1000);
-
-  const offset = inputDate.getTimezoneOffset() / 60;
-  const hours = inputDate.getHours();
-
-  newDate.setHours(hours - offset);
-
-  return newDate;
+  return new Date(inputDate.toString() + "Z");
 };
 
 export const formatDate = (date: Date) => {
