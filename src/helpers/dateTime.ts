@@ -3,8 +3,20 @@ import { format, formatDistanceToNowStrict } from "date-fns";
 import { NUMBERS } from "configs/constants";
 
 const convertUTCDateToLocalDate = (inputDate: string) => {
-  inputDate += `Z`;
-  return new Date(inputDate);
+  let date = new Date();
+  try {
+    const arr: string[] = inputDate.split(/[\-\+ :T]/);
+
+    date.setUTCFullYear(arr[0]);
+    date.setUTCMonth(arr[1] - 1);
+    date.setUTCDate(arr[2]);
+    date.setUTCHours(arr[3]);
+    date.setUTCMinutes(arr[4]);
+    date.setUTCSeconds(arr[5]);
+  } catch (err) {
+    date = new Date();
+  }
+  return date;
 };
 
 export const formatDate = (date: any) => {
