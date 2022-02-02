@@ -162,7 +162,16 @@ const AlertDetailsComponent: React.FC<IProps> = ({
       </Card>
 
       <Card className={classes.mediaCard}>
-        <CardMedia className={classes[type]} component={type} controls image={mediaUrl} />
+        <CardMedia
+          className={classes[type]}
+          component={type}
+          controls
+          playsinline
+          autoplay
+          muted
+          loop
+          image={mediaUrl}
+        />
       </Card>
     </>
   );

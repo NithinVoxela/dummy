@@ -158,7 +158,7 @@ class MasonryComponent extends React.Component<IProps> {
             badgeContent={translationService.getMessageTranslation("alert-new", "NEW")}
           />
         )}
-        <CardMedia className={classes[type]} component={type} controls image={preSignedUrl} onClick={handleCardClick} />
+        <CardMedia className={classes[type]} component={type} image={preSignedUrl} onClick={handleCardClick} />
         <CardContent style={{ padding: "6px 16px" }}>
           <div className={classes.header}>
             <Typography gutterBottom variant="headline" component="h3" className={classes.alertTime}>
