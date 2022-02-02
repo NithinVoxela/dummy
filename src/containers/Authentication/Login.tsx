@@ -45,7 +45,7 @@ export const Login = () => {
                 <Box mb={1} display="flex" justifyContent="center">
                   <Logo />
                   <Typography color="textPrimary" variant="h2" style={{ marginLeft: 4 }}>
-                    Cortexa
+                    VCare
                   </Typography>
                 </Box>
                 <Box mb={2} display="flex" justifyContent="center">

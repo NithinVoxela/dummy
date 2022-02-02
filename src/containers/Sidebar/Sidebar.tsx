@@ -33,7 +33,7 @@ const SideBarComponent: React.FunctionComponent<IProps> = ({
         <Box className={classes.brandIcon}>
           <Logo />
         </Box>
-        <Box ml={1}>CORTEXA</Box>
+        <Box ml={1}>VCare</Box>
       </ListItem>
       <PerfectScrollbar className={classes.scrollContainer}>
         <SideBarMenu />
