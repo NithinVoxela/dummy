@@ -162,15 +162,15 @@ const AlertDetailsComponent: React.FC<IProps> = ({
       </Card>
 
       <Card className={classes.mediaCard}>
-        <CardMedia
+        <video
           className={classes[type]}
-          component={type}
-          controls
-          playsinline
-          autoplay
-          muted
           loop
-          image={mediaUrl}
+          autoPlay
+          controls="true"
+          width="100%"
+          height="100%"
+          src={mediaUrl}
+          type="video/mp4"
         />
       </Card>
     </>
