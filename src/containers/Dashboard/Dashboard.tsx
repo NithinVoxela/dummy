@@ -82,7 +82,7 @@ const DashboardComponent: React.FC<IProps> = ({
 
   const renderLatetAlerts = (item, prefix) => {
     return (
-      <Grid item xs={2} key={`${prefix}-${item?.alertId}`}>
+      <Grid item xs={6} md={3} xl={2} key={`${prefix}-${item?.alertId}`}>
         <Card className={item?.alertId ? classes.card : classes.root} onClick={() => handleCardClick(item?.alertId)}>
           <CardContent style={{ textAlign: "center", padding: 8 }}>
             <Box style={{ display: "flex", justifyContent: "flex-end", minHeight: 25 }}>
