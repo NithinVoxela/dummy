@@ -4,6 +4,7 @@ import LaunchOutlinedIcon from "@material-ui/icons/LaunchOutlined";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import Helmet from "react-helmet";
+import ReactPlayer from "react-player";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router";
 import { NavLink as RouterNavLink } from "react-router-dom";
@@ -162,7 +163,7 @@ const AlertDetailsComponent: React.FC<IProps> = ({
       </Card>
 
       <Card className={classes.mediaCard}>
-        <video muted playsinline controls="true" width="100%" height="100%" src={mediaUrl} type="video/mp4" />
+        <ReactPlayer controls muted playsinline width="100%" height="100%" url={mediaUrl} />
       </Card>
     </>
   );
