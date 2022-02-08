@@ -20,7 +20,7 @@ const convertUTCDateToLocalDate = (inputDate: string) => {
 };
 
 export const formatDate = (date: any) => {
-  return format(convertUTCDateToLocalDate(date), "yyyy-MM-dd");
+  return format(date, "yyyy-MM-dd");
 };
 
 export const formatOnlyDateInWords = (date: any) => {
