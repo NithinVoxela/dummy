@@ -183,7 +183,7 @@ class AlertsComponent extends React.Component<IProps, IState> {
 
   public handleRefreshClick = () => {
     const { filters, updateFilterParams } = this.props;
-    updateFilterParams({ ...filters });
+    updateFilterParams({ ...filters, pageNumber: 0 });
   };
 
   public viewDetails = (id: any) => {
