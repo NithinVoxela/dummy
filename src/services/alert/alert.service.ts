@@ -56,6 +56,7 @@ class AlertService {
 
   public sanitizeFilters = (filterParams: IAlertFilterParams) => {
     return {
+      sortFields: ["alertTime", "createdAt"],
       pageNumber: filterParams.pageNumber,
       pageSize: filterParams.pageSize,
       ...(filterParams.cameraName && {
