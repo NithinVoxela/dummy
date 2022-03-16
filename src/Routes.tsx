@@ -1,3 +1,4 @@
+import { CameraAppSettingsTab } from "containers/Cameras/CameraSettingsTab";
 import * as React from "react";
 import { Route } from "react-router-dom";
 
@@ -6,7 +7,6 @@ import { AlertDetails } from "containers/Alerts/AlertDetails";
 import { Alerts } from "containers/Alerts/Alerts";
 import { Camera } from "containers/Cameras/Camera";
 import { CameraApps } from "containers/Cameras/CameraApps";
-import { CameraAppSettings } from "containers/Cameras/CameraAppSettings";
 import { Cameras } from "containers/Cameras/Cameras";
 import { Dashboard } from "containers/Dashboard/Dashboard";
 import { LiveStream } from "containers/LiveStream/LiveStream";
@@ -31,7 +31,7 @@ const routeMap = [
   routeCreater(Camera, { routeConfig: routes.addCamera }),
   routeCreater(LiveStream, { routeConfig: routes.liveStream }),
   routeCreater(CameraApps, { routeConfig: routes.cameraAppsList }),
-  routeCreater(CameraAppSettings, { routeConfig: routes.cameraAppsDetails })
+  routeCreater(CameraAppSettingsTab, { routeConfig: routes.cameraAppsDetails })
 ];
 
 export const MainRoutes: React.FunctionComponent = () => (

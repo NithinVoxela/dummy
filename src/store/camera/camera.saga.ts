@@ -166,3 +166,35 @@ export const addCameraApp = function*({ payload }: IStoreAction) {
 export const watchaddCameraAppRequest = function*() {
   yield takeLatest(actions.ADD_CAMERA_APP_REQUEST, addCameraApp);
 };
+
+export const updateAppSchedule = function*({ payload }: IStoreAction) {
+  try {
+    yield call(cameraService.updateAppSchedule, payload);
+    yield put(
+      addNotification({
+        header: translationService.getMessageTranslation("global-success-label", "Success"),
+        message: translationService.getMessageTranslation("schedule-updated-label", "Changes saved"),
+        type: "success"
+      })
+    );
+  } catch (err) {
+    yield put(handleError(err));
+  }
+};
+
+export const watchUpdateAppScheduleRequest = function*() {
+  yield takeLatest(actions.UPDATE_APP_SCHEDULE, updateAppSchedule);
+};
+
+export const getAppSchedule = function*({ payload }: IStoreAction) {
+  try {
+    const camera: ICameraDataModel = yield call(cameraService.getAppSchedule, payload);
+    yield put(actions.getAppScheduleSuccess({ camera }));
+  } catch (err) {
+    yield put(handleError(err));
+  }
+};
+
+export const watchGetAppScheduleRequest = function*() {
+  yield takeLatest(actions.GET_APP_SCHEDULE_LOADING_REQUEST, getAppSchedule);
+};

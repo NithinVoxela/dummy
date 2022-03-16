@@ -79,6 +79,24 @@ class CameraService {
     return cameras;
   };
 
+  public updateAppSchedule = async (payload: any) => {
+    const response = await CameraService._instance._httpService.post(
+      `camera/app/${payload.appId}/configure/schedule`,
+      payload.schedule
+    );
+    return response;
+  };
+
+  public getAppSchedule = async (payload: any) => {
+    const scheduleList = await CameraService._instance._httpService.get(`camera/app/${payload.appId}/schedule`);
+    const camerasData = {
+      cameras: [],
+      totalCount: 0,
+      scheduleList
+    };
+    return new CameraModel(camerasData);
+  };
+
   public sanitizeFilters = (filterParams: IFilterParams) => {
     return {
       name: filterParams.keywords,

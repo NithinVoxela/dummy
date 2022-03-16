@@ -14,6 +14,10 @@ export const DELETE_CAMERA_REQUEST = "[CAMERA] DELETE_CAMERA_REQUEST";
 export const RESET_CAMERA_LIST = "[CAMERA] RESET_CAMERA_LIST";
 export const UPDATE_CAMERA_APP_REQUEST = "[CAMERA] UPDATE_CAMERA_APP_REQUEST";
 export const ADD_CAMERA_APP_REQUEST = "[CAMERA] ADD_CAMERA_APP_REQUEST";
+export const GET_APP_SCHEDULE_LOADING_REQUEST = "[CAMERA] GET_APP_SCHEDULE_LOADING_REQUEST";
+export const GET_APP_SCHEDULE_SUCCESS = "[CAMERA] GET_APP_SCHEDULE_SUCCESS";
+export const RESET_APP_SCHEDULE = "[CAMERA] RESET_APP_SCHEDULE";
+export const UPDATE_APP_SCHEDULE = "[CAMERA] UPDATE_APP_SCHEDULE";
 
 export const getCamerasLoadingRequest = (filterParams: IFilterParams, options?: ICameraRequestOptions) => ({
   type: GET_CAMERAS_LOADING_REQUEST,
@@ -62,5 +66,20 @@ export const updateCameraAppRequest = (payload: any) => ({
 
 export const addCameraAppRequest = (payload: any) => ({
   type: ADD_CAMERA_APP_REQUEST,
+  payload
+});
+
+export const getAppScheduleLoadingRequest = (filterParams: any) => ({
+  type: GET_APP_SCHEDULE_LOADING_REQUEST,
+  payload: filterParams
+});
+
+export const getAppScheduleSuccess = (response: any) => ({
+  type: GET_APP_SCHEDULE_SUCCESS,
+  payload: response
+});
+
+export const updateAppScheduleRequest = (payload: any) => ({
+  type: UPDATE_APP_SCHEDULE,
   payload
 });

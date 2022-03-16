@@ -23,7 +23,8 @@ const initialState: ICameraState = {
     passPhrase: "",
     location: "",
     installationDate: ""
-  }
+  },
+  scheduleList: []
 };
 
 export const cameraReducer = (state: ICameraModel = initialState, action = {} as IStoreAction): ICameraModel => {
@@ -33,7 +34,9 @@ export const cameraReducer = (state: ICameraModel = initialState, action = {} as
     case actions.GET_CAMERA_SUCCESS:
       return { ...state, ...action.payload };
     case actions.RESET_CAMERA_LIST:
-      return { ...state, cameras: [], totalCount: 0 };
+      return { ...state, cameras: [], totalCount: 0, scheduleList: [] };
+    case actions.GET_APP_SCHEDULE_SUCCESS:
+      return { ...state, ...action.payload };
     default:
       return state;
   }

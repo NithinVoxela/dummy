@@ -18,7 +18,9 @@ import {
   watchRegisterCameraRequest,
   watchUpdateCameraRequest,
   watchUpdateCameraAppRequest,
-  watchaddCameraAppRequest
+  watchaddCameraAppRequest,
+  watchGetAppScheduleRequest,
+  watchUpdateAppScheduleRequest
 } from "./camera/camera.saga";
 import {
   watchLoginRequest,
@@ -45,6 +47,8 @@ export const rootSaga = function*(): any {
     watchUpdateCameraAppRequest(),
     watchaddCameraAppRequest(),
     watchGetDashboardAlertLogRequest(),
-    watchGetDashboardCameraAlertLogRequest()
+    watchGetDashboardCameraAlertLogRequest(),
+    watchUpdateAppScheduleRequest(),
+    watchGetAppScheduleRequest()
   ]);
 };
