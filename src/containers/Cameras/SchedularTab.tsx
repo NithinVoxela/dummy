@@ -93,12 +93,6 @@ const SchedularTabComponent: React.FC<IProps> = ({
   ];
   const [scheduleData, setScheduleData] = useState(weekdays);
 
-  const handleCheckboxChange = (checked: boolean, weekDayIndex: number) => {
-    const newData = cloneDeep(scheduleData);
-    newData[weekDayIndex].isSelected = checked;
-    setScheduleData(newData);
-  };
-
   const handleAddClick = (weekDayIndex: number) => {
     const newData = cloneDeep(scheduleData);
     const dayData = newData[weekDayIndex];
@@ -107,14 +101,6 @@ const SchedularTabComponent: React.FC<IProps> = ({
       startTime: set(new Date(), { hours: 9, minutes: 0 }),
       endTime: set(new Date(), { hours: 17, minutes: 0 })
     });
-    setScheduleData(newData);
-  };
-
-  const handleTimeRemove = (timeItemIndex: number, weekDayIndex: number) => {
-    const newData = cloneDeep(scheduleData);
-    const dayData = newData[weekDayIndex];
-    dayData.schedule.splice(timeItemIndex, 1);
-    dayData.isSelected = dayData.schedule.length > 0;
     setScheduleData(newData);
   };
 
@@ -187,7 +173,10 @@ const SchedularTabComponent: React.FC<IProps> = ({
     dayData.isSelected = true;
     dayData.hasError = hasError;
     const weekDay = dayData.schedule[timeItemIndex];
-    if (isEqual(weekDay.startTime, startTime) && isEqual(weekDay.endTime, endTime)) {
+    if (
+      dayData.schedule.length > 1 &&
+      (hasError || (isEqual(weekDay.startTime, startTime) && isEqual(weekDay.endTime, endTime)))
+    ) {
       return;
     }
     dayData.schedule[timeItemIndex] = {
@@ -198,6 +187,22 @@ const SchedularTabComponent: React.FC<IProps> = ({
     if (startTime && endTime) {
       saveScheduleData(newData);
     }
+  };
+
+  const handleTimeRemove = (timeItemIndex: number, weekDayIndex: number) => {
+    const newData = cloneDeep(scheduleData);
+    const dayData = newData[weekDayIndex];
+    dayData.schedule.splice(timeItemIndex, 1);
+    dayData.isSelected = dayData.schedule.length > 0;
+    setScheduleData(newData);
+    saveScheduleData(newData);
+  };
+
+  const handleCheckboxChange = (checked: boolean, weekDayIndex: number) => {
+    const newData = cloneDeep(scheduleData);
+    newData[weekDayIndex].isSelected = checked;
+    setScheduleData(newData);
+    saveScheduleData(newData);
   };
 
   useEffect(() => {
@@ -270,7 +275,7 @@ const SchedularTabComponent: React.FC<IProps> = ({
           >
             {item.isSelected &&
               item.schedule.map((time: any, timeItemIndex: number) => renderTimefield(time, timeItemIndex, index))}
-            {!item.isSelected && (
+            {(!item.isSelected || item.schedule.length === 0) && (
               <Box style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
                 <Typography color="textSecondary" variant="h6" style={{ paddingTop: 4 }}>
                   {translationService.getMessageTranslation("unavailable-label", "Unavailable")}
