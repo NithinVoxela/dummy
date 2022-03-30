@@ -126,5 +126,8 @@
   "end-time-error-lable": "End Time should be greater than Start Time.",
   "start-time-error-lable": "Start Time should be less than End Time.",
   "invalid-end-time-error-lable": "Invalid End Time.",
-  "invalid-start-time-error-lable": "Invalid Start Time."
+  "invalid-start-time-error-lable": "Invalid Start Time.",
+  "camera-privacy-label": "Privacy",
+  "camera-privacy-enabled-label": "Enabled",
+  "camera-privacy-disabled-label": "Disabled"
 }

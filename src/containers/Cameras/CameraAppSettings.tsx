@@ -4,6 +4,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
 import Slider from "@material-ui/core/Slider";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
+import Switch from "@material-ui/core/Switch";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -69,11 +70,13 @@ const CameraAppSettingsComponent: React.FC<IProps> = ({
     passPhrase: "",
     location: "",
     installationDate: "",
-    appDtos: []
+    appDtos: [],
+    isPrivacyEnabled: false
   });
   const [mlApp, setMlApp] = useState(null);
   const [sensitivity, setSensitivity] = useState(80);
   const [desktopAlert, setDesktopAlert] = useState(false);
+  const [isPrivacyEnabled, setIsPrivacyEnabled] = useState(false);
   const [email, setEmail] = useState(false);
   const [emailList, setEmailList] = useState("");
   const [extraConfig, setExtraConfig] = useState("");
@@ -91,6 +94,7 @@ const CameraAppSettingsComponent: React.FC<IProps> = ({
     setEmail(app?.config?.allowEmailAlert);
     setEmailList(app?.config?.notifyEmails);
     setExtraConfig(app?.config?.customJsonData);
+    setIsPrivacyEnabled(app?.config?.isPrivacyEnabled || false);
   }, [cameraInfo]);
 
   if (redirectTo) {
@@ -117,6 +121,10 @@ const CameraAppSettingsComponent: React.FC<IProps> = ({
     setExtraConfig(event.target.value);
   };
 
+  const handlePrivacyChange = (evt: Event) => {
+    setIsPrivacyEnabled(evt.target.checked);
+  };
+
   const handleAppEnable = () => {
     if (mlApp?.config) {
       const payload = {
@@ -127,7 +135,8 @@ const CameraAppSettingsComponent: React.FC<IProps> = ({
         allowDesktopAlert: desktopAlert,
         allowEmailAlert: email,
         notifyEmails: emailList,
-        customJsonData: extraConfig
+        customJsonData: extraConfig,
+        isPrivacyEnabled
       };
       updateCameraAppRequest(payload);
       history.push(`/camera/${id}/apps`);
@@ -154,6 +163,23 @@ const CameraAppSettingsComponent: React.FC<IProps> = ({
             onChange={handleSensitivityChange}
             style={{ width: 200 }}
             value={sensitivity}
+          />
+        </FormControl>
+      </Box>
+      <Box className={classes.appNotifications}>
+        <FormControl component="fieldset">
+          <FormLabel component="label" color="primary" classes={{ root: classes.fieldLable }}>
+            {translationService.getMessageTranslation("camera-privacy-label", "Privacy")}:{" "}
+          </FormLabel>
+          <FormControlLabel
+            control={
+              <Switch checked={isPrivacyEnabled} onChange={handlePrivacyChange} color="primary" name="privacy" />
+            }
+            label={
+              isPrivacyEnabled
+                ? translationService.getMessageTranslation("camera-privacy-enabled-label", "Enabled")
+                : translationService.getMessageTranslation("camera-privacy-disabled-label", "Disabled")
+            }
           />
         </FormControl>
       </Box>

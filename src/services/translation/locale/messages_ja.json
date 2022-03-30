@@ -126,5 +126,8 @@
   "end-time-error-lable": "終了時間は開始時間より大きくする必要があります",
   "start-time-error-lable": "開始時間は終了時間より短くする必要があります",
   "invalid-end-time-error-lable": "終了時刻が無効です",
-  "invalid-start-time-error-lable": "開始時刻が無効です"
+  "invalid-start-time-error-lable": "開始時刻が無効です",
+  "camera-privacy-label": "プライバシー",
+  "camera-privacy-enabled-label": "有効",
+  "camera-privacy-disabled-label": "無効"
 }
