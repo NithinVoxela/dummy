@@ -64,8 +64,7 @@ const AlertDetailsComponent: React.FC<IProps> = ({
     window.open(streamUrl, "_blank");
   };
 
-  const type = isImageURL(alert?.fileName) ? "image" : "video";
-  const mediaUrl = alert?.preSignedUrl;
+  const mediaUrl = alert?.mediaUrl;
   const cameraName = alert?.cameraName || "-";
   const streamUrl = alert?.streamUrl;
 

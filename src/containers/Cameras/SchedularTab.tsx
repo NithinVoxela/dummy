@@ -139,13 +139,15 @@ const SchedularTabComponent: React.FC<IProps> = ({
     }
     for (let i = 0; i < data.length; i++) {
       if (data[i]?.schedule?.length > 0) {
-        schedule.data = data[i].schedule.map(item => {
+        const newDaySchedule = data[i].schedule.map(item => {
           return {
             dayOfWeek: i + 1,
             fromTime: format(item.startTime, "HH:mm"),
             tillTime: format(item.endTime, "HH:mm")
           };
         });
+
+        schedule.data = schedule.data.concat(newDaySchedule);
       }
     }
     return schedule;
