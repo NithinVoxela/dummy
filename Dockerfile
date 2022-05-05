@@ -1,10 +1,11 @@
 # build environment
-FROM node:13.12.0-alpine as build-stage
+FROM node:14.17.6-alpine3.13 as build-stage
 WORKDIR /app
 COPY package*.json /app/
-RUN npm install
+RUN npm install --global yarn
+RUN yarn install
 COPY ./ /app/
-RUN npm run build
+RUN yarn build
 # Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
 FROM nginx:1.21.1
 COPY --from=build-stage /app/build/ /usr/share/nginx/html

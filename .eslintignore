@@ -1,6 +1,6 @@
-node_modules
-coverage
-tests
-webpack.config.js
-build
-*.d.ts
+// .eslintignore
+build/*
+public/*
+src/service-worker.js
+src/serviceWorkerRegistration.js
+src/setupTests.js
