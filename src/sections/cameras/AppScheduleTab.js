@@ -79,6 +79,7 @@ export default function AppScheduleTab(props) {
     }
   ];
   const [scheduleData, setScheduleData] = useState(weekdays);
+  const [hasTimeUpdated, setHasTimeUpdated] = useState(false);
 
   const handleAddClick = (weekDayIndex) => {
     const newData = cloneDeep(scheduleData);
@@ -89,6 +90,7 @@ export default function AppScheduleTab(props) {
       endTime: set(new Date(), { hours: 17, minutes: 0 })
     });
     setScheduleData(newData);
+    setHasTimeUpdated(true);
   };
 
   const isAlreadyExists = (time, timeItemIndex, weekDayIndex) => {
@@ -134,7 +136,7 @@ export default function AppScheduleTab(props) {
     }
     return schedule;
   };
-  const saveScheduleData = (data) => {
+  const saveScheduleData = async(data) => {
     const payload = {};
     payload.appId = appId;
     const schedule = createScheduleData(data);
@@ -168,7 +170,7 @@ export default function AppScheduleTab(props) {
       endTime
     };
     setScheduleData(newData);
-    if (startTime && endTime) {
+    if (startTime && endTime && hasTimeUpdated) {
       saveScheduleData(newData);
     }
   };
@@ -179,7 +181,9 @@ export default function AppScheduleTab(props) {
     dayData.schedule.splice(timeItemIndex, 1);
     dayData.isSelected = dayData.schedule.length > 0;
     setScheduleData(newData);
-    saveScheduleData(newData);
+    if (!dayData.hasError) {
+      saveScheduleData(newData);
+    }
   };
 
   const handleCheckboxChange = (checked, weekDayIndex) => {
@@ -192,7 +196,7 @@ export default function AppScheduleTab(props) {
   useEffect(() => {
     if (schedularList?.length > 0) {
       const dateString = format(new Date(), "MM/dd/yyyy");
-      const newScheduleData = cloneDeep(scheduleData);
+      const newScheduleData = cloneDeep(weekdays);
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < schedularList.length; i++) {
         const schdule = schedularList[i];
@@ -207,6 +211,12 @@ export default function AppScheduleTab(props) {
     }
   }, [schedularList]);
 
+  useEffect(() => {
+    if (hasTimeUpdated) {
+      setHasTimeUpdated(false);
+    }
+  }, [hasTimeUpdated]);
+
   const renderTimefield = (time, timeItemIndex, weekDayIndex) => (
       <TimePickerCmp
         cmpKey={`time-item-${weekDayIndex}-${timeItemIndex}`}
@@ -217,6 +227,8 @@ export default function AppScheduleTab(props) {
         isAlreadyExists={isAlreadyExists}
         updateSchedule={updateSchedule}
         translate={translate}
+        hasTimeUpdated={hasTimeUpdated}
+        setHasTimeUpdated={setHasTimeUpdated}
       />
     );
 
