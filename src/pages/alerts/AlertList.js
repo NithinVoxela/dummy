@@ -96,11 +96,12 @@ const AlertList = () => {
     setParams({});
     handleCloseFilter();
     setClearData(true);
-    getAlertData(0, isAscending, params);
+    getAlertData(0, isAscending, {});
   };
 
   const handleRefresh = () => {
     setClearData(true);
+    getAlertData(0, isAscending, params);
   };
 
   const isDefault = Object.keys(params).length === 0;

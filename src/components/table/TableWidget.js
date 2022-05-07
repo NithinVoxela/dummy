@@ -21,7 +21,6 @@ import { fDateTimeTZSuffix } from '../../utils/formatTime';
 import Scrollbar from '../Scrollbar';
 import useLocales from '../../hooks/useLocales';
 
-// import ConfirmationModal from './ConfirmationModal';
 
 
 
@@ -66,7 +65,7 @@ const TableWidget = (props) => {
       }
 
       if (page) {
-        queryParams.pageNumber = page + 1;
+        queryParams.pageNumber = page;
       }
     } 
     return queryParams;

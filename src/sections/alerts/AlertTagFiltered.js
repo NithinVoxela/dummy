@@ -99,7 +99,7 @@ export default function AlertTagFiltered({
 
       {endDate && (
         <WrapperStyle>
-          <LabelStyle>{translate('app.start-date-lable')}</LabelStyle>
+          <LabelStyle>{translate('app.end-date-lable')}</LabelStyle>
           <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
             <Chip size="small" label={format(new Date(endDate), "dd MMMM yyyy")} onDelete={() => onRemoveParam("endDate")} sx={{ m: 0.5 }} />
           </Stack>

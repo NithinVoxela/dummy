@@ -114,9 +114,23 @@ export default function AlertFilterSidebar({
     applyFilter(newParams);
   };
 
-  const applyFilter = (newParams) => {
-    setParams(newParams);
+  const applyFilter = (newParams) => {    
+    setParams({...newParams});
     setClearData(true);
+    if (newParams.startDate || newParams.endDate) {
+      newParams.dateRange = {
+        startDate: format(new Date, 'yyyy-MM-dd'),
+        endDate: format(new Date, 'yyyy-MM-dd')
+      };
+      if (newParams.startDate) {
+        newParams.dateRange.startDate = newParams.startDate;
+        delete newParams.startDate;
+      }
+      if (newParams.endDate) {
+        newParams.dateRange.endDate = newParams.endDate;
+        delete newParams.endDate;
+      }
+    }
     getAlertData(0, false, newParams);
   };
 
@@ -140,6 +154,10 @@ export default function AlertFilterSidebar({
       setEndDate(new Date(params.endDate));
     }
   }, [params]);
+
+  const getFormatedStartDate = () => {
+    return (startDate && format(startDate, 'dd MMMM yyyy')) || null;
+  }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -204,14 +222,12 @@ export default function AlertFilterSidebar({
                 inputFormat="dd MMMM yyyy"
                 value={startDate}
                 onChange={handleStartDate}
+                size="small"
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     size="small"
-                    inputProps={{ 
-                      ...params.inputsProps, 
-                      placeholder: translate('app.select-date-label') 
-                    }}
+                    inputProps={{ ...params.inputProps, placeholder: translate('app.select-date-label') }}
                   />
                 )}
               />
@@ -228,10 +244,7 @@ export default function AlertFilterSidebar({
                   <TextField
                     {...params}
                     size="small"
-                    inputProps={{ 
-                      ...params.inputsProps, 
-                      placeholder: translate('app.select-date-label') 
-                    }}
+                    inputProps={{ ...params.inputProps, placeholder: translate('app.select-date-label') }}                   
                   />
                 )}
               />

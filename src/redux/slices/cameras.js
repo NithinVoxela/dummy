@@ -48,6 +48,10 @@ const slice = createSlice({
       const { data } = action.payload;      
       state.schedularList = data;
     }, 
+
+    resetCameraDetails(state) {
+      state.cameraDetails = {};
+    },
   },
 });
 
@@ -138,5 +142,11 @@ export function updateAppSchedule(payload) {
     }          
   };
 };
+
+export function resetCameraDetails() {
+  return () => {       
+    dispatch(slice.actions.resetCameraDetails());          
+  };
+}
 
 

@@ -20,7 +20,12 @@ const initialState = {
   dashboardCameraAlerts: {
     data: [],
     total: 0
-  }
+  },
+  alertCountDataList: {
+    total: 0,
+    currentPage: 0,
+    data: []
+  },
 };
 
 const slice = createSlice({
@@ -70,6 +75,11 @@ const slice = createSlice({
       state.dashboardAlerts = emptyResponse;
       state.dashboardCameraAlerts = emptyResponse;
     },
+
+    getAlertCountSuccess(state, action) {
+      const { data } = action.payload;      
+      state.alertCountDataList = { total: data.totalCount, data: data.records, currentPage: data.currentPage };
+    },  
     
   },
 });
@@ -78,13 +88,17 @@ const slice = createSlice({
 export default slice.reducer;
 
 
-export function getAlerts(queryParams, payload = {}) {
+export function getAlerts(queryParams, payload = {}, countRequest = false) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
       const searchParams = new URLSearchParams(queryParams).toString();
       const response = await axios.put(`alert/search?${searchParams}`, payload);
-      dispatch(slice.actions.getAlertsSuccess(response));
+      if (countRequest) {
+        dispatch(slice.actions.getAlertCountSuccess(response));
+      } else {
+        dispatch(slice.actions.getAlertsSuccess(response));
+      }
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -105,8 +119,7 @@ export function getAlertDetails(id) {
 export function markAsRead(id) { 
   return async () => {    
     try {      
-      const response = await axios.get(`alert/${id}/markRead`);
-      dispatch(slice.actions.getAlertDetailsSuccess(response));
+      await axios.put(`alert/${id}/markRead`);      
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

@@ -12,7 +12,7 @@ import useLocales from '../../hooks/useLocales';
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getCameraDetails, saveCamera, updateCamera } from '../../redux/slices/cameras';
+import { getCameraDetails, resetCameraDetails, saveCamera, updateCamera } from '../../redux/slices/cameras';
 
 // components
 import Page from '../../components/Page';
@@ -67,6 +67,10 @@ export default function CameraCreate() {
       getCamera();
     }
   }, [cameraId]);
+
+  useEffect(() => () => {      
+      dispatch(resetCameraDetails());
+    }, []);
 
   const onCancel = () => {
     navigate(PATH_DASHBOARD.cameras.list);

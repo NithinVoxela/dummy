@@ -74,7 +74,7 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
   const navigate = useNavigate();
 
   const [alertCount, setAlertCount] = useState(null);
-  const { alertDataList } = useSelector((state) => state.alerts);
+  const { alertCountDataList } = useSelector((state) => state.alerts);
 
   const notification = {
     title: translate(`app.alerts-new-activity-label`),
@@ -90,7 +90,7 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
         pageSize: 1,
         sortAscending: false
       };
-      await dispatch(getAlerts(queryParams, payload));      
+      await dispatch(getAlerts(queryParams, payload, true));      
     } catch (err) {
       console.error(err);
     }
@@ -108,7 +108,7 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
   }, []);
 
   useEffect(() => {
-    const count = alertDataList?.total || 0;
+    const count = alertCountDataList?.total || 0;
     if (alertCount && count > alertCount) {
       const payload = {
         isCustom: true,
@@ -116,8 +116,8 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
       };
       notify(payload);
     }
-    setAlertCount(alertDataList?.total);
-  }, [alertDataList]);
+    setAlertCount(alertCountDataList?.total);
+  }, [alertCountDataList]);
 
   return (
     <RootStyle isCollapse={isCollapse} isOffset={isOffset} verticalLayout={verticalLayout}>
