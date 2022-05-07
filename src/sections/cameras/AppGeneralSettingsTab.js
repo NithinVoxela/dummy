@@ -130,7 +130,7 @@ export default function AppGeneralSettingsTab(props) {
           <Slider
             defaultValue={80}
             aria-labelledby="discrete-slider-always"
-            step={10}
+            step={1}
             valueLabelDisplay="auto"
             marks={marks}
             onChange={handleSensitivityChange}

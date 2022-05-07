@@ -2,7 +2,6 @@
 FROM node:14.17.6-alpine3.13 as build-stage
 WORKDIR /app
 COPY package*.json /app/
-RUN npm install --global yarn
 RUN yarn install
 COPY ./ /app/
 RUN yarn build
