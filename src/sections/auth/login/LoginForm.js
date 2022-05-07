@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,6 +10,7 @@ import { LoadingButton } from '@mui/lab';
 import useAuth from '../../../hooks/useAuth';
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
 import useLocales from '../../../hooks/useLocales';
+
 // components
 import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFTextField, RHFCheckbox } from '../../../components/hook-form';
@@ -23,17 +24,17 @@ export default function LoginForm() {
   const isMountedRef = useIsMountedRef();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [defaultValues, setDefaultValues] = useState({
+    email: '',
+    password: '',
+    remember: true,
+  });
+
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string().required(translate('app.username-required-label')),
     password: Yup.string().required(translate('app.password-required-label')),
   });
-
-  const defaultValues = {
-    email: '',
-    password: '',
-    remember: true,
-  };
 
   const methods = useForm({
     resolver: yupResolver(LoginSchema),
@@ -45,11 +46,13 @@ export default function LoginForm() {
     setError,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setValue
   } = methods;
 
   const onSubmit = async (data) => {
     try {
       await login(data.email, data.password);
+      localStorage.setItem('loginData', JSON.stringify(data));     
     } catch (error) {
       console.error(error);
       reset();
@@ -58,6 +61,27 @@ export default function LoginForm() {
       }
     }
   };
+
+  useEffect(() => {
+    const loginData = localStorage.getItem('loginData'); 
+    if (loginData) {
+      try {
+        const data = JSON.parse(loginData);
+        if (data.remember) {
+          setDefaultValues({
+            email: data.email,
+            password: data.password,
+            remember: true
+          });
+          setValue('email', data.email);
+          setValue('password', data.password);
+          setValue('remember', data.remember);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }    
+  }, []);
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
