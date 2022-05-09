@@ -9,6 +9,7 @@ import { Box, Stack, AppBar, Toolbar } from '@mui/material';
 import useOffSetTop from '../../../hooks/useOffSetTop';
 import useResponsive from '../../../hooks/useResponsive';
 import useLocales from '../../../hooks/useLocales';
+import useAuth from '../../../hooks/useAuth';
 // utils
 import cssStyles from '../../../utils/cssStyles';
 // config
@@ -72,6 +73,7 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
   const { translate } = useLocales();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const [alertCount, setAlertCount] = useState(null);
   const { alertCountDataList } = useSelector((state) => state.alerts);
@@ -93,6 +95,9 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
       await dispatch(getAlerts(queryParams, payload, true));      
     } catch (err) {
       console.error(err);
+      if (err?.message === "Not Authorized") {
+        logout();
+      }      
     }
   }, [dispatch]);
 

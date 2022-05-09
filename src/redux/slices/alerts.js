@@ -101,6 +101,7 @@ export function getAlerts(queryParams, payload = {}, countRequest = false) {
       }
     } catch (error) {
       dispatch(slice.actions.hasError(error));
+      throw(error);
     }
   };
 }
@@ -144,6 +145,7 @@ export function getDashboardCameraAlertLog() {
       dispatch(slice.actions.getDashboardCameraAlertsSuccess(response));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
+      throw(error);
     }
   };
 };

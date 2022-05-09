@@ -1,6 +1,6 @@
 {
-  "name": "Cortexa",
-  "short_name": "Cortexa",
+  "name": "VCare",
+  "short_name": "VCare",
   "display": "standalone",
   "start_url": "/",
   "theme_color": "#000000",

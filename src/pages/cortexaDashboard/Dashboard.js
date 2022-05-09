@@ -121,7 +121,7 @@ function CameraList() {
             </Typography>
 
             <Typography color="textSecondary">
-              {item?.appName || translate('app.no-activity-label')}
+              {item?.displayName || translate('app.no-activity-label')}
             </Typography>
           </CardContent>
         </Card>
