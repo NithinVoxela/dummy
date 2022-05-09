@@ -14,6 +14,7 @@ import { NAVBAR } from '../../config';
 import Iconify from '../../components/Iconify';
 import Scrollbar from '../../components/Scrollbar';
 import { RHFRadioGroup, RHFSelect } from '../../components/hook-form';
+import { fDate } from '../../utils/formatTime';
 
 AlertFilterSidebar.propTypes = {
   isOpen: PropTypes.bool,
@@ -86,7 +87,7 @@ export default function AlertFilterSidebar({
     const newParams = { ...params };
     if (value && isValid(value)) {
       setStartDate(value);
-      newParams.startDate = format(value, 'yyyy-MM-dd');
+      newParams.startDate = fDate(value);
     } else {
       delete newParams.startDate;
     }
@@ -102,7 +103,7 @@ export default function AlertFilterSidebar({
     const newParams = { ...params };
     if (value && isValid(value)) {
       setEndDate(value);
-      newParams.endDate = format(value, 'yyyy-MM-dd');
+      newParams.endDate = fDate(value);
     } else {
       delete newParams.endDate;
     }
@@ -119,15 +120,15 @@ export default function AlertFilterSidebar({
     setClearData(true);
     if (newParams.startDate || newParams.endDate) {
       newParams.dateRange = {
-        startDate: format(new Date, 'yyyy-MM-dd'),
-        endDate: format(new Date, 'yyyy-MM-dd')
+        startDate: format(new Date(), 'yyyy-MM-dd'),
+        endDate: format(new Date(), 'yyyy-MM-dd')
       };
       if (newParams.startDate) {
-        newParams.dateRange.startDate = newParams.startDate;
+        newParams.dateRange.startDate = format(new Date(newParams.startDate), 'yyyy-MM-dd');
         delete newParams.startDate;
       }
       if (newParams.endDate) {
-        newParams.dateRange.endDate = newParams.endDate;
+        newParams.dateRange.endDate = format(new Date(newParams.endDate), 'yyyy-MM-dd');
         delete newParams.endDate;
       }
     }
@@ -155,9 +156,7 @@ export default function AlertFilterSidebar({
     }
   }, [params]);
 
-  const getFormatedStartDate = () => {
-    return (startDate && format(startDate, 'dd MMMM yyyy')) || null;
-  }
+
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
