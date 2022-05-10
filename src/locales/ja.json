@@ -157,6 +157,10 @@
     "login-form-sub-header-label": "以下に詳細を入力してください",
     "remember-me-label": "私を覚えてますか",
     "username-required-label": "ユーザー名が必要です」、",
-    "password-required-label": "パスワードが必要です"
+    "password-required-label": "パスワードが必要です",
+    "app-name-fall": "転倒",
+    "app-name-wakeup": "起床",
+    "app-name-motion": "動作",
+    "app-name-person": "人物"
   }
 }

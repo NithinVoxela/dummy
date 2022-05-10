@@ -84,6 +84,13 @@ function CameraList() {
       cleanAlertLogs();
     }, [cleanAlertLogs]);
 
+  const getActivityName = (activity) => {
+    if (activity) {
+      return translate(`app.app-name-${activity.toLowerCase()}`) || activity;
+    }
+    return translate('app.no-activity-label');
+  }  
+
   const renderIcon = type => {
     if (type === "MotionDetection") {
       return <DirectionsWalkIcon fontSize="large" />;
@@ -121,7 +128,7 @@ function CameraList() {
             </Typography>
 
             <Typography color="textSecondary">
-              {item?.displayName || translate('app.no-activity-label')}
+              {getActivityName(item?.displayName)}
             </Typography>
           </CardContent>
         </Card>

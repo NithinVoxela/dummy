@@ -157,6 +157,10 @@
     "login-form-sub-header-label": "Enter your details below.",
     "remember-me-label": "Remember me",
     "username-required-label": "Username is required",
-    "password-required-label": "Password is required"
+    "password-required-label": "Password is required",
+    "app-name-fall": "Fall",
+    "app-name-wakeup": "Wakeup",
+    "app-name-motion": "Motion",
+    "app-name-person": "Person"
   }
 }

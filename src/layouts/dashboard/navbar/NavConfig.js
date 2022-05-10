@@ -1,7 +1,9 @@
+import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
 import SvgIconStyle from '../../../components/SvgIconStyle';
+
 
 // ----------------------------------------------------------------------
 
@@ -17,7 +19,7 @@ const ICONS = {
   banking: getIcon('ic_banking'),
   calendar: getIcon('ic_calendar'),
   ecommerce: getIcon('ic_ecommerce'),
-  analytics: getIcon('ic_analytics'),
+  analytics: <WarningAmberOutlinedIcon />,
   dashboard: getIcon('ic_dashboard'),
   booking: getIcon('ic_booking'),
 };
