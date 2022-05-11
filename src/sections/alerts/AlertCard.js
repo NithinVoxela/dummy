@@ -11,7 +11,7 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 import Label from '../../components/Label';
 import Image from '../../components/Image';
 import useLocales from '../../hooks/useLocales';
-import { fDateTimeTZSuffix } from '../../utils/formatTime';
+import { fDateTimeTZSuffix, fDateWithTZ } from '../../utils/formatTime';
 import Iconify from '../../components/Iconify';
 
 const useStyles = makeStyles({
@@ -48,6 +48,21 @@ export default function AlertCard({ alert }) {
 
   const openStreamUrl = (streamUrl) => {
     window.open(streamUrl, "_blank");
+  };
+
+  const renderDate = (dateValue) => {
+    let formattedDate = null;
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user?.timezone) {
+        formattedDate = fDateWithTZ(`${dateValue}Z`, user?.timezone);        
+      } else {
+        formattedDate = fDateTimeTZSuffix(dateValue);
+      }
+    } catch (err) {
+      formattedDate = fDateTimeTZSuffix(dateValue);
+    }
+    return formattedDate;
   };
 
   const renderCameraName = () => (
@@ -88,7 +103,7 @@ export default function AlertCard({ alert }) {
       <Stack spacing={2} sx={{ p: 2 }} className={classes.root}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="subtitle2" noWrap>
-            {fDateTimeTZSuffix(alertTime)}
+            {renderDate(alertTime)}
           </Typography>
 
           <Stack direction="row" spacing={0.5}>           

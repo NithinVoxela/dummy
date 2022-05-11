@@ -19,7 +19,7 @@ import useLocales from '../../hooks/useLocales';
 // components
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import { fDateTimeTZSuffix } from '../../utils/formatTime';
+import { fDateTimeTZSuffix, fDateWithTZ } from '../../utils/formatTime';
 import Label from '../../components/Label';
 import Iconify from '../../components/Iconify';
 
@@ -89,6 +89,21 @@ const AlertDetail = () => {
     window.open(streamUrl, "_blank");
   };
 
+  const renderDate = (dateValue) => {
+    let formattedDate = null;
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user?.timezone) {
+        formattedDate = fDateWithTZ(`${dateValue}Z`, user?.timezone);        
+      } else {
+        formattedDate = fDateTimeTZSuffix(dateValue);
+      }
+    } catch (err) {
+      formattedDate = fDateTimeTZSuffix(dateValue);
+    }
+    return formattedDate;
+  };
+
   const renderCameraName = () => (
     <>
       {alertDetails?.streamUrl?.trim()?.length > 0 ? (
@@ -145,7 +160,7 @@ const AlertDetail = () => {
                   {translate('app.alert-created-on-details').toUpperCase()}
                 </Typography>
                 <Typography color="textPrimary" variant="body1" sx={{ pt: 0.5 }} >
-                  {alertDetails?.alertTime ? fDateTimeTZSuffix(alertDetails.alertTime) : '-'}
+                  {alertDetails?.alertTime ? renderDate(alertDetails.alertTime) : '-'}
                 </Typography>
               </div>
             </Grid>

@@ -1,4 +1,5 @@
 import { format, getTime, formatDistanceToNow } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz'
 
 // ----------------------------------------------------------------------
 
@@ -44,4 +45,8 @@ export function fToNow(date) {
   return formatDistanceToNow(new Date(date), {
     addSuffix: true
   });
+}
+
+export function fDateWithTZ(date, timeZone) {
+  return formatInTimeZone(new Date(date), timeZone, 'do MMM yyyy, h:mm a')
 }
