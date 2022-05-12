@@ -158,7 +158,7 @@ function CameraList() {
           ) : (
             <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Typography variant="body2" gutterBottom display="inline">
-                {translate('app.camera-no-data-label')}
+                {translate('app.notification-no-data-label')}
               </Typography>
             </Box>
           )}

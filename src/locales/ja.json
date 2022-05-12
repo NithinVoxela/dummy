@@ -161,6 +161,7 @@
     "app-name-fall": "転倒",
     "app-name-wakeup": "起床",
     "app-name-motion": "動作",
-    "app-name-person": "人物"
+    "app-name-person": "人物",
+    "notification-no-data-label": "古い通知はありません"
   }
 }

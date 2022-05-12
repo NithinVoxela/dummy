@@ -161,6 +161,7 @@
     "app-name-fall": "Fall",
     "app-name-wakeup": "Wakeup",
     "app-name-motion": "Motion",
-    "app-name-person": "Person"
+    "app-name-person": "Person",
+    "notification-no-data-label": "No Older Notification"
   }
 }
