@@ -6,6 +6,7 @@ import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 import AirlineSeatFlatAngledIcon from "@mui/icons-material/AirlineSeatFlatAngled";
 import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
+import AccessibilityNewOutlinedIcon from '@mui/icons-material/AccessibilityNewOutlined';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -92,12 +93,14 @@ function CameraList() {
   }  
 
   const renderIcon = type => {
-    if (type === "MotionDetection") {
+    if (type === "motion") {
       return <DirectionsWalkIcon fontSize="large" />;
-    } if (type === "FallDetection") {
+    } if (type === "fall") {
       return <AirlineSeatFlatAngledIcon fontSize="large" />;
-    } if (type === "PersonDetection") {
+    } if (type === "person") {
       return <AccountBoxOutlinedIcon fontSize="large" />;
+    } if (type === "wakeup") {
+      return <AccessibilityNewOutlinedIcon fontSize="large" />;
     } 
     return <WbSunnyOutlinedIcon fontSize="large" />;
     
@@ -122,7 +125,7 @@ function CameraList() {
                 )}
               </Typography>
             </Box>
-            <Box style={{ display: "flex", justifyContent: "center", minHeight: 25 }}>{renderIcon(item?.appName)}</Box>
+            <Box style={{ display: "flex", justifyContent: "center", minHeight: 25 }}>{renderIcon(item?.displayName?.toLowerCase())}</Box>
             <Typography color="textSecondary" variant="button" gutterBottom>
               {item?.cameraName}
             </Typography>

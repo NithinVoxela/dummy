@@ -187,7 +187,8 @@ export default function AppScheduleTab(props) {
   };
 
   const handleCheckboxChange = (checked, weekDayIndex) => {
-    const newData = cloneDeep(scheduleData);
+    const newData = cloneDeep(scheduleData); 
+    newData.splice(weekDayIndex, 1);
     newData[weekDayIndex].isSelected = checked;
     setScheduleData(newData);
     saveScheduleData(newData);
