@@ -162,6 +162,8 @@
     "app-name-wakeup": "起床",
     "app-name-motion": "動作",
     "app-name-person": "人物",
-    "notification-no-data-label": "古い通知はありません"
+    "notification-no-data-label": "古い通知はありません",
+    "labelRowsPerPage": "1ページあたりの行数:",
+    "label-of": "の"
   }
 }

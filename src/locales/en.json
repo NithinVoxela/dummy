@@ -162,6 +162,8 @@
     "app-name-wakeup": "Wakeup",
     "app-name-motion": "Motion",
     "app-name-person": "Person",
-    "notification-no-data-label": "No Older Notification"
+    "notification-no-data-label": "No Older Notification",
+    "labelRowsPerPage": "Rows per page:",
+    "label-of": "of"
   }
 }

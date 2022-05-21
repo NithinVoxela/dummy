@@ -252,6 +252,10 @@ const TableWidget = (props) => {
     
   };
 
+  const renderPageRange = ({from, to, count}) => {
+    return `${from}-${to} ${translate("app.label-of")} ${count}`;
+  }
+
   return (    
     <>
       <Scrollbar>
@@ -336,6 +340,8 @@ const TableWidget = (props) => {
           <TablePagination
             component='div'
             count={tableData.total || tableData.length || 0}
+            labelRowsPerPage={translate("app.labelRowsPerPage")}
+            labelDisplayedRows={renderPageRange}
             onPageChange={handlePageChange}
             onRowsPerPageChange={handleLimitChange}
             page={page}
@@ -344,15 +350,7 @@ const TableWidget = (props) => {
           />
         </>
         : null
-      }
-      {/* { isOpen && 
-        <ConfirmationModal
-          isOpen={isOpen}
-          handleClose={() => setIsOpen(false)}
-          type={tableMetaData.recordType}
-          record={activeRecord}
-        />
-      } */}
+      }     
     </>
   );
 };
