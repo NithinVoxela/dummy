@@ -14,7 +14,7 @@ export default function Logo({ disabledLink = false, sx }) {
 
   const logo = (
     <Box sx={{ width: 40, height: 40, ...sx }}>
-      <img alt="Logo" src={`/icons/voxela_logo_dashboard.png`} />
+      <img alt="Logo" src={`/logo/voxela_logo_dashboard.png`} />
     </Box>
   );
 
