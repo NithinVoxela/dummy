@@ -117,7 +117,12 @@ const AlertDetail = () => {
     </>
   );
 
-  const getTypeLabel = () => translate(`app.alerts-${alertDetails?.type?.toLowerCase()}-label`, alertDetails?.type ) || '-'
+  const getTypeLabel = (activity) => {
+    if (activity) {
+      return translate(`app.app-name-${activity.toLowerCase()}`) || activity;
+    }
+    return "-";
+  }  
 
 
   return (
@@ -185,10 +190,10 @@ const AlertDetail = () => {
             <Grid item md={2} xs={12}>
               <div>
                 <Typography color="textPrimary" variant="subtitle2">
-                  {translate('app.camera-type-label').toUpperCase()}
+                  {translate('app.activity-type').toUpperCase()}
                 </Typography>
                 <Typography color="textPrimary" variant="body1" sx={{ pt: 0.5 }}>
-                  {getTypeLabel()}
+                  {getTypeLabel(alertDetails?.type)}
                 </Typography>
               </div>
             </Grid>

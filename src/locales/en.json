@@ -164,6 +164,7 @@
     "app-name-person": "Person",
     "notification-no-data-label": "No Older Notification",
     "labelRowsPerPage": "Rows per page:",
-    "label-of": "of"
+    "label-of": "of",
+    "activity-type": "Activity Type"
   }
 }

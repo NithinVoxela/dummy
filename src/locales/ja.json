@@ -164,6 +164,7 @@
     "app-name-person": "人物",
     "notification-no-data-label": "古い通知はありません",
     "labelRowsPerPage": "1ページあたりの行数:",
-    "label-of": "の"
+    "label-of": "の", 
+    "activity-type": "活動タイプ"
   }
 }

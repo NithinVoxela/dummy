@@ -30,7 +30,7 @@ AlertCard.propTypes = {
 };
 
 export default function AlertCard({ alert }) {
-  const { id, cameraName, alertTime, preSignedUrl, severity, streamUrl, cameraLocation, hasRead } = alert;
+  const { id, cameraName, alertTime, preSignedUrl, severity, streamUrl, cameraLocation, hasRead, type } = alert;
   const { translate } = useLocales();
   const classes = useStyles();
 
@@ -65,6 +65,13 @@ export default function AlertCard({ alert }) {
     return formattedDate;
   };
 
+  const getActivityName = (activity) => {
+    if (activity) {
+      return translate(`app.app-name-${activity.toLowerCase()}`) || activity;
+    }
+    return "-";
+  }  
+
   const renderCameraName = () => (
     <>
       {streamUrl?.trim()?.length > 0 ? (
@@ -79,7 +86,7 @@ export default function AlertCard({ alert }) {
   );
   return (
     <Card>
-      <Box sx={{ position: 'relative' }}>
+      <Box sx={{ position: 'relative' }}>        
         {!hasRead && (
           <Label
             variant="filled"
@@ -95,6 +102,7 @@ export default function AlertCard({ alert }) {
             {translate("app.alert-new")}
           </Label>
         )}
+                        
         <Link to={linkTo} color="inherit" component={RouterLink}>
           <Image alt={cameraName} src={preSignedUrl} ratio="1/1" />
         </Link>        
@@ -129,6 +137,10 @@ export default function AlertCard({ alert }) {
 
         <Typography variant="subtitle2" noWrap>
           <b>{translate("app.alert-location-details")}:</b> {cameraLocation}
+        </Typography>
+
+        <Typography variant="subtitle2" noWrap>
+          <b>{translate("app.activity-type")}:</b> {getActivityName(type)}
         </Typography>
       </Stack>
     </Card>
