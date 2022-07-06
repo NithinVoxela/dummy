@@ -86,7 +86,7 @@ export default function LoginForm() {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
-        {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
+        {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message || translate('app.invalid-credentials')}</Alert>}
 
         <RHFTextField name="email" label={translate('app.username-label')} />
 

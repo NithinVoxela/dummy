@@ -165,6 +165,7 @@
     "notification-no-data-label": "古い通知はありません",
     "labelRowsPerPage": "1ページあたりの行数:",
     "label-of": "の", 
-    "activity-type": "活動タイプ"
+    "activity-type": "活動タイプ",
+    "invalid-credentials": "無効な資格情報"
   }
 }

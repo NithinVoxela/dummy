@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 // utils
 import axios from '../utils/axios';
 import { isValidToken, setSession } from '../utils/jwt';
+import { registerDevice } from '../redux/slices/auth';
 
 // ----------------------------------------------------------------------
 
@@ -64,7 +65,7 @@ AuthProvider.propTypes = {
 };
 
 function AuthProvider({ children }) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState); 
 
   useEffect(() => {
     const initialize = async () => {
@@ -118,6 +119,13 @@ function AuthProvider({ children }) {
 
     setSession(accessToken);
     window.localStorage.setItem('user', JSON.stringify(user));
+
+    await registerDevice({
+      'imeiNumber': 'imeiNumber',
+      'fireBaseId': window.sessionStorage.getItem('messagingToken'),
+      'deviceType' : 'WEB'
+    });
+
     dispatch({
       type: 'LOGIN',
       payload: {

@@ -165,6 +165,7 @@
     "notification-no-data-label": "No Older Notification",
     "labelRowsPerPage": "Rows per page:",
     "label-of": "of",
-    "activity-type": "Activity Type"
+    "activity-type": "Activity Type",
+    "invalid-credentials": "Invalid Credentials"
   }
 }
