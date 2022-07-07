@@ -39,6 +39,7 @@ export default function AlertFilterSidebar({
   params,
   setParams,
   setClearData,
+  sortDirection
 }) {
   const SEVERITY = [
     { value: 'High', label: translate('app.alert-high-label') },
@@ -132,7 +133,7 @@ export default function AlertFilterSidebar({
         delete newParams.endDate;
       }
     }
-    getAlertData(0, false, newParams);
+    getAlertData(0, sortDirection, newParams);
   };
 
   useEffect(() => {

@@ -45,6 +45,7 @@ AlertTagFiltered.propTypes = {
   getAlertData: PropTypes.func,
   onResetAll: PropTypes.func,
   translate: PropTypes.func,
+  sortDirection: PropTypes.string
 };
 
 export default function AlertTagFiltered({
@@ -55,6 +56,7 @@ export default function AlertTagFiltered({
   onResetAll,
   setParams,
   translate,
+  sortDirection
 }) {
 
   const { cameraName, startDate, endDate, severity } = filters;
@@ -62,7 +64,7 @@ export default function AlertTagFiltered({
   const applyFilter = (newParams) => {
     setParams(newParams);
     setClearData(true);
-    getAlertData(0, false, newParams);
+    getAlertData(0, sortDirection, newParams);
   };
 
   const onRemoveParam = (paramName) => {

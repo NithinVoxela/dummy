@@ -147,6 +147,7 @@ const AlertList = () => {
                 params={params}
                 setParams={setParams}
                 setClearData={setClearData}
+                sortDirection={isAscending}
               />
             </FormProvider>
 
@@ -170,6 +171,7 @@ const AlertList = () => {
                 getAlertData={getAlertData}
                 onResetAll={handleResetFilter}
                 translate={translate}
+                sortDirection={isAscending}
               />
             </>
           )}
@@ -179,7 +181,7 @@ const AlertList = () => {
           isLoading={isLoading}    
           alertList={alertDataList?.data}          
           totalCount={alertDataList?.total}       
-          nextPageCallback={getAlertData}    
+          nextPageCallback={(page) => getAlertData(page, isAscending, params)}    
           currentPage={ alertDataList?.currentPage || 0 }    
           clearData={clearData}
           setClearData={setClearData}
