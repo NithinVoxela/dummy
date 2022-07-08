@@ -5,11 +5,13 @@ import { cloneDeep } from "lodash";
 // @mui
 import {
   Box,
+  Button,
   Card,
   Checkbox,
   FormControlLabel,
   Grid,
   IconButton,
+  Stack,
   Tooltip,
   Typography,
 } from '@mui/material';
@@ -27,12 +29,14 @@ AppScheduleTab.propTypes = {
   appId: PropTypes.string,
   schedularList: PropTypes.array,
   updateAppScheduleRequest: PropTypes.func,
+  resetSchedule: PropTypes.func,
+  onCancel: PropTypes.func,
 };
 
 // ----------------------------------------------------------------------
 
 export default function AppScheduleTab(props) {
-  const { translate, appId, updateAppScheduleRequest, schedularList } = props;
+  const { translate, appId, updateAppScheduleRequest, schedularList, resetSchedule, onCancel } = props;
 
   const weekdays = [
     {
@@ -93,15 +97,18 @@ export default function AppScheduleTab(props) {
     setHasTimeUpdated(true);
   };
 
-  const isAlreadyExists = (time, timeItemIndex, weekDayIndex) => {
+  const isAlreadyExists = (time, timeItemIndex, weekDayIndex, updatedScheduleData=null) => {
     let isExists = false;
+    if (!updatedScheduleData) {
+      updatedScheduleData = scheduleData;
+    }
     try {
-      if (scheduleData[weekDayIndex].schedule.length > 1) {
+      if (updatedScheduleData[weekDayIndex].schedule.length > 1) {
         const range = {
           start: time.startTime,
           end: time.endTime
         };
-        const newScheduleData = cloneDeep(scheduleData[weekDayIndex]);
+        const newScheduleData = cloneDeep(updatedScheduleData[weekDayIndex]);
         newScheduleData.schedule.splice(timeItemIndex, 1);
         isExists = newScheduleData.schedule.some(
           item => isWithinInterval(item.startTime, range) || isWithinInterval(item.endTime, range)
@@ -123,13 +130,11 @@ export default function AppScheduleTab(props) {
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < data.length; i++) {
       if (data[i]?.schedule?.length > 0) {
-        const newDaySchedule = data[i].schedule.map(item => {
-          return {
+        const newDaySchedule = data[i].schedule.map(item => ({
             dayOfWeek: i + 1,
             fromTime: format(item.startTime, "HH:mm"),
             tillTime: format(item.endTime, "HH:mm")
-          };
-        });
+          }));
 
         schedule.data = schedule.data.concat(newDaySchedule);
       }
@@ -163,16 +168,15 @@ export default function AppScheduleTab(props) {
       dayData.schedule.length > 1 &&
       (hasError || (isEqual(weekDay.startTime, startTime) && isEqual(weekDay.endTime, endTime)))
     ) {
-      return;
+      dayData.hasError = true;
+    } else {
+      dayData.hasError = false;
     }
     dayData.schedule[timeItemIndex] = {
       startTime,
       endTime
     };
-    setScheduleData(newData);
-    if (startTime && endTime && hasTimeUpdated) {
-      saveScheduleData(newData);
-    }
+    setScheduleData(newData);    
   };
 
   const handleTimeRemove = (timeItemIndex, weekDayIndex) => {
@@ -180,10 +184,20 @@ export default function AppScheduleTab(props) {
     const dayData = newData[weekDayIndex];
     dayData.schedule.splice(timeItemIndex, 1);
     dayData.isSelected = dayData.schedule.length > 0;
-    setScheduleData(newData);
-    if (!dayData.hasError) {
-      saveScheduleData(newData);
-    }
+    if (dayData.schedule.length > 1) {
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i<dayData.schedule.length; i++) {
+        const isExists = isAlreadyExists(dayData.schedule[i], i, weekDayIndex, newData);
+        if (isExists) {
+          dayData.hasError = true;
+          break;
+        }
+        dayData.hasError = false;
+      }
+    } else {
+      dayData.hasError = dayData.schedule.length > 1 ? dayData.hasError : false;
+    }        
+    setScheduleData(newData);    
   };
 
   const handleCheckboxChange = (checked, weekDayIndex) => {
@@ -197,8 +211,14 @@ export default function AppScheduleTab(props) {
         endTime: set(new Date(), { hours: 17, minutes: 0 })
       }];
     }
-    setScheduleData(newData);
-    saveScheduleData(newData);
+    setScheduleData(newData);    
+  };
+
+  const isSaveDisabled = () => {
+    let isDisabled = false;
+    const newData = cloneDeep(scheduleData);
+    isDisabled = newData.some(item => item.hasError);
+    return isDisabled;
   };
 
   useEffect(() => {
@@ -224,6 +244,12 @@ export default function AppScheduleTab(props) {
       setHasTimeUpdated(false);
     }
   }, [hasTimeUpdated]);
+
+  useEffect(() => {
+    return () => {      
+      resetSchedule();     
+    };
+  }, []);
 
   const renderTimefield = (time, timeItemIndex, weekDayIndex) => (
       <TimePickerCmp
@@ -316,6 +342,16 @@ export default function AppScheduleTab(props) {
           </Typography>
         </Box>
         {scheduleData.map(renderWeekday)}
+        <Stack spacing={3} alignItems="flex-end">
+          <Box sx={{ display: 'flex', marginTop: 2 }}>
+            <Button onClick={onCancel} sx={{ marginRight: 1 }}>
+              {translate('app.camera-cancel-label')}
+            </Button>
+            <Button onClick={() => saveScheduleData(scheduleData)} variant="contained" disabled={isSaveDisabled()}>
+              {translate('app.camera-save-label')}
+            </Button>
+          </Box>
+        </Stack>
       </Card>
     </LocalizationProvider>
   );

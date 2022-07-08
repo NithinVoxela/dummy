@@ -107,7 +107,7 @@ const TimePickerCmp = (props) => {
 
 TimePickerCmp.propTypes = {  
   cmpKey: PropTypes.string,
-  isAlreadyExists: PropTypes.bool,
+  isAlreadyExists: PropTypes.func,
   currentCamera: PropTypes.object,
   translate: PropTypes.func,
   handleTimeRemove: PropTypes.func,

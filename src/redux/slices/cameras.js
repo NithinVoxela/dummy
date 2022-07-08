@@ -52,6 +52,10 @@ const slice = createSlice({
     resetCameraDetails(state) {
       state.cameraDetails = {};
     },
+
+    resetSchedule(state) {
+      state.schedularList = [];
+    },
   },
 });
 
@@ -148,5 +152,10 @@ export function resetCameraDetails() {
     dispatch(slice.actions.resetCameraDetails());          
   };
 }
+
+export function resetSchedule() {
+  dispatch(slice.actions.resetSchedule()); 
+};
+
 
 

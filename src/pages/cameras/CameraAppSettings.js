@@ -17,7 +17,7 @@ import Iconify from '../../components/Iconify';
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getCameraDetails, getAppSchedule, updateCameraApp, updateAppSchedule } from '../../redux/slices/cameras';
+import { getCameraDetails, getAppSchedule, resetSchedule, updateCameraApp, updateAppSchedule } from '../../redux/slices/cameras';
 
 // sections
 import { AppGeneralSettingsTab, AppScheduleTab } from '../../sections/cameras';
@@ -60,6 +60,10 @@ const CameraAppSettings = () => {
     }
   };
 
+  const resetCameraAppSchedule = () => {
+    resetSchedule();
+  }
+
   const handleSaveApp = useCallback(async (payload) => {
     try {
       await dispatch(updateCameraApp(payload));
@@ -97,6 +101,12 @@ const CameraAppSettings = () => {
       setMlApp(app);
     }
   }, [cameraDetails]);
+
+  useEffect(() => {
+    return () => {      
+      resetCameraAppSchedule();     
+    };
+  }, []);
   
 
   const onCancel = () => {
@@ -138,6 +148,8 @@ const CameraAppSettings = () => {
           updateAppScheduleRequest={updateAppScheduleRequest}          
           appId={appId}
           schedularList={schedularList}
+          resetSchedule={resetCameraAppSchedule}
+          onCancel={onCancel}
         />
       ),
     },
