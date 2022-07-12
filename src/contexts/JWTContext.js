@@ -120,11 +120,15 @@ function AuthProvider({ children }) {
     setSession(accessToken);
     window.localStorage.setItem('user', JSON.stringify(user));
 
-    await registerDevice({
-      'imeiNumber': 'imeiNumber',
-      'fireBaseId': window.sessionStorage.getItem('messagingToken'),
-      'deviceType' : 'WEB'
-    });
+    const firebaseToken = window.sessionStorage.getItem('messagingToken');
+
+    if (firebaseToken) {
+      await registerDevice({
+        'imeiNumber': 'imeiNumber',
+        'fireBaseId': window.sessionStorage.getItem('messagingToken'),
+        'deviceType' : 'WEB'
+      });
+    }
 
     dispatch({
       type: 'LOGIN',
