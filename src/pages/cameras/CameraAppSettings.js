@@ -155,6 +155,8 @@ const CameraAppSettings = () => {
     },
   ];
 
+  const cameraName = cameraDetails?.name ? capitalCase(cameraDetails?.name) : '';
+
   return (
     <Page title={`${translate('app.alert-camera-details')} : ${translate('app.camera-apps-header-label')}`}>
       <Container maxWidth={themeStretch ? false : 'lg'}>
@@ -164,7 +166,7 @@ const CameraAppSettings = () => {
             { name: `${translate('app.dashboard-header-label')}`, href: PATH_DASHBOARD.root },
             { name: `${translate('app.alert-camera-details')}`, href: PATH_DASHBOARD.general.cameras },
             {
-              name: `${translate('app.camera-apps-header-label')}`,
+              name: `${cameraName}`,
               href: `${PATH_DASHBOARD.cameras.root}/apps/${cameraId}`,
             },
             { name: mlApp?.app?.name || '' },
