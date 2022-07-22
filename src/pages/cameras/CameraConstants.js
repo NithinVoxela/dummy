@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import Label from "../../components/Label";
 import Iconify from '../../components/Iconify';
+import { VideoPreview } from "../../sections/cameras";
 
 
 const openStreamUrl = (streamUrl) => {
@@ -11,6 +12,18 @@ export const CAMERA_TABLE_META = {
   size: 'medium',
   idProperty: 'publicId',
   columns: [{
+    text: '',
+    dataKey: 'latestAlertThumbnailUrl',
+    type: 'widget',    
+    renderWidget: (col, cellData, value) => (
+      <Box>
+        {value ? <VideoPreview name={cellData?.name} thumbnailUrl={value} mediaUrl={cellData?.latestAlertMediaUrl} />
+        :
+        <Iconify icon={'clarity:image-line'} width={48} height={48} color="#919EAB" />
+        }
+      </Box>
+    )
+  }, {
     text: 'app.camera-name-label',
     dataKey: 'name',
     type: 'widget',    

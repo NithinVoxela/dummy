@@ -20,7 +20,7 @@ import Label from '../../components/Label';
 import { useDispatch, useSelector } from '../../redux/store';
 import { getDashboardAlertLog, getDashboardCameraAlertLog, cleanDashboardAlertLogs } from '../../redux/slices/alerts';
 // sections
-
+import { VideoPreview } from "../../sections/cameras";
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
@@ -106,35 +106,42 @@ function CameraList() {
     
   };
 
-  const renderLatetAlerts = (item, prefix) => (
-      <Grid item xs={6} md={3} xl={2} key={`${prefix}-${item?.alertId}`}>
-        <Card sx={{ cursor: item.alertId ? "pointer" : "default" }} onClick={() => handleCardClick(item?.alertId)}>
-          <CardContent style={{ textAlign: "center", padding: 8 }}>
-            <Box style={{ display: "flex", justifyContent: "flex-end", minHeight: 25 }}>
-              <Typography component="div">
-                {item?.severity && (
-                  <Label
-                    variant="filled"
-                    color={getColor()}
-                    sx={{
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    {item?.severity}
-                  </Label>
-                )}
-              </Typography>
-            </Box>
-            <Box style={{ display: "flex", justifyContent: "center", minHeight: 25 }}>{renderIcon(item?.displayName?.toLowerCase())}</Box>
-            <Typography color="textSecondary" variant="button" gutterBottom>
-              {item?.cameraName}
-            </Typography>
-
-            <Typography color="textSecondary">
-              {getActivityName(item?.displayName)}
-            </Typography>
-          </CardContent>
-        </Card>
+  const renderLatetAlerts = (item, prefix, index) => (
+      <Grid item xs={6} md={3} xl={2} key={`${prefix}-${item?.cameraId}-${index}`}>
+        <VideoPreview 
+          name={item?.name}
+          thumbnailUrl={item?.thumbnailUrl}
+          mediaUrl={item?.mediaUrl}         
+          childCmp={(
+            <Card sx={{ cursor: item.alertId ? "pointer" : "default" }} onClick={() => handleCardClick(item?.alertId)}>
+              <CardContent style={{ textAlign: "center", padding: 8 }}>
+                <Box style={{ display: "flex", justifyContent: "flex-end", minHeight: 25 }}>
+                  <Typography component="div">
+                    {item?.severity && (
+                      <Label
+                        variant="filled"
+                        color={getColor()}
+                        sx={{
+                          textTransform: 'uppercase',
+                        }}
+                      >
+                        {item?.severity}
+                      </Label>
+                    )}
+                  </Typography>
+                </Box>
+                <Box style={{ display: "flex", justifyContent: "center", minHeight: 25 }}>{renderIcon(item?.displayName?.toLowerCase())}</Box>
+                <Typography color="textSecondary" variant="button" gutterBottom>
+                  {item?.cameraName}
+                </Typography>
+    
+                <Typography color="textSecondary">
+                  {getActivityName(item?.displayName)}
+                </Typography>
+              </CardContent>
+            </Card>
+          )}
+        />
       </Grid>
     );
 
@@ -156,7 +163,7 @@ function CameraList() {
         <Box style={{ marginTop: 8, width: '100%' }}>
           {dashboardAlerts?.data?.length > 0 ? (
             <Grid container spacing={3}>
-              {dashboardAlerts.data.map((item) => renderLatetAlerts(item, 'latest-alert'))}
+              {dashboardAlerts.data.map((item, index) => renderLatetAlerts(item, 'latest-alert', index))}
             </Grid>
           ) : (
             <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -174,7 +181,7 @@ function CameraList() {
         <Box style={{ marginTop: 8, width: '100%' }}>
           {dashboardCameraAlerts?.data?.length > 0 ? (
             <Grid container spacing={3}>
-              {dashboardCameraAlerts.data.map((item) => renderLatetAlerts(item, 'camera-alert'))}
+              {dashboardCameraAlerts.data.map((item, index) => renderLatetAlerts(item, 'camera-alert', index))}
             </Grid>
           ) : (
             <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

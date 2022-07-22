@@ -20,7 +20,8 @@ import { useDispatch, useSelector } from '../../redux/store';
 import { getCameraDetails, getAppSchedule, resetSchedule, updateCameraApp, updateAppSchedule } from '../../redux/slices/cameras';
 
 // sections
-import { AppGeneralSettingsTab, AppScheduleTab } from '../../sections/cameras';
+import { AppGeneralSettingsTab } from '../../sections/cameras';
+import AppScheduleTab from '../../sections/cameras/AppScheduleTab';
 
 // ----------------------------------------------------------------------
 
