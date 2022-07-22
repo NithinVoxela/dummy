@@ -166,6 +166,7 @@
     "labelRowsPerPage": "1ページあたりの行数:",
     "label-of": "の", 
     "activity-type": "活動タイプ",
-    "invalid-credentials": "無効な資格情報"
+    "invalid-credentials": "無効な資格情報",
+    "last-activity": "最後の活動"
   }
 }

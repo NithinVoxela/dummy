@@ -166,6 +166,7 @@
     "labelRowsPerPage": "Rows per page:",
     "label-of": "of",
     "activity-type": "Activity Type",
-    "invalid-credentials": "Invalid Credentials"
+    "invalid-credentials": "Invalid Credentials",
+    "last-activity": "Last Activity"
   }
 }

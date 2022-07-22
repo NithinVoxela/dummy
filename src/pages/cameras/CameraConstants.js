@@ -1,4 +1,5 @@
-import { Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import Label from "../../components/Label";
 import Iconify from '../../components/Iconify';
 
 
@@ -21,11 +22,11 @@ export const CAMERA_TABLE_META = {
       </Typography>
     )
   }, {
-    text: 'app.camera-type-label',
-    dataKey: 'cameraType'
+    text: 'app.camera-location-label',
+    dataKey: 'location'
   }, {
-    text: 'app.camera-installation-label',
-    dataKey: 'installationDate',
+    text: 'app.last-activity',
+    dataKey: 'lastActivityTime',
     type: 'date'
   }, {
     text: 'app.camera-status-label',
@@ -34,16 +35,22 @@ export const CAMERA_TABLE_META = {
     renderWidget: (col, cellData, value, translate) => (
       <>
         {value?.trim()?.length > 0 && cellData?.cameraStatus === "Online" ? (
-          <Button
-            color="primary"
-            size="small"            
-            onClick={() => openStreamUrl(value)}
+          <Label
+            variant='ghost'
+            color='success'
           >
-            {translate("app.camera-online-label", "Online")}
-            <Iconify icon={'ic:sharp-launch'} />
-          </Button>
+            <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={() => openStreamUrl(value)}>
+              {translate("app.camera-online-label", "Online")}
+              <Iconify icon={'ic:sharp-launch'} />
+            </Box>
+          </Label>          
         ) : (
-          <>{translate("app.camera-offline-label", "Online")}</>
+          <Label
+            variant='ghost'
+            color='error'
+          >
+            {translate("app.camera-offline-label", "Offline")}
+          </Label> 
         )}
       </>
     )
