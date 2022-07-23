@@ -37,6 +37,7 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
     location: Yup.string().required(translate('app.camera-location-required-label')),
     installationDate: Yup.date().required('Installation Date is required'),
     passPhrase: Yup.string().required(translate('app.camera-pass-required-label')),
+    minIdleTime: Yup.number().min(1, translate('app.camera-min-idle-validation-label')).max(9999999999, translate('app.camera-pass-required-label')).required(translate('app.camera-min-idle-required-label')),
   });
 
   const defaultValues = useMemo(
@@ -51,6 +52,7 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
       location: currentCamera?.location || '',
       passPhrase: currentCamera?.passPhrase || '',
       publicId: currentCamera?.publicId || '',
+      minIdleTime: currentCamera?.minIdleTime || 1440,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentCamera]
@@ -126,6 +128,7 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
 
               <RHFTextField name="location" label={translate('app.camera-location-label')} />
               <RHFTextField name="passPhrase" label={translate('app.camera-pass-label')} />
+              <RHFTextField name="minIdleTime" label={translate('app.camera-min-idle-time')} type="number" />
               {isEdit && (
                 <RHFTextField
                   name="publicId"
@@ -134,7 +137,7 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
                     readOnly: true,
                   }}
                 />
-              )}
+              )}              
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

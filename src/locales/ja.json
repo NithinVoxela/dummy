@@ -167,6 +167,9 @@
     "label-of": "の", 
     "activity-type": "活動タイプ",
     "invalid-credentials": "無効な資格情報",
-    "last-activity": "最後の活動"
+    "last-activity": "最後の活動",
+    "camera-min-idle-time": "非アクティブなアラート期間（分）",
+    "camera-min-idle-required-label": "非アクティブなアラート期間が必要です",
+    "camera-min-idle-validation-label": "最小値：1、最大値：9999999"
   }
 }
