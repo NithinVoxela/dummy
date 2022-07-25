@@ -40,6 +40,8 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
     minIdleTime: Yup.number().min(1, translate('app.camera-min-idle-validation-label')).max(9999999999, translate('app.camera-pass-required-label')).required(translate('app.camera-min-idle-required-label')),
   });
 
+  const tomiliseconds = (hrs, min, sec) => (hrs * 60 * 60 + min * 60 + sec) * 1000;
+
   const defaultValues = useMemo(
     () => ({
       name: currentCamera?.name || '',
@@ -52,7 +54,7 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
       location: currentCamera?.location || '',
       passPhrase: currentCamera?.passPhrase || '',
       publicId: currentCamera?.publicId || '',
-      minIdleTime: currentCamera?.minIdleTime || 1440,
+      minIdleTime: (currentCamera?.minIdleTime ? Math.floor(currentCamera?.minIdleTime / 60000) : 1440),
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentCamera]
@@ -82,6 +84,7 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
   const onSubmit = async (data) => {
     try {
       data.installationDate = format(data.installationDate, "yyyy-MM-dd'T'HH:mm:ss");
+      data.minIdleTime = tomiliseconds(0, data.minIdleTime, 0);
       if (isEdit) {
         data = {...currentCamera, ...data};
       }
@@ -128,7 +131,7 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
 
               <RHFTextField name="location" label={translate('app.camera-location-label')} />
               <RHFTextField name="passPhrase" label={translate('app.camera-pass-label')} />
-              <RHFTextField name="minIdleTime" label={translate('app.camera-min-idle-time')} type="number" />
+              <RHFTextField name="minIdleTime" label={translate('app.camera-min-idle-time')} type="number" pattern="[+-]?\d+(?:[.,]\d+)?" />
               {isEdit && (
                 <RHFTextField
                   name="publicId"
