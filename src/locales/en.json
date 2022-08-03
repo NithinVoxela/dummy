@@ -170,11 +170,12 @@
     "activity-type": "Activity Type",
     "invalid-credentials": "Invalid Credentials",
     "last-activity": "Last Activity",
-    "camera-min-idle-time": "Inactive alert duration (minutes)",
+    "camera-min-idle-time": "Inactive Alert Duration (minutes)",
     "camera-min-idle-required-label": "Inactive alert duration is required",
     "camera-min-idle-validation-label": "Min value: 1, Max value: 9999999",
     "camera-email-subscribers-label": "Email Subscribers",
     "camera-mobile-subscribers-label": "Mobile Subscribers",
-    "camera-desktop-subscribers-label": "Desktop Subscribers"
+    "camera-desktop-subscribers-label": "Desktop Subscribers",
+    "camera-enable-idle-alert": "Enable Inactive Alert"
   }
 }
