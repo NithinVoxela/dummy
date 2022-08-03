@@ -170,6 +170,11 @@
     "last-activity": "最後の活動",
     "camera-min-idle-time": "非アクティブなアラート期間（分）",
     "camera-min-idle-required-label": "非アクティブなアラート期間が必要です",
-    "camera-min-idle-validation-label": "最小値：1、最大値：9999999"
+    "camera-min-idle-validation-label": "最小値：1、最大値：9999999",
+    "camera-mobile-label": "モバイルアラート",
+    "camera-alert-subscribers-label": "アラートサブスクライバー",
+    "camera-email-subscribers-label": "メール購読者",
+    "camera-mobile-subscribers-label": "モバイル加入者",
+    "camera-desktop-subscribers-label": "デスクトップサブスクライバー"
   }
 }

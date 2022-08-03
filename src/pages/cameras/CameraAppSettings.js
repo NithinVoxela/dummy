@@ -18,6 +18,7 @@ import Iconify from '../../components/Iconify';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getCameraDetails, getAppSchedule, resetSchedule, updateCameraApp, updateAppSchedule } from '../../redux/slices/cameras';
+import { getUsers, resetUserList } from '../../redux/slices/users';
 
 // sections
 import { AppGeneralSettingsTab } from '../../sections/cameras';
@@ -36,6 +37,7 @@ const CameraAppSettings = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [mlApp, setMlApp] = useState(null);
   const { cameraDetails, schedularList } = useSelector((state) => state.cameras);
+  const { userList } = useSelector((state) => state.users);
 
   const [currentTab, setCurrentTab] = useState('general');
 
@@ -47,6 +49,16 @@ const CameraAppSettings = () => {
         variant: 'error',
       });
       throw new Error(err?.message);
+    }
+  }, [dispatch]);
+
+  const getUserList = useCallback(async () => {
+    try {
+      await dispatch(getUsers({ pageSize: 1000 }));
+    } catch (err) {
+      enqueueSnackbar(err?.message, {
+        variant: 'error',
+      });      
     }
   }, [dispatch]);
 
@@ -63,6 +75,10 @@ const CameraAppSettings = () => {
 
   const resetCameraAppSchedule = () => {
     resetSchedule();
+  }
+
+  const resetUsers = () => {
+    resetUserList();
   }
 
   const handleSaveApp = useCallback(async (payload) => {
@@ -93,6 +109,7 @@ const CameraAppSettings = () => {
   useEffect(() => {
     if (cameraId) {
       getCamera();
+      getUserList();
     }
   }, [cameraId]);
 
@@ -106,6 +123,7 @@ const CameraAppSettings = () => {
   useEffect(() => {
     return () => {      
       resetCameraAppSchedule();     
+      resetUsers();
     };
   }, []);
   
@@ -118,6 +136,7 @@ const CameraAppSettings = () => {
     setCurrentTab(value);
     if (value === 'general') {
       getCamera();
+      getUserList();
     } else if (value === 'schedule') {
       getCameraAppSchedule();
     }
@@ -135,7 +154,8 @@ const CameraAppSettings = () => {
           translate={translate}
           handleSave={handleSaveApp}
           onCancel={onCancel}
-          appId={appId}          
+          appId={appId} 
+          userList={userList}         
         />
       ),
     },

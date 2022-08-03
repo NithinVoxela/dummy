@@ -47,6 +47,8 @@
     "camera-low-label": "Low",
     "camera-notifications-header-label": "Notifications",
     "camera-desktop-label": "Desktop Alert",
+    "camera-mobile-label": "Mobile Alert",
+    "camera-alert-subscribers-label": "Alert Subscribers",
     "camera-email-label": "Email",
     "camera-email-address-label": "List of Email Addresses",
     "camera-save-label": "Save Changes",
@@ -170,6 +172,9 @@
     "last-activity": "Last Activity",
     "camera-min-idle-time": "Inactive alert duration (minutes)",
     "camera-min-idle-required-label": "Inactive alert duration is required",
-    "camera-min-idle-validation-label": "Min value: 1, Max value: 9999999"
+    "camera-min-idle-validation-label": "Min value: 1, Max value: 9999999",
+    "camera-email-subscribers-label": "Email Subscribers",
+    "camera-mobile-subscribers-label": "Mobile Subscribers",
+    "camera-desktop-subscribers-label": "Desktop Subscribers"
   }
 }

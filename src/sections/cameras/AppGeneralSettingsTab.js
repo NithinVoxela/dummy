@@ -1,17 +1,20 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 // @mui
 import {
+  Autocomplete,
   Box,
   Button,
   Card,
   Checkbox,
+  Chip,
   FormControl,
   FormControlLabel,
   FormLabel,
   Slider,
   Stack,
   Switch,
+  TextField,
   TextareaAutosize,
 } from '@mui/material';
 // components
@@ -29,18 +32,20 @@ const marks = [
   }
 ];
 
+
 AppGeneralSettingsTab.propTypes = {
   currentCamera: PropTypes.object,
   translate: PropTypes.func,
   handleSave: PropTypes.func,
   onCancel: PropTypes.func,
   appId: PropTypes.string,
+  userList: PropTypes.object
 };
 
 // ----------------------------------------------------------------------
 
 export default function AppGeneralSettingsTab(props) {
-  const { onCancel, translate, appId, currentCamera, handleSave } = props;
+  const { onCancel, translate, appId, currentCamera, handleSave, userList={} } = props;
 
   const [camera, setCamera] = useState({
     name: "",
@@ -58,11 +63,17 @@ export default function AppGeneralSettingsTab(props) {
   const [mlApp, setMlApp] = useState(null);
   const [sensitivity, setSensitivity] = useState(80);
   const [desktopAlert, setDesktopAlert] = useState(false);
+  const [mobileAlert, setMobileAlert] = useState(false);
   const [isPrivacyEnabled, setIsPrivacyEnabled] = useState(false);
   const [email, setEmail] = useState(false);
   const [emailList, setEmailList] = useState("");
   const [extraConfig, setExtraConfig] = useState("");
- 
+  const [desktopSubscribers, setDesktopSubscribers] = useState([]);
+  const [mobileSubscribers, setMobileSubscribers] = useState([]);
+  const [emailSubscribers, setEmailSubscribers] = useState([]);
+  const [subscribers, setSubscribers] = useState([]);
+
+
   useEffect(() => {
     setCamera(currentCamera);
     const app = currentCamera.appDtos?.find((item) => item?.id?.toString() === appId);
@@ -73,7 +84,7 @@ export default function AppGeneralSettingsTab(props) {
     setEmail(app?.config?.allowEmailAlert);
     setEmailList(app?.config?.notifyEmails);
     setExtraConfig(app?.config?.customJsonData);
-    setIsPrivacyEnabled(app?.config?.isPrivacyEnabled || false);
+    setIsPrivacyEnabled(app?.config?.isPrivacyEnabled || false);    
   }, [currentCamera]);
 
 
@@ -85,14 +96,15 @@ export default function AppGeneralSettingsTab(props) {
     setDesktopAlert(event.target.checked);
   };
 
+  const handleMobileAlertChange = (event) => {
+    setMobileAlert(event.target.checked);
+  };
+
   const handleEmailAlertChange = (event) => {
     setEmail(event.target.checked);
   };
 
-  const handleEmailListChange = (event) => {
-    setEmailList(event.target.value);
-  };
-
+ 
   const handleExtraConfigChange = (event) => {
     setExtraConfig(event.target.value);
   };
@@ -101,24 +113,96 @@ export default function AppGeneralSettingsTab(props) {
     setIsPrivacyEnabled(evt.target.checked);
   };
 
+  const handleDesktopSubscriber = (e, values) => setDesktopSubscribers(values);
+  const handleMobileSubscriber = (e, values) => setMobileSubscribers(values);
+  const handleEmailSubscriber = (e, values) => setEmailSubscribers(values);
+
+  useMemo(() => {
+    if (userList?.data?.length > 0) {
+      setSubscribers(userList?.data);
+      if (mlApp) {
+        setDesktopSubscribers(mlApp?.config?.deskTopSubscribers?.userDtos);
+        setMobileSubscribers(mlApp?.config?.mobileSubscribers?.userDtos);
+        setEmailSubscribers(mlApp?.config?.emailSubscribers?.userDtos);
+      }
+    }    
+  }, [userList, mlApp]);
+
+  const getSubscriberPayload = (list) => {
+    const payload = [];
+    if (list?.length > 0) {
+      list.map(item => payload.push({ id: item.id }));
+    }
+    return payload; 
+  } 
+
   const handleSubmit = () => {
     if (mlApp?.config) {
+
+      const desktop = {
+        "type" : "FIREBASE_DESKTOP",
+        "userDtos" : getSubscriberPayload(desktopSubscribers)
+      };
+
+      const mobile = {
+        "type" : "FIREBASE_MOBILE",
+        "userDtos" : getSubscriberPayload(mobileSubscribers)
+      };
+
+      const emailSubList = {
+        "type" : "EMAIL",
+        "userDtos" : getSubscriberPayload(emailSubscribers)
+      };
       const payload = {
         ...mlApp.config,
         cameraId: currentCamera?.publicId,
         appId: mlApp.app.id,
         sensitivity: sensitivity / 100,
         allowDesktopAlert: desktopAlert,
+        allowMobileAlert: mobileAlert,
         allowEmailAlert: email,
         notifyEmails: emailList,
         customJsonData: extraConfig,
-        isPrivacyEnabled
-      };
+        isPrivacyEnabled,
+        emailSubscribers: emailSubList,
+        mobileSubscribers: mobile,
+        deskTopSubscribers: desktop
+      };      
       handleSave(payload);      
     }
   };
 
+  const isDisabled = () => {
+    if ((desktopAlert && desktopSubscribers?.length === 0) || (mobileAlert && mobileSubscribers?.length === 0) || (email && emailSubscribers?.length === 0)) {
+      return true;
+    }
+    return false;
+  };
 
+
+  const renderAutoComplete = (handler, value, label, type) => (
+    <FormControlLabel
+      control={
+        <Autocomplete            
+          multiple            
+          size="small"
+          sx={{ minWidth: 300, ml: 1 }}
+          onChange={handler}
+          options={subscribers}
+          getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
+          renderTags={(value, getTagProps) => value.map((option, index) => (
+              <Chip {...getTagProps({ index })} key={`${type}-${option.id}`} size="small" label={`${option.firstName} ${option.lastName}`} />
+            ))
+          }
+          renderInput={(params) => <TextField label="" {...params} />}
+          value={value}
+        />
+      }
+      label={`${translate(label)}:`}
+      labelPlacement="start"
+      sx={{ ml: 5, mb: 2, justifyContent: "start" }}
+    />   
+  );
 
   return (
     <Card sx={{ padding: "24px 40px" }}>
@@ -169,24 +253,23 @@ export default function AppGeneralSettingsTab(props) {
             }
             label={translate('app.camera-desktop-label')}
           />
+          { desktopAlert && renderAutoComplete(handleDesktopSubscriber, desktopSubscribers, 'app.camera-desktop-subscribers-label', 'desktop') }
+           <FormControlLabel
+            control={
+              <Checkbox
+                checked={mobileAlert}
+                onChange={handleMobileAlertChange}
+                name="desktop"               
+              />
+            }
+            label={translate('app.camera-mobile-label')}
+          />
+          { mobileAlert && renderAutoComplete(handleMobileSubscriber, mobileSubscribers, 'app.camera-mobile-subscribers-label', 'mobile') }
           <FormControlLabel
             control={<Checkbox checked={email} onChange={handleEmailAlertChange} name="email" />}
             label={translate('app.camera-email-label')}
           />
-          <FormControlLabel
-            control={
-              <TextareaAutosize
-                aria-label="email-list"
-                minRows={3}
-                value={emailList}
-                style={{ minHeight: 30, marginLeft: 8, minWidth: 350 }}
-                disabled={!email}
-                onChange={handleEmailListChange}
-              />
-            }
-            label={`${translate('app.camera-email-address-label')}:`}
-            labelPlacement="start"
-          />
+          { email && renderAutoComplete(handleEmailSubscriber, emailSubscribers, 'app.camera-email-subscribers-label', 'email') }          
         </FormControl>
       </Box>
       <Box sx={{ mt: 3 }}>
@@ -208,7 +291,7 @@ export default function AppGeneralSettingsTab(props) {
           <Button onClick={onCancel} sx={{ mr: 1 }}>
             {translate('app.camera-cancel-label')}
           </Button>
-          <Button onClick={handleSubmit} variant="contained">
+          <Button disabled={isDisabled()} onClick={() => handleSubmit()} variant="contained">
             {translate('app.camera-save-label')}
           </Button>
         </Box>
