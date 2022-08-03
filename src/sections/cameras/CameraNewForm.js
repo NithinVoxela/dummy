@@ -12,7 +12,7 @@ import { Box, Button, Card, Grid, Stack } from '@mui/material';
 
 
 // components
-import { FormProvider, RHFSelect, RHFTextField, RHFDateField } from '../../components/hook-form';
+import { FormProvider, RHFSelect, RHFTextField, RHFDateField, RHFCheckbox } from '../../components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -55,6 +55,7 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
       passPhrase: currentCamera?.passPhrase || '',
       publicId: currentCamera?.publicId || '',
       minIdleTime: (currentCamera?.minIdleTime ? Math.floor(currentCamera?.minIdleTime / 60000) : 1440),
+      enableIdleAlert: currentCamera?.enableIdleAlert || false
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentCamera]
@@ -69,7 +70,10 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
     reset,
     handleSubmit,
     formState: { isSubmitting },
+    watch
   } = methods;
+
+  const watchEnableIdleAlert = watch("enableIdleAlert", defaultValues?.enableIdleAlert);
 
   useEffect(() => {
     if (isEdit && currentCamera) {
@@ -83,7 +87,7 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
 
   const onSubmit = async (data) => {
     try {
-      data.installationDate = format(data.installationDate, "yyyy-MM-dd'T'HH:mm:ss");
+      data.installationDate = data.enableIdleAlert ? format(data.installationDate, "yyyy-MM-dd'T'HH:mm:ss") : null;
       data.minIdleTime = tomiliseconds(0, data.minIdleTime, 0);
       if (isEdit) {
         data = {...currentCamera, ...data};
@@ -130,8 +134,7 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
               <RHFTextField name="streamUrl" label={translate('app.camera-stream-label')} />
 
               <RHFTextField name="location" label={translate('app.camera-location-label')} />
-              <RHFTextField name="passPhrase" label={translate('app.camera-pass-label')} />
-              <RHFTextField name="minIdleTime" label={translate('app.camera-min-idle-time')} type="number" pattern="[+-]?\d+(?:[.,]\d+)?" />
+              <RHFTextField name="passPhrase" label={translate('app.camera-pass-label')} />              
               {isEdit && (
                 <RHFTextField
                   name="publicId"
@@ -140,7 +143,9 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
                     readOnly: true,
                   }}
                 />
-              )}              
+              )} 
+              <RHFCheckbox name="enableIdleAlert" label={translate('app.camera-enable-idle-alert')} />
+              { watchEnableIdleAlert && <RHFTextField name="minIdleTime" label={translate('app.camera-min-idle-time')} type="number" pattern="[+-]?\d+(?:[.,]\d+)?" /> }                                        
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
