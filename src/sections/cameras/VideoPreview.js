@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useState } from "react";
 import { Box, Paper, Popper} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import ReactPlayer from 'react-player';
 import Image from '../../components/Image';
 
@@ -15,6 +16,7 @@ VideoPreview.propTypes = {
 export default function VideoPreview(props) {
   const { name, thumbnailUrl, mediaUrl, childCmp } = props;
   const [anchorEl, setAnchorEl] = useState(null);
+  const theme = useTheme();
 
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -47,7 +49,9 @@ export default function VideoPreview(props) {
       <Popper
         id="mouse-over-popover"
         sx={{
-          pointerEvents: 'none',           
+          pointerEvents: 'none',   
+          boxShadow: theme.customShadows.dialog,
+          borderRadius: Number(theme.shape.borderRadius) * 1.5,          
         }}
         open={open}
         anchorEl={anchorEl}
