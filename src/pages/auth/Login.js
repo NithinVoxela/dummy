@@ -71,7 +71,7 @@ export default function Login() {
 
         {mdUp && (
           <SectionStyle>
-            <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
+            <Typography variant="h4" sx={{ px: 5, mt: 10, mb: 5 }}>
               {translate("app.login-welcome-label")}
             </Typography>
             <Image
