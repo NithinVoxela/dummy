@@ -115,7 +115,7 @@ const TableWidget = (props) => {
   const getCellData = (col, cellData, value) => {
     switch (col.type) {
       case 'date':        
-        if(!value) {
+        if(!value || value === 0) {
           return '';
         } 
         
