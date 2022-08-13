@@ -121,9 +121,9 @@ export default function AppGeneralSettingsTab(props) {
     if (userList?.data?.length > 0) {
       setSubscribers(userList?.data);
       if (mlApp) {
-        setDesktopSubscribers(mlApp?.config?.deskTopSubscribers?.userDtos);
-        setMobileSubscribers(mlApp?.config?.mobileSubscribers?.userDtos);
-        setEmailSubscribers(mlApp?.config?.emailSubscribers?.userDtos);
+        setDesktopSubscribers(mlApp?.config?.deskTopSubscribers?.userDtos || []);
+        setMobileSubscribers(mlApp?.config?.mobileSubscribers?.userDtos || []);
+        setEmailSubscribers(mlApp?.config?.emailSubscribers?.userDtos || []);
       }
     }    
   }, [userList, mlApp]);
@@ -188,7 +188,7 @@ export default function AppGeneralSettingsTab(props) {
           size="small"
           sx={{ minWidth: 300, ml: 1 }}
           onChange={handler}
-          options={subscribers}
+          options={subscribers || []}
           getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
           renderTags={(value, getTagProps) => value.map((option, index) => (
               <Chip {...getTagProps({ index })} key={`${type}-${option.id}`} size="small" label={`${option.firstName} ${option.lastName}`} />
