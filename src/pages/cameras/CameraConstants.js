@@ -43,11 +43,9 @@ export const CAMERA_TABLE_META = {
     dataKey: 'lastActivityTime',
     type: 'widget',
     renderWidget: (col, cellData, value) => (
-      <Typography
-        variant='subtitle2'        
-      >
+      <>
         {value && value > 0 ? fDateTimeSuffix(convertUTCDateToLocalDateWithTimzone(new Date(value))) : ''}
-      </Typography>
+      </>
     )
   }, {
     text: 'app.camera-status-label',
