@@ -8,13 +8,15 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { format, isAfter, isValid } from 'date-fns';
 // @types
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { NAVBAR } from '../../config';
 // components
 import Iconify from '../../components/Iconify';
 import Scrollbar from '../../components/Scrollbar';
 import { RHFRadioGroup, RHFSelect } from '../../components/hook-form';
 import { fDate } from '../../utils/formatTime';
+
+const EVENT_TYPES = ['motion', 'fall', 'person', 'wakeup'];
 
 AlertFilterSidebar.propTypes = {
   isOpen: PropTypes.bool,
@@ -51,6 +53,9 @@ export default function AlertFilterSidebar({
   const [endDate, setEndDate] = useState(null);
   const [cameraText, setCameraText] = useState("");
   const [severityValue, setSeverityValue] = useState(null);
+  const [eventText, setEventText] = useState("");
+
+  const eventTypes = useMemo(() => EVENT_TYPES.map(item => ({ id: item, label:translate(`app.app-name-${item.toLowerCase()}`) })), [isOpen]);
 
   const handleCameraChange = (e) => {
     const filteredValue = e.target.value;
@@ -60,6 +65,18 @@ export default function AlertFilterSidebar({
       setCameraText(filteredValue);    
     } else {
       delete newParams.cameraName;
+    }
+    applyFilter(newParams);
+  };
+
+  const handleEventTypeChange = (e) => {
+    const filteredValue = e.target.value;
+    const newParams = { ...params };
+    if (filteredValue?.length > 0) {
+      newParams.eventType = eventTypes.find(item => item.label === filteredValue)?.id;  
+      setEventText(filteredValue);    
+    } else {
+      delete newParams.eventType;
     }
     applyFilter(newParams);
   };
@@ -81,6 +98,7 @@ export default function AlertFilterSidebar({
     setSeverityValue(null);
     setStartDate(null);
     setEndDate(null);
+    setEventText("");
     applyFilter({});
   };
 
@@ -138,6 +156,7 @@ export default function AlertFilterSidebar({
 
   useEffect(() => {
     setCameraText("");
+    setEventText("");
     setSeverityValue(null);
     setStartDate(null);
     setEndDate(null);
@@ -155,9 +174,11 @@ export default function AlertFilterSidebar({
     if (params?.endDate) {
       setEndDate(new Date(params.endDate));
     }
-  }, [params]);
-
-
+    if (params?.eventType) {
+      const type = eventTypes.find((item) => item.id === params.eventType);
+      setEventText(type?.label);
+    }
+  }, [params]);  
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -200,6 +221,24 @@ export default function AlertFilterSidebar({
                 {cameraList.map((option) => (
                   <option key={option.publicId} value={option.name}>
                     {option.name}
+                  </option>
+                ))}
+              </RHFSelect>
+            </Stack>
+
+            <Stack spacing={1}>
+              <Typography variant="subtitle1">{translate('app.event-type-label')}</Typography>
+              <RHFSelect
+                name="eventType"
+                label=""                
+                size="small"
+                onChange={handleEventTypeChange}
+                value={eventText}
+              >
+                <option value="" />
+                {eventTypes.map((option) => (
+                  <option key={option.id} value={option.label}>
+                    {option.label}
                   </option>
                 ))}
               </RHFSelect>

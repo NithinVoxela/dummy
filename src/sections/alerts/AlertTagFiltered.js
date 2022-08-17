@@ -59,7 +59,7 @@ export default function AlertTagFiltered({
   sortDirection
 }) {
 
-  const { cameraName, startDate, endDate, severity } = filters;
+  const { cameraName, startDate, endDate, severity, eventType } = filters;
 
   const applyFilter = (newParams) => {
     setParams(newParams);
@@ -84,6 +84,21 @@ export default function AlertTagFiltered({
               label={cameraName}
               size="small"
               onDelete={() => onRemoveParam("cameraName")}
+              sx={{ m: 0.5 }}
+            />            
+          </Stack>
+        </WrapperStyle>
+      )}
+
+      {filters?.eventType?.length > 0 && (
+        <WrapperStyle>
+          <LabelStyle>{translate('app.event-type-label')}:</LabelStyle>
+          <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>            
+            <Chip
+              key={eventType}
+              label={translate(`app.app-name-${eventType}`)}
+              size="small"
+              onDelete={() => onRemoveParam("eventType")}
               sx={{ m: 0.5 }}
             />            
           </Stack>

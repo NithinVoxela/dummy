@@ -176,6 +176,7 @@
     "camera-email-subscribers-label": "Email Subscribers",
     "camera-mobile-subscribers-label": "Mobile Subscribers",
     "camera-desktop-subscribers-label": "Desktop Subscribers",
-    "camera-enable-idle-alert": "Enable Inactive Alert"
+    "camera-enable-idle-alert": "Enable Inactive Alert",
+    "event-type-label": "Event Type"
   }
 }

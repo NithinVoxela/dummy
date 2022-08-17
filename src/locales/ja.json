@@ -176,6 +176,7 @@
     "camera-email-subscribers-label": "メール購読者",
     "camera-mobile-subscribers-label": "モバイル加入者",
     "camera-desktop-subscribers-label": "デスクトップサブスクライバー",
-    "camera-enable-idle-alert": "非アクティブ アラートを有効にする"
+    "camera-enable-idle-alert": "非アクティブ アラートを有効にする",
+    "event-type-label": "イベントタイプ"
   }
 }
