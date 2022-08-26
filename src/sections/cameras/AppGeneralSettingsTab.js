@@ -16,7 +16,10 @@ import {
   Switch,
   TextField,
   TextareaAutosize,
+  RadioGroup,
+  Radio,
 } from '@mui/material';
+import { RHFRadioGroup } from '../../components/hook-form';
 // components
 
 // ----------------------------------------------------------------------
@@ -58,7 +61,8 @@ export default function AppGeneralSettingsTab(props) {
     location: "",
     installationDate: "",
     appDtos: [],
-    isPrivacyEnabled: false
+    isPrivacyEnabled: false,
+    severity: ""
   });
   const [mlApp, setMlApp] = useState(null);
   const [sensitivity, setSensitivity] = useState(80);
@@ -72,6 +76,13 @@ export default function AppGeneralSettingsTab(props) {
   const [mobileSubscribers, setMobileSubscribers] = useState([]);
   const [emailSubscribers, setEmailSubscribers] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
+  const [severityValue, setSeverityValue] = useState('LOW');
+
+  const SEVERITY = [
+    { value: 'High', label: translate('app.alert-high-label') },
+    { value: 'Medium', label: translate('app.alert-medium-label') },
+    { value: 'Low', label: translate('app.alert-low-label') },
+  ];
 
 
   useEffect(() => {
@@ -85,6 +96,7 @@ export default function AppGeneralSettingsTab(props) {
     setEmailList(app?.config?.notifyEmails);
     setExtraConfig(app?.config?.customJsonData);
     setIsPrivacyEnabled(app?.config?.isPrivacyEnabled || false);    
+    setSeverityValue(SEVERITY.find((item) => item.value === app?.config?.severity));
   }, [currentCamera]);
 
 
@@ -116,6 +128,10 @@ export default function AppGeneralSettingsTab(props) {
   const handleDesktopSubscriber = (e, values) => setDesktopSubscribers(values);
   const handleMobileSubscriber = (e, values) => setMobileSubscribers(values);
   const handleEmailSubscriber = (e, values) => setEmailSubscribers(values);
+
+  const handleRadioChange = (e, value) => {
+    setSeverityValue(value);
+  };
 
   useMemo(() => {
     if (userList?.data?.length > 0) {
@@ -166,7 +182,8 @@ export default function AppGeneralSettingsTab(props) {
         isPrivacyEnabled,
         emailSubscribers: emailSubList,
         mobileSubscribers: mobile,
-        deskTopSubscribers: desktop
+        deskTopSubscribers: desktop,
+        severity: severityValue
       };      
       handleSave(payload);      
     }
@@ -237,6 +254,22 @@ export default function AppGeneralSettingsTab(props) {
             }
           />
         </FormControl>
+      </Box>
+      <Box sx={{ mt: 3 }}>
+      <FormControl component="fieldset">
+          <FormLabel component="label" color="primary">
+            {translate('app.alerts-severity-label')}:{' '}
+          </FormLabel>
+          <RadioGroup
+            row
+            aria-labelledby="demo-row-radio-buttons-group-label"
+            name="row-radio-buttons-group"
+            onChange={handleRadioChange}
+            value={severityValue}
+          >
+            {SEVERITY.map((item) => <FormControlLabel key={item.value} value={item.value} control={<Radio />} label={item.label} />)}            
+          </RadioGroup>          
+        </FormControl>        
       </Box>
       <Box sx={{ mt: 3 }}>
         <FormControl component="fieldset">
