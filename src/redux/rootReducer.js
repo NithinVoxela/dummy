@@ -5,6 +5,7 @@ import camerasReducer from './slices/cameras';
 import alertsReducer from './slices/alerts';
 import authReducer from './slices/auth';
 import userReducer from './slices/users';
+import analyticsReducer from './slices/analytics';
 
 // ----------------------------------------------------------------------
 
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
   cameras: camerasReducer,
   alerts: alertsReducer,
   auth: authReducer,
-  users: userReducer
+  users: userReducer,
+  analytics: analyticsReducer
 });
 
 export { rootPersistConfig, rootReducer };

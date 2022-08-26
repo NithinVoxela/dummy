@@ -177,6 +177,17 @@
     "camera-mobile-subscribers-label": "モバイル加入者",
     "camera-desktop-subscribers-label": "デスクトップサブスクライバー",
     "camera-enable-idle-alert": "非アクティブ アラートを有効にする",
-    "event-type-label": "イベントタイプ"
+    "event-type-label": "イベントタイプ",
+    "analytics-label": "分析",
+    "total-active-devices-label": "アクティブなカメラの合計",
+    "total-offline-devices": "オフラインカメラの総数",
+    "storage-utilization": "ストレージ使用率",
+    "sort-by-lable": "並び替え",
+    "alert-generated-by-time": "アラート総数",
+    "alert-time-hour-option": "現在の時間",
+    "alert-time-day-option": "過去 1 日",
+    "alert-time-week-option": "過去 7 日間",
+    "alert-time-month-option": "過去 30 日間",
+    "chart-title-camera-total": "総アラート対カメラ"
   }
 }

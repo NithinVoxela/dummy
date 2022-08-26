@@ -177,6 +177,17 @@
     "camera-mobile-subscribers-label": "Mobile Subscribers",
     "camera-desktop-subscribers-label": "Desktop Subscribers",
     "camera-enable-idle-alert": "Enable Inactive Alert",
-    "event-type-label": "Event Type"
+    "event-type-label": "Event Type",
+    "analytics-label": "Analytics",
+    "total-active-devices-label": "Total Active Cameras",
+    "total-offline-devices": "Total Offline Cameras",
+    "storage-utilization": "Storage Utilization",
+    "sort-by-lable": "Sort By",
+    "alert-generated-by-time": "Total Alerts",
+    "alert-time-hour-option": "Current Hour",
+    "alert-time-day-option": "Last 1 Day",
+    "alert-time-week-option": "Last 7 Days",
+    "alert-time-month-option": "Last 30 Days",
+    "chart-title-camera-total": "Total Alerts vs Cameras"
   }
 }

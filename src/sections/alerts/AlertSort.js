@@ -58,7 +58,7 @@ export default function AlertSort(props) {
         onClick={(event) => handleOpen(event.currentTarget)}
         endIcon={<Iconify icon={open ? 'eva:chevron-up-fill' : 'eva:chevron-down-fill'} />}
       >
-        Sort By:&nbsp;
+        {translate("app.sort-by-lable")}: &nbsp;
         <Typography component="span" variant="subtitle2" sx={{ color: 'text.secondary' }}>
           {renderLabel(sortBy)}
         </Typography>

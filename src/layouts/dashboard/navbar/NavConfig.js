@@ -19,9 +19,10 @@ const ICONS = {
   banking: getIcon('ic_banking'),
   calendar: getIcon('ic_calendar'),
   ecommerce: getIcon('ic_ecommerce'),
-  analytics: <WarningAmberOutlinedIcon />,
+  alerts: <WarningAmberOutlinedIcon />,
   dashboard: getIcon('ic_dashboard'),
   booking: getIcon('ic_booking'),
+  analytics: getIcon('ic_analytics'),
 };
 
 const navConfig = [
@@ -31,7 +32,8 @@ const navConfig = [
     subheader: 'general',
     items: [                       
       { title: 'dashboard', path: PATH_DASHBOARD.general.dashboard, icon: ICONS.dashboard },      
-      { title: 'alerts', path: PATH_DASHBOARD.general.alerts, icon: ICONS.analytics },
+      { title: 'analytics', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
+      { title: 'alerts', path: PATH_DASHBOARD.general.alerts, icon: ICONS.alerts },      
     ],
   },
 

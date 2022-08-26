@@ -67,6 +67,7 @@ export default function Router() {
       children: [
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         { path: 'dashboard', element: <Dashboard /> },
+        { path: 'analytics', element: <Analytics /> },
                         
         
         {
@@ -131,6 +132,7 @@ const CameraAppSettings = Loadable(lazy(() => import('../pages/cameras/CameraApp
 const AlertList = Loadable(lazy(() => import('../pages/alerts/AlertList')));
 const AlertDetail = Loadable(lazy(() => import('../pages/alerts/AlertDetail')));
 const Dashboard = Loadable(lazy(() => import('../pages/cortexaDashboard/Dashboard')));
+const Analytics = Loadable(lazy(() => import('../pages/analytics/Analytics')));
 // Main
 
 const Maintenance = Loadable(lazy(() => import('../pages/Maintenance')));

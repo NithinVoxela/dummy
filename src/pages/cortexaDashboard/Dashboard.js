@@ -25,7 +25,7 @@ import { VideoPreview } from "../../sections/cameras";
 
 // ----------------------------------------------------------------------
 
-function CameraList() {
+function Dashboard() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -196,4 +196,4 @@ function CameraList() {
   );
 }
 
-export default CameraList;
+export default Dashboard;
