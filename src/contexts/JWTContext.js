@@ -118,6 +118,7 @@ function AuthProvider({ children }) {
     const user = data;
 
     setSession(accessToken);
+    user.displayName = `${data?.firstName} ${data?.lastName}`;
     window.localStorage.setItem('user', JSON.stringify(user));
 
     const firebaseToken = window.sessionStorage.getItem('messagingToken');

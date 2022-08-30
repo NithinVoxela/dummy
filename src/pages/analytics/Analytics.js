@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
 // @mui
-import { Container, Grid, Typography, TextField } from '@mui/material';
+import { Container, Grid, Typography, TextField, Card, Box } from '@mui/material';
 // routes
 // hooks
 import useSettings from '../../hooks/useSettings';
@@ -11,7 +11,7 @@ import useLocales from '../../hooks/useLocales';
 import Page from '../../components/Page';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getAlertsStats, getCameraStats, getCameraSeverityStats, resetAnalytics } from '../../redux/slices/analytics';
+import { getAlertsStats, getCameraStats, getCameraSeverityStats, resetAnalytics, getS3Stats } from '../../redux/slices/analytics';
 // sections
 import { AnalyticsCameraPieChart, AppAlertsPieChart, AppWidgetSummary } from "../../sections/analytics";
 // ----------------------------------------------------------------------
@@ -25,7 +25,7 @@ function Analytics() {
   const dispatch = useDispatch();  
   const { enqueueSnackbar } = useSnackbar();  
   const { translate } = useLocales();
-  const { cameraStats, severityStats, alertStats } = useSelector((state) => state.analytics);
+  const { cameraStats, severityStats, alertStats, bucketSize } = useSelector((state) => state.analytics);
 
   const [seriesData, setSeriesData] = useState("month");
   const [activeCameraCount, setActiveCameraCount] = useState(0);
@@ -79,6 +79,30 @@ function Analytics() {
     }
   }, [dispatch]);
 
+  const getAlertS3StatDetails = useCallback(async (params={}) => {
+    try {         
+      await dispatch(getS3Stats(params));      
+    } catch (err) {
+      enqueueSnackbar(err?.message, {
+        variant: 'error',
+      });
+      throw new Error(err?.message);
+    }
+  }, [dispatch]);
+
+  const formatBytes = (bytes, decimals = 2) => {
+    if (!bytes || bytes === 0) return '0';
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    // eslint-disable-next-line no-restricted-properties
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))  } ${  sizes[i]}`;
+};
+
   useEffect(() => {
     if (cameraStats?.length > 0) {
       setActiveCameraCount(cameraStats.find(item => item.status === "ONLINE")?.groupCount);
@@ -90,6 +114,7 @@ function Analytics() {
     getCameraStatDetails();
     getSeverityStatDetails();
     getAlertStatDetails();
+    getAlertS3StatDetails();
     return () => {      
       resetAnalytics();     
     };
@@ -156,10 +181,12 @@ function Analytics() {
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <AppWidgetSummary
-              title={`${translate('app.storage-utilization')} (GB)`}             
-              total={26}              
-            />
+            <Card sx={{ display: 'flex', alignItems: 'center', p: 3 }}>
+              <Box sx={{ flexGrow: 1 }}>
+                <Typography variant="subtitle2">{translate('app.storage-utilization')}</Typography>
+                <Typography variant="h3">{formatBytes(bucketSize?.size)}</Typography>
+              </Box>      
+            </Card>            
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>

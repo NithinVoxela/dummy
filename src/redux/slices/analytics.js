@@ -13,7 +13,8 @@ const initialState = {
   },  
   cameraStats: {},
   severityStats: {},
-  alertStats: {}
+  alertStats: {},
+  bucketSize: {}
 };
 
 const slice = createSlice({
@@ -46,10 +47,18 @@ const slice = createSlice({
       state.alertStats = data;
     }, 
 
+    getS3Stats(state, action) {
+      const { data } = action.payload;      
+      state.bucketSize = {
+        size: 10000000
+      };
+    }, 
+
     resetAnalytics(state) {
       state.cameraStats = {};
       state.severityStats = {};
       state.alertStats = {};
+      state.bucketSize = {};
     },
   },
 });
@@ -85,6 +94,17 @@ export function getAlertsStats(params = {}) {
     try {      
       const response = await axios.get(`alert/view/by-camera/dashboard`, {params});
       dispatch(slice.actions.getAlertsStats(response));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getS3Stats(params = {}) {
+  return async () => {    
+    try {      
+      const response = await axios.get(`aws/content-size`, {params});
+      dispatch(slice.actions.getS3Stats(response));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

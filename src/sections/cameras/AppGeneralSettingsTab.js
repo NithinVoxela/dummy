@@ -93,10 +93,11 @@ export default function AppGeneralSettingsTab(props) {
     setSensitivity(app?.config?.sensitivity ? parseInt(app.config.sensitivity * 100) : 0);
     setDesktopAlert(app?.config?.allowDesktopAlert);
     setEmail(app?.config?.allowEmailAlert);
+    setMobileAlert(app?.config?.allowMobileAlert);
     setEmailList(app?.config?.notifyEmails);
     setExtraConfig(app?.config?.customJsonData);
-    setIsPrivacyEnabled(app?.config?.isPrivacyEnabled || false);    
-    setSeverityValue(SEVERITY.find((item) => item.value === app?.config?.severity));
+    setIsPrivacyEnabled(app?.config?.isPrivacyEnabled || false);        
+    setSeverityValue(app?.config?.severity);
   }, [currentCamera]);
 
 

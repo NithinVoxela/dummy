@@ -39,11 +39,12 @@ function Dashboard() {
   };
 
   const getColor = (severity) => {
-    if (severity === "High") {
+    const value = severity?.toLowerCase();
+    if (value === "high") {
       return "error";
     }
     
-    if (severity === "Medium") {
+    if (value === "medium") {
       return "warning";
     } 
     return "info";    
@@ -120,7 +121,7 @@ function Dashboard() {
                     {item?.severity && (
                       <Label
                         variant="filled"
-                        color={getColor()}
+                        color={getColor(item?.severity)}
                         sx={{
                           textTransform: 'uppercase',
                         }}
