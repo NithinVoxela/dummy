@@ -76,7 +76,7 @@ export default function AppGeneralSettingsTab(props) {
   const [mobileSubscribers, setMobileSubscribers] = useState([]);
   const [emailSubscribers, setEmailSubscribers] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
-  const [severityValue, setSeverityValue] = useState('LOW');
+  const [severityValue, setSeverityValue] = useState('Low');
 
   const SEVERITY = [
     { value: 'High', label: translate('app.alert-high-label') },
@@ -97,7 +97,7 @@ export default function AppGeneralSettingsTab(props) {
     setEmailList(app?.config?.notifyEmails);
     setExtraConfig(app?.config?.customJsonData);
     setIsPrivacyEnabled(app?.config?.isPrivacyEnabled || false);        
-    setSeverityValue(app?.config?.severity);
+    setSeverityValue(app?.config?.severity || "Low");
   }, [currentCamera]);
 
 

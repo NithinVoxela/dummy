@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import Label from "../../components/Label";
 import Iconify from '../../components/Iconify';
 import { VideoPreview } from "../../sections/cameras";
-import { convertUTCDateToLocalDateWithTimzone, fDateTimeSuffix } from "../../utils/formatTime";
+import { epochToLocalDateTime, fDateTimeSuffix } from "../../utils/formatTime";
 
 
 const openStreamUrl = (streamUrl) => {
@@ -44,7 +44,7 @@ export const CAMERA_TABLE_META = {
     type: 'widget',
     renderWidget: (col, cellData, value) => (
       <>
-        {value && value > 0 ? fDateTimeSuffix(convertUTCDateToLocalDateWithTimzone(new Date(value))) : ''}
+        {value && value > 0 ? epochToLocalDateTime(new Date(value)) : ''}
       </>
     )
   }, {
