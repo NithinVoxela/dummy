@@ -51,13 +51,17 @@ export function fDateWithTZ(date, timeZone) {
   return formatInTimeZone(new Date(date), timeZone, 'do MMM yyyy, h:mm a')
 }
 
-export function epochToLocalDateTime(date) {
-  const newDate = new Date(date);  
-
-  const offset = date.getTimezoneOffset() / 60;
-  const hours = date.getHours();
-
-  newDate.setHours(hours - offset);
-
-  return format(newDate, 'do MMM yyyy, h:mm a');   
+export function epochToLocalDateTime(newDate) {
+  let formattedDate = null;  
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user?.timezone) {
+      formattedDate = fDateWithTZ(newDate, user?.timezone);        
+    } else {
+      formattedDate = fDateTimeTZSuffix(newDate);
+    }
+  } catch (err) {
+    formattedDate =  format(newDate, 'do MMM yyyy, h:mm a');  
+  }
+  return formattedDate;  
 }
