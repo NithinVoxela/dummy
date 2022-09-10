@@ -11,6 +11,9 @@ import 'simplebar/src/simplebar.css';
 import 'react-image-lightbox/style.css';
 
 
+import './index.css';
+
+
 
 
 // slick-carousel

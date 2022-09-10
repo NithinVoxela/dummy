@@ -21,7 +21,6 @@ import {
 } from '@mui/material';
 import { RHFRadioGroup } from '../../components/hook-form';
 // components
-
 // ----------------------------------------------------------------------
 
 const marks = [
@@ -306,7 +305,7 @@ export default function AppGeneralSettingsTab(props) {
           { email && renderAutoComplete(handleEmailSubscriber, emailSubscribers, 'app.camera-email-subscribers-label', 'email') }          
         </FormControl>
       </Box>
-      <Box sx={{ mt: 3 }}>
+      <Box sx={{ mt: 3, display: 'flex', alignItems: 'center' }}>
         <FormControl component="fieldset">
           <FormLabel component="label" color="primary">
             {translate('app.camera-extra-config-label')}:{' '}
@@ -318,7 +317,7 @@ export default function AppGeneralSettingsTab(props) {
             style={{ minHeight: 30, minWidth: 350, marginTop: 8 }}
             onChange={handleExtraConfigChange}
           />
-        </FormControl>
+        </FormControl>       
       </Box>
       <Stack spacing={3} alignItems="flex-end">
         <Box sx={{ display: 'flex' }}>

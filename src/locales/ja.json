@@ -188,6 +188,7 @@
     "alert-time-day-option": "過去 1 日",
     "alert-time-week-option": "過去 7 日間",
     "alert-time-month-option": "過去 30 日間",
-    "chart-title-camera-total": "総アラート対カメラ"
+    "chart-title-camera-total": "総アラート対カメラ",
+    "camera-region-of-intrest": "関心領域"
   }
 }

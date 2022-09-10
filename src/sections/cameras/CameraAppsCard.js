@@ -31,7 +31,7 @@ const CameraAppsCard = (props) => {
 
   const renderAppCard = (item) => (
     <Grid item md={12} xs={12} key={`${item.app.id}`}>
-      <Card>
+      <Card sx={{ minHeight: 165 }}>
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
             {item.app.name}

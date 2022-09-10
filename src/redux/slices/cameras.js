@@ -12,7 +12,8 @@ const initialState = {
     data: []
   },
   cameraDetails: {},
-  schedularList: []
+  schedularList: [],
+  cameraLatestFrame: null
 };
 
 const slice = createSlice({
@@ -48,6 +49,11 @@ const slice = createSlice({
       const { data } = action.payload;      
       state.schedularList = data;
     }, 
+
+    getCamerasLatestFrame(state, action) {
+      const { data } = action.payload;      
+      state.cameraLatestFrame = data ? URL.createObjectURL(data) : null;
+    },
 
     resetCameraDetails(state) {
       state.cameraDetails = {};
@@ -155,6 +161,17 @@ export function resetCameraDetails() {
 
 export function resetSchedule() {
   dispatch(slice.actions.resetSchedule()); 
+};
+
+export function getCamerasLatestFrame(cameraId) {
+  return async () => {  
+    try {      
+      const response = await axios.get(`camera/latest-frame/${cameraId}`, { responseType: 'blob' });
+      dispatch(slice.actions.getCamerasLatestFrame(response));
+    } catch (error) {
+      throw new Error(error);
+    }          
+  };
 };
 
 

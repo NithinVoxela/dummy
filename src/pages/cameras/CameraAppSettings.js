@@ -17,11 +17,11 @@ import Iconify from '../../components/Iconify';
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getCameraDetails, getAppSchedule, resetSchedule, updateCameraApp, updateAppSchedule } from '../../redux/slices/cameras';
+import { getCameraDetails, getAppSchedule, resetSchedule, updateCameraApp, updateAppSchedule, getCamerasLatestFrame } from '../../redux/slices/cameras';
 import { getUsers, resetUserList } from '../../redux/slices/users';
 
 // sections
-import { AppGeneralSettingsTab } from '../../sections/cameras';
+import { AppGeneralSettingsTab, AnnotationTab } from '../../sections/cameras';
 import AppScheduleTab from '../../sections/cameras/AppScheduleTab';
 
 // ----------------------------------------------------------------------
@@ -36,7 +36,7 @@ const CameraAppSettings = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const [mlApp, setMlApp] = useState(null);
-  const { cameraDetails, schedularList } = useSelector((state) => state.cameras);
+  const { cameraDetails, schedularList, cameraLatestFrame } = useSelector((state) => state.cameras);
   const { userList } = useSelector((state) => state.users);
 
   const [currentTab, setCurrentTab] = useState('general');
@@ -106,10 +106,21 @@ const CameraAppSettings = () => {
     }
   }, [dispatch]);
 
+  const getCameraFrameDetails = useCallback(async () => {
+    try {
+      await dispatch(getCamerasLatestFrame(cameraId));
+    } catch (err) {
+      enqueueSnackbar(err?.message, {
+        variant: 'error',
+      });      
+    }
+  }, [dispatch]);
+
   useEffect(() => {
     if (cameraId) {
       getCamera();
       getUserList();
+      getCameraFrameDetails();
     }
   }, [cameraId]);
 
@@ -172,6 +183,14 @@ const CameraAppSettings = () => {
           resetSchedule={resetCameraAppSchedule}
           onCancel={onCancel}
         />
+      ),
+    },
+    {
+      value: 'region',
+      label: translate('app.camera-region-of-intrest'),
+      icon: <Iconify icon={'carbon:area-custom'} width={20} height={20} />,
+      component: (
+        <AnnotationTab translate={translate} frameUrl={cameraLatestFrame} handleSave={handleSaveApp} currentCamera={cameraDetails} appId={appId} />          
       ),
     },
   ];

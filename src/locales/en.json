@@ -188,6 +188,7 @@
     "alert-time-day-option": "Last 1 Day",
     "alert-time-week-option": "Last 7 Days",
     "alert-time-month-option": "Last 30 Days",
-    "chart-title-camera-total": "Total Alerts vs Cameras"
+    "chart-title-camera-total": "Total Alerts vs Cameras",
+    "camera-region-of-intrest": "Region of Interest"
   }
 }
