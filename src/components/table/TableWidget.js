@@ -31,7 +31,7 @@ const TableWidget = (props) => {
   const history = useNavigate();
   const { translate } = useLocales();
   const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(tableMetaData.pageSize || 5);
+  const [limit, setLimit] = useState(tableMetaData.pageSize || 10);
   const [selectedRecords, setSelectedRecords] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [activeRecord, setActiveRecord] = useState(null);
@@ -189,7 +189,7 @@ const TableWidget = (props) => {
   };
 
   const getBoxStyle = (metaData) => {
-    const style = { minHeight: 300, maxHeight: 600 };
+    const style = { minHeight: 300, maxHeight: '100%' };
     if (metaData.height) {
       style.height = metaData.height;
     }

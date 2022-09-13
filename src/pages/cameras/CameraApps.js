@@ -86,7 +86,7 @@ const CameraApps = () => {
     }
   }, [cameraId]);
 
-  const cameraName = cameraDetails?.name ? capitalCase(cameraDetails?.name) : '';
+  const cameraName = cameraDetails?.name ? cameraDetails.name : '';
 
   const handleAppsClick = (item) => {
     navigate(`${PATH_DASHBOARD.cameras.root}/apps/${cameraId}/settings/${item.id}`);
