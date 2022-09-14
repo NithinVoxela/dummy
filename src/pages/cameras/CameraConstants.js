@@ -44,7 +44,7 @@ export const CAMERA_TABLE_META = {
     type: 'widget',
     renderWidget: (col, cellData, value) => (
       <>
-        {value && value > 0 ? epochToLocalDateTime(new Date(value)) : ''}
+        {value && value > 0 ? epochToLocalDateTime(value) : ''}
       </>
     )
   }, {
