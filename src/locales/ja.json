@@ -103,8 +103,8 @@
     "signin-header-label": "アカウントにサインインします",
     "username-label": "ユーザー名",
     "password-label": "パスワード",
-    "alerts-persondetection-label": "人の検出",
-    "alerts-motionetection-label": "モーション検知",
+    "alerts-persondetection-label": "人物検知",
+    "alerts-motiondetection-label": "動作検知",
     "alerts-PersonDetection-title-label": "検出された人",
     "alerts-MotionDetection-title-label": "モーションが検出されました",
     "alerts-PersonDetection-desc-label": "カメラで検出された人",
@@ -189,6 +189,8 @@
     "alert-time-week-option": "過去 7 日間",
     "alert-time-month-option": "過去 30 日間",
     "chart-title-camera-total": "総アラート対カメラ",
-    "camera-region-of-intrest": "関心領域"
+    "camera-region-of-intrest": "関心領域",
+    "alerts-wakeupdetection-label": "離床検知",
+    "alerts-falldetection-label": "転倒検知"
   }
 }
