@@ -191,6 +191,7 @@
     "chart-title-camera-total": "Total Alerts vs Cameras",
     "camera-region-of-intrest": "Region of Interest",
     "alerts-wakeupdetection-label": "Wakeup Detection",
-    "alerts-falldetection-label": "Fall Detection"
+    "alerts-falldetection-label": "Fall Detection",
+    "annotation-tab-empty-placeholder": "No image to be displayed."
   }
 }

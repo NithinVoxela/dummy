@@ -195,7 +195,7 @@ const CameraAppSettings = () => {
     },
   ];
 
-  const cameraName = cameraDetails?.name ? capitalCase(cameraDetails?.name) : '';
+  const cameraName = cameraDetails?.name ? cameraDetails.name : '';
 
   return (
     <Page title={`${translate('app.alert-camera-details')} : ${translate('app.camera-apps-header-label')}`}>

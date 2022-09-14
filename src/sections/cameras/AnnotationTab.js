@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { MapContainer, TileLayer, FeatureGroup, Circle, ImageOverlay } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
-import { Box, Button, Card, Stack } from '@mui/material';
+import { Box, Button, Card, Stack, Typography } from '@mui/material';
 import L from 'leaflet';
 import { EditControl } from 'react-leaflet-draw';
 
@@ -38,11 +38,7 @@ export default function AnnotationTab(props) {
   useEffect(() => {
     if (frameUrl) {
       setUrl(frameUrl);
-    } else {
-      setUrl(
-        'https://beamtech-file.s3.amazonaws.com/company/3/6dcbca6e-574d-410b-b732-b6ba0865ed06-hermitage-standard-lhs-2546x1900_0.png'
-      );
-    }
+    }     
   }, [frameUrl]);
 
   useEffect(() => {
@@ -135,39 +131,48 @@ export default function AnnotationTab(props) {
 
   return (
     <Card sx={{ p: 1, pb: 2 }}>
-      <MapContainer
-        center={coordinates}
-        whenCreated={setMap}
-        crs={L.CRS.MySimple}
-        minZoom={-4}
-        bounds={bounds}
-        style={style}
-      >
-        <ImageOverlay bounds={bounds} url={url} />
-        <FeatureGroup ref={featureGroupRef}>
-          <EditControl
-            position="topright"
-            onCreated={_onCreate}
-            onEdited={_onEdited}
-            onDeleted={_onDeleted}
-            draw={{
-              rectangle: false,
-              polyline: false,
-              circle: false,
-              circlemarker: false,
-              marker: false,
-            }}
-          />
-        </FeatureGroup>
-      </MapContainer>
-      <Stack spacing={3} alignItems="flex-end">
-        <Box sx={{ display: 'flex', marginTop: 2, marginRight: 2 }}>
-          <Button sx={{ marginRight: 1 }}>{translate('app.camera-cancel-label')}</Button>
-          <Button variant="contained" onClick={handleSaveClick}>
-            {translate('app.camera-save-label')}
-          </Button>
-        </Box>
-      </Stack>
+     { url && 
+      <>
+        <MapContainer
+            center={coordinates}
+            whenCreated={setMap}
+            crs={L.CRS.MySimple}
+            minZoom={-4}
+            bounds={bounds}
+            style={style}
+          >
+            <ImageOverlay bounds={bounds} url={url} />
+            <FeatureGroup ref={featureGroupRef}>
+              <EditControl
+                position="topright"
+                onCreated={_onCreate}
+                onEdited={_onEdited}
+                onDeleted={_onDeleted}
+                draw={{
+                  rectangle: false,
+                  polyline: false,
+                  circle: false,
+                  circlemarker: false,
+                  marker: false,
+                }}
+              />
+            </FeatureGroup>
+          </MapContainer>
+          <Stack spacing={3} alignItems="flex-end">
+            <Box sx={{ display: 'flex', marginTop: 2, marginRight: 2 }}>
+              <Button sx={{ marginRight: 1 }}>{translate('app.camera-cancel-label')}</Button>
+              <Button variant="contained" onClick={handleSaveClick}>
+                {translate('app.camera-save-label')}
+              </Button>
+            </Box>
+          </Stack>
+        </>
+      }
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 500 }}>
+        <Typography color="textSecondary" variant="subtitle2">
+          {translate('app.annotation-tab-empty-placeholder')}
+        </Typography>
+      </Box>
     </Card>
   );
 }

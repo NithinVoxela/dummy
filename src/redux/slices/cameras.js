@@ -52,7 +52,7 @@ const slice = createSlice({
 
     getCamerasLatestFrame(state, action) {
       const { data } = action.payload;      
-      state.cameraLatestFrame = data ? URL.createObjectURL(data) : null;
+      state.cameraLatestFrame = data ? data?.fileUrl : null;
     },
 
     resetCameraDetails(state) {
@@ -166,7 +166,7 @@ export function resetSchedule() {
 export function getCamerasLatestFrame(cameraId) {
   return async () => {  
     try {      
-      const response = await axios.get(`camera/latest-frame/${cameraId}`, { responseType: 'blob' });
+      const response = await axios.get(`camera/latest-frame/${cameraId}`);
       dispatch(slice.actions.getCamerasLatestFrame(response));
     } catch (error) {
       throw new Error(error);

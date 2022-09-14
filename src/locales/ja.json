@@ -191,6 +191,7 @@
     "chart-title-camera-total": "総アラート対カメラ",
     "camera-region-of-intrest": "関心領域",
     "alerts-wakeupdetection-label": "離床検知",
-    "alerts-falldetection-label": "転倒検知"
+    "alerts-falldetection-label": "転倒検知",
+    "annotation-tab-empty-placeholder": "表示する画像がありません"
   }
 }
