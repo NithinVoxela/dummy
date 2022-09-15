@@ -16,9 +16,9 @@ L.CRS.MySimple = L.extend({}, L.CRS.Simple, {
 
 const bounds = [
   [0, 0],
-  [1900, 2546],
+  [340, 640],
 ];
-const coordinates = [800, 800];
+const coordinates = [0, 0];
 const style = { height: '80vh', width: '75vw' };
 
 export default function AnnotationTab(props) {
@@ -136,7 +136,7 @@ export default function AnnotationTab(props) {
         <MapContainer
             center={coordinates}
             whenCreated={setMap}
-            crs={L.CRS.MySimple}
+            crs={L.CRS.Simple}
             minZoom={-4}
             bounds={bounds}
             style={style}
@@ -153,7 +153,7 @@ export default function AnnotationTab(props) {
                   polyline: false,
                   circle: false,
                   circlemarker: false,
-                  marker: false,
+                  marker: true,
                 }}
               />
             </FeatureGroup>
@@ -168,11 +168,13 @@ export default function AnnotationTab(props) {
           </Stack>
         </>
       }
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 500 }}>
-        <Typography color="textSecondary" variant="subtitle2">
-          {translate('app.annotation-tab-empty-placeholder')}
-        </Typography>
-      </Box>
+      { !url && 
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 500 }}>
+          <Typography color="textSecondary" variant="subtitle2">
+            {translate('app.annotation-tab-empty-placeholder')}
+          </Typography>
+        </Box>
+      }
     </Card>
   );
 }
