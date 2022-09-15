@@ -18,7 +18,7 @@ const bounds = [
   [0, 0],
   [340, 640],
 ];
-const coordinates = [0, 0];
+const coordinates = [150, 300];
 const style = { height: '80vh', width: '75vw' };
 
 export default function AnnotationTab(props) {
@@ -139,7 +139,7 @@ export default function AnnotationTab(props) {
             crs={L.CRS.Simple}
             minZoom={-4}
             bounds={bounds}
-            style={style}
+            style={style}            
           >
             <ImageOverlay bounds={bounds} url={url} />
             <FeatureGroup ref={featureGroupRef}>
@@ -153,7 +153,7 @@ export default function AnnotationTab(props) {
                   polyline: false,
                   circle: false,
                   circlemarker: false,
-                  marker: true,
+                  marker: false,
                 }}
               />
             </FeatureGroup>
