@@ -11,7 +11,7 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 import Label from '../../components/Label';
 import Image from '../../components/Image';
 import useLocales from '../../hooks/useLocales';
-import { fDateTimeTZSuffix, fDateWithTZ } from '../../utils/formatTime';
+import { fDateTimeSuffix, fDateTimeTZSuffix, fDateWithTZ } from '../../utils/formatTime';
 import Iconify from '../../components/Iconify';
 
 const useStyles = makeStyles({
@@ -52,13 +52,8 @@ export default function AlertCard({ alert }) {
 
   const renderDate = (dateValue) => {
     let formattedDate = null;
-    try {
-      const user = JSON.parse(localStorage.getItem("user"));
-      if (user?.timezone) {
-        formattedDate = fDateWithTZ(`${dateValue}Z`, user?.timezone);        
-      } else {
-        formattedDate = fDateTimeTZSuffix(dateValue);
-      }
+    try {     
+      formattedDate = fDateTimeSuffix(`${dateValue}Z`);
     } catch (err) {
       formattedDate = fDateTimeTZSuffix(dateValue);
     }
