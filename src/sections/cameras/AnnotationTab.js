@@ -111,7 +111,7 @@ export default function AnnotationTab(props) {
     let layers = featureGroupRef?.current?.getLayers() || [];
     const cords = layers?.map((item) => {
       const layerLatLngs = item?.getLatLngs();
-      return layerLatLngs?.length > 0 ? layerLatLngs[0].map((latlngs) => [latlngs.lng, latlngs.lat]) : [];
+      return layerLatLngs?.length > 0 ? layerLatLngs[0].map((latlngs) => [Math.floor(latlngs.lng), Math.floor(latlngs.lat)]) : [];
     });
     return cords;
   };
