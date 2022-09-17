@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, FeatureGroup, Circle, ImageOverlay } from 'react-leaflet';
+import { MapContainer, FeatureGroup, ImageOverlay } from 'react-leaflet';
+import { Oval } from  'react-loader-spinner';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import { Box, Button, Card, Stack, Typography } from '@mui/material';
@@ -16,7 +17,7 @@ L.CRS.MySimple = L.extend({}, L.CRS.Simple, {
 
 const bounds = [
   [0, 0],
-  [340, 640],
+  [1000, 1000],
 ];
 const coordinates = [150, 300];
 const style = { height: '80vh', width: '75vw' };
@@ -28,7 +29,15 @@ export default function AnnotationTab(props) {
   const [map, setMap] = useState(null);
   const [url, setUrl] = useState(null);
   const [mlApp, setMlApp] = useState(null);
+  const [imgBounds, setImgBounds] = useState(bounds);
+  const [height, setHeight] = useState(null);
+  const [width, setWidth] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const featureGroupRef = useRef();
+
+  useEffect(() => {
+    setIsLoading(true);
+  }, []);
 
   useEffect(() => {
     const app = currentCamera.appDtos?.find((item) => item?.id?.toString() === appId);
@@ -37,8 +46,22 @@ export default function AnnotationTab(props) {
 
   useEffect(() => {
     if (frameUrl) {
-      setUrl(frameUrl);
-    }     
+      const img = new Image();
+      img.src = frameUrl;
+      img.onload = function () {
+        setHeight(this.height);
+        setWidth(this.width);
+        const bounds = [
+          [0, 0],
+          [this.height, this.width],
+        ];
+        setImgBounds(bounds);
+        setUrl(frameUrl);
+        setIsLoading(false);
+      };
+    } else {
+      setIsLoading(false);
+    }
   }, [frameUrl]);
 
   useEffect(() => {
@@ -62,7 +85,7 @@ export default function AnnotationTab(props) {
   const getGeoJson = (regionOfInterest) => {
     let features = [];
     features = regionOfInterest?.map((region) => {
-      const coordinates = region?.map((item) => [item[0], item[1]]);
+      const coordinates = region?.map((item) => [item[0] * width, item[1] * height]);      
       return {
         type: 'Feature',
         properties: {},
@@ -111,7 +134,13 @@ export default function AnnotationTab(props) {
     let layers = featureGroupRef?.current?.getLayers() || [];
     const cords = layers?.map((item) => {
       const layerLatLngs = item?.getLatLngs();
-      return layerLatLngs?.length > 0 ? layerLatLngs[0].map((latlngs) => [Math.floor(latlngs.lng), Math.floor(latlngs.lat)]) : [];
+      return layerLatLngs?.length > 0
+        ? layerLatLngs[0].map((latlngs) => {
+          const x = (latlngs.lng / width);
+          const y = (latlngs.lat / height);
+          return [x, y];
+        })
+        : [];
     });
     return cords;
   };
@@ -131,17 +160,28 @@ export default function AnnotationTab(props) {
 
   return (
     <Card sx={{ p: 1, pb: 2 }}>
-     { url && 
-      <>
-        <MapContainer
+      {isLoading && (
+        <Box sx={{ height: 500 }}>
+          <Oval
+            color="#626262"
+            secondaryColor="#e7e4e4"
+            wrapperStyle={{ justifyContent: "center", alignItems: "center", height: "100%" }}
+            height={36}
+            width={36}
+          />
+        </Box>
+      )}
+      {!isLoading && url && (
+        <>
+          <MapContainer
             center={coordinates}
             whenCreated={setMap}
             crs={L.CRS.Simple}
             minZoom={-4}
-            bounds={bounds}
-            style={style}            
+            bounds={imgBounds}
+            style={style}
           >
-            <ImageOverlay bounds={bounds} url={url} />
+            <ImageOverlay bounds={imgBounds} url={url} />
             <FeatureGroup ref={featureGroupRef}>
               <EditControl
                 position="topright"
@@ -167,14 +207,14 @@ export default function AnnotationTab(props) {
             </Box>
           </Stack>
         </>
-      }
-      { !url && 
+      )}
+      {!isLoading && !url && (
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 500 }}>
           <Typography color="textSecondary" variant="subtitle2">
             {translate('app.annotation-tab-empty-placeholder')}
           </Typography>
         </Box>
-      }
+      )}
     </Card>
   );
 }

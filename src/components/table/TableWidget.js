@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Oval } from  'react-loader-spinner'
+import { Oval } from  'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
 import _ from 'lodash';
 import {
