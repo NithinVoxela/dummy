@@ -127,7 +127,7 @@ export default function AlertTagFiltered({
         <WrapperStyle>
           <LabelStyle>{translate('app.alerts-severity-label')}</LabelStyle>
           <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
-            <Chip size="small" label={sentenceCase(severity)} onDelete={() => onRemoveParam("severity")} sx={{ m: 0.5 }} />
+            <Chip size="small" label={translate(`app.alert-${severity.toLowerCase()}-label`)} onDelete={() => onRemoveParam("severity")} sx={{ m: 0.5 }} />
           </Stack>
         </WrapperStyle>
       )}      

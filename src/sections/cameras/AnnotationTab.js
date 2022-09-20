@@ -23,7 +23,7 @@ const coordinates = [150, 300];
 const style = { height: '80vh', width: '75vw' };
 
 export default function AnnotationTab(props) {
-  const { currentCamera, translate, handleSave, frameUrl, appId } = props;
+  const { currentCamera, translate, handleSave, frameUrl, appId, onCancel } = props;
   const [mapLayers, setMapLayers] = useState([]);
 
   const [map, setMap] = useState(null);
@@ -200,7 +200,7 @@ export default function AnnotationTab(props) {
           </MapContainer>
           <Stack spacing={3} alignItems="flex-end">
             <Box sx={{ display: 'flex', marginTop: 2, marginRight: 2 }}>
-              <Button sx={{ marginRight: 1 }}>{translate('app.camera-cancel-label')}</Button>
+              <Button sx={{ marginRight: 1 }} onClick={onCancel}>{translate('app.camera-cancel-label')}</Button>
               <Button variant="contained" onClick={handleSaveClick}>
                 {translate('app.camera-save-label')}
               </Button>

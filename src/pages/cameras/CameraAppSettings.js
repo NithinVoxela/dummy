@@ -190,7 +190,7 @@ const CameraAppSettings = () => {
       label: translate('app.camera-region-of-intrest'),
       icon: <Iconify icon={'carbon:area-custom'} width={20} height={20} />,
       component: (
-        <AnnotationTab translate={translate} frameUrl={cameraLatestFrame} handleSave={handleSaveApp} currentCamera={cameraDetails} appId={appId} />          
+        <AnnotationTab translate={translate} frameUrl={cameraLatestFrame} handleSave={handleSaveApp} currentCamera={cameraDetails} appId={appId} onCancel={onCancel} />          
       ),
     },
   ];
