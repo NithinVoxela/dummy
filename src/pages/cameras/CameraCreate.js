@@ -1,4 +1,3 @@
-import { capitalCase } from 'change-case';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 // @mui
@@ -76,7 +75,7 @@ export default function CameraCreate() {
     navigate(PATH_DASHBOARD.cameras.list);
   }
 
-  const cameraName = (cameraDetails?.name ? capitalCase(cameraDetails?.name) : '');
+  const cameraName = (cameraDetails?.name ? cameraDetails.name : '');
   return (
     <Page title={`${translate("app.alert-camera-details")} : ${translate("app.alert-new-camera-label")}`}>
       <Container maxWidth={themeStretch ? false : 'lg'}>

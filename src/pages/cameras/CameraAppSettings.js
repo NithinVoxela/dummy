@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { capitalCase } from 'change-case';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 // @mui
@@ -221,7 +220,7 @@ const CameraAppSettings = () => {
           onChange={handleTabChange}
         >
           {APP_TABS.map((tab) => (
-            <Tab disableRipple key={tab.value} label={capitalCase(tab.label)} icon={tab.icon} value={tab.value} />
+            <Tab disableRipple key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
           ))}
         </Tabs>
 

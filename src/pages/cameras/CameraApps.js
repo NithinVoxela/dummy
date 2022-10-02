@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { capitalCase } from 'change-case';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 // @mui
