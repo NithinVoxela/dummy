@@ -47,7 +47,9 @@ const CameraList = () => {
 
   const getCameraData = useCallback(async(queryParams = {}) => {
     try {      
-      await dispatch(getCameras(queryParams, params));      
+      const payload = {...params, name: queryParams?.name || ""};
+      delete queryParams.name;
+      await dispatch(getCameras(queryParams, payload));      
     } catch (err) {
       console.error(err);
     }
@@ -61,14 +63,14 @@ const CameraList = () => {
       searchParams.name = searchStr;     
     }
     setParams(searchParams);    
-    getCameraData({}, searchParams);
+    // getCameraData({}, searchParams);
   };
 
 
   const debounceSearchHandler = useCallback(debounce(searchHandler, 1000), []);
 
-  const handleQueryChange = ({target}) => {
-    debounceSearchHandler(target.value);
+  const handleQueryChange = (value) => {
+    debounceSearchHandler(value);
   };
 
   const showWarningModal = (id) => {
@@ -120,12 +122,13 @@ const CameraList = () => {
         />
 
         <Card>
-          <Searchbar placeholder={translate('app.alert-search-txt-label')} searchText={""} onSearchTextChange={handleQueryChange}/>
+          <Searchbar placeholder={translate('app.alert-search-txt-label')} onSearchTextChange={handleQueryChange}/>
           <TableWidget
             tableMetaData={tableMetaData}
             tableData={cameraDataList}
             callback={getCameraData}                        
             isLoading={isLoading}
+            params={params}
           />          
         </Card>
       </Container>

@@ -17,11 +17,10 @@ const RootStyle = styled(Toolbar)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const Searchbar = ({ searchText, onSearchTextChange, placeholder }) => (
+const Searchbar = ({ onSearchTextChange, placeholder }) => (
   <RootStyle>
     <InputStyle
-      stretchStart={240}
-      value={searchText}
+      stretchStart={240}      
       onChange={(event) => onSearchTextChange(event.target.value)}
       placeholder={placeholder}
       size="small"
@@ -36,8 +35,7 @@ const Searchbar = ({ searchText, onSearchTextChange, placeholder }) => (
   </RootStyle>
 );
 
-Searchbar.propTypes = {
-  searchText: PropTypes.string,
+Searchbar.propTypes = {  
   onSearchTextChange: PropTypes.func,
   placeholder: PropTypes.string,
 };
