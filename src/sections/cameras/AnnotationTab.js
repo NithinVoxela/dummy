@@ -15,6 +15,7 @@ L.CRS.MySimple = L.extend({}, L.CRS.Simple, {
   transformation: new L.Transformation(1, 0, 1, 0),
 });
 
+
 const bounds = [
   [0, 0],
   [1000, 1000],
@@ -35,8 +36,115 @@ export default function AnnotationTab(props) {
   const [isLoading, setIsLoading] = useState(false);
   const featureGroupRef = useRef();
 
+  const initializeLocale = () => {
+    L.drawLocal = {
+      draw: {
+        toolbar: {
+          // #TODO: this should be reorganized where actions are nested in actions
+          // ex: actions.undo  or actions.cancel
+          actions: {
+            title: translate('app.actions-title-label'),
+            text: translate('app.actions-text-label'),
+          },
+          finish: {
+            title: translate('app.finish-title-label'),
+            text: translate('app.finish-text-label'),
+          },
+          undo: {
+            title: translate('app.undo-title-label'),
+            text: translate('app.undo-text-label'),
+          },
+          buttons: {            
+            polygon: translate('app.polyline-draw-label'),            
+          }
+        },
+        handlers: {
+          circle: {
+            tooltip: {
+              start: translate('app.circle-tooltip-start-label')
+            },
+            radius: translate('app.circle-radius-label')
+          },
+          circlemarker: {
+            tooltip: {
+              start: translate('app.circlemarker-tooltip-start-label')
+            }
+          },
+          marker: {
+            tooltip: {
+              start: translate('app.marker-tooltip-start-label')
+            }
+          },
+          polygon: {
+            tooltip: {
+              start: translate('app.polygon-tooltip-start-label'),
+              cont: translate('app.polygon-tooltip-cont-label'),
+              end: translate('app.polygon-tooltip-end-label')
+            }
+          },
+          polyline: {
+            error: translate('app.polyline-error-label'),
+            tooltip: {
+              start: translate('app.polyline-tooltip-start-label'),
+              cont: translate('app.polyline-tooltip-cont-label'),
+              end: translate('app.polyline-tooltip-end-label')
+            }
+          },
+          rectangle: {
+            tooltip: {
+              start: translate('app.rectangle-tooltip-start-label')
+            }
+          },
+          simpleshape: {
+            tooltip: {
+              end: translate('app.simple-shape-tooltip-end-label')
+            }
+          }
+        }
+      },
+      edit: {
+        toolbar: {
+          actions: {
+            save: {
+              title: translate('app.save-title-label'),
+              text: translate('app.save-text-label')
+            },
+            cancel: {
+              title: translate('app.cancel-title-label'),
+              text: translate('app.cancel-text-label')
+            },
+            clearAll: {
+              title: translate('app.clearall-title-label'),
+              text: translate('app.clearall-text-label')
+            }
+          },
+          buttons: {
+            edit: translate('app.edit-layer-label'),
+            editDisabled: translate('app.no-edit-layer-label'),
+            remove: translate('app.delete-layer-label'),
+            removeDisabled: translate('app.no-delete-layer-label')
+          }
+        },
+        handlers: {
+          edit: {
+            tooltip: {
+              text: translate('app.cancel-handler-text-tooltip-label'),
+              subtext: translate('app.cancel-handler-subtext-tooltip-label')
+            }
+          },
+          remove: {
+            tooltip: {
+              text: translate('app.tooltip-remove-label')
+            }
+          }
+        }
+      }
+    };
+  };
+
   useEffect(() => {
     setIsLoading(true);
+    initializeLocale();
   }, []);
 
   useEffect(() => {
