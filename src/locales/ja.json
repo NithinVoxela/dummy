@@ -225,6 +225,7 @@
     "finish-title-label": "描画を終了",
     "finish-text-label": "終了",
     "actions-title-label": "描画をキャンセル",
-    "actions-text-label": "キャンセル"
+    "actions-text-label": "キャンセル",
+    "chart-total-label": "合計"
   }
 }

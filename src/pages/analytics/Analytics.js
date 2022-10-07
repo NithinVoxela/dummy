@@ -190,7 +190,7 @@ function Analytics() {
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
-            <AppAlertsPieChart title={translate('app.alert-generated-by-time')} actions={getAlertActions} data={severityStats} />
+            <AppAlertsPieChart title={translate('app.alert-generated-by-time')} actions={getAlertActions} data={severityStats} translate={translate} />
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>

@@ -50,7 +50,7 @@ const slice = createSlice({
     getS3Stats(state, action) {
       const { data } = action.payload;      
       state.bucketSize = {
-        size: 10000000
+        size: data?.size || 0
       };
     }, 
 

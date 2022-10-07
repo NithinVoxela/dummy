@@ -225,6 +225,7 @@
     "finish-title-label": "Finish drawing",
     "finish-text-label": "Finish",
     "actions-title-label": "Cancel drawing",
-    "actions-text-label": "Cancel"
+    "actions-text-label": "Cancel",
+    "chart-total-label": "Total"
   }
 }

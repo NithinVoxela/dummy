@@ -35,7 +35,7 @@ const ChartWrapperStyle = styled('div')(({ theme }) => ({
 
 
 export default function AppAlertsPieChart(props) {
-  const { title, actions, data } = props;
+  const { title, actions, data, translate } = props;
   const theme = useTheme();
   const [chartData, setChartData] = useState([0, 0, 0]);
 
@@ -45,7 +45,7 @@ export default function AppAlertsPieChart(props) {
       theme.palette.primary.warning,
       theme.palette.primary.info,      
     ],
-    labels: ['High', 'Medium', 'Low'],
+    labels: [translate('app.camera-high-label'), translate('app.camera-medium-label'), translate('app.camera-low-label')],
     stroke: { colors: [theme.palette.background.paper] },
     legend: { floating: true, horizontalAlign: 'center' },
     tooltip: {
@@ -60,12 +60,13 @@ export default function AppAlertsPieChart(props) {
     plotOptions: {
       pie: {
         donut: {
-          size: '90%',
+          size: '90%',          
           labels: {
             value: {
               formatter: (val) => fNumber(val),
             },
             total: {
+              label: translate('app.chart-total-label'),
               formatter: (w) => {
                 const sum = w.globals.seriesTotals.reduce((a, b) => a + b, 0);
                 return fNumber(sum);
