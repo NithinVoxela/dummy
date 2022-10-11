@@ -56,6 +56,7 @@ const TableWidget = (props) => {
     if(!queryParams.searchApplied) {
       if (sortColumn) {
         queryParams.sortAscending = order === 'asc';
+        queryParams.sortColumn = sortColumn;
       } else {
         queryParams.sortAscending = false;
       }
@@ -245,7 +246,7 @@ const TableWidget = (props) => {
             direction={sortColumn === col.dataKey? order : 'desc'}
             onClick={() => handleSort(col)}
           >
-            {col.text}
+            {translate(col.text)}
           </TableSortLabel>
         </TableCell>
       );

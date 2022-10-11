@@ -28,6 +28,7 @@ export const CAMERA_TABLE_META = {
     text: 'app.camera-name-label',
     dataKey: 'name',
     type: 'widget',    
+    sortable: true,
     renderWidget: (col, cellData, value) => (
       <Typography
         variant='subtitle2'        
@@ -37,11 +38,13 @@ export const CAMERA_TABLE_META = {
     )
   }, {
     text: 'app.camera-location-label',
-    dataKey: 'location'
+    dataKey: 'location',
+    sortable: true
   }, {
     text: 'app.last-activity',
     dataKey: 'lastActivityTime',
     type: 'widget',
+    sortable: true,
     renderWidget: (col, cellData, value) => (
       <>
         {value && value > 0 ? epochToLocalDateTime(value) : ''}

@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
+import { Oval } from  'react-loader-spinner';
 // @mui
 import {
+  Box,
   Button,
   Container,
   Stack,
@@ -65,15 +67,11 @@ const AlertList = () => {
       console.error(err);
     }
   }, [dispatch]);
-
-  useEffect(() => {
-    getAlertData(0, isAscending, params);
-  }, []);
   
-  useEffect(() => {
+  const handleSort = (sortDirection) => {
     setClearData(true);
-    getAlertData(0, isAscending, params);
-  }, [isAscending])
+    getAlertData(0, sortDirection, params);
+  };
   
   const defaultValues = {};
 
@@ -151,7 +149,7 @@ const AlertList = () => {
               />
             </FormProvider>
 
-            <AlertSort setIsAscending={setIsAscending} translate={translate} />
+            <AlertSort setIsAscending={setIsAscending} handleSort={handleSort} translate={translate} />
           </Stack>
         </Stack>
 
@@ -186,7 +184,12 @@ const AlertList = () => {
           clearData={clearData}
           setClearData={setClearData}
         />    
-        { alertDataList?.data?.length === 0 &&
+        { isLoading &&  
+          <Box sx={{ mt: 15}}>
+            <Oval color="#626262" secondaryColor="#e7e4e4" wrapperStyle={{ justifyContent: 'center'}} height={36} width={36}/>
+          </Box>
+        }
+        { !isLoading && alertDataList?.data?.length === 0 &&
           <Typography variant="body1" color="textSecondary" sx={{ textAlign: "center" }}>
             {translate("app.global-no-results-label")}
           </Typography>    

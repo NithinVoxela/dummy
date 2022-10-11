@@ -12,13 +12,14 @@ import MenuPopover from '../../components/MenuPopover';
 
 AlertSort.propTypes = {  
   setIsAscending: PropTypes.func,
+  handleSort: PropTypes.func,
   translate: PropTypes.func,
 };
 
 // ----------------------------------------------------------------------
 
 export default function AlertSort(props) {
-  const { translate, setIsAscending } = props;
+  const { translate, setIsAscending, handleSort } = props;
 
 
   const [open, setOpen] = useState(null);
@@ -47,7 +48,8 @@ export default function AlertSort(props) {
   const handleSortBy = (value) => {
     handleClose();
     setSortBy(value);    
-    setIsAscending(value === "oldest");    
+    setIsAscending(value === "oldest");   
+    handleSort(value === "oldest"); 
   };
 
   return (
