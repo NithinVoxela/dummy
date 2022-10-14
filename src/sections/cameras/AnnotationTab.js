@@ -21,7 +21,7 @@ const bounds = [
   [1000, 1000],
 ];
 const coordinates = [150, 300];
-const style = { height: '80vh', width: '75vw' };
+const style = { height: '68vh', width: '75vw' };
 
 export default function AnnotationTab(props) {
   const { currentCamera, translate, handleSave, frameUrl, appId, onCancel } = props;
