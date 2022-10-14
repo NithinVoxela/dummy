@@ -106,6 +106,25 @@ export function getAlerts(queryParams, payload = {}, countRequest = false) {
   };
 }
 
+export function getUnreadAlertCount(payload = {}) {
+  return async () => {    
+    try {
+      const queryParams = {
+        pageNumber: 0,
+        pageSize: 0,
+        sortAscending: false        
+      };
+      payload.hasRead = false;
+      const searchParams = new URLSearchParams(queryParams).toString();
+      const response = await axios.put(`alert/search?${searchParams}`, payload);      
+      dispatch(slice.actions.getAlertCountSuccess(response));      
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+      throw(error);
+    }
+  };
+}
+
 export function getAlertDetails(id) {
   return async () => {    
     try {      

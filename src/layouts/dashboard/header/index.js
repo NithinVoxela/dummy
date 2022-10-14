@@ -1,14 +1,11 @@
 import PropTypes from 'prop-types';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { toast } from "react-toastify";
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar } from '@mui/material';
 // hooks
 import useOffSetTop from '../../../hooks/useOffSetTop';
 import useResponsive from '../../../hooks/useResponsive';
-import useLocales from '../../../hooks/useLocales';
 import useAuth from '../../../hooks/useAuth';
 // utils
 import cssStyles from '../../../utils/cssStyles';
@@ -18,12 +15,11 @@ import { HEADER, NAVBAR } from '../../../config';
 import Logo from '../../../components/Logo';
 import Iconify from '../../../components/Iconify';
 import { IconButtonAnimate } from '../../../components/animate';
-import { Notification } from "../../../components/toastify";
 //
 import AccountPopover from './AccountPopover';
-import { useDispatch, useSelector } from '../../../redux/store';
-import { getAlerts } from '../../../redux/slices/alerts';
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import NotificationsPopover from './NotificationsPopover';
+import { useDispatch } from '../../../redux/store';
+import { getUnreadAlertCount } from '../../../redux/slices/alerts';
 
 // ----------------------------------------------------------------------
 
@@ -63,36 +59,19 @@ DashboardHeader.propTypes = {
 };
 
 export const REFRESH_INTERVAL = 30 * 1000;
-const notify = (notification) => toast(<Notification notification={notification} />);
 
 export default function DashboardHeader({ onOpenSidebar, isCollapse = false, verticalLayout = false }) {
   const isOffset = useOffSetTop(HEADER.DASHBOARD_DESKTOP_HEIGHT) && !verticalLayout;
 
   const isDesktop = useResponsive('up', 'lg');
 
-  const { translate } = useLocales();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const dispatch = useDispatch();  
   const { logout } = useAuth();
 
-  const [alertCount, setAlertCount] = useState(null);
-  const { alertCountDataList } = useSelector((state) => state.alerts);
 
-  const notification = {
-    title: translate(`app.alerts-new-activity-label`),
-    body: translate(`app.alerts-new-activity-desc-label`),
-    actionLabel: translate(`app.alerts-view-alert-label`),
-    actionUrl: PATH_DASHBOARD.general.alerts
-  };
-
-  const refreshAlertCount = useCallback(async(payload = {}) => {
-    try {      
-      const queryParams = {
-        pageNumber: 0,
-        pageSize: 1,
-        sortAscending: false
-      };
-      await dispatch(getAlerts(queryParams, payload, true));      
+  const refreshAlertCount = useCallback(async() => {
+    try {            
+      await dispatch(getUnreadAlertCount());      
     } catch (err) {
       console.error(err);
       if (err?.message === "Not Authorized") {
@@ -112,17 +91,6 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
     };
   }, []);
 
-  useEffect(() => {
-    const count = alertCountDataList?.total || 0;
-    if (alertCount && count > alertCount) {
-      const payload = {
-        isCustom: true,
-        notification
-      };
-      notify(payload);
-    }
-    setAlertCount(alertCountDataList?.total);
-  }, [alertCountDataList]);
 
   return (
     <RootStyle isCollapse={isCollapse} isOffset={isOffset} verticalLayout={verticalLayout}>
@@ -144,6 +112,7 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>      
+          <NotificationsPopover />
           <AccountPopover />
         </Stack>
       </Toolbar>

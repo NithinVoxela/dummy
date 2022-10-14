@@ -3,6 +3,7 @@ import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
 import SvgIconStyle from '../../../components/SvgIconStyle';
+import AlertCountLabel from '../../../sections/alerts/AlertCountLabel';
 
 
 // ----------------------------------------------------------------------
@@ -33,7 +34,9 @@ const navConfig = [
     items: [                       
       { title: 'dashboard', path: PATH_DASHBOARD.general.dashboard, icon: ICONS.dashboard },      
       { title: 'analytics', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
-      { title: 'alerts', path: PATH_DASHBOARD.general.alerts, icon: ICONS.alerts },      
+      { title: 'alerts', path: PATH_DASHBOARD.general.alerts, icon: ICONS.alerts, info: (
+        <AlertCountLabel />         
+      ), },      
     ],
   },
 

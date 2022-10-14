@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Oval } from  'react-loader-spinner';
+import { useLocation, useNavigate } from 'react-router-dom';
 // @mui
 import {
   Box,
@@ -40,10 +41,13 @@ const AlertList = () => {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
   const { translate } = useLocales();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [clearData, setClearData] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
   const [isAscending, setIsAscending] = useState(false);
-  const [params, setParams] = useState({});
+  const [isPageLoading, setIsPageLoading] = useState(true);
+  const [params, setParams] = useState({});  
   const { alertDataList, isLoading } = useSelector((state) => state.alerts);
   const { cameraDataList } = useSelector((state) => state.cameras);
 
@@ -101,6 +105,16 @@ const AlertList = () => {
     setClearData(true);
     getAlertData(0, isAscending, params);
   };
+
+
+  useEffect(() => {
+    const query = new URLSearchParams(location.search);
+    const unreadFlag = query.get("unread");
+    if (unreadFlag) {
+      setParams({ hasRead: false });      
+    }
+    setIsPageLoading(false);
+  }, [location]);
 
   const isDefault = Object.keys(params).length === 0;
 
@@ -175,15 +189,17 @@ const AlertList = () => {
           )}
         </Stack>
 
-        <MasonaryGrid       
-          isLoading={isLoading}    
-          alertList={alertDataList?.data}          
-          totalCount={alertDataList?.total}       
-          nextPageCallback={(page) => getAlertData(page, isAscending, params)}    
-          currentPage={ alertDataList?.currentPage || 0 }    
-          clearData={clearData}
-          setClearData={setClearData}
-        />    
+        { !isPageLoading && 
+          <MasonaryGrid       
+            isLoading={isLoading}    
+            alertList={alertDataList?.data}          
+            totalCount={alertDataList?.total}       
+            nextPageCallback={(page) => getAlertData(page, isAscending, params)}    
+            currentPage={ alertDataList?.currentPage || 0 }    
+            clearData={clearData}
+            setClearData={setClearData}
+          />    
+        }
         { isLoading &&  
           <Box sx={{ mt: 15}}>
             <Oval color="#626262" secondaryColor="#e7e4e4" wrapperStyle={{ justifyContent: 'center'}} height={36} width={36}/>

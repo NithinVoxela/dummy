@@ -226,6 +226,10 @@
     "finish-text-label": "終了",
     "actions-title-label": "描画をキャンセル",
     "actions-text-label": "キャンセル",
-    "chart-total-label": "合計"
+    "chart-total-label": "合計",
+    "logout-label": "ログアウト",
+    "home-label": "家",
+    "show-only-unread-label": "目に見えないアラートのみ",
+    "unread-label": "目に見えない"
   }
 }

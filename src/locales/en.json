@@ -145,8 +145,8 @@
     "sort-option-newest": "Newest",
     "filter-label": "Filters",
     "filter-reset-label": "Clear All",
-    "start-date-lable": "Start date",
-    "end-date-lable": "End date",
+    "start-date-lable": "Start Date",
+    "end-date-lable": "End Date",
     "start-date-error-lable": "Start date should be less than End Time.",
     "alerts-found-label": "alerts found",
     "general-label": "general",
@@ -226,6 +226,10 @@
     "finish-text-label": "Finish",
     "actions-title-label": "Cancel drawing",
     "actions-text-label": "Cancel",
-    "chart-total-label": "Total"
+    "chart-total-label": "Total",
+    "logout-label": "Logout",
+    "home-label": "Home",
+    "show-only-unread-label": "Only Unseen Alerts",
+    "unread-label": "Unseen"
   }
 }

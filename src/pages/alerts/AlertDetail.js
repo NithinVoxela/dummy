@@ -25,7 +25,7 @@ import Iconify from '../../components/Iconify';
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getAlertDetails, markAsRead } from '../../redux/slices/alerts';
+import { getUnreadAlertCount, getAlertDetails, markAsRead } from '../../redux/slices/alerts';
 
 
 
@@ -68,6 +68,7 @@ const AlertDetail = () => {
   const markAsReadRequest = useCallback(async(id) => {
     try {      
       await dispatch(markAsRead(id));      
+      await dispatch(getUnreadAlertCount());
     } catch (err) {
       console.error(err);
     }
@@ -200,8 +201,8 @@ const AlertDetail = () => {
           </Grid>
         </Card>
 
-        <Card sx={{ mt: 3 }}>
-          <ReactPlayer controls muted playsinline width="100%" height="100%" url={alertDetails?.mediaUrl} />
+        <Card sx={{ mt: 3, py: 2, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 400 }}>
+          <ReactPlayer controls muted playsinline width="640px" height="320px" url={alertDetails?.mediaUrl} />
         </Card>
       </Container>
     </Page>

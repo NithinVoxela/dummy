@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 // form
 import { useFormContext } from 'react-hook-form';
 // @mui
-import { Box, Stack, Button, Drawer, Divider, IconButton, Typography, TextField } from '@mui/material';
+import { Box, Stack, Button, Drawer, Divider, IconButton, Typography, TextField, FormControlLabel, Checkbox } from '@mui/material';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -54,6 +54,7 @@ export default function AlertFilterSidebar({
   const [cameraText, setCameraText] = useState("");
   const [severityValue, setSeverityValue] = useState(null);
   const [eventText, setEventText] = useState("");
+  const [showUnread, setShowUnread] = useState(false);
 
   const eventTypes = useMemo(() => EVENT_TYPES.map(item => ({ id: item, label:translate(`app.app-name-${item.toLowerCase()}`) })), [isOpen]);
 
@@ -99,6 +100,7 @@ export default function AlertFilterSidebar({
     setStartDate(null);
     setEndDate(null);
     setEventText("");
+    setShowUnread(false);
     applyFilter({});
   };
 
@@ -134,6 +136,14 @@ export default function AlertFilterSidebar({
     applyFilter(newParams);
   };
 
+  const handleDeskAlertChange = (event) => {
+    const isChecked = event.target.checked;
+    setShowUnread(isChecked);
+
+    const newParams = { ...params, hasRead: !isChecked };
+    applyFilter(newParams);
+  };
+
   const applyFilter = (newParams) => {    
     setParams({...newParams});
     setClearData(true);
@@ -160,6 +170,7 @@ export default function AlertFilterSidebar({
     setSeverityValue(null);
     setStartDate(null);
     setEndDate(null);
+    setShowUnread(false);
 
     if (params?.cameraName) {
       setCameraText(params.cameraName);
@@ -177,6 +188,10 @@ export default function AlertFilterSidebar({
     if (params?.eventType) {
       const type = eventTypes.find((item) => item.id === params.eventType);
       setEventText(type?.label);
+    }
+    // eslint-disable-next-line no-prototype-builtins
+    if (params.hasOwnProperty('hasRead') && params.hasRead === false) {
+      setShowUnread(true);
     }
   }, [params]);  
 
@@ -292,6 +307,18 @@ export default function AlertFilterSidebar({
                   <Typography color="error">{translate('app.start-time-error-lable')}</Typography>
                 </Box>
               )}
+            </Stack>
+            <Stack spacing={1}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={showUnread}
+                    onChange={handleDeskAlertChange}
+                    name="unread"               
+                  />
+                }
+                label={translate('app.show-only-unread-label')}
+              />
             </Stack>
           </Stack>
         </Scrollbar>

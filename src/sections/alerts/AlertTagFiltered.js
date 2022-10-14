@@ -59,7 +59,7 @@ export default function AlertTagFiltered({
   sortDirection
 }) {
 
-  const { cameraName, startDate, endDate, severity, eventType } = filters;
+  const { cameraName, startDate, endDate, severity, eventType, hasRead } = filters;
 
   const applyFilter = (newParams) => {
     setParams(newParams);
@@ -128,6 +128,14 @@ export default function AlertTagFiltered({
           <LabelStyle>{translate('app.alerts-severity-label')}</LabelStyle>
           <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
             <Chip size="small" label={translate(`app.alert-${severity.toLowerCase()}-label`)} onDelete={() => onRemoveParam("severity")} sx={{ m: 0.5 }} />
+          </Stack>
+        </WrapperStyle>
+      )}
+
+      {!hasRead && (
+        <WrapperStyle>          
+          <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
+            <Chip size="small" label={translate(`app.unread-label`)} onDelete={() => onRemoveParam("hasRead")} sx={{ m: 0.5 }} />
           </Stack>
         </WrapperStyle>
       )}      
