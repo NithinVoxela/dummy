@@ -230,6 +230,8 @@
     "logout-label": "ログアウト",
     "home-label": "家",
     "show-only-unread-label": "目に見えないアラートのみ",
-    "unread-label": "目に見えない"
+    "unread-label": "目に見えない",
+    "mark-all-read-label": "すべて既読にする",
+    "alert-status-updated-label": "アラート ステータスが正常に更新されました"
   }
 }

@@ -230,6 +230,8 @@
     "logout-label": "Logout",
     "home-label": "Home",
     "show-only-unread-label": "Only Unseen Alerts",
-    "unread-label": "Unseen"
+    "unread-label": "Unseen",
+    "mark-all-read-label": "Mark All As Read",
+    "alert-status-updated-label": "Alert status updated successfully."
   }
 }

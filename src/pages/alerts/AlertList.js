@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Oval } from  'react-loader-spinner';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 // @mui
 import {
   Box,
@@ -24,11 +25,11 @@ import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getAlerts } from '../../redux/slices/alerts';
+import { getAlerts, getUnreadAlertCount, markAllAsRead, resetAlertList } from '../../redux/slices/alerts';
+import { getCameras } from '../../redux/slices/cameras';
 
 // sections
 import { AlertFilterSidebar, AlertSort, AlertTagFiltered, MasonaryGrid } from '../../sections/alerts';
-import { getCameras } from '../../redux/slices/cameras';
 
 
 
@@ -40,9 +41,9 @@ import { getCameras } from '../../redux/slices/cameras';
 const AlertList = () => {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
-  const { translate } = useLocales();
-  const navigate = useNavigate();
+  const { translate } = useLocales();  
   const location = useLocation();
+  const { enqueueSnackbar } = useSnackbar();
   const [clearData, setClearData] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
   const [isAscending, setIsAscending] = useState(false);
@@ -106,6 +107,19 @@ const AlertList = () => {
     getAlertData(0, isAscending, params);
   };
 
+  const handleMarkAsRead = async() => {
+    try {      
+      await dispatch(markAllAsRead());   
+      await dispatch(getUnreadAlertCount());
+      handleRefresh();   
+      enqueueSnackbar(translate('app.alert-status-updated-label'));
+    } catch (err) {
+      enqueueSnackbar(err?.message, {
+        variant: 'error',
+      });
+    }
+  }
+
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);
@@ -115,6 +129,10 @@ const AlertList = () => {
     }
     setIsPageLoading(false);
   }, [location]);
+
+  useEffect(() => () => {      
+    dispatch(resetAlertList());
+  }, []);
 
   const isDefault = Object.keys(params).length === 0;
 
@@ -128,13 +146,23 @@ const AlertList = () => {
             { name: translate('app.alerts-header-label')},            
           ]}
           action={
-            <Button
-              variant="contained"                            
-              startIcon={<Iconify icon={'ic:outline-refresh'} />}
-              onClick={handleRefresh}
-            >
-              {translate('app.alert-refresh-label')}
-            </Button>
+            <>
+              <Button
+                variant="outlined"                            
+                startIcon={<Iconify icon={'mdi:check-all'} />}
+                onClick={handleMarkAsRead}
+                sx={{ mr: 1 }}
+              >
+                {translate('app.mark-all-read-label')}
+              </Button>
+              <Button
+                variant="contained"                            
+                startIcon={<Iconify icon={'ic:outline-refresh'} />}
+                onClick={handleRefresh}
+              >
+                {translate('app.alert-refresh-label')}
+              </Button>
+            </>
           }
         />
 

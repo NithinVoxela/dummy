@@ -81,6 +81,13 @@ const slice = createSlice({
       state.alertCountDataList = { total: data.totalCount, data: data.records, currentPage: data.currentPage };
     },  
     
+    resetAlertList(state) {
+      state.alertDataList = {
+        total: 0,
+        currentPage: 0,
+        data: []
+      };
+    },
   },
 });
 
@@ -177,5 +184,19 @@ export function cleanDashboardAlertLogs() {
       dispatch(slice.actions.hasError(error));
     }
   };
+};
+
+export function markAllAsRead() {
+  return async () => {   
+    try {      
+      await axios.put(`alert/markAllAlertsAsRead`);      
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+};
+
+export function resetAlertList() {
+  dispatch(slice.actions.resetAlertList()); 
 };
 
