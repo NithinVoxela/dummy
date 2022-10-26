@@ -232,6 +232,7 @@
     "show-only-unread-label": "目に見えないアラートのみ",
     "unread-label": "目に見えない",
     "mark-all-read-label": "すべて既読にする",
-    "alert-status-updated-label": "アラート ステータスが正常に更新されました"
+    "alert-status-updated-label": "アラート ステータスが正常に更新されました",
+    "all-option-label": "全て"
   }
 }

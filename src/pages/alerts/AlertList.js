@@ -41,7 +41,7 @@ import { AlertFilterSidebar, AlertSort, AlertTagFiltered, MasonaryGrid } from '.
 const AlertList = () => {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
-  const { translate } = useLocales();  
+  const { translate, langStorage } = useLocales();  
   const location = useLocation();
   const { enqueueSnackbar } = useSnackbar();
   const [clearData, setClearData] = useState(false);
@@ -188,6 +188,7 @@ const AlertList = () => {
                 setParams={setParams}
                 setClearData={setClearData}
                 sortDirection={isAscending}
+                locale={langStorage}
               />
             </FormProvider>
 

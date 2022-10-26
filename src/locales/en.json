@@ -232,6 +232,7 @@
     "show-only-unread-label": "Only Unseen Alerts",
     "unread-label": "Unseen",
     "mark-all-read-label": "Mark All As Read",
-    "alert-status-updated-label": "Alert status updated successfully."
+    "alert-status-updated-label": "Alert status updated successfully.",
+    "all-option-label": "All"
   }
 }

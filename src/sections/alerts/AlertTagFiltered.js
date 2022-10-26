@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
-import { sentenceCase } from 'change-case';
 // @mui
-import { useTheme, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { Chip, Typography, Stack, Button } from '@mui/material';
 
 // components
@@ -73,6 +72,9 @@ export default function AlertTagFiltered({
     applyFilter(newParams);
   }
 
+  // eslint-disable-next-line no-prototype-builtins
+  const checkReadParam = () => filters.hasOwnProperty("hasRead") && !hasRead;
+
   return (
     <RootStyle>
       {filters?.cameraName?.length > 0 && (
@@ -132,7 +134,7 @@ export default function AlertTagFiltered({
         </WrapperStyle>
       )}
 
-      {!hasRead && (
+      { checkReadParam() && (
         <WrapperStyle>          
           <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
             <Chip size="small" label={translate(`app.unread-label`)} onDelete={() => onRemoveParam("hasRead")} sx={{ m: 0.5 }} />

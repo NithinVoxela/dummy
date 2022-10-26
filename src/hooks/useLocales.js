@@ -39,6 +39,7 @@ export default function useLocales() {
     onChangeLang: handleChangeLanguage,
     translate,
     currentLang,
+    langStorage,
     allLang: LANGS,
   };
 }

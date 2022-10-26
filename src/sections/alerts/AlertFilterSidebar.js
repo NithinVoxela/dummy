@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 // form
-import { useFormContext } from 'react-hook-form';
 // @mui
 import { Box, Stack, Button, Drawer, Divider, IconButton, Typography, TextField, FormControlLabel, Checkbox } from '@mui/material';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -29,6 +28,8 @@ AlertFilterSidebar.propTypes = {
   setParams: PropTypes.func,
   params: PropTypes.object,
   setClearData: PropTypes.func,
+  sortDirection: PropTypes.bool,
+  locale: PropTypes.string
 };
 
 export default function AlertFilterSidebar({
@@ -41,9 +42,12 @@ export default function AlertFilterSidebar({
   params,
   setParams,
   setClearData,
-  sortDirection
+  sortDirection,
+  locale
 }) {
+  const allOptionLabel = translate('app.all-option-label');
   const SEVERITY = [
+    { value: allOptionLabel, label: allOptionLabel },
     { value: 'High', label: translate('app.alert-high-label') },
     { value: 'Medium', label: translate('app.alert-medium-label') },
     { value: 'Low', label: translate('app.alert-low-label') },
@@ -51,19 +55,32 @@ export default function AlertFilterSidebar({
 
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [cameraText, setCameraText] = useState("");
-  const [severityValue, setSeverityValue] = useState(null);
-  const [eventText, setEventText] = useState("");
-  const [showUnread, setShowUnread] = useState(false);
+  const [cameraText, setCameraText] = useState(allOptionLabel);
+  const [severityValue, setSeverityValue] = useState(allOptionLabel);
+  const [eventText, setEventText] = useState(allOptionLabel);
+  const [showUnread, setShowUnread] = useState(false);  
 
-  const eventTypes = useMemo(() => EVENT_TYPES.map(item => ({ id: item, label:translate(`app.app-name-${item.toLowerCase()}`) })), [isOpen]);
+  const eventTypes = useMemo(() => {
+    const events = [{ id: allOptionLabel, label: allOptionLabel }];
+    const result = EVENT_TYPES.map(item => ({ id: item, label:translate(`app.app-name-${item.toLowerCase()}`) }));
+    return events.concat(result);
+  }, [isOpen]);
+
+  const cameraDataList = useMemo(() => {
+    const cameras = [{ id: allOptionLabel, name: allOptionLabel }];
+    let result = [];
+    if (cameraList.length > 0) {
+      result = cameraList.map(item => ({ publicId: item.publicId, name: item.name }));
+    }
+    return cameras.concat(result);
+  }, [cameraList]);
 
   const handleCameraChange = (e) => {
     const filteredValue = e.target.value;
     const newParams = { ...params };
-    if (filteredValue?.length > 0) {
-      newParams.cameraName = filteredValue;  
-      setCameraText(filteredValue);    
+    setCameraText(filteredValue);
+    if (filteredValue?.length > 0 && filteredValue !== allOptionLabel) {
+      newParams.cameraName = filteredValue;            
     } else {
       delete newParams.cameraName;
     }
@@ -73,9 +90,9 @@ export default function AlertFilterSidebar({
   const handleEventTypeChange = (e) => {
     const filteredValue = e.target.value;
     const newParams = { ...params };
-    if (filteredValue?.length > 0) {
-      newParams.eventType = eventTypes.find(item => item.label === filteredValue)?.id;  
-      setEventText(filteredValue);    
+    setEventText(filteredValue);   
+    if (filteredValue?.length > 0 && filteredValue !== allOptionLabel) {
+      newParams.eventType = eventTypes.find(item => item.label === filteredValue)?.id;            
     } else {
       delete newParams.eventType;
     }
@@ -84,7 +101,7 @@ export default function AlertFilterSidebar({
 
   const handleRadioChange = (e, value) => {
     const newParams = { ...params };
-    if (value?.length > 0) {
+    if (value?.length > 0 && value !== allOptionLabel ) {
       const filteredValue = SEVERITY.find((item) => item.label === value);
       newParams.severity = filteredValue?.value;
       setSeverityValue(value);
@@ -95,11 +112,11 @@ export default function AlertFilterSidebar({
   };
 
   const resetFilter = () => {
-    setCameraText("");
-    setSeverityValue(null);
+    setCameraText(allOptionLabel);
+    setSeverityValue(allOptionLabel);
     setStartDate(null);
     setEndDate(null);
-    setEventText("");
+    setEventText(allOptionLabel);
     setShowUnread(false);
     applyFilter({});
   };
@@ -165,9 +182,9 @@ export default function AlertFilterSidebar({
   };
 
   useEffect(() => {
-    setCameraText("");
-    setEventText("");
-    setSeverityValue(null);
+    setCameraText(allOptionLabel);
+    setEventText(allOptionLabel);
+    setSeverityValue(allOptionLabel);
     setStartDate(null);
     setEndDate(null);
     setShowUnread(false);
@@ -196,7 +213,7 @@ export default function AlertFilterSidebar({
   }, [params]);  
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={locale}>
       <Button disableRipple color="inherit" endIcon={<Iconify icon={'ic:round-filter-list'} />} onClick={onOpen}>
         {translate('app.filter-label')}
       </Button>
@@ -233,7 +250,7 @@ export default function AlertFilterSidebar({
                 value={cameraText}
               >
                 <option value="" />
-                {cameraList.map((option) => (
+                {cameraDataList.map((option) => (
                   <option key={option.publicId} value={option.name}>
                     {option.name}
                   </option>
