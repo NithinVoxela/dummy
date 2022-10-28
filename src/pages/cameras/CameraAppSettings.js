@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import { useConfirm } from 'material-ui-confirm';
 // @mui
-import { Container, Tab, Box, Tabs } from '@mui/material';
+import { Container, Tab, Box, Tabs, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -13,6 +15,7 @@ import useLocales from '../../hooks/useLocales';
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import Iconify from '../../components/Iconify';
+import ConfirmationModalConfig from '../../components/widgets/ConfirmationModalConfig';
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
@@ -34,7 +37,10 @@ const CameraAppSettings = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+  const confirm = useConfirm();
+  const theme = useTheme();
   const [mlApp, setMlApp] = useState(null);
+  const [isFormUpdated, setIsFormUpdated] = useState(false);
   const { cameraDetails, schedularList, cameraLatestFrame } = useSelector((state) => state.cameras);
   const { userList } = useSelector((state) => state.users);
 
@@ -134,21 +140,61 @@ const CameraAppSettings = () => {
     return () => {      
       resetCameraAppSchedule();     
       resetUsers();
+      setIsFormUpdated(false);
     };
   }, []);
   
-
-  const onCancel = () => {
-    navigate(`${PATH_DASHBOARD.cameras.root}/apps/${cameraId}`);
+  const handleTabConfirmation = async() => {
+    const config = ConfirmationModalConfig(theme);
+    const settings = {...config};
+    settings.confirmationButtonProps.color = 'error';
+    settings.confirmationText = translate('app.leave-btn-label');
+    settings.cancellationText = translate('app.camera-cancel-label');
+    settings.title = (
+      <Typography
+        color="textPrimary"
+        variant="h6"
+      >
+        {translate('app.annotation-confirmation-label')} 
+      </Typography>
+    );
+    
+    try {
+      await confirm({
+        ...settings,
+        description: translate('app.annotation-confirmation-text-label'),
+      });
+      setIsFormUpdated(false);
+      return true;
+    } catch (err) {
+      return false;
+    }     
+  };
+  const onCancel = async() => {
+    if (currentTab === 'region' && isFormUpdated) {
+      const canNaviagte = await handleTabConfirmation();
+      if (canNaviagte) {
+        navigate(`${PATH_DASHBOARD.cameras.root}/apps/${cameraId}`);
+      }
+    } else {
+      navigate(`${PATH_DASHBOARD.cameras.root}/apps/${cameraId}`);
+    }        
   };
 
-  const handleTabChange = (e, value) => {
-    setCurrentTab(value);
-    if (value === 'general') {
-      getCamera();
-      getUserList();
-    } else if (value === 'schedule') {
-      getCameraAppSchedule();
+  const handleTabChange = async(e, value) => {
+    let canNaviagte = true;
+    if (isFormUpdated) {
+      canNaviagte = await handleTabConfirmation();      
+    }
+    if (canNaviagte) {
+      setCurrentTab(value);
+      setIsFormUpdated(false);
+      if (value === 'general') {
+        getCamera();
+        getUserList();
+      } else if (value === 'schedule') {
+        getCameraAppSchedule();
+      }
     }
   }
 
@@ -189,7 +235,7 @@ const CameraAppSettings = () => {
       label: translate('app.camera-region-of-intrest'),
       icon: <Iconify icon={'carbon:area-custom'} width={20} height={20} />,
       component: (
-        <AnnotationTab translate={translate} frameUrl={cameraLatestFrame} handleSave={handleSaveApp} currentCamera={cameraDetails} appId={appId} onCancel={onCancel} />          
+        <AnnotationTab translate={translate} frameUrl={cameraLatestFrame} handleSave={handleSaveApp} currentCamera={cameraDetails} appId={appId} onCancel={onCancel} setIsFormUpdated={setIsFormUpdated} />          
       ),
     },
   ];

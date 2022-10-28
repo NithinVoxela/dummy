@@ -24,7 +24,7 @@ const coordinates = [150, 300];
 const style = { height: '68vh', width: '75vw' };
 
 export default function AnnotationTab(props) {
-  const { currentCamera, translate, handleSave, frameUrl, appId, onCancel } = props;
+  const { currentCamera, translate, handleSave, frameUrl, appId, onCancel, setIsFormUpdated } = props;  
   const [mapLayers, setMapLayers] = useState([]);
 
   const [map, setMap] = useState(null);
@@ -144,7 +144,7 @@ export default function AnnotationTab(props) {
 
   useEffect(() => {
     setIsLoading(true);
-    initializeLocale();
+    initializeLocale();       
   }, []);
 
   useEffect(() => {
@@ -213,6 +213,7 @@ export default function AnnotationTab(props) {
       const { _leaflet_id } = layer;
 
       setMapLayers((layers) => [...layers, { id: _leaflet_id, latlngs: layer.getLatLngs()[0] }]);
+      setIsFormUpdated(true);
     }
   };
 
@@ -226,6 +227,7 @@ export default function AnnotationTab(props) {
         layers.map((l) => (l.id === _leaflet_id ? { ...l, latlngs: { ...editing.latlngs[0] } } : l))
       );
     });
+    setIsFormUpdated(true);
   };
 
   const _onDeleted = (e) => {
@@ -236,6 +238,7 @@ export default function AnnotationTab(props) {
     Object.values(_layers).map(({ _leaflet_id }) => {
       setMapLayers((layers) => layers.filter((l) => l.id !== _leaflet_id));
     });
+    setIsFormUpdated(true);
   };
 
   const tansformCordinates = () => {
@@ -263,6 +266,7 @@ export default function AnnotationTab(props) {
         appId: mlApp.app.id,
       };
       handleSave(payload);
+      setIsFormUpdated(false);
     }
   };
 

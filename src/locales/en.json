@@ -233,6 +233,9 @@
     "unread-label": "Unseen",
     "mark-all-read-label": "Mark All As Read",
     "alert-status-updated-label": "Alert status updated successfully.",
-    "all-option-label": "All"
+    "all-option-label": "All",
+    "leave-btn-label": "Leave",
+    "annotation-confirmation-label": "Are you sure you want to leave?",
+    "annotation-confirmation-text-label": "You will loose all unsaved changes. Are you sure you want to leave?"
   }
 }

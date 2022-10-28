@@ -5,7 +5,6 @@ import Router from './routes';
 // theme
 import ThemeProvider from './theme';
 // components
-import Settings from './components/settings';
 import RtlLayout from './components/RtlLayout';
 import { ChartStyle } from './components/chart';
 import ScrollToTop from './components/ScrollToTop';

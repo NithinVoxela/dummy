@@ -233,6 +233,9 @@
     "unread-label": "目に見えない",
     "mark-all-read-label": "すべて既読にする",
     "alert-status-updated-label": "アラート ステータスが正常に更新されました",
-    "all-option-label": "全て"
+    "all-option-label": "全て",
+    "leave-btn-label": "離れる",
+    "annotation-confirmation-label": "退会してもよろしいですか",
+    "annotation-confirmation-text-label": "保存されていない変更はすべて失われます。退会してもよろしいですか"
   }
 }
