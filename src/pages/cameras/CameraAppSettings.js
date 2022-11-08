@@ -227,6 +227,7 @@ const CameraAppSettings = () => {
           schedularList={schedularList}
           resetSchedule={resetCameraAppSchedule}
           onCancel={onCancel}
+          setIsFormUpdated={setIsFormUpdated}
         />
       ),
     },

@@ -8,7 +8,7 @@ import Iconify from '../../components/Iconify';
 
 
 const TimePickerCmp = (props) => {
-  const { cmpKey, handleTimeRemove, isAlreadyExists, timeItemIndex, weekDayIndex, time, updateSchedule, translate, hasTimeUpdated, setHasTimeUpdated} = props;
+  const { cmpKey, handleTimeRemove, isAlreadyExists, timeItemIndex, weekDayIndex, time, updateSchedule, translate, setIsFormUpdated, setHasTimeUpdated} = props;
   const [startTime, setStartTime] = useState(time.startTime);
   const [endTime, setEndTime] = useState(time.endTime);
   const [error, setError] = useState("");
@@ -37,11 +37,13 @@ const TimePickerCmp = (props) => {
   const handleStartDateChange = date => {
     setStartTime(date);
     setHasTimeUpdated(true);
+    setIsFormUpdated(true);
   };
 
   const handleEndDateChange = date => {
     setEndTime(date);
     setHasTimeUpdated(true);
+    setIsFormUpdated(true);
   };
 
   useEffect(() => {

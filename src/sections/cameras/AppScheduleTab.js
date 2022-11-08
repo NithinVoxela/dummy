@@ -36,7 +36,7 @@ AppScheduleTab.propTypes = {
 // ----------------------------------------------------------------------
 
 export default function AppScheduleTab(props) {
-  const { translate, appId, updateAppScheduleRequest, schedularList, resetSchedule, onCancel } = props;
+  const { translate, appId, updateAppScheduleRequest, schedularList, resetSchedule, onCancel, setIsFormUpdated } = props;
 
   const weekdays = [
     {
@@ -95,6 +95,7 @@ export default function AppScheduleTab(props) {
     });
     setScheduleData(newData);
     setHasTimeUpdated(true);
+    setIsFormUpdated(true);
   };
 
   const isAlreadyExists = (time, timeItemIndex, weekDayIndex, updatedScheduleData=null) => {
@@ -176,7 +177,7 @@ export default function AppScheduleTab(props) {
       startTime,
       endTime
     };
-    setScheduleData(newData);    
+    setScheduleData(newData);       
   };
 
   const handleTimeRemove = (timeItemIndex, weekDayIndex) => {
@@ -197,7 +198,8 @@ export default function AppScheduleTab(props) {
     } else {
       dayData.hasError = dayData.schedule.length > 1 ? dayData.hasError : false;
     }        
-    setScheduleData(newData);    
+    setScheduleData(newData);   
+    setIsFormUpdated(true); 
   };
 
   const handleCheckboxChange = (checked, weekDayIndex) => {
@@ -211,7 +213,8 @@ export default function AppScheduleTab(props) {
         endTime: set(new Date(), { hours: 17, minutes: 0 })
       }];
     }
-    setScheduleData(newData);    
+    setScheduleData(newData);   
+    setIsFormUpdated(true); 
   };
 
   const isSaveDisabled = () => {
@@ -235,7 +238,7 @@ export default function AppScheduleTab(props) {
           endTime: new Date(`${dateString} ${schdule.tillTime}`)
         });
       }
-      setScheduleData(newScheduleData);
+      setScheduleData(newScheduleData);      
     }
   }, [schedularList]);
 
@@ -263,6 +266,7 @@ export default function AppScheduleTab(props) {
         translate={translate}
         hasTimeUpdated={hasTimeUpdated}
         setHasTimeUpdated={setHasTimeUpdated}
+        setIsFormUpdated={setIsFormUpdated}
       />
     );
 
