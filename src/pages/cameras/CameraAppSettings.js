@@ -171,7 +171,7 @@ const CameraAppSettings = () => {
     }     
   };
   const onCancel = async() => {
-    if (currentTab === 'region' && isFormUpdated) {
+    if (currentTab === 'region' || currentTab === 'schedule' && isFormUpdated) {
       const canNaviagte = await handleTabConfirmation();
       if (canNaviagte) {
         navigate(`${PATH_DASHBOARD.cameras.root}/apps/${cameraId}`);
