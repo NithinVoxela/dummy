@@ -236,6 +236,7 @@
     "all-option-label": "All",
     "leave-btn-label": "Leave",
     "annotation-confirmation-label": "Are you sure you want to leave?",
-    "annotation-confirmation-text-label": "You will loose all unsaved changes. Are you sure you want to leave?"
+    "annotation-confirmation-text-label": "You will loose all unsaved changes. Are you sure you want to leave?",
+    "subscriber-validation-label": "Please add subscriber"
   }
 }

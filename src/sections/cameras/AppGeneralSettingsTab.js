@@ -15,11 +15,11 @@ import {
   Stack,
   Switch,
   TextField,
-  TextareaAutosize,
+  TextareaAutosize,  
   RadioGroup,
   Radio,
 } from '@mui/material';
-import { RHFRadioGroup } from '../../components/hook-form';
+
 // components
 // ----------------------------------------------------------------------
 
@@ -198,27 +198,28 @@ export default function AppGeneralSettingsTab(props) {
 
 
   const renderAutoComplete = (handler, value, label, type) => (
-    <FormControlLabel
-      control={
-        <Autocomplete            
-          multiple            
-          size="small"
-          sx={{ minWidth: 300, ml: 1 }}
-          onChange={handler}
-          options={subscribers || []}
-          getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
-          renderTags={(value, getTagProps) => value.map((option, index) => (
-              <Chip {...getTagProps({ index })} key={`${type}-${option.id}`} size="small" label={`${option.firstName} ${option.lastName}`} />
-            ))
-          }
-          renderInput={(params) => <TextField label="" {...params} />}
-          value={value}
-        />
-      }
-      label={`${translate(label)}:`}
-      labelPlacement="start"
-      sx={{ ml: 5, mb: 2, justifyContent: "start" }}
-    />   
+    
+      <FormControlLabel
+        control={
+          <Autocomplete            
+            multiple            
+            size="small"
+            sx={{ minWidth: 300, ml: 1 }}
+            onChange={handler}
+            options={subscribers || []}
+            getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
+            renderTags={(value, getTagProps) => value.map((option, index) => (
+                <Chip {...getTagProps({ index })} key={`${type}-${option.id}`} size="small" label={`${option.firstName} ${option.lastName}`} />
+              ))
+            }
+            renderInput={(params) => <TextField label="" {...params} error={value.length === 0} helperText={value.length === 0 ? translate('app.subscriber-validation-label'): ""} />}
+            value={value}
+          />
+        }
+        label={`${translate(label)}:`}
+        labelPlacement="start"
+        sx={{ ml: 5, mb: 2, justifyContent: "start" }}
+      />         
   );
 
   return (
@@ -297,7 +298,7 @@ export default function AppGeneralSettingsTab(props) {
             }
             label={translate('app.camera-mobile-label')}
           />
-          { mobileAlert && renderAutoComplete(handleMobileSubscriber, mobileSubscribers, 'app.camera-mobile-subscribers-label', 'mobile') }
+          { mobileAlert && renderAutoComplete(handleMobileSubscriber, mobileSubscribers, 'app.camera-mobile-subscribers-label', 'mobile') }          
           <FormControlLabel
             control={<Checkbox checked={email} onChange={handleEmailAlertChange} name="email" />}
             label={translate('app.camera-email-label')}
