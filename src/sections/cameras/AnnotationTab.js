@@ -300,6 +300,7 @@ export default function AnnotationTab(props) {
                 onCreated={_onCreate}
                 onEdited={_onEdited}
                 onDeleted={_onDeleted}
+                onEditStart={() => setIsFormUpdated(true)}
                 draw={{
                   rectangle: false,
                   polyline: false,

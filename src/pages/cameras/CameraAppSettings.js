@@ -211,7 +211,8 @@ const CameraAppSettings = () => {
           handleSave={handleSaveApp}
           onCancel={onCancel}
           appId={appId} 
-          userList={userList}         
+          userList={userList}      
+          setIsFormUpdated={setIsFormUpdated}   
         />
       ),
     },

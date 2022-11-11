@@ -47,7 +47,7 @@ AppGeneralSettingsTab.propTypes = {
 // ----------------------------------------------------------------------
 
 export default function AppGeneralSettingsTab(props) {
-  const { onCancel, translate, appId, currentCamera, handleSave, userList={} } = props;
+  const { onCancel, translate, appId, currentCamera, handleSave, userList={}, setIsFormUpdated } = props;
 
   const [camera, setCamera] = useState({
     name: "",
@@ -102,35 +102,51 @@ export default function AppGeneralSettingsTab(props) {
 
   const handleSensitivityChange = (event, value) => {
     setSensitivity(value === "" ? "" : Number(value));
+    setIsFormUpdated(true);
   };
 
   const handleDeskAlertChange = (event) => {
     setDesktopAlert(event.target.checked);
+    setIsFormUpdated(true);
   };
 
   const handleMobileAlertChange = (event) => {
     setMobileAlert(event.target.checked);
+    setIsFormUpdated(true);
   };
 
   const handleEmailAlertChange = (event) => {
     setEmail(event.target.checked);
+    setIsFormUpdated(true);
   };
 
  
   const handleExtraConfigChange = (event) => {
     setExtraConfig(event.target.value);
+    setIsFormUpdated(true);
   };
 
   const handlePrivacyChange = (evt) => {
     setIsPrivacyEnabled(evt.target.checked);
+    setIsFormUpdated(true);
   };
 
-  const handleDesktopSubscriber = (e, values) => setDesktopSubscribers(values);
-  const handleMobileSubscriber = (e, values) => setMobileSubscribers(values);
-  const handleEmailSubscriber = (e, values) => setEmailSubscribers(values);
+  const handleDesktopSubscriber = (e, values) => {
+    setDesktopSubscribers(values);
+    setIsFormUpdated(true);
+  };
+  const handleMobileSubscriber = (e, values) => {
+    setMobileSubscribers(values);
+    setIsFormUpdated(true);
+  };
+  const handleEmailSubscriber = (e, values) => {
+    setEmailSubscribers(values);
+    setIsFormUpdated(true);
+  }
 
   const handleRadioChange = (e, value) => {
     setSeverityValue(value);
+    setIsFormUpdated(true);
   };
 
   useMemo(() => {
@@ -185,7 +201,8 @@ export default function AppGeneralSettingsTab(props) {
         deskTopSubscribers: desktop,
         severity: severityValue
       };      
-      handleSave(payload);      
+      handleSave(payload);    
+      setIsFormUpdated(false);  
     }
   };
 
