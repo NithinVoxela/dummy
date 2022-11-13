@@ -83,13 +83,12 @@ export default function AppScheduleTab(props) {
     }
   ];
   const [scheduleData, setScheduleData] = useState(weekdays);
-  const [hasTimeUpdated, setHasTimeUpdated] = useState(false);
+  const [hasTimeUpdated, setHasTimeUpdated] = useState(false);  
 
   const handleAddClick = (weekDayIndex) => {
-    const newData = cloneDeep(scheduleData);
-    const dayData = newData[weekDayIndex];
-    dayData.isSelected = true;
-    dayData.schedule.push({
+    const newData = cloneDeep(scheduleData);    
+    newData[weekDayIndex].isSelected = true;
+    newData[weekDayIndex].schedule.push({
       startTime: set(new Date(), { hours: 9, minutes: 0 }),
       endTime: set(new Date(), { hours: 17, minutes: 0 })
     });
@@ -104,15 +103,21 @@ export default function AppScheduleTab(props) {
       updatedScheduleData = scheduleData;
     }
     try {
-      if (updatedScheduleData[weekDayIndex].schedule.length > 1) {
-        const range = {
-          start: time.startTime,
-          end: time.endTime
-        };
+      if (updatedScheduleData[weekDayIndex].schedule.length > 1) {        
         const newScheduleData = cloneDeep(updatedScheduleData[weekDayIndex]);
         newScheduleData.schedule.splice(timeItemIndex, 1);
         isExists = newScheduleData.schedule.some(
-          item => isWithinInterval(item.startTime, range) || isWithinInterval(item.endTime, range)
+          item => 
+          { 
+            const range = {
+              start: item.startTime,
+              end: item.endTime
+            };
+            if (isWithinInterval(time.startTime, range) || isWithinInterval(time.endTime, range)) {
+              return true;
+            }
+            return false;
+          }
         );
       }
     } catch (error) {
@@ -153,53 +158,63 @@ export default function AppScheduleTab(props) {
     updateAppScheduleRequest(payload);
   };
 
+  const validateTime = (
+    weekDayIndex,
+    timeItemIndex,
+    startTime,
+    endTime
+  ) => {
+    let hasError = false;
+    const newData = cloneDeep(scheduleData);
+    const dayData = newData[weekDayIndex];
+    if (dayData.schedule.length > 1) {
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i<dayData.schedule.length; i++) {      
+        if (timeItemIndex !== i && (isEqual(dayData.schedule[i].startTime, startTime) || isEqual(dayData.schedule[i].endTime, endTime))) {
+          hasError = true;          
+          break;
+        }      
+      }
+    }
+    return hasError;
+  }
+
   const updateSchedule = (
     weekDayIndex,
     timeItemIndex,
     startTime,
     endTime,
-    hasError
+    hasError = false
   ) => {
-    const newData = cloneDeep(scheduleData);
-    const dayData = newData[weekDayIndex];
-    dayData.isSelected = true;
-    dayData.hasError = hasError;
-    const weekDay = dayData.schedule[timeItemIndex];
-    if (
-      dayData.schedule.length > 1 &&
-      (hasError || (isEqual(weekDay.startTime, startTime) && isEqual(weekDay.endTime, endTime)))
-    ) {
-      dayData.hasError = true;
-    } else {
-      dayData.hasError = false;
-    }
-    dayData.schedule[timeItemIndex] = {
+    const newData = cloneDeep(scheduleData);    
+    newData[weekDayIndex].isSelected = true;
+    newData[weekDayIndex].hasError = hasError;    
+    newData[weekDayIndex].schedule[timeItemIndex] = {
       startTime,
       endTime
-    };
-    setScheduleData(newData);       
+    };    
+    setScheduleData(newData);    
   };
 
   const handleTimeRemove = (timeItemIndex, weekDayIndex) => {
-    const newData = cloneDeep(scheduleData);
-    const dayData = newData[weekDayIndex];
-    dayData.schedule.splice(timeItemIndex, 1);
-    dayData.isSelected = dayData.schedule.length > 0;
-    if (dayData.schedule.length > 1) {
+    const newData =scheduleData;    
+    newData[weekDayIndex].schedule.splice(timeItemIndex, 1);
+    newData[weekDayIndex].isSelected = newData[weekDayIndex].schedule.length > 0;
+    if (newData[weekDayIndex].schedule.length > 1) {
       // eslint-disable-next-line no-plusplus
-      for (let i = 0; i<dayData.schedule.length; i++) {
-        const isExists = isAlreadyExists(dayData.schedule[i], i, weekDayIndex, newData);
+      for (let i = 0; i<newData[weekDayIndex].schedule.length; i++) {
+        const isExists = isAlreadyExists(newData[weekDayIndex].schedule[i], i, weekDayIndex, newData);
         if (isExists) {
-          dayData.hasError = true;
+          newData[weekDayIndex].hasError = true;
           break;
         }
-        dayData.hasError = false;
+        newData[weekDayIndex].hasError = false;
       }
     } else {
-      dayData.hasError = dayData.schedule.length > 1 ? dayData.hasError : false;
+      newData[weekDayIndex].hasError = newData[weekDayIndex].schedule.length > 1 ? newData[weekDayIndex].hasError : false;
     }        
-    setScheduleData(newData);   
-    setIsFormUpdated(true); 
+    setScheduleData([...newData]);   
+    setIsFormUpdated(true);  
   };
 
   const handleCheckboxChange = (checked, weekDayIndex) => {
@@ -213,7 +228,7 @@ export default function AppScheduleTab(props) {
         endTime: set(new Date(), { hours: 17, minutes: 0 })
       }];
     }
-    setScheduleData(newData);   
+    setScheduleData(newData);    
     setIsFormUpdated(true); 
   };
 
@@ -223,6 +238,16 @@ export default function AppScheduleTab(props) {
     isDisabled = newData.some(item => item.hasError);
     return isDisabled;
   };
+
+  const handleTimeRange = (time, timeItemIndex, weekDayIndex) => {    
+    if (scheduleData[weekDayIndex].schedule.length > 1) {
+      const hasRangeError = isAlreadyExists(time, timeItemIndex, weekDayIndex);
+      return hasRangeError;
+    }
+    return false;
+  };
+
+  const generateKey = (pre) => `${ pre }_${ new Date().getTime() }`
 
   useEffect(() => {
     if (schedularList?.length > 0) {
@@ -238,7 +263,7 @@ export default function AppScheduleTab(props) {
           endTime: new Date(`${dateString} ${schdule.tillTime}`)
         });
       }
-      setScheduleData(newScheduleData);      
+      setScheduleData(newScheduleData);
     }
   }, [schedularList]);
 
@@ -248,26 +273,26 @@ export default function AppScheduleTab(props) {
     }
   }, [hasTimeUpdated]);
 
-  useEffect(() => {
-    return () => {      
+  useEffect(() => () => {      
       resetSchedule();     
-    };
-  }, []);
+    }, []);
 
   const renderTimefield = (time, timeItemIndex, weekDayIndex) => (
-      <TimePickerCmp
+    <TimePickerCmp
         cmpKey={`time-item-${weekDayIndex}-${timeItemIndex}`}
         weekDayIndex={weekDayIndex}
         timeItemIndex={timeItemIndex}
         handleTimeRemove={() => handleTimeRemove(timeItemIndex, weekDayIndex)}
-        time={time}
+        time={{...time}}
         isAlreadyExists={isAlreadyExists}
         updateSchedule={updateSchedule}
         translate={translate}
         hasTimeUpdated={hasTimeUpdated}
         setHasTimeUpdated={setHasTimeUpdated}
+        validateTime={validateTime}
+        hasRangeValidationError={handleTimeRange(time, timeItemIndex, weekDayIndex)}
         setIsFormUpdated={setIsFormUpdated}
-      />
+      /> 
     );
 
   const renderWeekday = (item, index) => (
@@ -305,7 +330,7 @@ export default function AppScheduleTab(props) {
             }}
           >
             {item.isSelected &&
-              item.schedule.map((time, timeItemIndex) => renderTimefield(time, timeItemIndex, index))}
+              item.schedule.map((time, timeItemIndex) => renderTimefield({...time}, timeItemIndex, index))}
             {(!item.isSelected || item.schedule.length === 0) && (
               <Box style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", padding: "8px 0px" }}>
                 <Typography color="textSecondary" variant="body">

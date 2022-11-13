@@ -8,7 +8,7 @@ import Iconify from '../../components/Iconify';
 
 
 const TimePickerCmp = (props) => {
-  const { cmpKey, handleTimeRemove, isAlreadyExists, timeItemIndex, weekDayIndex, time, updateSchedule, translate, setIsFormUpdated, setHasTimeUpdated} = props;
+  const { cmpKey, handleTimeRemove, isAlreadyExists, timeItemIndex, weekDayIndex, time, updateSchedule, translate, setIsFormUpdated, setHasTimeUpdated, validateTime, hasRangeValidationError} = props;
   const [startTime, setStartTime] = useState(time.startTime);
   const [endTime, setEndTime] = useState(time.endTime);
   const [error, setError] = useState("");
@@ -27,11 +27,15 @@ const TimePickerCmp = (props) => {
       setError(
         translate("app.end-time-error-lable")
       );
+    } 
+    else if (validateTime( weekDayIndex, timeItemIndex, startTime, endTime)) {
+      hasError = true;
     } else {
       setError("");
       hasError = false;
     }
     updateSchedule(weekDayIndex, timeItemIndex, startTime, endTime, hasError);
+    return hasError;
   };
 
   const handleStartDateChange = date => {
@@ -46,20 +50,37 @@ const TimePickerCmp = (props) => {
     setIsFormUpdated(true);
   };
 
-  useEffect(() => {
+  const handleTimeRange = () => {
+    const hasError = handleDateValidation();
+    if (hasError) {
+      return;
+    }
     const timeObject = { startTime, endTime };
     const hasRangeError = isAlreadyExists(timeObject, timeItemIndex, weekDayIndex);
-    if (!hasRangeError) {
-      handleDateValidation();
-    } else {
+    if (hasRangeError) {      
       setError(
         translate("app.time-overlap-lable")
       );
       updateSchedule(weekDayIndex, timeItemIndex, startTime, endTime, true);
     }
+  };
+
+  useEffect(() => {
+    handleTimeRange();
   }, [startTime, endTime]);
 
-  return (    
+
+  useEffect(() => {
+    if (hasRangeValidationError) {
+      setError(
+        translate("app.time-overlap-lable")
+      );
+    } else {
+      setError("");
+    }
+  }, [hasRangeValidationError]);
+
+  return (
     <Box key={cmpKey} sx={{ padding: "8px 0px" }}>
       <Box style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>        
         <MobileTimePicker
@@ -119,6 +140,9 @@ TimePickerCmp.propTypes = {
   time: PropTypes.any,
   hasTimeUpdated: PropTypes.bool,
   setHasTimeUpdated: PropTypes.func,
+  validateTime: PropTypes.func,
+  hasRangeValidationError: PropTypes.bool,
+  setIsFormUpdated: PropTypes.func,
 };
 
 export default TimePickerCmp;

@@ -237,6 +237,7 @@
     "leave-btn-label": "離れる",
     "annotation-confirmation-label": "退会してもよろしいですか",
     "annotation-confirmation-text-label": "保存されていない変更はすべて失われます。退会してもよろしいですか",
-    "subscriber-validation-label": "サブスクライバーを追加してください"
+    "subscriber-validation-label": "サブスクライバーを追加してください",
+    "new-interval-lable": "スケジュールを追加"
   }
 }
