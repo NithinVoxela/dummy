@@ -10,6 +10,7 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useSettings from '../../hooks/useSettings';
 import useLocales from '../../hooks/useLocales';
+import usePrompt from '../../hooks/usePrompt';
 
 // components
 import Page from '../../components/Page';
@@ -198,7 +199,8 @@ const CameraAppSettings = () => {
     }
   }
 
-
+  const isBlocking = () => isFormUpdated;
+  
   const APP_TABS = [
     {
       value: 'general',
@@ -243,6 +245,7 @@ const CameraAppSettings = () => {
   ];
 
   const cameraName = cameraDetails?.name ? cameraDetails.name : '';
+  usePrompt(translate('app.annotation-confirmation-text-label'), isBlocking());
 
   return (
     <Page title={`${translate('app.alert-camera-details')} : ${translate('app.camera-apps-header-label')}`}>
