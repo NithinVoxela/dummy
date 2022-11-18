@@ -1,38 +1,41 @@
 import { useTranslation } from 'react-i18next';
 // '@mui
-import { enUS, deDE, frFR } from '@mui/material/locale';
+import { enUS, jaJP } from '@mui/material/locale';
+import { patchUser } from '../redux/slices/users';
 
 // ----------------------------------------------------------------------
 
 const LANGS = [
   {
-    label: 'English',
+    label: 'app.lang-en',
     value: 'en',
     systemValue: enUS,
-    icon: 'https://minimal-assets-api.vercel.app/assets/icons/ic_flag_en.svg',
+    icon: '/icons/flags/ic_flag_en.svg',
   },
   {
-    label: 'German',
-    value: 'de',
-    systemValue: deDE,
-
-    icon: 'https://minimal-assets-api.vercel.app/assets/icons/ic_flag_de.svg',
-  },
-  {
-    label: 'French',
-    value: 'fr',
-    systemValue: frFR,
-    icon: 'https://minimal-assets-api.vercel.app/assets/icons/ic_flag_fr.svg',
+    label: 'app.lang-ja',
+    value: 'ja',
+    systemValue: jaJP,
+    icon: '/icons/flags/ic_flag_ja.png',
   },
 ];
 
 export default function useLocales() {
   const { i18n, t: translate } = useTranslation();
-  const langStorage = localStorage.getItem('i18nextLng');
-  const currentLang = LANGS.find((_lang) => _lang.value === langStorage) || LANGS[1];
+  const langStorage = localStorage.getItem("i18nextLng");
+
+  const currentLang = LANGS.find((_lang) => _lang.value === langStorage) || LANGS[0];
 
   const handleChangeLanguage = (newlang) => {
     i18n.changeLanguage(newlang);
+
+    const user = JSON.parse(localStorage.getItem("user"));
+    user.locale = newlang;
+    localStorage.setItem('user', JSON.stringify(user));
+    
+    patchUser({
+      'locale': newlang
+    });
   };
 
   return {

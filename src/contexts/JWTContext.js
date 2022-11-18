@@ -1,4 +1,5 @@
 import { createContext, useEffect, useReducer } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 // utils
 import axios from '../utils/axios';
@@ -66,6 +67,7 @@ AuthProvider.propTypes = {
 
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState); 
+  const { i18n } = useTranslation();
 
   useEffect(() => {
     const initialize = async () => {
@@ -76,7 +78,8 @@ function AuthProvider({ children }) {
 
         if (accessToken && isValidToken(accessToken) && user?.userName) {
           setSession(accessToken);         
-
+          i18n.changeLanguage(user.locale);
+          
           dispatch({
             type: 'INITIALIZE',
             payload: {
@@ -120,6 +123,7 @@ function AuthProvider({ children }) {
     setSession(accessToken);
     user.displayName = `${data?.firstName} ${data?.lastName}`;
     window.localStorage.setItem('user', JSON.stringify(user));
+    i18n.changeLanguage(user.locale);
 
     const firebaseToken = window.sessionStorage.getItem('messagingToken');
 

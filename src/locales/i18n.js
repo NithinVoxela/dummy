@@ -23,7 +23,7 @@ i18n
       en: { translations: enLocales },  
       ja: { translations: jaLocales }
     },
-    order: ['navigator', 'querystring', 'cookie', 'localStorage', 'sessionStorage', 'htmlTag', 'path', 'subdomain'],    
+    order: ['localStorage', 'sessionStorage'],    
     fallbackLng: 'en',
     debug: false,
     ns: ['translations'],

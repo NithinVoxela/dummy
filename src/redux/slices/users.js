@@ -62,5 +62,7 @@ export function resetUserList() {
   dispatch(slice.actions.resetUserList()); 
 };
 
-
+export async function patchUser(payload = {}) {        
+  await axios.put('user/patch', payload); 
+}
 

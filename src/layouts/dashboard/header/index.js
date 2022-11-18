@@ -18,6 +18,7 @@ import { IconButtonAnimate } from '../../../components/animate';
 //
 import AccountPopover from './AccountPopover';
 import NotificationsPopover from './NotificationsPopover';
+import LanguagePopover from './LanguagePopover';
 import { useDispatch } from '../../../redux/store';
 import { getUnreadAlertCount } from '../../../redux/slices/alerts';
 
@@ -111,7 +112,8 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
       
         <Box sx={{ flexGrow: 1 }} />
 
-        <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>      
+        <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
+          <LanguagePopover />      
           <NotificationsPopover />
           <AccountPopover />
         </Stack>

@@ -238,6 +238,8 @@
     "annotation-confirmation-label": "退会してもよろしいですか",
     "annotation-confirmation-text-label": "保存されていない変更はすべて失われます。退会してもよろしいですか",
     "subscriber-validation-label": "サブスクライバーを追加してください",
-    "new-interval-lable": "スケジュールを追加"
+    "new-interval-lable": "スケジュールを追加",
+    "lang-en": "英語",
+    "lang-ja": "日本"
   }
 }
