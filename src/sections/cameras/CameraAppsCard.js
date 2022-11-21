@@ -34,10 +34,10 @@ const CameraAppsCard = (props) => {
       <Card sx={{ minHeight: 165 }}>
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            {item.app.name}
+            {translate(`app.mlapp-type-${item.app.code}`, `${item.app.name}`)}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            {item.app.description}
+            {translate(`app.mlapp-type-${item.app.code}`, `${item.app.description}`)}
           </Typography>
         </CardContent>
         <CardActions style={{ padding: "8px 16px", justifyContent: "space-between" }}>

@@ -240,6 +240,10 @@
     "subscriber-validation-label": "Please add subscriber",
     "new-interval-lable": "Add a Schedule",
     "lang-en": "English",
-    "lang-ja": "Japanese"
+    "lang-ja": "Japanese",
+    "mlapp-type-A001": "Person Detection",
+    "mlapp-type-A002": "Motion Detection",
+    "mlapp-type-A003": "Wakeup Detection",
+    "mlapp-type-A004": "Fall Detection"
   }
 }

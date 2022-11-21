@@ -240,6 +240,10 @@
     "subscriber-validation-label": "サブスクライバーを追加してください",
     "new-interval-lable": "スケジュールを追加",
     "lang-en": "英語",
-    "lang-ja": "日本"
+    "lang-ja": "日本",
+    "mlapp-type-A001": "人物検知",
+    "mlapp-type-A002": "動作検知",
+    "mlapp-type-A003": "離床検知",
+    "mlapp-type-A004": "転倒検知"
   }
 }
