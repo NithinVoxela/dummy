@@ -10,7 +10,7 @@ const LANGS = [
     label: 'app.lang-en',
     value: 'en',
     systemValue: enUS,
-    icon: '/icons/flags/ic_flag_en.svg',
+    icon: '/icons/flags/ic_flag_us.svg',
   },
   {
     label: 'app.lang-ja',
