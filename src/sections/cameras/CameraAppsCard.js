@@ -28,6 +28,7 @@ const CameraAppsCard = (props) => {
   const { loading, dataList, translate, handleAppsClick, handleAppEnable  } = props;
 
   const isAppEnabled = (item) => item.config ? item.config.isEnabled : false;
+  const isNonMLApp = (item) => item.app.appType !== 'ML';
 
   const renderAppCard = (item) => (
     <Grid item md={12} xs={12} key={`${item.app.id}`}>
@@ -59,7 +60,7 @@ const CameraAppsCard = (props) => {
                 }
                 label={translate("app.camera-active-label")}
               />
-              <Button size="small" color="primary" onClick={() => handleAppsClick(item)}>
+              <Button size="small" color="primary" disabled={isNonMLApp(item)} onClick={() => handleAppsClick(item)}>
                 {translate("app.camera-settings-label")}
               </Button>
             </>

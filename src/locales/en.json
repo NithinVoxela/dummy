@@ -244,6 +244,7 @@
     "mlapp-type-A001": "Person Detection",
     "mlapp-type-A002": "Motion Detection",
     "mlapp-type-A003": "Wakeup Detection",
-    "mlapp-type-A004": "Fall Detection"
+    "mlapp-type-A004": "Fall Detection",
+    "mlapp-type-A005": "Continuous Recording"
   }
 }
