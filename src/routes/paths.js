@@ -42,6 +42,7 @@ export const PATH_DASHBOARD = {
     booking: path(ROOTS_DASHBOARD, '/booking'),
     cameras: path(ROOTS_DASHBOARD, '/cameras/list'),
     alerts: path(ROOTS_DASHBOARD, '/alerts/list'),
+    recordings: path(ROOTS_DASHBOARD, '/recordings/list'),
     dashboard: path(ROOTS_DASHBOARD, '/dashboard')
   }, 
   mail: {
@@ -93,6 +94,10 @@ export const PATH_DASHBOARD = {
   alerts: {
     root: path(ROOTS_DASHBOARD, '/alerts'),
     getById: path(ROOTS_DASHBOARD, '/alerts/:id')
+  },
+  recordings: {
+    root: path(ROOTS_DASHBOARD, '/recordings'),
+    getById: path(ROOTS_DASHBOARD, '/recordings/:id')
   }
 };
 

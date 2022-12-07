@@ -2,8 +2,7 @@ import { Box, Typography } from "@mui/material";
 import Label from "../../components/Label";
 import Iconify from '../../components/Iconify';
 import { VideoPreview } from "../../sections/cameras";
-import { epochToLocalDateTime, fDateTimeSuffix } from "../../utils/formatTime";
-
+import { epochToLocalDateTime } from "../../utils/formatTime";
 
 const openStreamUrl = (streamUrl) => {
   window.open(streamUrl, "_blank");
@@ -45,9 +44,9 @@ export const CAMERA_TABLE_META = {
     dataKey: 'lastActivityTime',
     type: 'widget',
     sortable: true,
-    renderWidget: (col, cellData, value) => (
+    renderWidget: (col, cellData, value, translate, authContext) => (
       <>
-        {value && value > 0 ? epochToLocalDateTime(value) : ''}
+        {value && value > 0 ? epochToLocalDateTime(value, authContext?.user?.timezone) : ''}
       </>
     )
   }, {

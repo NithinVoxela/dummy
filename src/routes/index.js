@@ -81,13 +81,20 @@ export default function Router() {
             { path: 'apps/:cameraId/settings/:appId', element: <CameraAppSettings /> },
           ],
         },
-
         {
           path: 'alerts',
           children: [
             { element: <Navigate to="/cortexa/alerts/list" replace />, index: true },        
             { path: 'list', element: <AlertList /> },   
             { path: 'detail/:alertId', element: <AlertDetail /> },           
+          ],
+        },
+        {
+          path: 'recordings',
+          children: [
+            { element: <Navigate to="/cortexa/recordings/list" replace />, index: true },        
+            { path: 'list', element: <RecordingList /> },   
+            { path: 'detail/:recordingId', element: <RecordingDetail /> },           
           ],
         },              
       ],
@@ -131,6 +138,8 @@ const CameraApps = Loadable(lazy(() => import('../pages/cameras/CameraApps')));
 const CameraAppSettings = Loadable(lazy(() => import('../pages/cameras/CameraAppSettings')));
 const AlertList = Loadable(lazy(() => import('../pages/alerts/AlertList')));
 const AlertDetail = Loadable(lazy(() => import('../pages/alerts/AlertDetail')));
+const RecordingList = Loadable(lazy(() => import('../pages/recordings/RecordingList')));
+const RecordingDetail = Loadable(lazy(() => import('../pages/recordings/RecordingDetail')));
 const Dashboard = Loadable(lazy(() => import('../pages/cortexaDashboard/Dashboard')));
 const Analytics = Loadable(lazy(() => import('../pages/analytics/Analytics')));
 // Main

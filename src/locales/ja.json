@@ -142,6 +142,7 @@
     "sort-option-oldest": "最古",
     "sort-option-newest": "最新",
     "filter-label": "フィルタ",
+    "search-label": "検索",
     "filter-reset-label": "すべてクリア",
     "start-date-lable": "開始日",
     "end-date-lable": "終了日",
@@ -151,6 +152,7 @@
     "management-label": "管理",
     "cameras-label": "カメラ",
     "alerts-label": "アラート",
+    "recordings-label": "録音",
     "dashboard-label": "ダッシュボード",
     "login-welcome-label": "こんにちは、おかえりなさい",
     "login-form-header-label": "VCare へサインイン",
@@ -245,6 +247,10 @@
     "mlapp-type-A002": "動作検知",
     "mlapp-type-A003": "離床検知",
     "mlapp-type-A004": "転倒検知",
-    "mlapp-type-A005": "連続記録"
+    "mlapp-type-A005": "連続記録",
+    "recordings-list-label": "録画リスト",
+    "recordings-found-label": "録音が見つかりました",
+    "recordings-details-label": "録音の詳細",
+    "recordings-created-on-details": "記録作成日"
   }
 }

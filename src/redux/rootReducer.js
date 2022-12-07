@@ -3,6 +3,7 @@ import storage from 'redux-persist/lib/storage';
 // slices
 import camerasReducer from './slices/cameras';
 import alertsReducer from './slices/alerts';
+import recordingsReducer from './slices/recordings';
 import authReducer from './slices/auth';
 import userReducer from './slices/users';
 import analyticsReducer from './slices/analytics';
@@ -20,9 +21,10 @@ const rootPersistConfig = {
 const rootReducer = combineReducers({
   cameras: camerasReducer,
   alerts: alertsReducer,
+  recordings: recordingsReducer,
   auth: authReducer,
   users: userReducer,
-  analytics: analyticsReducer
+  analytics: analyticsReducer,
 });
 
 export { rootPersistConfig, rootReducer };

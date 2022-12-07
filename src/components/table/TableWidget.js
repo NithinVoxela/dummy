@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Oval } from  'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
 import _ from 'lodash';
@@ -17,6 +17,7 @@ import {
   Tooltip,  
   Typography
 } from '@mui/material';
+import { AuthContext } from '../../contexts/JWTContext';
 import { fDateTimeTZSuffix } from '../../utils/formatTime';
 import Scrollbar from '../Scrollbar';
 import useLocales from '../../hooks/useLocales';
@@ -35,6 +36,7 @@ const TableWidget = (props) => {
   const [selectedRecords, setSelectedRecords] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [activeRecord, setActiveRecord] = useState(null);
+  const authContext = useContext(AuthContext);
 
   const [sortColumn, setSortColumn] = useState(null);
   const [order, setOrder] = useState('asc');
@@ -127,7 +129,7 @@ const TableWidget = (props) => {
         }
         return fDateTimeTZSuffix(value);      
       case 'widget':
-        return col.renderWidget && col.renderWidget(col, cellData, value, translate);
+        return col.renderWidget && col.renderWidget(col, cellData, value, translate, authContext);
       case 'action':
         return renderActions(col.actions, cellData);   
       default:

@@ -144,6 +144,7 @@
     "sort-option-oldest": "Oldest",
     "sort-option-newest": "Newest",
     "filter-label": "Filters",
+    "search-label": "Search",
     "filter-reset-label": "Clear All",
     "start-date-lable": "Start Date",
     "end-date-lable": "End Date",
@@ -153,6 +154,7 @@
     "management-label": "management",
     "cameras-label": "cameras",
     "alerts-label": "alerts",
+    "recordings-label": "Recordings",
     "dashboard-label": "dashboard",
     "login-welcome-label": "Hi, Welcome Back",
     "login-form-header-label": "Sign in to VCare",
@@ -245,6 +247,10 @@
     "mlapp-type-A002": "Motion Detection",
     "mlapp-type-A003": "Wakeup Detection",
     "mlapp-type-A004": "Fall Detection",
-    "mlapp-type-A005": "Continuous Recording"
+    "mlapp-type-A005": "Continuous Recording",
+    "recordings-list-label": "Recording List",
+    "recordings-found-label": "recordings found",
+    "recordings-details-label": "Recording Details",
+    "recordings-created-on-details": "RECORDING CREATED ON"
   }
 }

@@ -51,14 +51,11 @@ export function fDateWithTZ(date, timeZone) {
   return formatInTimeZone(new Date(date), timeZone, 'do MMM yyyy, h:mm a')
 }
 
-export function epochToLocalDateTime(value) {
+export function epochToLocalDateTime(value, timezone) {
   let formattedDate = null;  
-  try {    
-    const  utcSeconds = value / 1000;
-    const  d = new Date(0); // The 0 there is the key, which sets the date to the epoch
-    d.setUTCSeconds(utcSeconds);
-
-    formattedDate =  format(d, 'do MMM yyyy, h:mm a');
+  try {
+    const d = new Date(value);
+    formattedDate =  (timezone) ? formatInTimeZone(d, timezone, 'do MMM yyyy, h:mm a') : format(d, 'do MMM yyyy, h:mm a');
   } catch (err) {
     formattedDate =  '';  
   }

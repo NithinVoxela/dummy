@@ -1,4 +1,5 @@
 import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
+import EmergencyRecordingOutlinedIcon from '@mui/icons-material/EmergencyRecordingOutlined';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
@@ -21,6 +22,7 @@ const ICONS = {
   calendar: getIcon('ic_calendar'),
   ecommerce: getIcon('ic_ecommerce'),
   alerts: <WarningAmberOutlinedIcon />,
+  recordings: <EmergencyRecordingOutlinedIcon />,
   dashboard: getIcon('ic_dashboard'),
   booking: getIcon('ic_booking'),
   analytics: getIcon('ic_analytics'),
@@ -36,7 +38,8 @@ const navConfig = [
       { title: 'analytics', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
       { title: 'alerts', path: PATH_DASHBOARD.general.alerts, icon: ICONS.alerts, info: (
         <AlertCountLabel />         
-      ), },      
+      ), },  
+      { title: 'recordings', path: PATH_DASHBOARD.general.recordings, icon: ICONS.recordings, },     
     ],
   },
 

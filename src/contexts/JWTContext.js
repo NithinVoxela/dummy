@@ -1,6 +1,8 @@
 import { createContext, useEffect, useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import moment from 'moment-timezone'
+
 // utils
 import axios from '../utils/axios';
 import { isValidToken, setSession } from '../utils/jwt';
@@ -79,6 +81,7 @@ function AuthProvider({ children }) {
         if (accessToken && isValidToken(accessToken) && user?.userName) {
           setSession(accessToken);         
           i18n.changeLanguage(user.locale);
+          moment.tz.setDefault(user.timezone);
           
           dispatch({
             type: 'INITIALIZE',
@@ -124,6 +127,7 @@ function AuthProvider({ children }) {
     user.displayName = `${data?.firstName} ${data?.lastName}`;
     window.localStorage.setItem('user', JSON.stringify(user));
     i18n.changeLanguage(user.locale);
+    moment.tz.setDefault(user.timezone);
 
     const firebaseToken = window.sessionStorage.getItem('messagingToken');
 
