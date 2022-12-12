@@ -4,7 +4,6 @@ import ReactPlayer from 'react-player';
 import { has } from "lodash";
 // @mui
 import {
-  Button,
   Card,  
   Container,
   Grid,
@@ -20,8 +19,8 @@ import useLocales from '../../hooks/useLocales';
 import { AuthContext } from '../../contexts/JWTContext';
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import { epochToLocalDateTime } from '../../utils/formatTime';
-import Iconify from '../../components/Iconify';
+import CameraName from '../../sections/cameras/CameraName';
+import { formatEpochTime } from '../../utils/formatTime';
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
@@ -71,31 +70,6 @@ const RecordingDetail = () => {
     }
   }, [recordingDetails]);
 
-  const openStreamUrl = (streamUrl) => {
-    window.open(streamUrl, "_blank");
-  };
-
-  const renderDate = (dateValue) => {
-    if(dateValue) {
-      return epochToLocalDateTime(dateValue, authContext?.user?.timezone);
-    }
-
-    return null;
-  };
-
-  const renderCameraName = () => (
-    <>
-      {recordingDetails?.streamUrl?.trim()?.length > 0 ? (
-        <Button color="primary" size="small" onClick={() => openStreamUrl(recordingDetails?.streamUrl)}>
-          {recordingDetails?.cameraApp?.camera.name}
-          <Iconify icon={'ic:sharp-launch'} />
-        </Button>
-      ) : (
-        <>{recordingDetails?.cameraApp?.camera.name}</>
-      )}
-    </>
-  );
-
   return (
     <Page title={translate('app.recordings-details-label')}>
       <Container maxWidth={themeStretch ? false : 'lg'}>
@@ -126,7 +100,7 @@ const RecordingDetail = () => {
                   {translate('app.alert-camera-details').toUpperCase()}
                 </Typography>
                 <Typography color="textPrimary" variant="body1" sx={{ pt: 0.5 }} >
-                  {renderCameraName()}
+                  <CameraName cameraName={recordingDetails?.cameraApp?.camera.name} streamUrl={recordingDetails?.streamUrl}/>
                 </Typography>
               </div>
             </Grid>
@@ -136,7 +110,7 @@ const RecordingDetail = () => {
                   {translate('app.recordings-created-on-details').toUpperCase()}
                 </Typography>
                 <Typography color="textPrimary" variant="body1" sx={{ pt: 0.5 }} >
-                  {recordingDetails?.recordingTime ? renderDate(recordingDetails.recordingTime) : '-'}
+                  {recordingDetails?.recordingTime ? formatEpochTime(recordingDetails?.recordingTime, authContext?.user?.timezone) : '-'}
                 </Typography>
               </div>
             </Grid>

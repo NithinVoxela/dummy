@@ -1,7 +1,9 @@
-import { format, getTime, formatDistanceToNow } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import { formatInTimeZone } from 'date-fns-tz'
 
 // ----------------------------------------------------------------------
+
+export const DEFAULT_DATE_FORMAT = 'do MMM yyyy, h:mm a'
 
 const convertUTCDateToLocalDate = (inputDate) => {
   let date = new Date();
@@ -25,18 +27,6 @@ export function fDate(date) {
   return format(new Date(date), 'dd MMMM yyyy');
 }
 
-export function fDateTime(date) {
-  return format(new Date(date), 'dd MMM yyyy HH:mm');
-}
-
-export function fTimestamp(date) {
-  return getTime(new Date(date));
-}
-
-export function fDateTimeSuffix(date) {
-  return format(new Date(date), 'do MMM yyyy, h:mm a');
-}
-
 export function fDateTimeTZSuffix(date) {
   return format(convertUTCDateToLocalDate(date), 'do MMM yyyy, h:mm a');
 }
@@ -47,15 +37,20 @@ export function fToNow(date) {
   });
 }
 
-export function fDateWithTZ(date, timeZone) {
-  return formatInTimeZone(new Date(date), timeZone, 'do MMM yyyy, h:mm a')
+export function formatEpochTime(value, timezone, format = DEFAULT_DATE_FORMAT) {
+  const date = new Date(value);
+  return formatDate(date, timezone, format);
 }
 
-export function epochToLocalDateTime(value, timezone) {
+export function formatUTCDateString(dateStr, timezone, format = DEFAULT_DATE_FORMAT) {
+  const date = new Date(`${dateStr}Z`);
+  return formatDate(date, timezone, format);
+}
+
+export function formatDate(date, timezone, format = DEFAULT_DATE_FORMAT) {
   let formattedDate = null;  
   try {
-    const d = new Date(value);
-    formattedDate =  (timezone) ? formatInTimeZone(d, timezone, 'do MMM yyyy, h:mm a') : format(d, 'do MMM yyyy, h:mm a');
+    formattedDate =  (timezone) ? formatInTimeZone(date, timezone, format) : format(date, format);
   } catch (err) {
     formattedDate =  '';  
   }

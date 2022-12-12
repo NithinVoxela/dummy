@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
+import moment from "moment-timezone"
+
 // @mui
 import { styled } from '@mui/material/styles';
 import { Chip, Typography, Stack, Button } from '@mui/material';
@@ -111,7 +112,7 @@ export default function AlertTagFiltered({
         <WrapperStyle>
           <LabelStyle>{translate('app.start-date-lable')}</LabelStyle>
           <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
-            <Chip size="small" label={format(new Date(startDate), "dd MMMM yyyy")} onDelete={() => onRemoveParam("startDate")} sx={{ m: 0.5 }} />
+            <Chip size="small" label={moment(startDate).format("DD MMMM yyyy")} onDelete={() => onRemoveParam("startDate")} sx={{ m: 0.5 }} />
           </Stack>
         </WrapperStyle>
       )}
@@ -120,7 +121,7 @@ export default function AlertTagFiltered({
         <WrapperStyle>
           <LabelStyle>{translate('app.end-date-lable')}</LabelStyle>
           <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
-            <Chip size="small" label={format(new Date(endDate), "dd MMMM yyyy")} onDelete={() => onRemoveParam("endDate")} sx={{ m: 0.5 }} />
+            <Chip size="small" label={moment(endDate).format("DD MMMM yyyy")} onDelete={() => onRemoveParam("endDate")} sx={{ m: 0.5 }} />
           </Stack>
         </WrapperStyle>
       )}
