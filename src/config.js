@@ -7,14 +7,14 @@ export const getAPIUrl = () => {
   const environment = {
     protocal: window.location.protocol,
     host: window.location.hostname,
-    port: window.location.port
+    port: window.location.port,
   };
-  const BASE_URL =
-    `${(environment.protocal.indexOf(":") > 0 ? `${environment.protocal  }//` : `${environment.protocal  }://`) +
-    environment.host +
-    (environment.port && environment.port !== "" ? `:${  environment.port}` : "") 
-    }/cortexa-service/api/v2/`; 
-  // const BASE_URL = "https://cortexa.voxela.ai/cortexa-service/api/v2/";
+  // const BASE_URL =
+  //   `${(environment.protocal.indexOf(":") > 0 ? `${environment.protocal  }//` : `${environment.protocal  }://`) +
+  //   environment.host +
+  //   (environment.port && environment.port !== "" ? `:${  environment.port}` : "")
+  //   }/cortexa-service/api/v2/`;
+  const BASE_URL = 'https://cortexa-dev.voxela.ai/cortexa-service/api/v2/';
   return BASE_URL;
 };
 
@@ -42,7 +42,6 @@ export const AUTH0_API = {
 };
 
 export const MAPBOX_API = process.env.REACT_APP_MAPBOX;
-
 
 // ROOT PATH AFTER LOGIN SUCCESSFUL
 export const PATH_AFTER_LOGIN = PATH_DASHBOARD.general.app; // as '/dashboard/app'

@@ -1,12 +1,12 @@
 import { useEffect, useState, useContext } from 'react';
-import { Oval } from  'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
 import _ from 'lodash';
 import {
   Box,
-  Checkbox, 
+  Checkbox,
   Divider,
-  IconButton, 
+  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -14,21 +14,26 @@ import {
   TablePagination,
   TableSortLabel,
   TableRow,
-  Tooltip,  
-  Typography
+  Tooltip,
+  Typography,
 } from '@mui/material';
 import { AuthContext } from '../../contexts/JWTContext';
 import { fDateTimeTZSuffix } from '../../utils/formatTime';
 import Scrollbar from '../Scrollbar';
 import useLocales from '../../hooks/useLocales';
 
-
-
-
-
 const TableWidget = (props) => {
-  const { tableData, tableMetaData, onMultiSelect, callback, params, refreshTable = false, isLoading = false, defaultSelected = [],
-    isMultiSelectDisabled = false } = props;  
+  const {
+    tableData,
+    tableMetaData,
+    onMultiSelect,
+    callback,
+    params,
+    refreshTable = false,
+    isLoading = false,
+    defaultSelected = [],
+    isMultiSelectDisabled = false,
+  } = props;
   const history = useNavigate();
   const { translate } = useLocales();
   const [page, setPage] = useState(0);
@@ -53,9 +58,9 @@ const TableWidget = (props) => {
   };
 
   const buildParams = () => {
-    const queryParams = {...params};
+    const queryParams = { ...params };
 
-    if(!queryParams.searchApplied) {
+    if (!queryParams.searchApplied) {
       if (sortColumn) {
         queryParams.sortAscending = order === 'asc';
         queryParams.sortColumn = sortColumn;
@@ -70,26 +75,24 @@ const TableWidget = (props) => {
       if (page) {
         queryParams.pageNumber = page;
       }
-    } 
+    }
     return queryParams;
   };
-
 
   useEffect(() => {
     if (defaultSelected.length > 0) {
       setSelectedRecords(defaultSelected);
     }
-  }, [defaultSelected]);  
+  }, [defaultSelected]);
 
- 
-  useEffect(() => {    
+  useEffect(() => {
     if (callback) {
       if (params.searchApplied && page > 0) {
         setPage(0);
       } else {
         const queryParams = buildParams();
-        callback(queryParams);   
-        params.searchApplied = false; 
+        callback(queryParams);
+        params.searchApplied = false;
       }
     }
   }, [params, sortColumn, order, limit, page]);
@@ -101,9 +104,8 @@ const TableWidget = (props) => {
     }
     if (refreshTable) {
       setSelectedRecords([]);
-    }    
+    }
   }, [refreshTable]);
-
 
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
@@ -117,21 +119,21 @@ const TableWidget = (props) => {
 
   const getCellData = (col, cellData, value) => {
     switch (col.type) {
-      case 'date':        
-        if(!value || value === 0) {
+      case 'date':
+        if (!value || value === 0) {
           return '';
-        } 
-        
+        }
+
         if (typeof value === 'number') {
           const secondValue = value.toString().length === 13 ? value : value * 1000;
-          const dataDate = new Date(secondValue);          
+          const dataDate = new Date(secondValue);
           value = dataDate;
         }
-        return fDateTimeTZSuffix(value);      
+        return fDateTimeTZSuffix(value);
       case 'widget':
         return col.renderWidget && col.renderWidget(col, cellData, value, translate, authContext);
       case 'action':
-        return renderActions(col.actions, cellData);   
+        return renderActions(col.actions, cellData);
       default:
         return value;
     }
@@ -143,18 +145,18 @@ const TableWidget = (props) => {
       return null;
     }
     return (
-      <Tooltip title={action.tooltip} key={`${action.type}-${cellData[tableMetaData.idProperty || 'id']}`}>     
-        <IconButton onClick={() => handleActionClick(action, cellData)} size="small" >
+      <Tooltip title={action.tooltip} key={`${action.type}-${cellData[tableMetaData.idProperty || 'id']}`}>
+        <IconButton onClick={() => handleActionClick(action, cellData)} size="small">
           {action.icon}
-        </IconButton>      
-      </Tooltip>    
-    )
+        </IconButton>
+      </Tooltip>
+    );
   };
 
   const handleActionClick = (action, cellData) => {
     if (action.type === 'navigation') {
       const compiled = _.template(action.path);
-      const url = compiled({'id': cellData[tableMetaData.idProperty || 'id']});     
+      const url = compiled({ id: cellData[tableMetaData.idProperty || 'id'] });
       history(url);
     } else if (action.type === 'delete') {
       setActiveRecord(cellData);
@@ -175,18 +177,17 @@ const TableWidget = (props) => {
     const index = _.findIndex(selectedRecords, (item) => item[idProperty] === dataId[idProperty]);
     let list = _.cloneDeep(selectedRecords);
     if (index === -1) {
-      list.push(dataId);      
+      list.push(dataId);
     } else {
-      list = list.filter((item) => item[idProperty] !== dataId[idProperty]);      
+      list = list.filter((item) => item[idProperty] !== dataId[idProperty]);
     }
     setSelectedRecords(list);
     onMultiSelect(list);
   };
 
   const showEmptyMessage = () => {
-    if (params && params.query && paginatedData.length === 0
-      || (paginatedData && paginatedData.length === 0)) {
-        return true;
+    if ((params && params.query && paginatedData.length === 0) || (paginatedData && paginatedData.length === 0)) {
+      return true;
     }
     return false;
   };
@@ -200,150 +201,155 @@ const TableWidget = (props) => {
     return style;
   };
 
-  const selectedSomeEntries = selectedRecords?.length > 0
-  && selectedRecords?.length < tableData?.length;
-  const selectedAllEntries = selectedRecords?.length > 0 && selectedRecords?.length === (tableData?.data?.length);
+  const selectedSomeEntries = selectedRecords?.length > 0 && selectedRecords?.length < tableData?.length;
+  const selectedAllEntries = selectedRecords?.length > 0 && selectedRecords?.length === tableData?.data?.length;
 
-  const getColStyle = (col, isHeader=false) => {
+  const getColStyle = (col, isHeader = false) => {
     const style = {
-      width: col.width || 'auto'
+      width: col.width || 'auto',
     };
     if (col.fixed) {
       style.position = 'sticky';
       style.left = 0;
       style.background = '#fff';
-      style.zIndex = isHeader? 100 : 99;
+      style.zIndex = isHeader ? 100 : 99;
     }
     return style;
-  }
+  };
 
   const renderCell = (col, cellData, index) => (
-    <TableCell key={`${index}-${col.dataKey}-${cellData.id || cellData[tableMetaData.idProperty]}`}
+    <TableCell
+      key={`${index}-${col.dataKey}-${cellData.id || cellData[tableMetaData.idProperty]}`}
       align={col.align || 'left'}
       size={tableMetaData.size || 'medium'}
       style={getColStyle(col)}
     >
       {getCellData(col, cellData, cellData[col.dataKey])}
-    </TableCell> 
+    </TableCell>
   );
 
   const renderHeaderCell = (col, index) => {
     if (!col.sortable) {
-      return (       
-        <TableCell key={`header-${index}-${col.dataKey}`} align={col.align || 'left'} 
-          size={tableMetaData.size || 'medium'} style={getColStyle(col, true)}>
-          {translate(col.text)}
-        </TableCell>        
-      );
-    } 
       return (
         <TableCell
           key={`header-${index}-${col.dataKey}`}
           align={col.align || 'left'}
-          size={tableMetaData.size || 'medium'} 
-          sortDirection={sortColumn === col.text ? order : false}                 
+          size={tableMetaData.size || 'medium'}
+          style={getColStyle(col, true)}
         >
-          <TableSortLabel
-            active={sortColumn === col.dataKey}
-            direction={sortColumn === col.dataKey? order : 'desc'}
-            onClick={() => handleSort(col)}
-          >
-            {translate(col.text)}
-          </TableSortLabel>
+          {translate(col.text)}
         </TableCell>
       );
-    
+    }
+    return (
+      <TableCell
+        key={`header-${index}-${col.dataKey}`}
+        align={col.align || 'left'}
+        size={tableMetaData.size || 'medium'}
+        sortDirection={sortColumn === col.text ? order : false}
+      >
+        <TableSortLabel
+          active={sortColumn === col.dataKey}
+          direction={sortColumn === col.dataKey ? order : 'desc'}
+          onClick={() => handleSort(col)}
+        >
+          {translate(col.text)}
+        </TableSortLabel>
+      </TableCell>
+    );
   };
 
-  const renderPageRange = ({from, to, count}) => {
-    return `${from}-${to} ${translate("app.label-of")} ${count}`;
-  }
+  const renderPageRange = ({ from, to, count }) => {
+    return `${from}-${to} ${translate('app.label-of')} ${count}`;
+  };
 
-  return (    
+  return (
     <>
       <Scrollbar>
         <Box sx={getBoxStyle(tableMetaData)}>
           <Table stickyHeader style={tableMetaData.style}>
             <TableHead>
               <TableRow>
-                {tableMetaData.multiSelect ? 
-                  <TableCell padding='checkbox'>
-                      <Checkbox
-                        checked={selectedAllEntries}
-                        color='primary'
-                        indeterminate={selectedSomeEntries}
-                        onChange={handleSelectAllRecords}
-                        disabled={isMultiSelectDisabled}
-                      />                
+                {tableMetaData.multiSelect ? (
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      checked={selectedAllEntries}
+                      color="primary"
+                      indeterminate={selectedSomeEntries}
+                      onChange={handleSelectAllRecords}
+                      disabled={isMultiSelectDisabled}
+                    />
                   </TableCell>
-                  : null
-                }
-                { tableMetaData.columns.map(renderHeaderCell) }                
+                ) : null}
+                {tableMetaData.columns.map(renderHeaderCell)}
               </TableRow>
             </TableHead>
             <TableBody>
-              { !isLoading && showEmptyMessage() &&
+              {!isLoading && showEmptyMessage() && (
                 <TableRow>
                   <TableCell
-                    align='center'
+                    align="center"
                     colSpan={tableMetaData.colSpan || tableMetaData.columns.length}
-                    sx={{ height: 240, border: 'none'}}
+                    sx={{ height: 240, border: 'none' }}
                   >
                     <Typography color="textSecondary" variant="subtitle2">
-                      { tableMetaData.emptyMessageText || translate('app.table-empty-placeholder') }
+                      {tableMetaData.emptyMessageText || translate('app.table-empty-placeholder')}
                     </Typography>
                   </TableCell>
                 </TableRow>
-              }
-              { !isLoading && paginatedData?.map((data) => {    
-                const idProperty = tableMetaData.idProperty || 'id';
-                const rec = data[idProperty];             
-                const index = _.findIndex(selectedRecords, (item) => item[idProperty] === rec);
-                const isSelected = index > -1;
-                return (                  
-                  <TableRow
-                    hover
-                    key={tableMetaData.idProperty ? data[tableMetaData.idProperty] : data.id}                    
-                  >
-                    {tableMetaData.multiSelect ? 
-                      <TableCell padding='checkbox'>
-                        <Checkbox
-                          checked={isSelected}
-                          color='primary'
-                          onChange={(event) => handleSelectOneEntry(event, data)}
-                          value={isSelected}
-                          disabled={isMultiSelectDisabled}
-                        />
-                      </TableCell>
-                      : null
-                    }
-                    { tableMetaData.columns.map((col, index) => renderCell(col, data, index))}                      
-                  </TableRow>
-                );
-              })}
+              )}
+              {!isLoading &&
+                paginatedData?.map((data) => {
+                  const idProperty = tableMetaData.idProperty || 'id';
+                  const rec = data[idProperty];
+                  const index = _.findIndex(selectedRecords, (item) => item[idProperty] === rec);
+                  const isSelected = index > -1;
+                  return (
+                    <TableRow hover key={tableMetaData.idProperty ? data[tableMetaData.idProperty] : data.id}>
+                      {tableMetaData.multiSelect ? (
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            checked={isSelected}
+                            color="primary"
+                            onChange={(event) => handleSelectOneEntry(event, data)}
+                            value={isSelected}
+                            disabled={isMultiSelectDisabled}
+                          />
+                        </TableCell>
+                      ) : null}
+                      {tableMetaData.columns.map((col, index) => renderCell(col, data, index))}
+                    </TableRow>
+                  );
+                })}
 
-              { isLoading && 
+              {isLoading && (
                 <TableRow>
                   <TableCell
-                    align='center'
+                    align="center"
                     colSpan={tableMetaData.colSpan || tableMetaData.columns.length}
-                    sx={{ height: 240, border: 'none'}}
-                  >                        
-                    <Oval color="#626262" secondaryColor="#e7e4e4" wrapperStyle={{ justifyContent: 'center'}} height={36} width={36}/>                    
+                    sx={{ height: 240, border: 'none' }}
+                  >
+                    <Oval
+                      color="#626262"
+                      secondaryColor="#e7e4e4"
+                      wrapperStyle={{ justifyContent: 'center' }}
+                      height={36}
+                      width={36}
+                    />
                   </TableCell>
                 </TableRow>
-              }
+              )}
             </TableBody>
           </Table>
         </Box>
       </Scrollbar>
-      { !tableMetaData.hidePagination ?
+      {!tableMetaData.hidePagination ? (
         <>
           <Divider />
           <TablePagination
-            component='div'
+            component="div"
             count={tableData.total || tableData.length || 0}
-            labelRowsPerPage={translate("app.labelRowsPerPage")}
+            labelRowsPerPage={translate('app.labelRowsPerPage')}
             labelDisplayedRows={renderPageRange}
             onPageChange={handlePageChange}
             onRowsPerPageChange={handleLimitChange}
@@ -352,17 +358,15 @@ const TableWidget = (props) => {
             rowsPerPageOptions={[5, 10, 25, 50]}
           />
         </>
-        : null
-      }     
+      ) : null}
     </>
   );
 };
 
-
 TableWidget.defaultProps = {
   onMultiSelect: () => {},
   callback: () => {},
-  params: {}
+  params: {},
 };
 
 export default TableWidget;
