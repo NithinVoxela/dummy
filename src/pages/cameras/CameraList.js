@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, useContext } from 'react';
 import { cloneDeep, debounce } from 'lodash';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
@@ -22,6 +22,7 @@ import { getCameras, deleteCamera } from '../../redux/slices/cameras';
 // sections
 import { CAMERA_TABLE_META } from './CameraConstants';
 import { CameraListMenu } from '../../sections/cameras';
+import { ADMIN_ROLE } from '../../layouts/dashboard/navbar/NavConfig';
 
 // ----------------------------------------------------------------------
 
@@ -37,13 +38,13 @@ const CameraList = () => {
   const [showModal, setShowModal] = useState(false);
   const [recordId, setRecordId] = useState(null);
   const { cameraDataList, isLoading } = useSelector((state) => state.cameras);
+  const authContext = useContext(AuthContext);
 
   const getCameraData = useCallback(
     async (queryParams = {}) => {
       try {
         const payload = { ...params, name: queryParams?.name || '' };
         delete queryParams.name;
-        console.log(AuthContext);
         await dispatch(getCameras(queryParams, payload));
       } catch (err) {
         console.error(err);
@@ -89,14 +90,16 @@ const CameraList = () => {
 
   const tableMetaData = useMemo(() => {
     const metaData = cloneDeep(CAMERA_TABLE_META);
-    metaData.columns[metaData.columns.length - 1] = {
-      text: '',
-      dataKey: 'publicId',
-      type: 'widget',
-      renderWidget: (col, cellData, value) => (
-        <CameraListMenu onDelete={() => showWarningModal(value)} cameraId={value} translate={translate} />
-      ),
-    };
+    metaData.columns[metaData.columns.length - 1] = ADMIN_ROLE.includes(authContext?.user?.role)
+      ? {
+          text: '',
+          dataKey: 'publicId',
+          type: 'widget',
+          renderWidget: (col, cellData, value) => (
+            <CameraListMenu onDelete={() => showWarningModal(value)} cameraId={value} translate={translate} />
+          ),
+        }
+      : {};
     return metaData;
   }, []);
   return (

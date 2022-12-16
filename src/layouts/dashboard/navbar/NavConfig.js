@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
 import EmergencyRecordingOutlinedIcon from '@mui/icons-material/EmergencyRecordingOutlined';
 // routes
@@ -6,8 +6,6 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
 import SvgIconStyle from '../../../components/SvgIconStyle';
 import AlertCountLabel from '../../../sections/alerts/AlertCountLabel';
-import AuthUser from '../../../pages/users/AuthUser';
-import { AuthContext } from '../../../contexts/JWTContext';
 // ----------------------------------------------------------------------
 
 const getIcon = (name) => <SvgIconStyle src={`/icons/${name}.svg`} sx={{ width: 1, height: 1 }} />;
@@ -29,19 +27,7 @@ const ICONS = {
   analytics: getIcon('ic_analytics'),
 };
 
-// const UserAuth = () => {
-//   const authContext = useContext(AuthContext);
-//   console.log(authContext);
-//   console.log(authContext?.user);
-//   console.log(authContext?.user?.role);
-//   console.log(typeof authContext?.user?.role);
-//   console.log(authContext?.user?.role === 'adfad');
-
-//   if (authContext?.user?.role === 'adfad') {
-//     return true;
-//   }
-//   return false;
-// };
+export const ADMIN_ROLE = ['ADMIN'];
 
 const navConfig = [
   // GENERAL
@@ -63,8 +49,7 @@ const navConfig = [
     role: ['ADMIN'],
     items: [
       { title: 'cameras', path: PATH_DASHBOARD.general.cameras, icon: ICONS.kanban },
-      // AuthContext?.user?.role === 'USER'
-      { title: 'users', path: PATH_DASHBOARD.general.users, icon: ICONS.user },
+      { title: 'users', path: PATH_DASHBOARD.general.users, icon: ICONS.user, role: ADMIN_ROLE },
     ],
   },
 ];

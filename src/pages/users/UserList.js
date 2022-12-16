@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { cloneDeep, debounce } from 'lodash';
-import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { Card, Button, Container } from '@mui/material';
 // routes
@@ -11,16 +10,11 @@ import useLocales from '../../hooks/useLocales';
 
 // components
 import Page from '../../components/Page';
-import Iconify from '../../components/Iconify';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import Searchbar from '../../components/widgets/Searchbar';
 import TableWidget from '../../components/table/TableWidget';
-import DeleteModal from '../../components/widgets/DeleteModal';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getCameras, deleteCamera } from '../../redux/slices/cameras'; // sections
-import { CAMERA_TABLE_META } from '../cameras/CameraConstants';
-import { CameraListMenu } from '../../sections/cameras';
 import { getUsers } from '../../redux/slices/users';
 import { USERS_TABLE_META } from './UserConstants';
 
@@ -31,22 +25,7 @@ const UserList = () => {
   const [params, setParams] = useState({
     name: '',
   });
-  const [showModal, setShowModal] = useState(false);
-  const [recordId, setRecordId] = useState(null);
   const { userList, isLoading } = useSelector((state) => state.users);
-
-  // const getCameraData = useCallback(
-  //   async (queryParams = {}) => {
-  //     try {
-  //       const payload = { ...params, name: queryParams?.name || '' };
-  //       delete queryParams.name;
-  //       await dispatch(getUsers(queryParams, payload));
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   },
-  //   [dispatch]
-  // );
 
   const getUsersData = useCallback(
     async (queryParams = {}) => {
@@ -78,62 +57,21 @@ const UserList = () => {
     debounceSearchHandler(value);
   };
 
-  const showWarningModal = (id) => {
-    setRecordId(id);
-    setShowModal(true);
-  };
-
-  // const handleDelete = useCallback(
-  //   async (cameraId) => {
-  //     try {
-  //       await dispatch(deleteCamera(cameraId));
-  //       await getCameraData();
-  //       setShowModal(false);
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   },
-  //   [dispatch]
-  // );
-
   const tableMetaData = useMemo(() => {
     const metaData = cloneDeep(USERS_TABLE_META);
-    // metaData.columns[metaData.columns.length - 1] = {
-    //   text: 'app.users-mobileNo-label',
-    //   dataKey: 'id',
-    //   type: 'widget',
-    //   // renderWidget: (col, cellData, value) => (
-    //   //   <CameraListMenu onDelete={() => showWarningModal(value)} cameraId={value} translate={translate} />
-    //   // ),
-    // };
     return metaData;
   }, []);
 
   return (
-    <Page title={'Users'}>
+    <Page title={translate('app.users-list-header-label')}>
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading={'Users'}
+          heading={translate('app.users-list-header-label')}
           links={[
             { name: `${translate('app.dashboard-header-label')}`, href: PATH_DASHBOARD.root },
-            { name: `${'Users'}` },
+            { name: `${translate('app.alert-users-label')}` },
           ]}
-          // action={
-          //   <Button
-          //     variant="contained"
-          //     component={RouterLink}
-          //     to={PATH_DASHBOARD.cameras.new}
-          //     startIcon={<Iconify icon={'eva:plus-fill'} />}
-          //   >
-          //     {translate('app.alert-new-camera-label')}
-          //   </Button>
-          // }
         />
-        {console.log(userList)}
-        {console.log(tableMetaData)}
-        {console.log(getUsersData)}
-        {console.log(isLoading)}
-        {console.log(params)}
         <Card>
           <Searchbar placeholder={translate('app.alert-search-txt-label')} onSearchTextChange={handleQueryChange} />
           <TableWidget
@@ -145,13 +83,6 @@ const UserList = () => {
           />
         </Card>
       </Container>
-      {/* <DeleteModal
-        isOpen={showModal}
-        handleClose={() => setShowModal(false)}
-        type="Camera"
-        recordId={recordId}
-        handleDelete={handleDelete}
-      /> */}
     </Page>
   );
 };

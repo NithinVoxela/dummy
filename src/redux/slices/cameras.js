@@ -74,7 +74,6 @@ export function getCameras(queryParams, payload = {}) {
     try {
       const searchParams = new URLSearchParams(queryParams).toString();
       const response = await axios.post(`camera/view/search?${searchParams}`, payload);
-      // console.log(response);
       dispatch(slice.actions.getCamerasSuccess(response));
     } catch (error) {
       dispatch(slice.actions.hasError(error));

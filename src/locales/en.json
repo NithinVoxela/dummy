@@ -153,6 +153,8 @@
     "general-label": "general",
     "management-label": "management",
     "cameras-label": "cameras",
+    "users-list-header-label": "Users List",
+    "alert-users-label": "Users",
     "users-label": "users",
     "users-email-label": "Email",
     "users-firstName-label": "First Name",
