@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { cloneDeep, debounce } from 'lodash';
+import { useCallback, useMemo, useState } from 'react';
+import { cloneDeep } from 'lodash';
 // @mui
-import { Card, Button, Container } from '@mui/material';
+import { Card, Container } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -40,23 +40,6 @@ const UserList = () => {
     [dispatch]
   );
 
-  const searchHandler = (searchStr) => {
-    const searchParams = {
-      name: '',
-    };
-    if (searchStr.length > 0) {
-      searchParams.name = searchStr;
-    }
-    setParams(searchParams);
-    // getCameraData({}, searchParams);
-  };
-
-  const debounceSearchHandler = useCallback(debounce(searchHandler, 1000), []);
-
-  const handleQueryChange = (value) => {
-    debounceSearchHandler(value);
-  };
-
   const tableMetaData = useMemo(() => {
     const metaData = cloneDeep(USERS_TABLE_META);
     return metaData;
@@ -73,7 +56,6 @@ const UserList = () => {
           ]}
         />
         <Card>
-          <Searchbar placeholder={translate('app.alert-search-txt-label')} onSearchTextChange={handleQueryChange} />
           <TableWidget
             tableMetaData={tableMetaData}
             tableData={userList}
