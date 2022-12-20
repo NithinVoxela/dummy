@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
-import { has } from "lodash";
+import { has } from 'lodash';
 // @mui
 import {
   Card,  
@@ -32,13 +32,13 @@ const RecordingDetail = () => {
   const dispatch = useDispatch();
   const { translate } = useLocales();
   const { recordingId } = useParams();
- 
+
   const { recordingDetails } = useSelector((state) => state.recordings);
 
-  const getRecordingData = useCallback(async() => {
-    try {      
+  const getRecordingData = useCallback(async () => {
+    try {
       const queryParams = {
-        requireVideoUrl: true
+        requireVideoUrl: true,
       };
       await dispatch(getRecordingDetails(recordingId, queryParams));
     } catch (err) {
@@ -46,30 +46,33 @@ const RecordingDetail = () => {
     }
   }, [dispatch]);
 
-  const markAsReadRequest = useCallback(async(id) => {
-    try {      
-      const payload = {
-        id,
-        hasRead: true
-      };
-      await dispatch(patch(payload));      
-    } catch (err) {
-      console.error(err);
-    }
-  }, [dispatch]);
+  const markAsReadRequest = useCallback(
+    async (id) => {
+      try {
+        const payload = {
+          id,
+          hasRead: true,
+        };
+        await dispatch(patch(payload));
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     getRecordingData();
   }, []);
 
   useEffect(() => {
-    if (has(recordingDetails, "hasRead")) {
+    if (has(recordingDetails, 'hasRead')) {
       if (!recordingDetails.hasRead) {
-       markAsReadRequest(recordingDetails.id);
+        markAsReadRequest(recordingDetails.id);
       }
     }
   }, [recordingDetails]);
-
+  
   return (
     <Page title={translate('app.recordings-details-label')}>
       <Container maxWidth={themeStretch ? false : 'lg'}>
@@ -82,19 +85,19 @@ const RecordingDetail = () => {
           ]}
         />
 
-        <Card sx={{ padding: "24px 16px"}}>
+        <Card sx={{ padding: '24px 16px' }}>
           <Grid container>
             <Grid item md={2} xs={12}>
               <div>
                 <Typography color="textPrimary" variant="subtitle2">
-                  {translate("app.alert-location-details").toUpperCase()}
+                  {translate('app.alert-location-details').toUpperCase()}
                 </Typography>
                 <Typography color="textPrimary" variant="body1" sx={{ pt: 0.5 }}>
                   {recordingDetails?.cameraApp?.camera.location || '-'}
                 </Typography>
               </div>
             </Grid>
-            <Grid item md={2} xs={12} >
+            <Grid item md={2} xs={12}>
               <div>
                 <Typography color="textPrimary" variant="subtitle2">
                   {translate('app.alert-camera-details').toUpperCase()}
@@ -104,7 +107,7 @@ const RecordingDetail = () => {
                 </Typography>
               </div>
             </Grid>
-            <Grid item md={3} xs={12} >
+            <Grid item md={3} xs={12}>
               <div>
                 <Typography color="textPrimary" variant="subtitle2">
                   {translate('app.recordings-created-on-details').toUpperCase()}
@@ -117,13 +120,12 @@ const RecordingDetail = () => {
           </Grid>
         </Card>
 
-        <Card sx={{ mt: 3, py: 2, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 400 }}>
+        <Card sx={{ mt: 3, py: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
           <ReactPlayer controls muted playsinline width="640px" height="320px" url={recordingDetails?.recordingUrl} />
         </Card>
       </Container>
     </Page>
   );
-}
-
+};
 
 export default RecordingDetail;

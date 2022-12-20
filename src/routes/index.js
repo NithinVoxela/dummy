@@ -68,35 +68,43 @@ export default function Router() {
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         { path: 'dashboard', element: <Dashboard /> },
         { path: 'analytics', element: <Analytics /> },
-                        
-        
+
         {
           path: 'cameras',
           children: [
-            { element: <Navigate to="/cortexa/cameras/list" replace />, index: true },        
-            { path: 'list', element: <CameraList /> },   
-            { path: 'new', element: <CameraCreate /> },    
-            { path: 'edit/:cameraId', element: <CameraCreate /> },      
+            { element: <Navigate to="/cortexa/cameras/list" replace />, index: true },
+            { path: 'list', element: <CameraList /> },
+            { path: 'new', element: <CameraCreate /> },
+            { path: 'edit/:cameraId', element: <CameraCreate /> },
             { path: 'apps/:cameraId', element: <CameraApps /> },
             { path: 'apps/:cameraId/settings/:appId', element: <CameraAppSettings /> },
           ],
         },
+
+        {
+          path: 'users',
+          children: [
+            { element: <Navigate to="/cortexa/users/list" replace />, index: true },
+            { path: 'list', element: <UserList /> },
+          ],
+        },
+
         {
           path: 'alerts',
           children: [
-            { element: <Navigate to="/cortexa/alerts/list" replace />, index: true },        
-            { path: 'list', element: <AlertList /> },   
-            { path: 'detail/:alertId', element: <AlertDetail /> },           
+            { element: <Navigate to="/cortexa/alerts/list" replace />, index: true },
+            { path: 'list', element: <AlertList /> },
+            { path: 'detail/:alertId', element: <AlertDetail /> },
           ],
         },
         {
           path: 'recordings',
           children: [
-            { element: <Navigate to="/cortexa/recordings/list" replace />, index: true },        
-            { path: 'list', element: <RecordingList /> },   
-            { path: 'detail/:recordingId', element: <RecordingDetail /> },           
+            { element: <Navigate to="/cortexa/recordings/list" replace />, index: true },
+            { path: 'list', element: <RecordingList /> },
+            { path: 'detail/:recordingId', element: <RecordingDetail /> },
           ],
-        },              
+        },
       ],
     },
 
@@ -104,7 +112,7 @@ export default function Router() {
     {
       path: '*',
       element: <LogoOnlyLayout />,
-      children: [        
+      children: [
         { path: 'maintenance', element: <Maintenance /> },
         { path: '500', element: <Page500 /> },
         { path: '404', element: <NotFound /> },
@@ -113,7 +121,7 @@ export default function Router() {
     },
     {
       path: '/',
-      element: isAuthenticated ? <Navigate to="/cortexa" /> : <Navigate to="/cortexa/dashboard" />,      
+      element: isAuthenticated ? <Navigate to="/cortexa" /> : <Navigate to="/cortexa/dashboard" />,
     },
     { path: '*', element: <Navigate to="/404" replace /> },
   ]);
@@ -127,11 +135,6 @@ const Register = Loadable(lazy(() => import('../pages/auth/Register')));
 const ResetPassword = Loadable(lazy(() => import('../pages/auth/ResetPassword')));
 const VerifyCode = Loadable(lazy(() => import('../pages/auth/VerifyCode')));
 
-
-
-
-
-
 const CameraList = Loadable(lazy(() => import('../pages/cameras/CameraList')));
 const CameraCreate = Loadable(lazy(() => import('../pages/cameras/CameraCreate')));
 const CameraApps = Loadable(lazy(() => import('../pages/cameras/CameraApps')));
@@ -142,6 +145,7 @@ const RecordingList = Loadable(lazy(() => import('../pages/recordings/RecordingL
 const RecordingDetail = Loadable(lazy(() => import('../pages/recordings/RecordingDetail')));
 const Dashboard = Loadable(lazy(() => import('../pages/cortexaDashboard/Dashboard')));
 const Analytics = Loadable(lazy(() => import('../pages/analytics/Analytics')));
+const UserList = Loadable(lazy(() => import('../pages/users/UserList')));
 // Main
 
 const Maintenance = Loadable(lazy(() => import('../pages/Maintenance')));

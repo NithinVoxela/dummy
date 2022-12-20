@@ -1,3 +1,4 @@
+import React from 'react';
 import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
 import EmergencyRecordingOutlinedIcon from '@mui/icons-material/EmergencyRecordingOutlined';
 // routes
@@ -5,8 +6,6 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
 import SvgIconStyle from '../../../components/SvgIconStyle';
 import AlertCountLabel from '../../../sections/alerts/AlertCountLabel';
-
-
 // ----------------------------------------------------------------------
 
 const getIcon = (name) => <SvgIconStyle src={`/icons/${name}.svg`} sx={{ width: 1, height: 1 }} />;
@@ -28,18 +27,18 @@ const ICONS = {
   analytics: getIcon('ic_analytics'),
 };
 
+export const ADMIN_ROLE = ['ADMIN'];
+
 const navConfig = [
   // GENERAL
   // ----------------------------------------------------------------------
   {
     subheader: 'general',
-    items: [                       
-      { title: 'dashboard', path: PATH_DASHBOARD.general.dashboard, icon: ICONS.dashboard },      
+    items: [
+      { title: 'dashboard', path: PATH_DASHBOARD.general.dashboard, icon: ICONS.dashboard },
       { title: 'analytics', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
-      { title: 'alerts', path: PATH_DASHBOARD.general.alerts, icon: ICONS.alerts, info: (
-        <AlertCountLabel />         
-      ), },  
-      { title: 'recordings', path: PATH_DASHBOARD.general.recordings, icon: ICONS.recordings, },     
+      { title: 'alerts', path: PATH_DASHBOARD.general.alerts, icon: ICONS.alerts, info: <AlertCountLabel /> },
+      { title: 'recordings', path: PATH_DASHBOARD.general.recordings, icon: ICONS.recordings },
     ],
   },
 
@@ -48,9 +47,10 @@ const navConfig = [
   {
     subheader: 'management',
     items: [
-      { title: 'cameras', path: PATH_DASHBOARD.general.cameras, icon: ICONS.kanban },          
+      { title: 'cameras', path: PATH_DASHBOARD.general.cameras, icon: ICONS.kanban },
+      { title: 'users', path: PATH_DASHBOARD.general.users, icon: ICONS.user, role: ADMIN_ROLE },
     ],
-  },  
+  },
 ];
 
 export default navConfig;

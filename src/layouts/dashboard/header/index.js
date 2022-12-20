@@ -66,18 +66,17 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
 
   const isDesktop = useResponsive('up', 'lg');
 
-  const dispatch = useDispatch();  
+  const dispatch = useDispatch();
   const { logout } = useAuth();
 
-
-  const refreshAlertCount = useCallback(async() => {
-    try {            
-      await dispatch(getUnreadAlertCount());      
+  const refreshAlertCount = useCallback(async () => {
+    try {
+      await dispatch(getUnreadAlertCount());
     } catch (err) {
       console.error(err);
-      if (err?.message === "Not Authorized") {
+      if (err?.message === 'Not Authorized') {
         logout();
-      }      
+      }
     }
   }, [dispatch]);
 
@@ -91,7 +90,6 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
       clearInterval(refreshPage);
     };
   }, []);
-
 
   return (
     <RootStyle isCollapse={isCollapse} isOffset={isOffset} verticalLayout={verticalLayout}>
@@ -109,11 +107,10 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
           </IconButtonAnimate>
         )}
 
-      
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
-          <LanguagePopover />      
+          <LanguagePopover />
           <NotificationsPopover />
           <AccountPopover />
         </Stack>
