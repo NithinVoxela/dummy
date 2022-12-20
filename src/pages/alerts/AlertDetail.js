@@ -1,10 +1,9 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import { has } from "lodash";
 // @mui
 import {
-  Button,
   Card,  
   Container,
   Grid,
@@ -18,10 +17,11 @@ import useLocales from '../../hooks/useLocales';
 
 // components
 import Page from '../../components/Page';
+import { AuthContext } from '../../contexts/JWTContext';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import { fDateTimeTZSuffix, fDateWithTZ } from '../../utils/formatTime';
+import { formatUTCDateString } from '../../utils/formatTime';
 import Label from '../../components/Label';
-import Iconify from '../../components/Iconify';
+import CameraName from '../../sections/cameras/CameraName';
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
@@ -39,6 +39,7 @@ import { getUnreadAlertCount, getAlertDetails, markAsRead } from '../../redux/sl
 // ----------------------------------------------------------------------
 
 const AlertDetail = () => {
+  const authContext = useContext(AuthContext);
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
   const { translate } = useLocales();
@@ -86,38 +87,6 @@ const AlertDetail = () => {
     }
   }, [alertDetails]);
 
-  const openStreamUrl = (streamUrl) => {
-    window.open(streamUrl, "_blank");
-  };
-
-  const renderDate = (dateValue) => {
-    let formattedDate = null;
-    try {
-      const user = JSON.parse(localStorage.getItem("user"));
-      if (user?.timezone) {
-        formattedDate = fDateWithTZ(`${dateValue}Z`, user?.timezone);        
-      } else {
-        formattedDate = fDateTimeTZSuffix(dateValue);
-      }
-    } catch (err) {
-      formattedDate = fDateTimeTZSuffix(dateValue);
-    }
-    return formattedDate;
-  };
-
-  const renderCameraName = () => (
-    <>
-      {alertDetails?.streamUrl?.trim()?.length > 0 ? (
-        <Button color="primary" size="small" onClick={() => openStreamUrl(alertDetails?.streamUrl)}>
-          {alertDetails?.cameraName}
-          <Iconify icon={'ic:sharp-launch'} />
-        </Button>
-      ) : (
-        <>{alertDetails?.cameraName}</>
-      )}
-    </>
-  );
-
   const getTypeLabel = (activity) => {
     if (activity) {
       return translate(`app.app-name-${activity.toLowerCase()}`) || activity;
@@ -156,7 +125,7 @@ const AlertDetail = () => {
                   {translate('app.alert-camera-details').toUpperCase()}
                 </Typography>
                 <Typography color="textPrimary" variant="body1" sx={{ pt: 0.5 }} >
-                  {renderCameraName()}
+                  <CameraName cameraName={alertDetails?.cameraName} streamUrl={alertDetails?.streamUrl}/>
                 </Typography>
               </div>
             </Grid>
@@ -166,7 +135,7 @@ const AlertDetail = () => {
                   {translate('app.alert-created-on-details').toUpperCase()}
                 </Typography>
                 <Typography color="textPrimary" variant="body1" sx={{ pt: 0.5 }} >
-                  {alertDetails?.alertTime ? renderDate(alertDetails.alertTime) : '-'}
+                  {alertDetails?.alertTime ? formatUTCDateString(alertDetails.alertTime, authContext?.user?.timezone) : '-'}
                 </Typography>
               </div>
             </Grid>

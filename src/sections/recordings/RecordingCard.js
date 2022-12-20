@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
-import { Box, Card, Link, Typography, Stack, Button} from '@mui/material';
+import { Box, Card, Link, Typography, Stack } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
@@ -13,8 +13,8 @@ import { AuthContext } from '../../contexts/JWTContext';
 import Label from '../../components/Label';
 import Image from '../../components/Image';
 import useLocales from '../../hooks/useLocales';
-import { epochToLocalDateTime } from '../../utils/formatTime';
-import Iconify from '../../components/Iconify';
+import { formatEpochTime } from '../../utils/formatTime';
+import CameraName from '../cameras/CameraName';
 
 const useStyles = makeStyles({
   root: {       
@@ -40,30 +40,6 @@ export default function RecordingCard({ recording }) {
 
   const linkTo = `${PATH_DASHBOARD.recordings.root}/detail/${id}`;
 
-  const openStreamUrl = (streamUrl) => {
-    window.open(streamUrl, "_blank");
-  };
-
-  const renderDate = (dateValue) => {
-    if(dateValue) {
-      return epochToLocalDateTime(dateValue, authContext?.user?.timezone);
-    }
-
-    return null;
-  }; 
-
-  const renderCameraName = () => (
-    <>
-      {streamUrl?.trim()?.length > 0 ? (
-        <Button color="primary" size="small" onClick={() => openStreamUrl(streamUrl)}>
-          {cameraName}
-          <Iconify icon={'ic:sharp-launch'} />
-        </Button>
-      ) : (
-        <>{cameraName}</>
-      )}
-    </>
-  );
   return (
     <Card>
       <Box sx={{ position: 'relative' }}>        
@@ -91,13 +67,13 @@ export default function RecordingCard({ recording }) {
       <Stack spacing={2} sx={{ p: 2 }} className={classes.root}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="subtitle2" noWrap>
-            {renderDate(recordingTime)}
+            {(recordingTime) ? formatEpochTime(recordingTime, authContext?.user?.timezone) : ''}
           </Typography>
         </Stack>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="subtitle2" noWrap>
-            <b>{translate("app.alert-camera-details")}:</b> {renderCameraName()}
+            <b>{translate("app.alert-camera-details")}:</b> <CameraName cameraName={cameraName} streamUrl={streamUrl}/>
           </Typography>
         </Stack>
 

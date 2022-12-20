@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import Label from "../../components/Label";
 import Iconify from '../../components/Iconify';
 import { VideoPreview } from "../../sections/cameras";
-import { epochToLocalDateTime } from "../../utils/formatTime";
+import { formatEpochTime } from "../../utils/formatTime";
 
 const openStreamUrl = (streamUrl) => {
   window.open(streamUrl, "_blank");
@@ -46,7 +46,7 @@ export const CAMERA_TABLE_META = {
     sortable: true,
     renderWidget: (col, cellData, value, translate, authContext) => (
       <>
-        {value && value > 0 ? epochToLocalDateTime(value, authContext?.user?.timezone) : ''}
+        {value && value > 0 ? formatEpochTime(value, authContext?.user?.timezone) : ''}
       </>
     )
   }, {

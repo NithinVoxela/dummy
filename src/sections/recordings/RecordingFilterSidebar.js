@@ -7,10 +7,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import moment from "moment-timezone"
 import MomentUtils from "@date-io/moment"
 // @types
-import { useEffect, useMemo, useState, useContext } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { NAVBAR } from '../../config';
 // components
-import { AuthContext } from '../../contexts/JWTContext';
 import Iconify from '../../components/Iconify';
 import Scrollbar from '../../components/Scrollbar';
 import { RHFSelect } from '../../components/hook-form';
@@ -43,8 +42,6 @@ export default function RecordingFilterSidebar({
   sortDirection,
   locale
 }) {
-
-  const authContext = useContext(AuthContext);
   const allOptionLabel = translate('app.all-option-label');
 
   const [startDate, setStartDate] = useState(null);
@@ -78,12 +75,20 @@ export default function RecordingFilterSidebar({
   };
 
   const handleStartDate = (value) => {
-    const newParams = { ...params };
-    value.set({minute:0,second:0,millisecond:0});
-    setStartDate(value);
-    newParams.startDate = value;
+    if(value) {
+      value.set({minute:0,second:0,millisecond:0});
+    }
 
-    applyFilter(newParams);
+    if((!value && !startDate) || (value && startDate && startDate.isSame(value))) {
+      return;
+    }
+
+    setStartDate(value);
+    if(!value || value.isValid()) {
+      const newParams = { ...params };
+      newParams.startDate = value;
+      applyFilter(newParams);
+    }
   };
 
   const applyFilter = (newParams) => {    
@@ -121,7 +126,7 @@ export default function RecordingFilterSidebar({
         open={isOpen}
         onClose={onClose}
         PaperProps={{
-          sx: { width: NAVBAR.BASE_WIDTH },
+          sx: { width: 320 },
         }}
       >
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ px: 1, py: 2 }}>
@@ -161,8 +166,7 @@ export default function RecordingFilterSidebar({
               <DesktopDateTimePicker
                 inputFormat="DD MMMM yyyy hh:mm a"
                 value={startDate}
-                onAccept={handleStartDate}
-                onChange={ () => {}}
+                onChange={handleStartDate}
                 size="small"
                 views={["year", "month", "day", "hours"]}
                 disableFuture

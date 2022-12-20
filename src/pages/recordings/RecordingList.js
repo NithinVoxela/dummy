@@ -45,7 +45,8 @@ const RecordingList = () => {
       const queryParams = {
         pageNumber: currentPage,
         pageSize: 8,
-        sortAscending
+        sortAscending,
+        requireThumbnailUrl: true
       };
       await dispatch(getRecordings(queryParams, payload));      
     } catch (err) {

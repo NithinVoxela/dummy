@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 // @mui
 import { Box, Stack, Button, Drawer, Divider, IconButton, Typography, TextField, FormControlLabel, Checkbox } from '@mui/material';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import moment from "moment-timezone"
+import MomentUtils from "@date-io/moment"
 import { format, isAfter, isValid } from 'date-fns';
 // @types
 import { useEffect, useMemo, useState } from 'react';
@@ -13,7 +14,6 @@ import { NAVBAR } from '../../config';
 import Iconify from '../../components/Iconify';
 import Scrollbar from '../../components/Scrollbar';
 import { RHFRadioGroup, RHFSelect } from '../../components/hook-form';
-import { fDate } from '../../utils/formatTime';
 
 const EVENT_TYPES = ['motion', 'fall', 'person', 'wakeup'];
 
@@ -122,35 +122,44 @@ export default function AlertFilterSidebar({
   };
 
   const handleStartDate = (value) => {
-    const newParams = { ...params };
-    if (value && isValid(value)) {
-      setStartDate(value);
-      newParams.startDate = fDate(value);
-    } else {
-      delete newParams.startDate;
+    if(value) {
+      value.set({hour:0,minute:0,second:0,millisecond:0});
     }
 
-    if (value && isValid(value) && endDate && isAfter(value, endDate)) {
+    if((!value && !startDate) || (value && startDate && startDate.isSame(value))) {
       return;
     }
 
-    applyFilter(newParams);
+    setStartDate(value);
+    if(!value || (value.isValid() && !(endDate && value.isAfter(endDate)))) {
+      const newParams = { ...params };
+      newParams.startDate = value;
+      if(endDate) {
+        newParams.endDate = endDate;
+      }
+      applyFilter(newParams);
+    }
   };
 
   const handleEndDate = (value) => {
-    const newParams = { ...params };
-    if (value && isValid(value)) {
-      setEndDate(value);
-      newParams.endDate = fDate(value);
-    } else {
-      delete newParams.endDate;
+    if(value) {
+      value.set({hour:0,minute:0,second:0,millisecond:0});
     }
 
-    if (value && isValid(value) && startDate && isAfter(startDate, value)) {
+    if((!value && !endDate) || (value && endDate && endDate.isSame(value))) {
       return;
     }
 
-    applyFilter(newParams);
+    setEndDate(value);
+
+    if(!value || (value.isValid() && !(startDate && value.isBefore(startDate)))) {
+      const newParams = { ...params };
+      newParams.endDate = value;
+      if(startDate) {
+        newParams.startDate = startDate;
+      }
+      applyFilter(newParams);
+    }
   };
 
   const handleDeskAlertChange = (event) => {
@@ -165,16 +174,13 @@ export default function AlertFilterSidebar({
     setParams({...newParams});
     setClearData(true);
     if (newParams.startDate || newParams.endDate) {
-      newParams.dateRange = {
-        startDate: format(new Date(), 'yyyy-MM-dd'),
-        endDate: format(new Date(), 'yyyy-MM-dd')
-      };
+      newParams.dateRange = {};
       if (newParams.startDate) {
-        newParams.dateRange.startDate = format(new Date(newParams.startDate), 'yyyy-MM-dd');
+        newParams.dateRange.startDate = moment(newParams.startDate).utc().format('yyyy-MM-DDTHH:mm:ss');
         delete newParams.startDate;
       }
       if (newParams.endDate) {
-        newParams.dateRange.endDate = format(new Date(newParams.endDate), 'yyyy-MM-dd');
+        newParams.dateRange.endDate = moment(newParams.endDate).utc().format('yyyy-MM-DDTHH:mm:ss');
         delete newParams.endDate;
       }
     }
@@ -197,10 +203,10 @@ export default function AlertFilterSidebar({
       setSeverityValue(filteredValue.label);      
     } 
     if (params?.startDate) {
-      setStartDate(new Date(params.startDate));
+      setStartDate(params.startDate);
     } 
     if (params?.endDate) {
-      setEndDate(new Date(params.endDate));
+      setEndDate(params.endDate);
     }
     if (params?.eventType) {
       const type = eventTypes.find((item) => item.id === params.eventType);
@@ -213,7 +219,7 @@ export default function AlertFilterSidebar({
   }, [params]);  
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={locale}>
+    <LocalizationProvider dateLibInstance={moment} dateAdapter={MomentUtils} adapterLocale={locale}>
       <Button disableRipple color="inherit" endIcon={<Iconify icon={'ic:round-filter-list'} />} onClick={onOpen}>
         {translate('app.filter-label')}
       </Button>
@@ -290,9 +296,10 @@ export default function AlertFilterSidebar({
             <Stack spacing={1}>
               <Typography variant="subtitle1">{translate('app.start-date-lable')}</Typography>
               <DesktopDatePicker
-                inputFormat="dd MMMM yyyy"
+                inputFormat="DD MMMM yyyy"
                 value={startDate}
                 onChange={handleStartDate}
+                disableFuture
                 size="small"
                 renderInput={(params) => (
                   <TextField
@@ -307,10 +314,11 @@ export default function AlertFilterSidebar({
             <Stack spacing={1}>
               <Typography variant="subtitle1">{translate('app.end-date-lable')}</Typography>
               <DesktopDatePicker
-                inputFormat="dd MMMM yyyy"
+                inputFormat="DD MMMM yyyy"
                 placeholder={translate('app.select-date-label')}
                 value={endDate}
                 onChange={handleEndDate}
+                disableFuture
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -319,7 +327,7 @@ export default function AlertFilterSidebar({
                   />
                 )}
               />
-              {endDate && isValid(endDate) && startDate && isValid(startDate) && isAfter(startDate, endDate) && (
+              {startDate && endDate && endDate.isBefore(startDate) && (
                 <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Typography color="error">{translate('app.start-time-error-lable')}</Typography>
                 </Box>

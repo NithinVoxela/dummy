@@ -1,18 +1,20 @@
+import { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
-import { Box, Card, Link, Typography, Stack, Button} from '@mui/material';
+import { Box, Card, Link, Typography, Stack } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // utils
 
 // components
+import { AuthContext } from '../../contexts/JWTContext';
 import Label from '../../components/Label';
 import Image from '../../components/Image';
+import CameraName from '../cameras/CameraName';
 import useLocales from '../../hooks/useLocales';
-import { fDateTimeSuffix, fDateTimeTZSuffix, fDateWithTZ } from '../../utils/formatTime';
-import Iconify from '../../components/Iconify';
+import { formatUTCDateString } from '../../utils/formatTime';
 
 const useStyles = makeStyles({
   root: {       
@@ -30,6 +32,7 @@ AlertCard.propTypes = {
 };
 
 export default function AlertCard({ alert }) {
+  const authContext = useContext(AuthContext);
   const { id, cameraName, alertTime, preSignedUrl, severity, streamUrl, cameraLocation, hasRead, type } = alert;
   const { translate } = useLocales();
   const classes = useStyles();
@@ -46,20 +49,6 @@ export default function AlertCard({ alert }) {
     return "info";    
   };
 
-  const openStreamUrl = (streamUrl) => {
-    window.open(streamUrl, "_blank");
-  };
-
-  const renderDate = (dateValue) => {
-    let formattedDate = null;
-    try {     
-      formattedDate = fDateTimeSuffix(`${dateValue}Z`);
-    } catch (err) {
-      formattedDate = fDateTimeTZSuffix(dateValue);
-    }
-    return formattedDate;
-  };
-
   const getActivityName = (activity) => {
     if (activity) {
       return translate(`app.app-name-${activity.toLowerCase()}`) || activity;
@@ -67,18 +56,6 @@ export default function AlertCard({ alert }) {
     return "-";
   }  
 
-  const renderCameraName = () => (
-    <>
-      {streamUrl?.trim()?.length > 0 ? (
-        <Button color="primary" size="small" onClick={() => openStreamUrl(streamUrl)}>
-          {cameraName}
-          <Iconify icon={'ic:sharp-launch'} />
-        </Button>
-      ) : (
-        <>{cameraName}</>
-      )}
-    </>
-  );
   return (
     <Card>
       <Box sx={{ position: 'relative' }}>        
@@ -106,7 +83,7 @@ export default function AlertCard({ alert }) {
       <Stack spacing={2} sx={{ p: 2 }} className={classes.root}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="subtitle2" noWrap>
-            {renderDate(alertTime)}
+            {(alertTime) ? formatUTCDateString(alertTime, authContext?.user?.timezone) : ''}
           </Typography>
 
           <Stack direction="row" spacing={0.5}>           
@@ -126,7 +103,7 @@ export default function AlertCard({ alert }) {
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="subtitle2" noWrap>
-            <b>{translate("app.alert-camera-details")}:</b> {renderCameraName()}
+            <b>{translate("app.alert-camera-details")}:</b> <CameraName cameraName={cameraName} streamUrl={streamUrl}/>
           </Typography>
         </Stack>
 
