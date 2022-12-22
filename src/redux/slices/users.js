@@ -7,10 +7,10 @@ import { dispatch } from '../store';
 const initialState = {
   isLoading: false,
   error: null,
-  userList : {
+  userList: {
     total: 0,
-    data: []
-  },  
+    data: [],
+  },
 };
 
 const slice = createSlice({
@@ -33,7 +33,7 @@ const slice = createSlice({
       const { data } = action.payload;
       state.isLoading = false;
       state.userList = { total: data.totalCount, data: data.records };
-    },        
+    },
 
     resetUserList(state) {
       state.userList = [];
@@ -44,13 +44,12 @@ const slice = createSlice({
 // Reducer
 export default slice.reducer;
 
-
 export function getUsers(queryParams, payload = {}) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
       const searchParams = new URLSearchParams(queryParams).toString();
-      const response = await axios.put(`view/user/all?${searchParams}`, payload);
+      const response = await axios.get(`user?${searchParams}`, payload);
       dispatch(slice.actions.getUserSuccess(response));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -59,10 +58,9 @@ export function getUsers(queryParams, payload = {}) {
 }
 
 export function resetUserList() {
-  dispatch(slice.actions.resetUserList()); 
-};
-
-export async function patchUser(payload = {}) {        
-  await axios.put('user/patch', payload); 
+  dispatch(slice.actions.resetUserList());
 }
 
+export async function patchUser(payload = {}) {
+  await axios.put('user/patch', payload);
+}
