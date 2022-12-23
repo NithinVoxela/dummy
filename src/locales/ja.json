@@ -58,7 +58,8 @@
     "alert-cameras-label": "カメラ",
     "alert-new-camera-label": "新規カメラ",
     "alert-camera-list-label": "カメラ一覧",
-    "alert-search-txt-label": "名前から検索",
+    "name-search-txt-label": "名前から検索",
+    "code-search-txt-label": "コードで検索",
     "camera-delete-label": "削除",
     "camera-edit-label": "編集",
     "camera-online-label": "オンライン",
@@ -259,6 +260,12 @@
     "recordings-list-label": "録画リスト",
     "recordings-found-label": "録音が見つかりました",
     "recordings-details-label": "録音の詳細",
-    "recordings-created-on-details": "記録作成日"
+    "recordings-created-on-details": "記録作成日",
+    "tenants-label": "拠点",
+    "tenants-list-header-label": "拠点一覧",
+    "tenant-impersonate-label": "なりすまし",
+    "name-label": "名前",
+    "code-label": "コード",
+    "region-label": "領域"
   }
 }

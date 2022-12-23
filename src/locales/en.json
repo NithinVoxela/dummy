@@ -60,7 +60,8 @@
     "alert-cameras-label": "Cameras",
     "alert-new-camera-label": "New Camera",
     "alert-camera-list-label": "Camera List",
-    "alert-search-txt-label": "Search by Name...",
+    "name-search-txt-label": "Search by Name",
+    "code-search-txt-label": "Search by Code",
     "camera-delete-label": "Delete",
     "camera-edit-label": "Edit",
     "camera-online-label": "Online",
@@ -259,6 +260,12 @@
     "recordings-list-label": "Recording List",
     "recordings-found-label": "recordings found",
     "recordings-details-label": "Recording Details",
-    "recordings-created-on-details": "RECORDING CREATED ON"
+    "recordings-created-on-details": "RECORDING CREATED ON",
+    "tenants-label": "Sites",
+    "tenants-list-header-label": "Sites List",
+    "tenant-impersonate-label": "Impersonate",
+    "name-label": "Name",
+    "code-label": "Code",
+    "region-label": "Region"
   }
 }

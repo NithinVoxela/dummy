@@ -1,41 +1,14 @@
 import PropTypes from 'prop-types';
-import moment from "moment-timezone"
+import moment from 'moment-timezone';
 
 // @mui
-import { styled } from '@mui/material/styles';
-import { Chip, Typography, Stack, Button } from '@mui/material';
+import { Chip, Stack, Button } from '@mui/material';
 
 // components
 import Iconify from '../../components/Iconify';
+import { RootStyle, WrapperStyle, LabelStyle } from '../common/StyleConstants';
 
 // ----------------------------------------------------------------------
-
-const RootStyle = styled('div')({
-  flexGrow: 1,
-  display: 'flex',
-  flexWrap: 'wrap',
-  alignItems: 'center',
-});
-
-const WrapperStyle = styled('div')(({ theme }) => ({
-  display: 'flex',
-  overflow: 'hidden',
-  alignItems: 'stretch',
-  margin: theme.spacing(0.5),
-  borderRadius: theme.shape.borderRadius,
-  border: `solid 1px ${theme.palette.divider}`,
-}));
-
-const LabelStyle = styled((props) => <Typography component="span" variant="subtitle2" {...props} />)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(0, 1),
-  color: theme.palette.text.secondary,
-  backgroundColor: theme.palette.background.neutral,
-  borderRight: `solid 1px ${theme.palette.divider}`,
-}));
-
-
 
 AlertTagFiltered.propTypes = {
   filters: PropTypes.object,
@@ -45,7 +18,7 @@ AlertTagFiltered.propTypes = {
   getAlertData: PropTypes.func,
   onResetAll: PropTypes.func,
   translate: PropTypes.func,
-  sortDirection: PropTypes.string
+  sortDirection: PropTypes.string,
 };
 
 export default function AlertTagFiltered({
@@ -56,9 +29,8 @@ export default function AlertTagFiltered({
   onResetAll,
   setParams,
   translate,
-  sortDirection
+  sortDirection,
 }) {
-
   const { cameraName, startDate, endDate, severity, eventType, hasRead } = filters;
 
   const applyFilter = (newParams) => {
@@ -68,27 +40,27 @@ export default function AlertTagFiltered({
   };
 
   const onRemoveParam = (paramName) => {
-    const newParams = {...filters};
+    const newParams = { ...filters };
     delete newParams[paramName];
     applyFilter(newParams);
-  }
+  };
 
   // eslint-disable-next-line no-prototype-builtins
-  const checkReadParam = () => filters.hasOwnProperty("hasRead") && !hasRead;
+  const checkReadParam = () => filters.hasOwnProperty('hasRead') && !hasRead;
 
   return (
     <RootStyle>
       {filters?.cameraName?.length > 0 && (
         <WrapperStyle>
           <LabelStyle>{translate('app.cameras-header-label')}:</LabelStyle>
-          <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>            
+          <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
             <Chip
               key={cameraName}
               label={cameraName}
               size="small"
-              onDelete={() => onRemoveParam("cameraName")}
+              onDelete={() => onRemoveParam('cameraName')}
               sx={{ m: 0.5 }}
-            />            
+            />
           </Stack>
         </WrapperStyle>
       )}
@@ -96,14 +68,14 @@ export default function AlertTagFiltered({
       {filters?.eventType?.length > 0 && (
         <WrapperStyle>
           <LabelStyle>{translate('app.event-type-label')}:</LabelStyle>
-          <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>            
+          <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
             <Chip
               key={eventType}
               label={translate(`app.app-name-${eventType}`)}
               size="small"
-              onDelete={() => onRemoveParam("eventType")}
+              onDelete={() => onRemoveParam('eventType')}
               sx={{ m: 0.5 }}
-            />            
+            />
           </Stack>
         </WrapperStyle>
       )}
@@ -112,7 +84,12 @@ export default function AlertTagFiltered({
         <WrapperStyle>
           <LabelStyle>{translate('app.start-date-lable')}</LabelStyle>
           <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
-            <Chip size="small" label={moment(startDate).format("DD MMMM yyyy")} onDelete={() => onRemoveParam("startDate")} sx={{ m: 0.5 }} />
+            <Chip
+              size="small"
+              label={moment(startDate).format('DD MMMM yyyy')}
+              onDelete={() => onRemoveParam('startDate')}
+              sx={{ m: 0.5 }}
+            />
           </Stack>
         </WrapperStyle>
       )}
@@ -121,7 +98,12 @@ export default function AlertTagFiltered({
         <WrapperStyle>
           <LabelStyle>{translate('app.end-date-lable')}</LabelStyle>
           <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
-            <Chip size="small" label={moment(endDate).format("DD MMMM yyyy")} onDelete={() => onRemoveParam("endDate")} sx={{ m: 0.5 }} />
+            <Chip
+              size="small"
+              label={moment(endDate).format('DD MMMM yyyy')}
+              onDelete={() => onRemoveParam('endDate')}
+              sx={{ m: 0.5 }}
+            />
           </Stack>
         </WrapperStyle>
       )}
@@ -130,18 +112,28 @@ export default function AlertTagFiltered({
         <WrapperStyle>
           <LabelStyle>{translate('app.alerts-severity-label')}</LabelStyle>
           <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
-            <Chip size="small" label={translate(`app.alert-${severity.toLowerCase()}-label`)} onDelete={() => onRemoveParam("severity")} sx={{ m: 0.5 }} />
+            <Chip
+              size="small"
+              label={translate(`app.alert-${severity.toLowerCase()}-label`)}
+              onDelete={() => onRemoveParam('severity')}
+              sx={{ m: 0.5 }}
+            />
           </Stack>
         </WrapperStyle>
       )}
 
-      { checkReadParam() && (
-        <WrapperStyle>          
+      {checkReadParam() && (
+        <WrapperStyle>
           <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
-            <Chip size="small" label={translate(`app.unread-label`)} onDelete={() => onRemoveParam("hasRead")} sx={{ m: 0.5 }} />
+            <Chip
+              size="small"
+              label={translate(`app.unread-label`)}
+              onDelete={() => onRemoveParam('hasRead')}
+              sx={{ m: 0.5 }}
+            />
           </Stack>
         </WrapperStyle>
-      )}      
+      )}
 
       {isShowReset && (
         <Button color="error" size="small" onClick={onResetAll} startIcon={<Iconify icon={'ic:round-clear-all'} />}>

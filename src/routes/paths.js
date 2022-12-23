@@ -36,52 +36,14 @@ export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
   general: {
     app: path(ROOTS_DASHBOARD, '/dashboard'),
-    ecommerce: path(ROOTS_DASHBOARD, '/ecommerce'),
     analytics: path(ROOTS_DASHBOARD, '/analytics'),
-    banking: path(ROOTS_DASHBOARD, '/banking'),
     booking: path(ROOTS_DASHBOARD, '/booking'),
     cameras: path(ROOTS_DASHBOARD, '/cameras/list'),
     users: path(ROOTS_DASHBOARD, '/users/list'),
     alerts: path(ROOTS_DASHBOARD, '/alerts/list'),
     recordings: path(ROOTS_DASHBOARD, '/recordings/list'),
+    tenants: path(ROOTS_DASHBOARD, '/tenants/list'),
     dashboard: path(ROOTS_DASHBOARD, '/dashboard'),
-  },
-  mail: {
-    root: path(ROOTS_DASHBOARD, '/mail'),
-    all: path(ROOTS_DASHBOARD, '/mail/all'),
-  },
-  chat: {
-    root: path(ROOTS_DASHBOARD, '/chat'),
-    new: path(ROOTS_DASHBOARD, '/chat/new'),
-    conversation: path(ROOTS_DASHBOARD, '/chat/:conversationKey'),
-  },
-  calendar: path(ROOTS_DASHBOARD, '/calendar'),
-  user: {
-    root: path(ROOTS_DASHBOARD, '/user'),
-    profile: path(ROOTS_DASHBOARD, '/user/profile'),
-    cards: path(ROOTS_DASHBOARD, '/user/cards'),
-    list: path(ROOTS_DASHBOARD, '/user/list'),
-    newUser: path(ROOTS_DASHBOARD, '/user/new'),
-    editById: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
-    account: path(ROOTS_DASHBOARD, '/user/account'),
-  },
-  eCommerce: {
-    root: path(ROOTS_DASHBOARD, '/e-commerce'),
-    shop: path(ROOTS_DASHBOARD, '/e-commerce/shop'),
-    product: path(ROOTS_DASHBOARD, '/e-commerce/product/:name'),
-    productById: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-air-force-1-ndestrukt'),
-    list: path(ROOTS_DASHBOARD, '/e-commerce/list'),
-    newProduct: path(ROOTS_DASHBOARD, '/e-commerce/product/new'),
-    editById: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-blazer-low-77-vintage/edit'),
-    checkout: path(ROOTS_DASHBOARD, '/e-commerce/checkout'),
-    invoice: path(ROOTS_DASHBOARD, '/e-commerce/invoice'),
-  },
-  blog: {
-    root: path(ROOTS_DASHBOARD, '/blog'),
-    posts: path(ROOTS_DASHBOARD, '/blog/posts'),
-    post: path(ROOTS_DASHBOARD, '/blog/post/:title'),
-    postById: path(ROOTS_DASHBOARD, '/blog/post/apply-these-7-secret-techniques-to-improve-event'),
-    newPost: path(ROOTS_DASHBOARD, '/blog/new-post'),
   },
   cameras: {
     root: path(ROOTS_DASHBOARD, '/cameras'),
@@ -94,6 +56,9 @@ export const PATH_DASHBOARD = {
   },
   users: {
     list: path(ROOTS_DASHBOARD, '/users/list'),
+  },
+  tenants: {
+    list: path(ROOTS_DASHBOARD, '/tenants/list'),
   },
   alerts: {
     root: path(ROOTS_DASHBOARD, '/alerts'),

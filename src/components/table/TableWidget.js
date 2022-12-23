@@ -58,24 +58,23 @@ const TableWidget = (props) => {
   };
 
   const buildParams = () => {
-    const queryParams = { ...params };
+    const queryParams = {};
 
-    if (!queryParams.searchApplied) {
-      if (sortColumn) {
-        queryParams.sortAscending = order === 'asc';
-        queryParams.sortColumn = sortColumn;
-      } else {
-        queryParams.sortAscending = false;
-      }
-
-      if (limit) {
-        queryParams.pageSize = limit;
-      }
-
-      if (page) {
-        queryParams.pageNumber = page;
-      }
+    if (sortColumn) {
+      queryParams.sortAscending = order === 'asc';
+      queryParams.sortColumn = sortColumn;
+    } else {
+      queryParams.sortAscending = false;
     }
+
+    if (limit) {
+      queryParams.pageSize = limit;
+    }
+
+    if (page) {
+      queryParams.pageNumber = page;
+    }
+
     return queryParams;
   };
 
@@ -87,20 +86,23 @@ const TableWidget = (props) => {
 
   useEffect(() => {
     if (callback) {
-      if (params.searchApplied && page > 0) {
+      callback(buildParams());
+    }
+  }, [sortColumn, order, limit, page]);
+
+  useEffect(() => {
+    if (callback) {
+      if (page > 0) {
         setPage(0);
       } else {
-        const queryParams = buildParams();
-        callback(queryParams);
-        params.searchApplied = false;
+        callback(buildParams());
       }
     }
-  }, [params, sortColumn, order, limit, page]);
+  }, [params]);
 
   useEffect(() => {
     if (callback && refreshTable) {
-      const queryParams = buildParams();
-      callback(queryParams);
+      callback(buildParams());
     }
     if (refreshTable) {
       setSelectedRecords([]);
@@ -186,7 +188,7 @@ const TableWidget = (props) => {
   };
 
   const showEmptyMessage = () => {
-    if ((params && params.query && paginatedData.length === 0) || (paginatedData && paginatedData.length === 0)) {
+    if (paginatedData && paginatedData.length === 0) {
       return true;
     }
     return false;

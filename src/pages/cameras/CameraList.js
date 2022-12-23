@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useMemo, useState, useContext } from 'react';
+import { useCallback, useMemo, useState, useContext } from 'react';
 import { cloneDeep, debounce } from 'lodash';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
-import { Card, Button, Container } from '@mui/material';
+import { Card, Button, Container, MenuItem } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -21,8 +21,8 @@ import { useDispatch, useSelector } from '../../redux/store';
 import { getCameras, deleteCamera } from '../../redux/slices/cameras';
 // sections
 import { CAMERA_TABLE_META } from './CameraConstants';
-import { CameraListMenu } from '../../sections/cameras';
 import { ADMIN_ROLE } from '../../layouts/dashboard/navbar/NavConfig';
+import ListMenu, { ICON } from '../../sections/common/ListMenu';
 
 // ----------------------------------------------------------------------
 
@@ -43,8 +43,7 @@ const CameraList = () => {
   const getCameraData = useCallback(
     async (queryParams = {}) => {
       try {
-        const payload = { ...params, name: queryParams?.name || '' };
-        delete queryParams.name;
+        const payload = { ...params };
         await dispatch(getCameras(queryParams, payload));
       } catch (err) {
         console.error(err);
@@ -54,14 +53,8 @@ const CameraList = () => {
   );
 
   const searchHandler = (searchStr) => {
-    const searchParams = {
-      name: '',
-    };
-    if (searchStr.length > 0) {
-      searchParams.name = searchStr;
-    }
-    setParams(searchParams);
-    // getCameraData({}, searchParams);
+    params.name = searchStr;
+    setParams({ ...params });
   };
 
   const debounceSearchHandler = useCallback(debounce(searchHandler, 1000), []);
@@ -88,6 +81,27 @@ const CameraList = () => {
     [dispatch]
   );
 
+  const getMenuItems = (id) => {
+    return (
+      <>
+        <MenuItem onClick={() => showWarningModal(id)} sx={{ color: 'error.main' }}>
+          <Iconify icon={'eva:trash-2-outline'} sx={{ ...ICON }} />
+          {translate('app.camera-delete-label')}
+        </MenuItem>
+
+        <MenuItem component={RouterLink} to={`${PATH_DASHBOARD.cameras.root}/edit/${id}`}>
+          <Iconify icon={'eva:edit-fill'} sx={{ ...ICON }} />
+          {translate('app.camera-edit-label')}
+        </MenuItem>
+
+        <MenuItem component={RouterLink} to={`${PATH_DASHBOARD.cameras.root}/apps/${id}`}>
+          <Iconify icon={'mdi:apps'} sx={{ ...ICON }} />
+          {translate('app.camera-apps-header-label')}
+        </MenuItem>
+      </>
+    );
+  };
+
   const tableMetaData = useMemo(() => {
     const metaData = cloneDeep(CAMERA_TABLE_META);
     metaData.columns[metaData.columns.length - 1] = ADMIN_ROLE.includes(authContext?.user?.role)
@@ -95,9 +109,7 @@ const CameraList = () => {
           text: '',
           dataKey: 'publicId',
           type: 'widget',
-          renderWidget: (col, cellData, value) => (
-            <CameraListMenu onDelete={() => showWarningModal(value)} cameraId={value} translate={translate} />
-          ),
+          renderWidget: (col, cellData, value) => <ListMenu getMenuItems={() => getMenuItems(value)} />,
         }
       : {};
     return metaData;
@@ -123,7 +135,7 @@ const CameraList = () => {
           }
         />
         <Card>
-          <Searchbar placeholder={translate('app.alert-search-txt-label')} onSearchTextChange={handleQueryChange} />
+          <Searchbar placeholder={translate('app.name-search-txt-label')} onSearchTextChange={handleQueryChange} />
           <TableWidget
             tableMetaData={tableMetaData}
             tableData={cameraDataList}

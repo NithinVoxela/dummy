@@ -1,15 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Oval } from  'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
 import { useLocation } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 // @mui
-import {
-  Box,
-  Button,
-  Container,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Container, Stack, Typography } from '@mui/material';
 // routes
 import { useForm } from 'react-hook-form';
 import { PATH_DASHBOARD } from '../../routes/paths';
@@ -31,60 +25,55 @@ import { getCameras } from '../../redux/slices/cameras';
 // sections
 import { AlertFilterSidebar, AlertSort, AlertTagFiltered, MasonaryGrid } from '../../sections/alerts';
 
-
-
-// ----------------------------------------------------------------------
-
-
-// ----------------------------------------------------------------------
-
 const AlertList = () => {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
-  const { translate, langStorage } = useLocales();  
+  const { translate, langStorage } = useLocales();
   const location = useLocation();
   const { enqueueSnackbar } = useSnackbar();
   const [clearData, setClearData] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
   const [isAscending, setIsAscending] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const [params, setParams] = useState({});  
+  const [params, setParams] = useState({});
   const { alertDataList, isLoading } = useSelector((state) => state.alerts);
   const { cameraDataList } = useSelector((state) => state.cameras);
 
-  const getAlertData = useCallback(async(currentPage = 0, sortAscending = false, payload = {}) => {
-    try {      
-      const queryParams = {
-        pageNumber: currentPage,
-        pageSize: 20,
-        sortAscending
-      };
-      await dispatch(getAlerts(queryParams, payload));      
+  const getAlertData = useCallback(
+    async (currentPage = 0, sortAscending = false, payload = {}) => {
+      try {
+        const queryParams = {
+          pageNumber: currentPage,
+          pageSize: 20,
+          sortAscending,
+          requireVideoUrl: false,
+        };
+        await dispatch(getAlerts(queryParams, payload));
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    [dispatch]
+  );
+
+  const getCameraData = useCallback(async () => {
+    try {
+      await dispatch(getCameras({ pageSize: 1000 }));
     } catch (err) {
       console.error(err);
     }
   }, [dispatch]);
 
-  const getCameraData = useCallback(async() => {
-    try {      
-      await dispatch(getCameras({ pageSize: 1000 }));      
-    } catch (err) {
-      console.error(err);
-    }
-  }, [dispatch]);
-  
   const handleSort = (sortDirection) => {
     setClearData(true);
     getAlertData(0, sortDirection, params);
   };
-  
-  const defaultValues = {};
 
+  const defaultValues = {};
 
   const methods = useForm({
     defaultValues,
   });
-
 
   const handleOpenFilter = () => {
     getCameraData();
@@ -107,32 +96,34 @@ const AlertList = () => {
     getAlertData(0, isAscending, params);
   };
 
-  const handleMarkAsRead = async() => {
-    try {      
-      await dispatch(markAllAsRead());   
+  const handleMarkAsRead = async () => {
+    try {
+      await dispatch(markAllAsRead());
       await dispatch(getUnreadAlertCount());
-      handleRefresh();   
+      handleRefresh();
       enqueueSnackbar(translate('app.alert-status-updated-label'));
     } catch (err) {
       enqueueSnackbar(err?.message, {
         variant: 'error',
       });
     }
-  }
-
+  };
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);
-    const unreadFlag = query.get("unread");
+    const unreadFlag = query.get('unread');
     if (unreadFlag) {
-      setParams({ hasRead: false });      
+      setParams({ hasRead: false });
     }
     setIsPageLoading(false);
   }, [location]);
 
-  useEffect(() => () => {      
-    dispatch(resetAlertList());
-  }, []);
+  useEffect(
+    () => () => {
+      dispatch(resetAlertList());
+    },
+    []
+  );
 
   const isDefault = Object.keys(params).length === 0;
 
@@ -141,25 +132,21 @@ const AlertList = () => {
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading={translate('app.alerts-list-label')}
-          links={[            
+          links={[
             { name: translate('app.dashboard-header-label'), href: PATH_DASHBOARD.root },
-            { name: translate('app.alerts-header-label')},            
+            { name: translate('app.alerts-header-label') },
           ]}
           action={
             <>
               <Button
-                variant="outlined"                            
+                variant="outlined"
                 startIcon={<Iconify icon={'mdi:check-all'} />}
                 onClick={handleMarkAsRead}
                 sx={{ mr: 1 }}
               >
                 {translate('app.mark-all-read-label')}
               </Button>
-              <Button
-                variant="contained"                            
-                startIcon={<Iconify icon={'ic:outline-refresh'} />}
-                onClick={handleRefresh}
-              >
+              <Button variant="contained" startIcon={<Iconify icon={'ic:outline-refresh'} />} onClick={handleRefresh}>
                 {translate('app.alert-refresh-label')}
               </Button>
             </>
@@ -172,8 +159,7 @@ const AlertList = () => {
           alignItems={{ sm: 'center' }}
           justifyContent="flex-end"
           sx={{ mb: 1 }}
-        >          
-
+        >
           <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
             <FormProvider methods={methods}>
               <AlertFilterSidebar
@@ -218,31 +204,36 @@ const AlertList = () => {
           )}
         </Stack>
 
-        { !isPageLoading && 
-          <MasonaryGrid       
-            isLoading={isLoading}    
-            alertList={alertDataList?.data}          
-            totalCount={alertDataList?.total}       
-            nextPageCallback={(page) => getAlertData(page, isAscending, params)}    
-            currentPage={ alertDataList?.currentPage || 0 }    
+        {!isPageLoading && (
+          <MasonaryGrid
+            isLoading={isLoading}
+            alertList={alertDataList?.data}
+            totalCount={alertDataList?.total}
+            nextPageCallback={(page) => getAlertData(page, isAscending, params)}
+            currentPage={alertDataList?.currentPage || 0}
             clearData={clearData}
             setClearData={setClearData}
-          />    
-        }
-        { isLoading &&  
-          <Box sx={{ mt: 15}}>
-            <Oval color="#626262" secondaryColor="#e7e4e4" wrapperStyle={{ justifyContent: 'center'}} height={36} width={36}/>
+          />
+        )}
+        {isLoading && (
+          <Box sx={{ mt: 15 }}>
+            <Oval
+              color="#626262"
+              secondaryColor="#e7e4e4"
+              wrapperStyle={{ justifyContent: 'center' }}
+              height={36}
+              width={36}
+            />
           </Box>
-        }
-        { !isLoading && alertDataList?.data?.length === 0 &&
-          <Typography variant="body1" color="textSecondary" sx={{ textAlign: "center" }}>
-            {translate("app.global-no-results-label")}
-          </Typography>    
-        }
-      </Container>      
+        )}
+        {!isLoading && alertDataList?.data?.length === 0 && (
+          <Typography variant="body1" color="textSecondary" sx={{ textAlign: 'center' }}>
+            {translate('app.global-no-results-label')}
+          </Typography>
+        )}
+      </Container>
     </Page>
   );
-}
-
+};
 
 export default AlertList;

@@ -6,7 +6,6 @@ import LogoOnlyLayout from '../layouts/LogoOnlyLayout';
 // guards
 import GuestGuard from '../guards/GuestGuard';
 import AuthGuard from '../guards/AuthGuard';
-// import RoleBasedGuard from '../guards/RoleBasedGuard';
 // config
 import { PATH_AFTER_LOGIN } from '../config';
 // components
@@ -80,7 +79,6 @@ export default function Router() {
             { path: 'apps/:cameraId/settings/:appId', element: <CameraAppSettings /> },
           ],
         },
-
         {
           path: 'users',
           children: [
@@ -88,7 +86,13 @@ export default function Router() {
             { path: 'list', element: <UserList /> },
           ],
         },
-
+        {
+          path: 'tenants',
+          children: [
+            { element: <Navigate to="/cortexa/tenants/list" replace />, index: true },
+            { path: 'list', element: <TenantList /> },
+          ],
+        },
         {
           path: 'alerts',
           children: [
@@ -146,6 +150,7 @@ const RecordingDetail = Loadable(lazy(() => import('../pages/recordings/Recordin
 const Dashboard = Loadable(lazy(() => import('../pages/cortexaDashboard/Dashboard')));
 const Analytics = Loadable(lazy(() => import('../pages/analytics/Analytics')));
 const UserList = Loadable(lazy(() => import('../pages/users/UserList')));
+const TenantList = Loadable(lazy(() => import('../pages/tenant/TenantList')));
 // Main
 
 const Maintenance = Loadable(lazy(() => import('../pages/Maintenance')));

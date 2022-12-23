@@ -1,41 +1,14 @@
 import PropTypes from 'prop-types';
-import moment from "moment-timezone"
+import moment from 'moment-timezone';
 
 // @mui
-import { styled } from '@mui/material/styles';
-import { Chip, Typography, Stack, Button } from '@mui/material';
+import { Chip, Stack, Button } from '@mui/material';
 
 // components
 import Iconify from '../../components/Iconify';
+import { RootStyle, WrapperStyle, LabelStyle } from '../common/StyleConstants';
 
 // ----------------------------------------------------------------------
-
-const RootStyle = styled('div')({
-  flexGrow: 1,
-  display: 'flex',
-  flexWrap: 'wrap',
-  alignItems: 'center',
-});
-
-const WrapperStyle = styled('div')(({ theme }) => ({
-  display: 'flex',
-  overflow: 'hidden',
-  alignItems: 'stretch',
-  margin: theme.spacing(0.5),
-  borderRadius: theme.shape.borderRadius,
-  border: `solid 1px ${theme.palette.divider}`,
-}));
-
-const LabelStyle = styled((props) => <Typography component="span" variant="subtitle2" {...props} />)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(0, 1),
-  color: theme.palette.text.secondary,
-  backgroundColor: theme.palette.background.neutral,
-  borderRight: `solid 1px ${theme.palette.divider}`,
-}));
-
-
 
 RecordingTagFiltered.propTypes = {
   filters: PropTypes.object,
@@ -45,7 +18,7 @@ RecordingTagFiltered.propTypes = {
   getRecordingData: PropTypes.func,
   onResetAll: PropTypes.func,
   translate: PropTypes.func,
-  sortDirection: PropTypes.bool
+  sortDirection: PropTypes.bool,
 };
 
 export default function RecordingTagFiltered({
@@ -56,9 +29,8 @@ export default function RecordingTagFiltered({
   onResetAll,
   setParams,
   translate,
-  sortDirection
+  sortDirection,
 }) {
-
   const { cameraName, startDate } = filters;
 
   const applyFilter = (newParams) => {
@@ -68,24 +40,24 @@ export default function RecordingTagFiltered({
   };
 
   const onRemoveParam = (paramName) => {
-    const newParams = {...filters};
+    const newParams = { ...filters };
     delete newParams[paramName];
     applyFilter(newParams);
-  }
+  };
 
   return (
     <RootStyle>
       {filters?.cameraName?.length > 0 && (
         <WrapperStyle>
           <LabelStyle>{translate('app.cameras-header-label')}:</LabelStyle>
-          <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>            
+          <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
             <Chip
               key={cameraName}
               label={cameraName}
               size="small"
-              onDelete={() => onRemoveParam("cameraName")}
+              onDelete={() => onRemoveParam('cameraName')}
               sx={{ m: 0.5 }}
-            />            
+            />
           </Stack>
         </WrapperStyle>
       )}
@@ -94,7 +66,12 @@ export default function RecordingTagFiltered({
         <WrapperStyle>
           <LabelStyle>{translate('app.start-date-lable')}</LabelStyle>
           <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
-            <Chip size="small" label={moment(startDate).format("DD MMMM yyyy hh:mm a")} onDelete={() => onRemoveParam("startDate")} sx={{ m: 0.5 }} />
+            <Chip
+              size="small"
+              label={moment(startDate).format('DD MMMM yyyy hh:mm a')}
+              onDelete={() => onRemoveParam('startDate')}
+              sx={{ m: 0.5 }}
+            />
           </Stack>
         </WrapperStyle>
       )}

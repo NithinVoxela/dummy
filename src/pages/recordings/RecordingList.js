@@ -1,14 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Oval } from  'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
 
 // @mui
-import {
-  Box,
-  Button,
-  Container,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Container, Stack, Typography } from '@mui/material';
 // routes
 import { useForm } from 'react-hook-form';
 import { PATH_DASHBOARD } from '../../routes/paths';
@@ -32,41 +26,44 @@ import { RecordingFilterSidebar, RecordingSort, RecordingTagFiltered, RecordingG
 const RecordingList = () => {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
-  const { translate, langStorage } = useLocales(); 
+  const { translate, langStorage } = useLocales();
   const [clearData, setClearData] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
   const [isAscending, setIsAscending] = useState(false);
-  const [params, setParams] = useState({});  
+  const [params, setParams] = useState({});
   const { recordingDataList, isLoading } = useSelector((state) => state.recordings);
   const { cameraDataList } = useSelector((state) => state.cameras);
 
-  const getRecordingData = useCallback(async(currentPage = 0, sortAscending = false, payload = {}) => {
-    try {      
-      const queryParams = {
-        pageNumber: currentPage,
-        pageSize: 8,
-        sortAscending,
-        requireThumbnailUrl: true
-      };
-      await dispatch(getRecordings(queryParams, payload));      
+  const getRecordingData = useCallback(
+    async (currentPage = 0, sortAscending = false, payload = {}) => {
+      try {
+        const queryParams = {
+          pageNumber: currentPage,
+          pageSize: 8,
+          sortAscending,
+          requireThumbnailUrl: true,
+        };
+        await dispatch(getRecordings(queryParams, payload));
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    [dispatch]
+  );
+
+  const getCameraData = useCallback(async () => {
+    try {
+      await dispatch(getCameras({ pageSize: 1000 }));
     } catch (err) {
       console.error(err);
     }
   }, [dispatch]);
 
-  const getCameraData = useCallback(async() => {
-    try {      
-      await dispatch(getCameras({ pageSize: 1000 }));      
-    } catch (err) {
-      console.error(err);
-    }
-  }, [dispatch]);
-  
   const handleSort = (sortDirection) => {
     setClearData(true);
     getRecordingData(0, sortDirection, params);
   };
-  
+
   const defaultValues = {};
 
   const methods = useForm({
@@ -89,9 +86,12 @@ const RecordingList = () => {
     getRecordingData(0, isAscending, {});
   };
 
-  useEffect(() => () => {      
-    dispatch(resetRecordingList());
-  }, []);
+  useEffect(
+    () => () => {
+      dispatch(resetRecordingList());
+    },
+    []
+  );
 
   const isDefault = Object.keys(params).length === 0;
 
@@ -100,9 +100,9 @@ const RecordingList = () => {
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading={translate('app.recordings-list-label')}
-          links={[            
+          links={[
             { name: translate('app.dashboard-header-label'), href: PATH_DASHBOARD.root },
-            { name: translate('app.recordings-label')},            
+            { name: translate('app.recordings-label') },
           ]}
         />
 
@@ -112,8 +112,7 @@ const RecordingList = () => {
           alignItems={{ sm: 'center' }}
           justifyContent="flex-end"
           sx={{ mb: 1 }}
-        >          
-
+        >
           <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
             <FormProvider methods={methods}>
               <RecordingFilterSidebar
@@ -158,29 +157,35 @@ const RecordingList = () => {
           )}
         </Stack>
 
-        <RecordingGrid       
-          isLoading={isLoading}    
-          recordingList={recordingDataList?.data}          
-          totalCount={recordingDataList?.total}       
-          nextPageCallback={(page) => getRecordingData(page, isAscending, params)}    
-          currentPage={ recordingDataList?.currentPage || 0 }    
+        <RecordingGrid
+          isLoading={isLoading}
+          recordingList={recordingDataList?.data}
+          totalCount={recordingDataList?.total}
+          nextPageCallback={(page) => getRecordingData(page, isAscending, params)}
+          currentPage={recordingDataList?.currentPage || 0}
           clearData={clearData}
           setClearData={setClearData}
         />
 
-        { isLoading &&  
-          <Box sx={{ mt: 15}}>
-            <Oval color="#626262" secondaryColor="#e7e4e4" wrapperStyle={{ justifyContent: 'center'}} height={36} width={36}/>
+        {isLoading && (
+          <Box sx={{ mt: 15 }}>
+            <Oval
+              color="#626262"
+              secondaryColor="#e7e4e4"
+              wrapperStyle={{ justifyContent: 'center' }}
+              height={36}
+              width={36}
+            />
           </Box>
-        }
-        { !isLoading && recordingDataList?.data?.length === 0 &&
-          <Typography variant="body1" color="textSecondary" sx={{ textAlign: "center" }}>
-            {translate("app.global-no-results-label")}
-          </Typography>    
-        }
-      </Container>      
+        )}
+        {!isLoading && recordingDataList?.data?.length === 0 && (
+          <Typography variant="body1" color="textSecondary" sx={{ textAlign: 'center' }}>
+            {translate('app.global-no-results-label')}
+          </Typography>
+        )}
+      </Container>
     </Page>
   );
-}
+};
 
 export default RecordingList;

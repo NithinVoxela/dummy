@@ -17,7 +17,7 @@ const ICONS = {
   mail: getIcon('ic_mail'),
   user: getIcon('ic_user'),
   kanban: getIcon('ic_kanban'),
-  banking: getIcon('ic_banking'),
+  organization: getIcon('ic_organization'),
   calendar: getIcon('ic_calendar'),
   ecommerce: getIcon('ic_ecommerce'),
   alerts: <WarningAmberOutlinedIcon />,
@@ -27,7 +27,8 @@ const ICONS = {
   analytics: getIcon('ic_analytics'),
 };
 
-export const ADMIN_ROLE = ['ADMIN'];
+export const ADMIN_ROLE = ['ADMIN', 'ORG_ADMIN', 'SUPER_ADMIN'];
+export const MULTIPLE_TENANT_ACCESS_ROLE = ['ORG_ADMIN', 'SUPER_ADMIN'];
 
 const navConfig = [
   // GENERAL
@@ -49,6 +50,12 @@ const navConfig = [
     items: [
       { title: 'cameras', path: PATH_DASHBOARD.general.cameras, icon: ICONS.kanban },
       { title: 'users', path: PATH_DASHBOARD.general.users, icon: ICONS.user, role: ADMIN_ROLE },
+      {
+        title: 'tenants',
+        path: PATH_DASHBOARD.general.tenants,
+        icon: ICONS.organization,
+        role: MULTIPLE_TENANT_ACCESS_ROLE,
+      },
     ],
   },
 ];
