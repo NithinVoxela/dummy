@@ -1,16 +1,18 @@
 import React from 'react';
 import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
 import EmergencyRecordingOutlinedIcon from '@mui/icons-material/EmergencyRecordingOutlined';
+
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
 import SvgIconStyle from '../../../components/SvgIconStyle';
+import Iconify from '../../../components/Iconify';
 import AlertCountLabel from '../../../sections/alerts/AlertCountLabel';
 // ----------------------------------------------------------------------
 
 const getIcon = (name) => <SvgIconStyle src={`/icons/${name}.svg`} sx={{ width: 1, height: 1 }} />;
 
-const ICONS = {
+export const ICONS = {
   blog: getIcon('ic_blog'),
   cart: getIcon('ic_cart'),
   chat: getIcon('ic_chat'),
@@ -25,6 +27,8 @@ const ICONS = {
   dashboard: getIcon('ic_dashboard'),
   booking: getIcon('ic_booking'),
   analytics: getIcon('ic_analytics'),
+  impersonation: <Iconify icon={'ic:outline-screen-share'} />,
+  stopImpersonation: <Iconify icon={'ic:outline-stop-screen-share'} />,
 };
 
 export const ADMIN_ROLE = ['ADMIN', 'ORG_ADMIN', 'SUPER_ADMIN'];

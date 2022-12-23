@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
-import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Link, Typography } from '@mui/material';
+import { Box, Stack, Typography, Tooltip } from '@mui/material';
 // hooks
 import useAuth from '../../../hooks/useAuth';
-// routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import useLocales from '../../../hooks/useLocales';
 // components
 import MyAvatar from '../../../components/MyAvatar';
+import { ListItemIconStyle } from '../../../components/nav-section/vertical/style';
+import { ICONS } from './NavConfig';
 
 // ----------------------------------------------------------------------
 
@@ -31,9 +31,9 @@ NavbarAccount.propTypes = {
 
 export default function NavbarAccount({ isCollapse }) {
   const { user } = useAuth();
+  const { translate } = useLocales();
 
   return (
-    
     <RootStyle
       sx={{
         ...(isCollapse && {
@@ -41,29 +41,41 @@ export default function NavbarAccount({ isCollapse }) {
         }),
       }}
     >
-      <MyAvatar />
+      <Stack direction="column" spacing={2}>
+        <Stack direction="row" spacing={2}>
+          <MyAvatar />
 
-      <Box
-        sx={{
-          ml: 2,
-          transition: (theme) =>
-            theme.transitions.create('width', {
-              duration: theme.transitions.duration.shorter,
-            }),
-          ...(isCollapse && {
-            ml: 0,
-            width: 0,
-          }),
-        }}
-      >
-        <Typography variant="subtitle2" noWrap>
-          {user?.displayName}
-        </Typography>
-        <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-          {user?.applicationTenant?.schemaName}
-        </Typography>
-      </Box>
+          <Box
+            sx={{
+              ml: 2,
+              transition: (theme) =>
+                theme.transitions.create('width', {
+                  duration: theme.transitions.duration.shorter,
+                }),
+              ...(isCollapse && {
+                ml: 0,
+                width: 0,
+              }),
+            }}
+          >
+            <Typography variant="subtitle2" noWrap>
+              {user?.displayName}
+            </Typography>
+            <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
+              {user?.applicationTenant?.schemaName}
+            </Typography>
+          </Box>
+        </Stack>
+        {user?.impersonatedTenant && (
+          <Stack direction="row">
+            <Tooltip title={translate('app.tenant-impersonating-label')}>
+              <ListItemIconStyle>{ICONS.impersonation}</ListItemIconStyle>
+            </Tooltip>
+
+            {user?.impersonatedTenant?.schemaName}
+          </Stack>
+        )}
+      </Stack>
     </RootStyle>
-    
   );
 }

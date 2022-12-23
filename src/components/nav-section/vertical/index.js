@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import { List, Box, ListSubheader } from '@mui/material';
 //
-import React, { useContext } from 'react';
+import React from 'react';
 import { NavListRoot } from './NavList';
-import { AuthContext } from '../../../contexts/JWTContext';
+import useAuth from '../../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
@@ -31,13 +31,7 @@ NavSectionVertical.propTypes = {
 };
 
 export default function NavSectionVertical({ navConfig, isCollapse = false, translate, ...other }) {
-  /**
-   * First, Check if the role array is there in the list or not.
-   * If it's not there then simply show the navroot list,
-   * but if it's there then check that the user in the api is contained in the array of users which are authorized for the permission.
-   * If the user is in the array, then show the navroot else show null
-   */
-  const authContext = useContext(AuthContext);
+  const { user } = useAuth();
 
   return (
     <Box {...other}>
@@ -53,7 +47,7 @@ export default function NavSectionVertical({ navConfig, isCollapse = false, tran
             {translate(`app.${group.subheader}-label`)}
           </ListSubheaderStyle>
           {group.items.map((list) =>
-            !list.role || list.role.includes(authContext?.user?.role) ? (
+            !list.role || list.role.includes(user?.role) ? ( // check if user has access to the group item
               <NavListRoot key={list.title} list={list} isCollapse={isCollapse} translate={translate} />
             ) : null
           )}

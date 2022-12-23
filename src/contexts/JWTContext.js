@@ -1,7 +1,7 @@
 import { createContext, useEffect, useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone'
+import moment from 'moment-timezone';
 
 // utils
 import axios from '../utils/axios';
@@ -40,12 +40,19 @@ const handlers = {
     isAuthenticated: false,
     user: null,
   }),
-  REGISTER: (state, action) => {
+  IMPERSONATE: (state, action) => {
     const { user } = action.payload;
 
     return {
       ...state,
-      isAuthenticated: true,
+      user,
+    };
+  },
+  IMPERSONATE_LOGOUT: (state, action) => {
+    const { user } = action.payload;
+
+    return {
+      ...state,
       user,
     };
   },
@@ -58,7 +65,6 @@ const AuthContext = createContext({
   method: 'jwt',
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
-  register: () => Promise.resolve(),
 });
 
 // ----------------------------------------------------------------------
@@ -68,37 +74,36 @@ AuthProvider.propTypes = {
 };
 
 function AuthProvider({ children }) {
-  const [state, dispatch] = useReducer(reducer, initialState); 
+  const [state, dispatch] = useReducer(reducer, initialState);
   const { i18n } = useTranslation();
 
   useEffect(() => {
     const initialize = async () => {
       try {
-        const accessToken = window.localStorage.getItem('accessToken');
+        let user = JSON.parse(window.localStorage.getItem('user'));
+        let isAuthenticated = false;
 
-        const user = JSON.parse(window.localStorage.getItem('user'));
+        if (user) {
+          if (user.token && isValidToken(user.token)) {
+            setSession(user.token);
+            const response = await axios.put('refreshToken', {});
+            user = response.data;
 
-        if (accessToken && isValidToken(accessToken) && user?.userName) {
-          setSession(accessToken);         
-          i18n.changeLanguage(user.locale);
-          moment.tz.setDefault(user.timezone);
-          
-          dispatch({
-            type: 'INITIALIZE',
-            payload: {
-              isAuthenticated: true,
-              user,
-            },
-          });
-        } else {
-          dispatch({
-            type: 'INITIALIZE',
-            payload: {
-              isAuthenticated: false,
-              user: null,
-            },
-          });
+            initializeUserSettings(user);
+            isAuthenticated = true;
+          } else {
+            clearUserSettings();
+            user = null;
+          }
         }
+
+        dispatch({
+          type: 'INITIALIZE',
+          payload: {
+            isAuthenticated,
+            user,
+          },
+        });
       } catch (err) {
         console.error(err);
         dispatch({
@@ -117,25 +122,18 @@ function AuthProvider({ children }) {
   const login = async (email, password) => {
     const response = await axios.post('login', {
       userName: email,
-      userPassword: Buffer.from(password, 'utf8').toString('base64')
+      userPassword: Buffer.from(password, 'utf8').toString('base64'),
     });
-    const { data } = response;
-    const accessToken = data.token;
-    const user = data;
-
-    setSession(accessToken);
-    user.displayName = `${data?.firstName} ${data?.lastName}`;
-    window.localStorage.setItem('user', JSON.stringify(user));
-    i18n.changeLanguage(user.locale);
-    moment.tz.setDefault(user.timezone);
+    const user = response.data;
+    initializeUserSettings(user);
 
     const firebaseToken = window.sessionStorage.getItem('messagingToken');
 
     if (firebaseToken) {
       await registerDevice({
-        'imeiNumber': 'imeiNumber',
-        'fireBaseId': window.sessionStorage.getItem('messagingToken'),
-        'deviceType' : 'WEB'
+        imeiNumber: 'imeiNumber',
+        fireBaseId: window.sessionStorage.getItem('messagingToken'),
+        deviceType: 'WEB',
       });
     }
 
@@ -147,18 +145,28 @@ function AuthProvider({ children }) {
     });
   };
 
-  const register = async (email, password, firstName, lastName) => {
-    const response = await axios.post('/api/account/register', {
-      email,
-      password,
-      firstName,
-      lastName,
+  const impersonate = async (tenantId) => {
+    const response = await axios.post('impersonate', {
+      tenantId,
     });
-    const { accessToken, user } = response.data;
+    const user = response.data;
+    initializeUserSettings(user);
 
-    window.localStorage.setItem('accessToken', accessToken);
     dispatch({
-      type: 'REGISTER',
+      type: 'IMPERSONATE',
+      payload: {
+        user,
+      },
+    });
+  };
+
+  const impersonateLogout = async () => {
+    const response = await axios.post('impersonate/logout');
+    const user = response.data;
+    initializeUserSettings(user);
+
+    dispatch({
+      type: 'IMPERSONATE_LOGOUT',
       payload: {
         user,
       },
@@ -167,7 +175,20 @@ function AuthProvider({ children }) {
 
   const logout = async () => {
     setSession(null);
+    clearUserSettings();
     dispatch({ type: 'LOGOUT' });
+  };
+
+  const initializeUserSettings = (user) => {
+    setSession(user.token);
+    user.displayName = `${user?.firstName} ${user?.lastName}`;
+    window.localStorage.setItem('user', JSON.stringify(user));
+    i18n.changeLanguage(user.locale);
+    moment.tz.setDefault(user.timezone);
+  };
+
+  const clearUserSettings = () => {
+    localStorage.removeItem('user');
   };
 
   return (
@@ -177,7 +198,8 @@ function AuthProvider({ children }) {
         method: 'jwt',
         login,
         logout,
-        register,
+        impersonate,
+        impersonateLogout,
       }}
     >
       {children}

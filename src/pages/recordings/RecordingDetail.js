@@ -1,22 +1,17 @@
-import { useCallback, useEffect, useContext } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import { has } from 'lodash';
 // @mui
-import {
-  Card,  
-  Container,
-  Grid,
-  Typography,
-} from '@mui/material';
+import { Card, Container, Grid, Typography } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useSettings from '../../hooks/useSettings';
 import useLocales from '../../hooks/useLocales';
+import useAuth from '../../hooks/useAuth';
 
 // components
-import { AuthContext } from '../../contexts/JWTContext';
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import CameraName from '../../sections/cameras/CameraName';
@@ -27,7 +22,7 @@ import { useDispatch, useSelector } from '../../redux/store';
 import { getRecordingDetails, patch } from '../../redux/slices/recordings';
 
 const RecordingDetail = () => {
-  const authContext = useContext(AuthContext);
+  const { user } = useAuth();
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
   const { translate } = useLocales();
@@ -72,7 +67,7 @@ const RecordingDetail = () => {
       }
     }
   }, [recordingDetails]);
-  
+
   return (
     <Page title={translate('app.recordings-details-label')}>
       <Container maxWidth={themeStretch ? false : 'lg'}>
@@ -102,8 +97,11 @@ const RecordingDetail = () => {
                 <Typography color="textPrimary" variant="subtitle2">
                   {translate('app.alert-camera-details').toUpperCase()}
                 </Typography>
-                <Typography color="textPrimary" variant="body1" sx={{ pt: 0.5 }} >
-                  <CameraName cameraName={recordingDetails?.cameraApp?.camera.name} streamUrl={recordingDetails?.streamUrl}/>
+                <Typography color="textPrimary" variant="body1" sx={{ pt: 0.5 }}>
+                  <CameraName
+                    cameraName={recordingDetails?.cameraApp?.camera.name}
+                    streamUrl={recordingDetails?.streamUrl}
+                  />
                 </Typography>
               </div>
             </Grid>
@@ -112,8 +110,10 @@ const RecordingDetail = () => {
                 <Typography color="textPrimary" variant="subtitle2">
                   {translate('app.recordings-created-on-details').toUpperCase()}
                 </Typography>
-                <Typography color="textPrimary" variant="body1" sx={{ pt: 0.5 }} >
-                  {recordingDetails?.recordingTime ? formatEpochTime(recordingDetails?.recordingTime, authContext?.user?.timezone) : '-'}
+                <Typography color="textPrimary" variant="body1" sx={{ pt: 0.5 }}>
+                  {recordingDetails?.recordingTime
+                    ? formatEpochTime(recordingDetails?.recordingTime, user?.timezone)
+                    : '-'}
                 </Typography>
               </div>
             </Grid>

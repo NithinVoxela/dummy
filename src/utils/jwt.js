@@ -18,35 +18,13 @@ const isValidToken = (accessToken) => {
   return decoded.exp > currentTime;
 };
 
-//  const handleTokenExpired = (exp) => {
-//   let expiredTimer;
-
-//   window.clearTimeout(expiredTimer);
-//   const currentTime = Date.now();
-//   const timeLeft = exp * 1000 - currentTime;
-//   console.log(timeLeft);
-//   expiredTimer = window.setTimeout(() => {
-//     console.log('expired');
-//     // You can do what ever you want here, like show a notification
-//   }, timeLeft);
-// };
-
-// ----------------------------------------------------------------------
-
 const setSession = (accessToken) => {
   if (accessToken) {
-    localStorage.setItem('accessToken', accessToken);
-
     const authenticationHeaders = {};
-    authenticationHeaders["X-AuthToken"] = window.localStorage.getItem('accessToken');
+    authenticationHeaders['X-AuthToken'] = accessToken;
     axios.defaults.headers.common = authenticationHeaders;
-    // This function below will handle when token is expired
-    // const { exp } = jwtDecode(accessToken);
-    // handleTokenExpired(exp);
   } else {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('user');
-    delete axios.defaults.headers.common["X-AuthToken"];        
+    delete axios.defaults.headers.common['X-AuthToken'];
   }
 };
 

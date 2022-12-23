@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { cloneDeep, debounce } from 'lodash';
-import { Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // @mui
 import { Card, Container, MenuItem } from '@mui/material';
 // routes
@@ -22,6 +22,7 @@ import { TENANT_TABLE_META } from './TenantConstants';
 import { ListMenu } from '../../sections/common';
 import { ICON } from '../../sections/common/ListMenu';
 import { RootStyle } from '../../sections/common/StyleConstants';
+import useAuth from '../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
@@ -33,6 +34,8 @@ const TenantList = () => {
   const { translate } = useLocales();
   const [params, setParams] = useState({});
   const { tenantDataList, isLoading } = useSelector((state) => state.tenants);
+  const navigate = useNavigate();
+  const { impersonate } = useAuth();
 
   const getTenantData = useCallback(
     async (queryParams = {}) => {
@@ -68,11 +71,16 @@ const TenantList = () => {
     debounceSearchHandler('tenantCode', value);
   };
 
+  const impersonateTenant = (id) => {
+    impersonate(id);
+    navigate(`${PATH_DASHBOARD.general.app}`);
+  };
+
   const getMenuItems = (id) => {
     return (
       <>
-        <MenuItem component={RouterLink} to={`${PATH_DASHBOARD.cameras.root}/apps/${id}`}>
-          <Iconify icon={'mdi:apps'} sx={{ ...ICON }} />
+        <MenuItem onClick={() => impersonateTenant(id)}>
+          <Iconify icon={'ic:outline-screen-share'} sx={{ ...ICON }} />
           {translate('app.tenant-impersonate-label')}
         </MenuItem>
       </>

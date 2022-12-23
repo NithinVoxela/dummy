@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, useContext } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { cloneDeep, debounce } from 'lodash';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
@@ -8,7 +8,7 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useSettings from '../../hooks/useSettings';
 import useLocales from '../../hooks/useLocales';
-import { AuthContext } from '../../contexts/JWTContext';
+import useAuth from '../../hooks/useAuth';
 // components
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
@@ -38,7 +38,7 @@ const CameraList = () => {
   const [showModal, setShowModal] = useState(false);
   const [recordId, setRecordId] = useState(null);
   const { cameraDataList, isLoading } = useSelector((state) => state.cameras);
-  const authContext = useContext(AuthContext);
+  const { user } = useAuth();
 
   const getCameraData = useCallback(
     async (queryParams = {}) => {
@@ -104,7 +104,7 @@ const CameraList = () => {
 
   const tableMetaData = useMemo(() => {
     const metaData = cloneDeep(CAMERA_TABLE_META);
-    metaData.columns[metaData.columns.length - 1] = ADMIN_ROLE.includes(authContext?.user?.role)
+    metaData.columns[metaData.columns.length - 1] = ADMIN_ROLE.includes(user?.role)
       ? {
           text: '',
           dataKey: 'publicId',

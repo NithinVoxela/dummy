@@ -266,6 +266,8 @@
     "tenant-impersonate-label": "Impersonate",
     "name-label": "Name",
     "code-label": "Code",
-    "region-label": "Region"
+    "region-label": "Region",
+    "tenant-impersonating-label": "Impersonating",
+    "tenant-stop-impersonating-label": "Stop Impersonating"
   }
 }

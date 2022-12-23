@@ -266,6 +266,8 @@
     "tenant-impersonate-label": "なりすまし",
     "name-label": "名前",
     "code-label": "コード",
-    "region-label": "領域"
+    "region-label": "領域",
+    "tenant-impersonating-label": "なりすまし",
+    "tenant-stop-impersonating-label": "なりすましをやめる"
   }
 }
