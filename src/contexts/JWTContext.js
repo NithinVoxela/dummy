@@ -65,6 +65,8 @@ const AuthContext = createContext({
   method: 'jwt',
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
+  impersonate: () => Promise.resolve(),
+  impersonateLogout: () => Promise.resolve(),
 });
 
 // ----------------------------------------------------------------------

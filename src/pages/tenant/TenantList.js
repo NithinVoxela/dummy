@@ -8,6 +8,7 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useSettings from '../../hooks/useSettings';
 import useLocales from '../../hooks/useLocales';
+import useAuth from '../../hooks/useAuth';
 // components
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
@@ -22,7 +23,7 @@ import { TENANT_TABLE_META } from './TenantConstants';
 import { ListMenu } from '../../sections/common';
 import { ICON } from '../../sections/common/ListMenu';
 import { RootStyle } from '../../sections/common/StyleConstants';
-import useAuth from '../../hooks/useAuth';
+import { IMAGES } from '../../sections/common/ImageConstants';
 
 // ----------------------------------------------------------------------
 
@@ -35,7 +36,7 @@ const TenantList = () => {
   const [params, setParams] = useState({});
   const { tenantDataList, isLoading } = useSelector((state) => state.tenants);
   const navigate = useNavigate();
-  const { impersonate } = useAuth();
+  const { user, impersonate, impersonateLogout } = useAuth();
 
   const getTenantData = useCallback(
     async (queryParams = {}) => {
@@ -71,18 +72,32 @@ const TenantList = () => {
     debounceSearchHandler('tenantCode', value);
   };
 
-  const impersonateTenant = (id) => {
-    impersonate(id);
+  const impersonateTenant = async (id) => {
+    await impersonate(id);
+    navigate(`${PATH_DASHBOARD.general.app}`);
+  };
+
+  const impersonateLogoutTenant = async () => {
+    await impersonateLogout();
     navigate(`${PATH_DASHBOARD.general.app}`);
   };
 
   const getMenuItems = (id) => {
     return (
       <>
-        <MenuItem onClick={() => impersonateTenant(id)}>
-          <Iconify icon={'ic:outline-screen-share'} sx={{ ...ICON }} />
-          {translate('app.tenant-impersonate-label')}
-        </MenuItem>
+        {user?.impersonatedTenant?.id !== id && (
+          <MenuItem onClick={() => impersonateTenant(id)}>
+            <Iconify icon={IMAGES.impersonation} sx={{ ...ICON }} />
+            {translate('app.tenant-impersonate-label')}
+          </MenuItem>
+        )}
+
+        {user?.impersonatedTenant && user?.impersonatedTenant.id === id && (
+          <MenuItem onClick={() => impersonateLogoutTenant()}>
+            <Iconify icon={IMAGES.stopImpersonation} sx={{ ...ICON }} />
+            {translate('app.tenant-stop-impersonating-label')}
+          </MenuItem>
+        )}
       </>
     );
   };

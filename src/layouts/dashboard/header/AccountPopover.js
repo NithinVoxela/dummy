@@ -5,7 +5,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem } from '@mui/material';
 // routes
-import { PATH_AUTH } from '../../../routes/paths';
+import { PATH_AUTH, PATH_DASHBOARD } from '../../../routes/paths';
 // hooks
 import useAuth from '../../../hooks/useAuth';
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
@@ -21,7 +21,7 @@ const MENU_OPTIONS = [
   {
     label: 'Home',
     linkTo: '/',
-  }, 
+  },
 ];
 
 // ----------------------------------------------------------------------
@@ -30,7 +30,7 @@ export default function AccountPopover() {
   const navigate = useNavigate();
   const { translate } = useLocales();
 
-  const { user, logout } = useAuth();
+  const { user, logout, impersonateLogout } = useAuth();
 
   const isMountedRef = useIsMountedRef();
 
@@ -58,6 +58,11 @@ export default function AccountPopover() {
       console.error(error);
       enqueueSnackbar('Unable to logout!', { variant: 'error' });
     }
+  };
+
+  const impersonateLogoutTenant = async () => {
+    await impersonateLogout();
+    navigate(`${PATH_DASHBOARD.general.app}`);
   };
 
   return (
@@ -116,6 +121,12 @@ export default function AccountPopover() {
         </Stack>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
+
+        {user?.impersonatedTenant && (
+          <MenuItem onClick={impersonateLogoutTenant} sx={{ m: 1 }}>
+            {translate('app.tenant-stop-impersonating-label')}
+          </MenuItem>
+        )}
 
         <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
           {translate('app.logout-label')}

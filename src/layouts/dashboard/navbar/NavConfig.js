@@ -8,6 +8,7 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import SvgIconStyle from '../../../components/SvgIconStyle';
 import Iconify from '../../../components/Iconify';
 import AlertCountLabel from '../../../sections/alerts/AlertCountLabel';
+import { IMAGES } from '../../../sections/common/ImageConstants';
 // ----------------------------------------------------------------------
 
 const getIcon = (name) => <SvgIconStyle src={`/icons/${name}.svg`} sx={{ width: 1, height: 1 }} />;
@@ -27,8 +28,6 @@ export const ICONS = {
   dashboard: getIcon('ic_dashboard'),
   booking: getIcon('ic_booking'),
   analytics: getIcon('ic_analytics'),
-  impersonation: <Iconify icon={'ic:outline-screen-share'} />,
-  stopImpersonation: <Iconify icon={'ic:outline-stop-screen-share'} />,
 };
 
 export const ADMIN_ROLE = ['ADMIN', 'ORG_ADMIN', 'SUPER_ADMIN'];

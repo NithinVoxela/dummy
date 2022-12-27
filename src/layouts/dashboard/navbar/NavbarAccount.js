@@ -8,7 +8,8 @@ import useLocales from '../../../hooks/useLocales';
 // components
 import MyAvatar from '../../../components/MyAvatar';
 import { ListItemIconStyle } from '../../../components/nav-section/vertical/style';
-import { ICONS } from './NavConfig';
+import Iconify from '../../../components/Iconify';
+import { IMAGES } from '../../../sections/common/ImageConstants';
 
 // ----------------------------------------------------------------------
 
@@ -69,7 +70,9 @@ export default function NavbarAccount({ isCollapse }) {
         {user?.impersonatedTenant && (
           <Stack direction="row">
             <Tooltip title={translate('app.tenant-impersonating-label')}>
-              <ListItemIconStyle>{ICONS.impersonation}</ListItemIconStyle>
+              <ListItemIconStyle>
+                <Iconify icon={IMAGES.impersonation} />
+              </ListItemIconStyle>
             </Tooltip>
 
             {user?.impersonatedTenant?.schemaName}

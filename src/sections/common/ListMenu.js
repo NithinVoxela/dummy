@@ -45,7 +45,6 @@ export default function ListMenu({ getMenuItems }) {
         arrow="right-top"
         sx={{
           mt: -1,
-          width: 160,
           '& .MuiMenuItem-root': { px: 1, typography: 'body2', borderRadius: 0.75 },
         }}
       >
