@@ -11,6 +11,7 @@ const initialState = {
     total: 0,
     data: [],
   },
+  userDetails: {},
 };
 
 const slice = createSlice({
@@ -28,11 +29,20 @@ const slice = createSlice({
       state.error = action.payload;
     },
 
-    // GET CAMERAS
+    // GET USERS
     getUserSuccess(state, action) {
       const { data } = action.payload;
       state.isLoading = false;
       state.userList = { total: data.totalCount, data: data.records };
+    },
+
+    getUsersDetails(state, action) {
+      const { data } = action.payload;
+      state.userDetails = data;
+    },
+
+    resetUsersDetails(state) {
+      state.userDetails = {};
     },
 
     resetUserList(state) {
@@ -57,10 +67,50 @@ export function getUsers(queryParams, payload = {}) {
   };
 }
 
+export function deleteUser(userId) {
+  return async () => {
+    try {
+      // I will create delete api call later in backend code
+      await axios.delete();
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function saveUser(payload) {
+  return async () => {
+    await axios.post(`user`, payload);
+  };
+}
+
+export function updateUser(payload) {
+  return async () => {
+    await axios.put('user/patch', payload);
+  };
+}
+
+export function getUserDetails(id) {
+  return async () => {
+    try {
+      const response = await axios.get(`user/${id}`);
+      dispatch(slice.actions.getUsersDetails(response));
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+}
+
+export function resetUserDetails() {
+  return () => {
+    dispatch(slice.actions.resetUsersDetails());
+  };
+}
+
 export function resetUserList() {
   dispatch(slice.actions.resetUserList());
 }
 
-export async function patchUser(payload = {}) {
+export async function patchUser(payload) {
   await axios.put('user/patch', payload);
 }

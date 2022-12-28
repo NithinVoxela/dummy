@@ -1,38 +1,43 @@
 import { useCallback, useMemo, useState } from 'react';
 import { cloneDeep } from 'lodash';
+import { Link as RouterLink } from 'react-router-dom';
 // @mui
-import { Card, Container } from '@mui/material';
+import { Card, Button, Container, MenuItem } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useSettings from '../../hooks/useSettings';
 import useLocales from '../../hooks/useLocales';
-
 // components
 import Page from '../../components/Page';
+import Iconify from '../../components/Iconify';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import Searchbar from '../../components/widgets/Searchbar';
 import TableWidget from '../../components/table/TableWidget';
+import DeleteModal from '../../components/widgets/DeleteModal';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getUsers } from '../../redux/slices/users';
+import { deleteUser, getUsers } from '../../redux/slices/users';
+// sections
 import { USERS_TABLE_META } from './UserConstants';
+import ListMenu, { ICON } from '../../sections/common/ListMenu';
 
 const UserList = () => {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
   const { translate } = useLocales();
   const [params, setParams] = useState({
-    name: '',
+    userName: '',
   });
+  const [showModal, setShowModal] = useState(false);
+  const [recordId, setRecordId] = useState(null);
   const { userList, isLoading } = useSelector((state) => state.users);
 
   const getUsersData = useCallback(
     async (queryParams = {}) => {
       try {
-        const payload = { ...params, name: queryParams?.name || '' };
-        delete queryParams.name;
-        await dispatch(getUsers(queryParams, payload));
+        const payload = { ...params, userName: queryParams?.userName || '' };
+        delete queryParams.userName;
+        dispatch(getUsers(queryParams, payload));
       } catch (err) {
         console.error(err);
       }
@@ -40,8 +45,48 @@ const UserList = () => {
     [dispatch]
   );
 
+  const showWarningModal = (id) => {
+    setRecordId(id);
+    setShowModal(true);
+  };
+
+  const handleDelete = useCallback(
+    async (userId) => {
+      try {
+        dispatch(deleteUser(userId));
+        await getUsersData();
+        setShowModal(false);
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    [dispatch]
+  );
+
+  const getMenuItems = (id) => {
+    return (
+      <>
+        <MenuItem onClick={() => showWarningModal(id)} sx={{ color: 'error.main' }}>
+          <Iconify icon={'eva:trash-2-outline'} sx={{ ...ICON }} />
+          {translate('app.camera-delete-label')}
+        </MenuItem>
+
+        <MenuItem component={RouterLink} to={`${PATH_DASHBOARD.users.root}/edit/${id}`}>
+          <Iconify icon={'eva:edit-fill'} sx={{ ...ICON }} />
+          {translate('app.camera-edit-label')}
+        </MenuItem>
+      </>
+    );
+  };
+
   const tableMetaData = useMemo(() => {
     const metaData = cloneDeep(USERS_TABLE_META);
+    metaData.columns[metaData.columns.length - 1] = {
+      text: '',
+      dataKey: 'id',
+      type: 'widget',
+      renderWidget: (col, cellData, value) => <ListMenu getMenuItems={() => getMenuItems(value)} />,
+    };
     return metaData;
   }, []);
 
@@ -54,6 +99,16 @@ const UserList = () => {
             { name: `${translate('app.dashboard-header-label')}`, href: PATH_DASHBOARD.root },
             { name: `${translate('app.alert-users-label')}` },
           ]}
+          action={
+            <Button
+              variant="contained"
+              component={RouterLink}
+              to={PATH_DASHBOARD.users.new}
+              startIcon={<Iconify icon={'eva:plus-fill'} />}
+            >
+              {translate('app.users-new-users-label')}
+            </Button>
+          }
         />
         <Card>
           <TableWidget
@@ -65,6 +120,13 @@ const UserList = () => {
           />
         </Card>
       </Container>
+      <DeleteModal
+        isOpen={showModal}
+        handleClose={() => setShowModal(false)}
+        type="User"
+        recordId={recordId}
+        handleDelete={handleDelete}
+      />
     </Page>
   );
 };

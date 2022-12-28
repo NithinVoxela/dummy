@@ -11,31 +11,31 @@ import useLocales from '../../hooks/useLocales';
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getCameraDetails, resetCameraDetails, saveCamera, updateCamera } from '../../redux/slices/cameras';
+import { getUserDetails, resetUserDetails, saveUser, updateUser } from '../../redux/slices/users';
 
 // components
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 // sections
-import { CameraNewForm } from '../../sections/cameras';
+import UserNewForm from '../../sections/users/UserNewForm';
 
 // ----------------------------------------------------------------------
 
-export default function CameraCreate() {
+export default function UserCreate() {
   const { themeStretch } = useSettings();
   const { pathname } = useLocation();
-  const { cameraId = '' } = useParams();
+  const { userId = '' } = useParams();
   const { translate } = useLocales();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const isEdit = pathname.includes('edit');
 
-  const { cameraDetails } = useSelector((state) => state.cameras);
+  const { userDetails } = useSelector((state) => state.users);
 
-  const getCamera = useCallback(async () => {
+  const getUser = useCallback(async () => {
     try {
-      await dispatch(getCameraDetails(cameraId));
+      dispatch(getUserDetails(userId));
     } catch (err) {
       enqueueSnackbar(err?.message, {
         variant: 'error',
@@ -44,16 +44,17 @@ export default function CameraCreate() {
     }
   }, [dispatch]);
 
-  const handleSaveCamera = useCallback(
+  const handleSaveUser = useCallback(
     async (payload = {}) => {
       try {
+        console.log(payload);
         if (!isEdit) {
-          await dispatch(saveCamera(payload));
+          dispatch(saveUser(payload));
         } else {
-          await dispatch(updateCamera(payload));
+          dispatch(updateUser(payload));
         }
-        enqueueSnackbar(!isEdit ? translate('app.camera-add-success') : translate('app.camera-update-success'));
-        navigate(PATH_DASHBOARD.cameras.list);
+        enqueueSnackbar(!isEdit ? translate('app.users-add-success') : translate('app.users-update-success'));
+        navigate(PATH_DASHBOARD.users.list);
       } catch (err) {
         enqueueSnackbar(err?.message, {
           variant: 'error',
@@ -65,42 +66,41 @@ export default function CameraCreate() {
   );
 
   useEffect(() => {
-    if (cameraId && isEdit) {
-      getCamera();
+    if (userId && isEdit) {
+      getUser();
     }
-  }, [cameraId]);
+  }, [userId]);
 
   useEffect(
     () => () => {
-      dispatch(resetCameraDetails());
+      dispatch(resetUserDetails());
     },
     []
   );
 
   const onCancel = () => {
-    navigate(PATH_DASHBOARD.cameras.list);
+    navigate(PATH_DASHBOARD.users.list);
   };
-
-  const cameraName = cameraDetails?.name ? cameraDetails.name : '';
+  const usersName = userDetails?.userName ? userDetails.userName : '';
   return (
-    <Page title={`${translate('app.alert-camera-details')} : ${translate('app.alert-new-camera-label')}`}>
+    <Page title={`${translate('app.alert-users-label')} : ${translate('app.users-new-users-label')}`}>
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading={
-            !isEdit ? `${translate('app.camera-add-header-label')}` : `${translate('app.camera-edit-header-label')}`
+            !isEdit ? `${translate('app.users-add-header-label')}` : `${translate('app.users-edit-header-label')}`
           }
           links={[
             { name: `${translate('app.dashboard-header-label')}`, href: PATH_DASHBOARD.root },
-            { name: `${translate('app.alert-camera-details')}`, href: PATH_DASHBOARD.general.cameras },
-            { name: !isEdit ? `${translate('app.alert-new-camera-label')}` : cameraName },
+            { name: `${translate('app.alert-users-label')}`, href: PATH_DASHBOARD.general.users },
+            { name: !isEdit ? `${translate('app.users-new-users-label')}` : usersName },
           ]}
         />
 
-        <CameraNewForm
+        <UserNewForm
           isEdit={isEdit}
-          currentCamera={cameraDetails}
+          currentUsers={userDetails}
           translate={translate}
-          handleSave={handleSaveCamera}
+          handleSave={handleSaveUser}
           onCancel={onCancel}
         />
       </Container>

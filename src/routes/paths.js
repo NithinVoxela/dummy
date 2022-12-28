@@ -55,7 +55,10 @@ export const PATH_DASHBOARD = {
     cameraAppSettings: path(ROOTS_DASHBOARD, '/cameras/apps/:cameraId/settings/:appId'),
   },
   users: {
+    root: path(ROOTS_DASHBOARD, '/users'),
     list: path(ROOTS_DASHBOARD, '/users/list'),
+    new: path(ROOTS_DASHBOARD, '/users/new'),
+    editById: path(ROOTS_DASHBOARD, '/users/edit/:userId'),
   },
   tenants: {
     list: path(ROOTS_DASHBOARD, '/tenants/list'),
