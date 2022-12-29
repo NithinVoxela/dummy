@@ -145,6 +145,7 @@ export default function UserNewForm({ isEdit, currentUsers, translate, handleSav
                 ))}
               </RHFSelect>
               <RHFSelect name="role" label={translate('app.role-label')} placeholder={translate('app.role-label')}>
+                <option value="" />
                 {roleTypes.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}

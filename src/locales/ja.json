@@ -164,6 +164,7 @@
     "users-edit-header-label": "ユーザーの編集",
     "users-add-success": "ユーザーが正常に追加されました",
     "users-update-success": "ユーザーが正常に更新されました",
+    "users-delete-success": "ユーザーが正常に削除されました",
     "users-min-password-label": "パスワードは最低でも6文字必要です",
     "firstname-required-label": "お名前必須",
     "lastname-required-label": "姓が必要です",

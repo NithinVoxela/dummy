@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { cloneDeep } from 'lodash';
 import { Link as RouterLink } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 // @mui
 import { Card, Button, Container, MenuItem } from '@mui/material';
 // routes
@@ -24,6 +25,7 @@ import ListMenu, { ICON } from '../../sections/common/ListMenu';
 const UserList = () => {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
   const [params, setParams] = useState({
     userName: '',
@@ -54,9 +56,12 @@ const UserList = () => {
     async (userId) => {
       try {
         dispatch(deleteUser(userId));
-        await getUsersData();
+        enqueueSnackbar(translate('app.users-delete-success'));
         setShowModal(false);
       } catch (err) {
+        enqueueSnackbar(err?.message, {
+          variant: 'error',
+        });
         console.error(err);
       }
     },

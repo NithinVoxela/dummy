@@ -67,11 +67,10 @@ export function getUsers(queryParams, payload = {}) {
   };
 }
 
-export function deleteUser(userId) {
+export function deleteUser(id) {
   return async () => {
     try {
-      // I will create delete api call later in backend code
-      await axios.delete();
+      await axios.delete(`user/${id}`);
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
