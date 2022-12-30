@@ -91,6 +91,7 @@
     "camera-logout-label": "Logout",
     "camera-add-success": "Camera added successfully.",
     "camera-update-success": "Camera updated successfully.",
+    "camera-delete-success": "Camera deleted successfully.",
     "camera-app-update-success": "Camera app updated successfully.",
     "camera-app-general-tab": "General",
     "camera-app-schedule-tab": "Schedule",

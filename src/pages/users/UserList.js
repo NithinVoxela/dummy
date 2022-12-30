@@ -30,6 +30,7 @@ const UserList = () => {
   const [params, setParams] = useState({
     userName: '',
   });
+  const [refreshTable, setRefreshTable] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [recordId, setRecordId] = useState(null);
   const { userList, isLoading } = useSelector((state) => state.users);
@@ -40,6 +41,7 @@ const UserList = () => {
         const payload = { ...params, userName: queryParams?.userName || '' };
         delete queryParams.userName;
         dispatch(getUsers(queryParams, payload));
+        setRefreshTable(false);
       } catch (err) {
         console.error(err);
       }
@@ -56,6 +58,7 @@ const UserList = () => {
     async (userId) => {
       try {
         dispatch(deleteUser(userId));
+        setRefreshTable(true);
         enqueueSnackbar(translate('app.users-delete-success'));
         setShowModal(false);
       } catch (err) {
@@ -122,6 +125,7 @@ const UserList = () => {
             callback={getUsersData}
             isLoading={isLoading}
             params={params}
+            refreshTable={refreshTable}
           />
         </Card>
       </Container>

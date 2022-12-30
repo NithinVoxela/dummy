@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { cloneDeep, debounce } from 'lodash';
 import { Link as RouterLink } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 // @mui
 import { Card, Button, Container, MenuItem } from '@mui/material';
 // routes
@@ -24,17 +25,15 @@ import { CAMERA_TABLE_META } from './CameraConstants';
 import { ADMIN_ROLE } from '../../layouts/dashboard/navbar/NavConfig';
 import ListMenu, { ICON } from '../../sections/common/ListMenu';
 
-// ----------------------------------------------------------------------
-
-// ----------------------------------------------------------------------
-
 const CameraList = () => {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
   const [params, setParams] = useState({
     name: '',
   });
+  const [refreshTable, setRefreshTable] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [recordId, setRecordId] = useState(null);
   const { cameraDataList, isLoading } = useSelector((state) => state.cameras);
@@ -44,7 +43,8 @@ const CameraList = () => {
     async (queryParams = {}) => {
       try {
         const payload = { ...params };
-        await dispatch(getCameras(queryParams, payload));
+        dispatch(getCameras(queryParams, payload));
+        setRefreshTable(false);
       } catch (err) {
         console.error(err);
       }
@@ -71,10 +71,14 @@ const CameraList = () => {
   const handleDelete = useCallback(
     async (cameraId) => {
       try {
-        await dispatch(deleteCamera(cameraId));
-        await getCameraData();
+        dispatch(deleteCamera(cameraId));
+        setRefreshTable(true);
+        enqueueSnackbar(translate('app.camera-delete-success'));
         setShowModal(false);
       } catch (err) {
+        enqueueSnackbar(err?.message, {
+          variant: 'error',
+        });
         console.error(err);
       }
     },
@@ -142,6 +146,7 @@ const CameraList = () => {
             callback={getCameraData}
             isLoading={isLoading}
             params={params}
+            refreshTable={refreshTable}
           />
         </Card>
       </Container>

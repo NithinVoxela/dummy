@@ -91,6 +91,7 @@
     "camera-logout-label": "ログアウト",
     "camera-add-success": "カメラが正常に追加されました",
     "camera-update-success": "カメラが正常に更新されました",
+    "camera-delete-success": "カメラが正常に削除されました",
     "camera-app-update-success": "カメラアプリが正常に更新されました",
     "camera-app-general-tab": "一般",
     "camera-app-schedule-tab": "スケジュール",
