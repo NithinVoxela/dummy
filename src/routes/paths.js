@@ -61,7 +61,10 @@ export const PATH_DASHBOARD = {
     editById: path(ROOTS_DASHBOARD, '/users/edit/:userId'),
   },
   tenants: {
+    root: path(ROOTS_DASHBOARD, '/tenants'),
     list: path(ROOTS_DASHBOARD, '/tenants/list'),
+    new: path(ROOTS_DASHBOARD, '/tenants/new'),
+    editById: path(ROOTS_DASHBOARD, '/tenants/edit/:tenantId'),
   },
   alerts: {
     root: path(ROOTS_DASHBOARD, '/alerts'),

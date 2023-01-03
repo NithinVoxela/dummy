@@ -93,7 +93,9 @@ export default function UserNewForm({ isEdit, currentUsers, translate, handleSav
       if (isEdit) {
         data = { ...currentUsers, ...data };
       }
-      data.userPassword = Buffer.from(data.userPassword, 'utf8').toString('base64');
+      if (data?.userPassword) {
+        data.userPassword = Buffer.from(data.userPassword, 'utf8').toString('base64');
+      }
       await handleSave(data);
       reset();
     } catch (error) {

@@ -285,6 +285,14 @@
     "code-label": "コード",
     "region-label": "領域",
     "tenant-impersonating-label": "なりすまし",
-    "tenant-stop-impersonating-label": "なりすましを止める"
+    "tenant-stop-impersonating-label": "なりすましを止める",
+    "tenants-new-tenant-label": "新しいサイト",
+    "tenant-add-success": "サイトが正常に作成されました",
+    "tenant-update-success": "サイトが正常に更新されました",
+    "name-required-label": "お名前必須",
+    "code-required-label": "コードが必要です",
+    "region-required-label": "地域が必要です",
+    "tenants-add-header-label": "新しいサイトを作成する",
+    "tenants-edit-header-label": "サイトを編集"
   }
 }

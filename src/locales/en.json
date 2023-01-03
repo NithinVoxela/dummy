@@ -285,6 +285,14 @@
     "code-label": "Code",
     "region-label": "Region",
     "tenant-impersonating-label": "Impersonating",
-    "tenant-stop-impersonating-label": "Stop Impersonation"
+    "tenant-stop-impersonating-label": "Stop Impersonation",
+    "tenants-new-tenant-label": "New Site",
+    "tenant-add-success": "Site created successfully",
+    "tenant-update-success": "Site updated successfully",
+    "name-required-label": "Name is required",
+    "code-required-label": "Code is required",
+    "region-required-label": "Region is required",
+    "tenants-add-header-label": "Create a new Site",
+    "tenants-edit-header-label": "Edit Site"
   }
 }

@@ -11,49 +11,48 @@ import useLocales from '../../hooks/useLocales';
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getUserDetails, resetUserDetails, saveUser, updateUser } from '../../redux/slices/users';
+import { getTenantDetails, resetTenantDetails, saveTenant, patchTenant } from '../../redux/slices/tenants';
 
 // components
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 // sections
-import UserNewForm from '../../sections/users/UserNewForm';
+import TenantNewForm from '../../sections/tenants/TenantNewForm';
 
 // ----------------------------------------------------------------------
 
-export default function UserCreate() {
+export default function TenantCreate() {
   const { themeStretch } = useSettings();
   const { pathname } = useLocation();
-  const { userId = '' } = useParams();
+  const { tenantId = '' } = useParams();
   const { translate } = useLocales();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const isEdit = pathname.includes('edit');
 
-  const { userDetails } = useSelector((state) => state.users);
+  const { tenantDetails } = useSelector((state) => state.tenants);
 
-  const getUser = useCallback(async () => {
+  const getTenant = useCallback(async () => {
     try {
-      dispatch(getUserDetails(userId));
+      dispatch(getTenantDetails(tenantId));
     } catch (err) {
       enqueueSnackbar(err?.message, {
         variant: 'error',
       });
-      throw new Error(err?.message);
     }
   }, [dispatch]);
 
-  const handleSaveUser = useCallback(
+  const handleSaveTenant = useCallback(
     async (payload = {}) => {
       try {
         if (!isEdit) {
-          dispatch(saveUser(payload));
+          dispatch(saveTenant(payload));
         } else {
-          dispatch(updateUser(payload));
+          dispatch(patchTenant(payload));
         }
-        enqueueSnackbar(!isEdit ? translate('app.users-add-success') : translate('app.users-update-success'));
-        navigate(PATH_DASHBOARD.users.list);
+        enqueueSnackbar(!isEdit ? translate('app.tenant-add-success') : translate('app.tenant-update-success'));
+        navigate(PATH_DASHBOARD.tenants.list);
       } catch (err) {
         enqueueSnackbar(err?.message, {
           variant: 'error',
@@ -64,41 +63,38 @@ export default function UserCreate() {
   );
 
   useEffect(() => {
-    if (userId && isEdit) {
-      getUser();
+    if (tenantId && isEdit) {
+      getTenant();
     }
-  }, [userId]);
+  }, [tenantId]);
 
-  useEffect(
-    () => () => {
-      dispatch(resetUserDetails());
-    },
-    []
-  );
+  useEffect(() => {
+    dispatch(resetTenantDetails());
+  }, []);
 
   const onCancel = () => {
-    navigate(PATH_DASHBOARD.users.list);
+    navigate(PATH_DASHBOARD.tenants.list);
   };
-  const usersName = userDetails?.userName ? userDetails.userName : '';
+  const tenantName = tenantDetails?.tenantName ? tenantDetails.tenantName : '';
   return (
-    <Page title={`${translate('app.alert-users-label')} : ${translate('app.users-new-users-label')}`}>
+    <Page title={`${translate('app.tenants-label')} : ${translate('app.tenants-new-tenant-label')}`}>
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading={
-            !isEdit ? `${translate('app.users-add-header-label')}` : `${translate('app.users-edit-header-label')}`
+            !isEdit ? `${translate('app.tenants-add-header-label')}` : `${translate('app.tenants-edit-header-label')}`
           }
           links={[
             { name: `${translate('app.dashboard-header-label')}`, href: PATH_DASHBOARD.root },
-            { name: `${translate('app.alert-users-label')}`, href: PATH_DASHBOARD.general.users },
-            { name: !isEdit ? `${translate('app.users-new-users-label')}` : usersName },
+            { name: `${translate('app.tenants-label')}`, href: PATH_DASHBOARD.general.tenants },
+            { name: !isEdit ? `${translate('app.tenants-new-tenant-label')}` : tenantName },
           ]}
         />
 
-        <UserNewForm
+        <TenantNewForm
           isEdit={isEdit}
-          currentUsers={userDetails}
+          currentTenant={tenantDetails}
           translate={translate}
-          handleSave={handleSaveUser}
+          handleSave={handleSaveTenant}
           onCancel={onCancel}
         />
       </Container>

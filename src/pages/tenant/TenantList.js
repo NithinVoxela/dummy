@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
 import { cloneDeep, debounce } from 'lodash';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
 // @mui
-import { Card, Container, MenuItem } from '@mui/material';
+import { Button, Card, Container, MenuItem } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -98,6 +98,11 @@ const TenantList = () => {
             {translate('app.tenant-stop-impersonating-label')}
           </MenuItem>
         )}
+
+        <MenuItem component={RouterLink} to={`${PATH_DASHBOARD.tenants.root}/edit/${id}`}>
+          <Iconify icon={'eva:edit-fill'} sx={{ ...ICON }} />
+          {translate('app.camera-edit-label')}
+        </MenuItem>
       </>
     );
   };
@@ -122,6 +127,20 @@ const TenantList = () => {
             { name: `${translate('app.dashboard-header-label')}`, href: PATH_DASHBOARD.root },
             { name: `${translate('app.tenants-label')}` },
           ]}
+          action={
+            <>
+              {user?.role === 'SUPER_ADMIN' && (
+                <Button
+                  variant="contained"
+                  component={RouterLink}
+                  to={PATH_DASHBOARD.tenants.new}
+                  startIcon={<Iconify icon={'eva:plus-fill'} />}
+                >
+                  {translate('app.tenants-new-tenant-label')}
+                </Button>
+              )}
+            </>
+          }
         />
         <Card>
           <RootStyle>

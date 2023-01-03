@@ -6,9 +6,8 @@ import EmergencyRecordingOutlinedIcon from '@mui/icons-material/EmergencyRecordi
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
 import SvgIconStyle from '../../../components/SvgIconStyle';
-import Iconify from '../../../components/Iconify';
 import AlertCountLabel from '../../../sections/alerts/AlertCountLabel';
-import { IMAGES } from '../../../sections/common/ImageConstants';
+import { ADMIN_ROLE, MULTIPLE_TENANT_ACCESS_ROLE } from '../../../sections/common/CommonConstants';
 // ----------------------------------------------------------------------
 
 const getIcon = (name) => <SvgIconStyle src={`/icons/${name}.svg`} sx={{ width: 1, height: 1 }} />;
@@ -29,9 +28,6 @@ export const ICONS = {
   booking: getIcon('ic_booking'),
   analytics: getIcon('ic_analytics'),
 };
-
-export const ADMIN_ROLE = ['ADMIN', 'ORG_ADMIN', 'SUPER_ADMIN'];
-export const MULTIPLE_TENANT_ACCESS_ROLE = ['ORG_ADMIN', 'SUPER_ADMIN'];
 
 const navConfig = [
   // GENERAL

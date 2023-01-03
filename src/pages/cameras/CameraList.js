@@ -22,8 +22,8 @@ import { useDispatch, useSelector } from '../../redux/store';
 import { getCameras, deleteCamera } from '../../redux/slices/cameras';
 // sections
 import { CAMERA_TABLE_META } from './CameraConstants';
-import { ADMIN_ROLE } from '../../layouts/dashboard/navbar/NavConfig';
 import ListMenu, { ICON } from '../../sections/common/ListMenu';
+import { ADMIN_ROLE } from '../../sections/common/CommonConstants';
 
 const CameraList = () => {
   const { themeStretch } = useSettings();
@@ -128,14 +128,18 @@ const CameraList = () => {
             { name: `${translate('app.alert-cameras-label')}` },
           ]}
           action={
-            <Button
-              variant="contained"
-              component={RouterLink}
-              to={PATH_DASHBOARD.cameras.new}
-              startIcon={<Iconify icon={'eva:plus-fill'} />}
-            >
-              {translate('app.alert-new-camera-label')}
-            </Button>
+            <>
+              {ADMIN_ROLE.includes(user?.role) && (
+                <Button
+                  variant="contained"
+                  component={RouterLink}
+                  to={PATH_DASHBOARD.cameras.new}
+                  startIcon={<Iconify icon={'eva:plus-fill'} />}
+                >
+                  {translate('app.alert-new-camera-label')}
+                </Button>
+              )}
+            </>
           }
         />
         <Card>

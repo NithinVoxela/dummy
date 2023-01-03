@@ -93,6 +93,8 @@ export default function Router() {
           children: [
             { element: <Navigate to="/cortexa/tenants/list" replace />, index: true },
             { path: 'list', element: <TenantList /> },
+            { path: 'new', element: <TenantCreate /> },
+            { path: 'edit/:tenantId', element: <TenantCreate /> },
           ],
         },
         {
@@ -154,6 +156,7 @@ const Analytics = Loadable(lazy(() => import('../pages/analytics/Analytics')));
 const UserList = Loadable(lazy(() => import('../pages/users/UserList')));
 const UserCreate = Loadable(lazy(() => import('../pages/users/UserCreate')));
 const TenantList = Loadable(lazy(() => import('../pages/tenant/TenantList')));
+const TenantCreate = Loadable(lazy(() => import('../pages/tenant/TenantCreate')));
 // Main
 
 const Maintenance = Loadable(lazy(() => import('../pages/Maintenance')));

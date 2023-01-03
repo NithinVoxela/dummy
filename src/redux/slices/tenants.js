@@ -11,6 +11,7 @@ const initialState = {
     total: 0,
     data: [],
   },
+  tenantDetails: {},
 };
 
 const slice = createSlice({
@@ -28,6 +29,13 @@ const slice = createSlice({
       const { data } = action.payload;
       state.isLoading = false;
       state.tenantDataList = { total: data.totalCount, data: data.records };
+    },
+    getTenantDetails(state, action) {
+      const { data } = action.payload;
+      state.tenantDetails = data;
+    },
+    resetTenantDetails(state) {
+      state.tenantDetails = {};
     },
     resetTenantList(state) {
       state.tenantDataList = [];
@@ -51,6 +59,35 @@ export function getTenants(queryParams, payload = {}) {
   };
 }
 
+export function resetTenantDetails() {
+  return () => {
+    dispatch(slice.actions.resetTenantDetails());
+  };
+}
+
 export function resetTenantList() {
   dispatch(slice.actions.resetTenantList());
+}
+
+export function saveTenant(payload) {
+  return async () => {
+    await axios.post('tenant', payload);
+  };
+}
+
+export function patchTenant(payload) {
+  return async () => {
+    await axios.put('tenant/patch', payload);
+  };
+}
+
+export function getTenantDetails(id) {
+  return async () => {
+    try {
+      const response = await axios.get(`tenant/${id}`);
+      dispatch(slice.actions.getTenantDetails(response));
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 }
