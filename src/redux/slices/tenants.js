@@ -69,9 +69,10 @@ export function resetTenantList() {
   dispatch(slice.actions.resetTenantList());
 }
 
-export function saveTenant(payload) {
+export function saveTenant(payload, queryParams) {
   return async () => {
-    await axios.post('tenant', payload);
+    const urlParams = queryParams ? `?${new URLSearchParams(queryParams).toString()}` : '';
+    await axios.post(`tenant${urlParams}`, payload);
   };
 }
 

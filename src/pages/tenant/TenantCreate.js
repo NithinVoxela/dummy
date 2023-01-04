@@ -46,10 +46,10 @@ export default function TenantCreate() {
   const handleSaveTenant = useCallback(
     async (payload = {}) => {
       try {
-        if (!isEdit) {
-          dispatch(saveTenant(payload));
-        } else {
+        if (isEdit) {
           dispatch(patchTenant(payload));
+        } else {
+          dispatch(saveTenant(payload, { createTenantUser: true }));
         }
         enqueueSnackbar(!isEdit ? translate('app.tenant-add-success') : translate('app.tenant-update-success'));
         navigate(PATH_DASHBOARD.tenants.list);
