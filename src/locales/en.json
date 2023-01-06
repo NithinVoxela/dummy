@@ -298,6 +298,8 @@
     "USER": "User",
     "ORG_ADMIN": "Organization Admin",
     "SUPER_ADMIN": "Super Admin",
-    "alert-delete-success": "Alert deleted successfully"
+    "alert-delete-success": "Alert deleted successfully",
+    "created-label": "Created On",
+    "apiAuthKey-label": "Api Authorization Key"
   }
 }

@@ -1,3 +1,5 @@
+import { formatEpochTime } from '../../utils/formatTime';
+
 export const TENANT_TABLE_META = {
   size: 'medium',
   idProperty: 'id',
@@ -13,9 +15,13 @@ export const TENANT_TABLE_META = {
       sortable: true,
     },
     {
-      text: 'app.region-label',
-      dataKey: 'region',
+      text: 'app.created-label',
+      dataKey: 'createdAt',
       sortable: false,
+      type: 'widget',
+      renderWidget: (col, cellData, value, translate, authContext) => (
+        <>{value && value > 0 ? formatEpochTime(value, authContext?.user?.timezone) : ''}</>
+      ),
     },
     {
       text: '',

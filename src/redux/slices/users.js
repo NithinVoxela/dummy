@@ -77,16 +77,8 @@ export function deleteUser(id) {
   };
 }
 
-export function saveUser(payload) {
-  return async () => {
-    await axios.post(`user`, payload);
-  };
-}
-
-export function updateUser(payload) {
-  return async () => {
-    await axios.put('user/patch', payload);
-  };
+export async function saveUser(payload) {
+  await axios.post(`user`, payload);
 }
 
 export function getUserDetails(id) {

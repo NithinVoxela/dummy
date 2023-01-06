@@ -22,6 +22,8 @@ export const USERS_TABLE_META = {
     {
       text: 'app.role-label',
       dataKey: 'role',
+      type: 'widget',
+      renderWidget: (col, cellData, value, translate) => <Typography>{translate(`app.${value}`)}</Typography>,
     },
     {
       text: 'app.users-email-label',

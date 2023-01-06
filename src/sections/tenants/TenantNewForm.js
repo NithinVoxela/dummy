@@ -10,7 +10,8 @@ import { Box, Button, Card, Grid, Stack } from '@mui/material';
 // utils
 
 // components
-import { FormProvider, RHFTextField } from '../../components/hook-form';
+import { FormProvider, RHFSelect, RHFTextField } from '../../components/hook-form';
+import { regions } from '../common/CommonConstants';
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +59,6 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
       data = { ...currentTenant, ...data };
     }
     await handleSave(data);
-    reset();
   };
 
   return (
@@ -76,7 +76,20 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
             >
               <RHFTextField name="tenantName" label={translate('app.name-label')} />
               <RHFTextField name="tenantCode" label={translate('app.code-label')} disabled={isEdit} />
-              <RHFTextField name="region" label={translate('app.region-label')} />
+
+              <RHFSelect
+                name="region"
+                label={translate('app.region-label')}
+                disabled={isEdit}
+                placeholder={translate('app.region-label')}
+              >
+                <option value="" />
+                {regions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </RHFSelect>
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

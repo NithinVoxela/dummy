@@ -40,12 +40,8 @@ const TenantList = () => {
 
   const getTenantData = useCallback(
     async (queryParams = {}) => {
-      try {
-        const payload = { ...params };
-        await dispatch(getTenants(queryParams, payload));
-      } catch (err) {
-        console.error(err);
-      }
+      const payload = { ...params };
+      await dispatch(getTenants(queryParams, payload));
     },
     [dispatch]
   );
@@ -85,7 +81,7 @@ const TenantList = () => {
   const getMenuItems = (id) => {
     return (
       <>
-        {user?.impersonatedTenant?.id !== id && (
+        {user?.impersonatedTenant?.id !== id && user?.applicationTenant?.id !== id && (
           <MenuItem onClick={() => impersonateTenant(id)}>
             <Iconify icon={IMAGES.impersonation} sx={{ ...ICON }} />
             {translate('app.tenant-impersonate-label')}

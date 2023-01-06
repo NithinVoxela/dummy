@@ -31,32 +31,28 @@ export default function TenantCreate() {
   const { enqueueSnackbar } = useSnackbar();
   const isEdit = pathname.includes('edit');
 
-  const { tenantDetails } = useSelector((state) => state.tenants);
+  const { tenantDetails, error } = useSelector((state) => state.tenants);
 
   const getTenant = useCallback(async () => {
-    try {
-      dispatch(getTenantDetails(tenantId));
-    } catch (err) {
-      enqueueSnackbar(err?.message, {
-        variant: 'error',
-      });
-    }
+    dispatch(getTenantDetails(tenantId));
   }, [dispatch]);
 
   const handleSaveTenant = useCallback(
     async (payload = {}) => {
       try {
         if (isEdit) {
-          dispatch(patchTenant(payload));
+          await patchTenant(payload);
         } else {
-          dispatch(saveTenant(payload, { createTenantUser: true }));
+          await saveTenant(payload, { createTenantUser: true });
         }
         enqueueSnackbar(!isEdit ? translate('app.tenant-add-success') : translate('app.tenant-update-success'));
         navigate(PATH_DASHBOARD.tenants.list);
-      } catch (err) {
-        enqueueSnackbar(err?.message, {
-          variant: 'error',
-        });
+      } catch (error) {
+        if (error?.message) {
+          enqueueSnackbar(error.message, {
+            variant: 'error',
+          });
+        }
       }
     },
     [dispatch]

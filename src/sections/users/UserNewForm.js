@@ -57,7 +57,6 @@ export default function UserNewForm({ isEdit, currentUsers, translate, handleSav
       role: currentUsers?.role || '',
       dateFormat: currentUsers?.dateFormat || '',
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUsers]
   );
 
@@ -79,24 +78,18 @@ export default function UserNewForm({ isEdit, currentUsers, translate, handleSav
     if (!isEdit) {
       reset(defaultValues);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentUsers]);
 
   const onSubmit = async (data) => {
-    try {
-      if (isEdit) {
-        data = { ...currentUsers, ...data };
-      }
-      if (data?.userPassword) {
-        data.userPassword = Buffer.from(data.userPassword, 'utf8').toString('base64');
-      } else {
-        data.userPassword = null;
-      }
-      await handleSave(data);
-      reset();
-    } catch (error) {
-      console.error(error);
+    if (isEdit) {
+      data = { ...currentUsers, ...data };
     }
+    if (data?.userPassword) {
+      data.userPassword = Buffer.from(data.userPassword, 'utf8').toString('base64');
+    } else {
+      data.userPassword = null;
+    }
+    await handleSave(data);
   };
 
   const localeTypes = [

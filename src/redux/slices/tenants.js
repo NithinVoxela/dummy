@@ -69,17 +69,13 @@ export function resetTenantList() {
   dispatch(slice.actions.resetTenantList());
 }
 
-export function saveTenant(payload, queryParams) {
-  return async () => {
-    const urlParams = queryParams ? `?${new URLSearchParams(queryParams).toString()}` : '';
-    await axios.post(`tenant${urlParams}`, payload);
-  };
+export async function saveTenant(payload, queryParams) {
+  const urlParams = queryParams ? `?${new URLSearchParams(queryParams).toString()}` : '';
+  await axios.post(`tenant${urlParams}`, payload);
 }
 
-export function patchTenant(payload) {
-  return async () => {
-    await axios.put('tenant/patch', payload);
-  };
+export async function patchTenant(payload) {
+  await axios.put('tenant/patch', payload);
 }
 
 export function getTenantDetails(id) {
@@ -88,7 +84,7 @@ export function getTenantDetails(id) {
       const response = await axios.get(`tenant/${id}`);
       dispatch(slice.actions.getTenantDetails(response));
     } catch (error) {
-      throw new Error(error);
+      dispatch(slice.actions.hasError(error));
     }
   };
 }

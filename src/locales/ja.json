@@ -298,6 +298,8 @@
     "USER": "ユーザー",
     "ORG_ADMIN": "組織管理者",
     "SUPER_ADMIN": "スーパー管理者",
-    "alert-delete-success": "アラートが正常に削除されました"
+    "alert-delete-success": "アラートが正常に削除されました",
+    "created-label": "作成日",
+    "apiAuthKey-label": "API 認証キー"
   }
 }

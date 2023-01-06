@@ -11,7 +11,7 @@ import useLocales from '../../hooks/useLocales';
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getUserDetails, resetUserDetails, saveUser, updateUser } from '../../redux/slices/users';
+import { getUserDetails, resetUserDetails, saveUser, patchUser } from '../../redux/slices/users';
 
 // components
 import Page from '../../components/Page';
@@ -48,16 +48,18 @@ export default function UserCreate() {
     async (payload = {}) => {
       try {
         if (!isEdit) {
-          dispatch(saveUser(payload));
+          await saveUser(payload);
         } else {
-          dispatch(updateUser(payload));
+          await patchUser(payload);
         }
         enqueueSnackbar(!isEdit ? translate('app.users-add-success') : translate('app.users-update-success'));
         navigate(PATH_DASHBOARD.users.list);
       } catch (err) {
-        enqueueSnackbar(err?.message, {
-          variant: 'error',
-        });
+        if (err?.message) {
+          enqueueSnackbar(err?.message, {
+            variant: 'error',
+          });
+        }
       }
     },
     [dispatch]
