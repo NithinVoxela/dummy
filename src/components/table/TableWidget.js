@@ -64,7 +64,7 @@ const TableWidget = (props) => {
       queryParams.sortAscending = order === 'asc';
       queryParams.sortColumn = sortColumn;
     } else {
-      queryParams.sortAscending = false;
+      queryParams.sortAscending = true;
     }
 
     if (limit) {

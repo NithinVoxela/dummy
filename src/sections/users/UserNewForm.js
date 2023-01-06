@@ -11,6 +11,7 @@ import { Box, Button, Card, Grid, Stack } from '@mui/material';
 import moment from 'moment-timezone';
 // components
 import { FormProvider, RHFSelect, RHFTextField } from '../../components/hook-form';
+import useAuth from '../../hooks/useAuth';
 // ----------------------------------------------------------------------
 
 UserNewForm.propTypes = {
@@ -104,9 +105,13 @@ export default function UserNewForm({ isEdit, currentUsers, translate, handleSav
   ];
   const timeZoneTypes = moment.tz.names();
   const roleTypes = [
-    { label: translate('app.role-user'), value: 'USER' },
-    { label: translate('app.site-admin'), value: 'ADMIN' },
+    { label: translate('app.USER'), value: 'USER' },
+    { label: translate('app.ADMIN'), value: 'ADMIN' },
   ];
+  const { user } = useAuth();
+  if (user?.role !== 'ADMIN') {
+    roleTypes.push({ label: translate('app.ORG_ADMIN'), value: 'ORG_ADMIN' });
+  }
   const dateFormatTypes = [{ label: 'yyyy/MM/dd hh:mm a', value: 'yyyy/MM/dd hh:mm a' }];
 
   return (
