@@ -1,18 +1,16 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { useEffect, useMemo } from 'react';
-import moment from 'moment-timezone';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
 import { Box, Button, Card, Grid, Stack } from '@mui/material';
-// utils
-
+// moment
+import moment from 'moment-timezone';
 // components
 import { FormProvider, RHFSelect, RHFTextField } from '../../components/hook-form';
-
 // ----------------------------------------------------------------------
 
 UserNewForm.propTypes = {
@@ -23,23 +21,18 @@ UserNewForm.propTypes = {
   onCancel: PropTypes.func,
 };
 
-const localeTypes = [
-  { label: 'English', value: 'en' },
-  { label: 'Japanese', value: 'ja' },
-];
-const timeZoneTypes = moment.tz.names();
-const roleTypes = [
-  { label: 'User', value: 'USER' },
-  { label: 'Admin', value: 'ADMIN' },
-];
-const dateFormatTypes = [{ label: 'yyyy/MM/dd hh:mm a', value: 'yyyy/MM/dd hh:mm a' }];
-
 export default function UserNewForm({ isEdit, currentUsers, translate, handleSave, onCancel }) {
   const NewUserSchema = Yup.object().shape({
     userName: Yup.string().required(translate('app.username-required-label')),
-    userPassword: Yup.string()
-      .min(6, translate('app.users-min-password-label'))
-      .required(translate('app.password-required-label')),
+    userPassword: isEdit
+      ? Yup.string().when({
+          is: (exists) => !!exists,
+          then: Yup.string().nullable(true).default(null).min(6, translate('app.users-min-password-label')),
+          otherwise: Yup.string().nullable(true).default(null),
+        })
+      : Yup.string()
+          .min(6, translate('app.users-min-password-label'))
+          .required(translate('app.password-required-label')),
     firstName: Yup.string().required(translate('app.firstname-required-label')),
     lastName: Yup.string().required(translate('app.lastname-required-label')),
     email: Yup.string(),
@@ -53,7 +46,7 @@ export default function UserNewForm({ isEdit, currentUsers, translate, handleSav
   const defaultValues = useMemo(
     () => ({
       userName: currentUsers?.userName || '',
-      userPassword: currentUsers?.userPassword || '',
+      userPassword: null,
       firstName: currentUsers?.firstName || '',
       lastName: currentUsers?.lastName || '',
       email: currentUsers?.email || '',
@@ -95,6 +88,8 @@ export default function UserNewForm({ isEdit, currentUsers, translate, handleSav
       }
       if (data?.userPassword) {
         data.userPassword = Buffer.from(data.userPassword, 'utf8').toString('base64');
+      } else {
+        data.userPassword = null;
       }
       await handleSave(data);
       reset();
@@ -102,6 +97,17 @@ export default function UserNewForm({ isEdit, currentUsers, translate, handleSav
       console.error(error);
     }
   };
+
+  const localeTypes = [
+    { label: translate('app.lang-en'), value: 'en' },
+    { label: translate('app.lang-ja'), value: 'ja' },
+  ];
+  const timeZoneTypes = moment.tz.names();
+  const roleTypes = [
+    { label: translate('app.role-user'), value: 'USER' },
+    { label: translate('app.site-admin'), value: 'ADMIN' },
+  ];
+  const dateFormatTypes = [{ label: 'yyyy/MM/dd hh:mm a', value: 'yyyy/MM/dd hh:mm a' }];
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -117,7 +123,13 @@ export default function UserNewForm({ isEdit, currentUsers, translate, handleSav
               }}
             >
               <RHFTextField name="userName" label={translate('app.username-label')} />
-              <RHFTextField name="userPassword" label={translate('app.password-label')} />
+              <RHFTextField
+                name="userPassword"
+                onFocus={isEdit ? (e) => (e.target.value = '') : () => {}}
+                onBlur={isEdit ? (e) => (e.target.value = '••••••••') : () => {}}
+                label={translate('app.password-label')}
+                defaultValue={isEdit ? '••••••••' : null}
+              />
               <RHFTextField name="firstName" label={translate('app.users-firstName-label')} />
               <RHFTextField name="lastName" label={translate('app.users-lastName-label')} />
               <RHFTextField name="email" label={translate('app.users-email-label')} />

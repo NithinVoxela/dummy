@@ -7,24 +7,24 @@ import { dispatch } from '../store';
 const initialState = {
   isLoading: false,
   error: null,
-  alertDataList : {
+  alertDataList: {
     total: 0,
     currentPage: 0,
-    data: []
+    data: [],
   },
-  alertDetails: {},  
+  alertDetails: {},
   dashboardAlerts: {
     data: [],
-    total: 0
+    total: 0,
   },
   dashboardCameraAlerts: {
     data: [],
-    total: 0
+    total: 0,
   },
   alertCountDataList: {
     total: 0,
     currentPage: 0,
-    data: []
+    data: [],
   },
 };
 
@@ -48,18 +48,18 @@ const slice = createSlice({
       const { data } = action.payload;
       state.isLoading = false;
       state.alertDataList = { total: data.totalCount, data: data.records, currentPage: data.currentPage };
-    },    
+    },
     getAlertDetailsSuccess(state, action) {
       const { data } = action.payload;
       state.isLoading = false;
       state.alertDetails = data;
-    },  
+    },
 
     getDashboardAlertsSuccess(state, action) {
       const { data } = action.payload;
       state.isLoading = false;
       state.dashboardAlerts = { total: data.length, data };
-    }, 
+    },
 
     getDashboardCameraAlertsSuccess(state, action) {
       const { data } = action.payload;
@@ -70,22 +70,22 @@ const slice = createSlice({
     cleanDashboardAlertLogs(state) {
       const emptyResponse = {
         data: [],
-        total: 0
-      };      
+        total: 0,
+      };
       state.dashboardAlerts = emptyResponse;
       state.dashboardCameraAlerts = emptyResponse;
     },
 
     getAlertCountSuccess(state, action) {
-      const { data } = action.payload;      
+      const { data } = action.payload;
       state.alertCountDataList = { total: data.totalCount, data: data.records, currentPage: data.currentPage };
-    },  
-    
+    },
+
     resetAlertList(state) {
       state.alertDataList = {
         total: 0,
         currentPage: 0,
-        data: []
+        data: [],
       };
     },
   },
@@ -93,7 +93,6 @@ const slice = createSlice({
 
 // Reducer
 export default slice.reducer;
-
 
 export function getAlerts(queryParams, payload = {}, countRequest = false) {
   return async () => {
@@ -108,33 +107,43 @@ export function getAlerts(queryParams, payload = {}, countRequest = false) {
       }
     } catch (error) {
       dispatch(slice.actions.hasError(error));
-      throw(error);
+      throw error;
+    }
+  };
+}
+
+export function deleteAlert(alertId) {
+  return async () => {
+    try {
+      await axios.delete(`alert/${alertId}`);
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
     }
   };
 }
 
 export function getUnreadAlertCount(payload = {}) {
-  return async () => {    
+  return async () => {
     try {
       const queryParams = {
         pageNumber: 0,
         pageSize: 0,
-        sortAscending: false        
+        sortAscending: false,
       };
       payload.hasRead = false;
       const searchParams = new URLSearchParams(queryParams).toString();
-      const response = await axios.put(`alert/search?${searchParams}`, payload);      
-      dispatch(slice.actions.getAlertCountSuccess(response));      
+      const response = await axios.put(`alert/search?${searchParams}`, payload);
+      dispatch(slice.actions.getAlertCountSuccess(response));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
-      throw(error);
+      throw error;
     }
   };
 }
 
 export function getAlertDetails(id) {
-  return async () => {    
-    try {      
+  return async () => {
+    try {
       const response = await axios.get(`alert/view/${id}`);
       dispatch(slice.actions.getAlertDetailsSuccess(response));
     } catch (error) {
@@ -143,60 +152,59 @@ export function getAlertDetails(id) {
   };
 }
 
-export function markAsRead(id) { 
-  return async () => {    
-    try {      
-      await axios.put(`alert/${id}/markRead`);      
+export function markAsRead(id) {
+  return async () => {
+    try {
+      await axios.put(`alert/${id}/markRead`);
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
   };
-};
+}
 
-export function getDashboardAlertLog() { 
-  return async () => {    
-    try {      
+export function getDashboardAlertLog() {
+  return async () => {
+    try {
       const response = await axios.get(`alert/view/camera-alert/dashboard/latest-alerts`);
       dispatch(slice.actions.getDashboardAlertsSuccess(response));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
   };
-};
+}
 
-export function getDashboardCameraAlertLog() { 
-  return async () => {    
-    try {      
+export function getDashboardCameraAlertLog() {
+  return async () => {
+    try {
       const response = await axios.get(`alert/view/camera-alert/dashboard`);
       dispatch(slice.actions.getDashboardCameraAlertsSuccess(response));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
-      throw(error);
+      throw error;
     }
   };
-};
+}
 
-export function cleanDashboardAlertLogs() { 
-  return async () => {    
-    try {            
+export function cleanDashboardAlertLogs() {
+  return async () => {
+    try {
       dispatch(slice.actions.cleanDashboardAlertLogs());
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
   };
-};
+}
 
 export function markAllAsRead() {
-  return async () => {   
-    try {      
-      await axios.put(`alert/markAllAlertsAsRead`);      
+  return async () => {
+    try {
+      await axios.put(`alert/markAllAlertsAsRead`);
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
   };
-};
+}
 
 export function resetAlertList() {
-  dispatch(slice.actions.resetAlertList()); 
-};
-
+  dispatch(slice.actions.resetAlertList());
+}

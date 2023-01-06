@@ -1,19 +1,24 @@
+import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 // @mui
-import { Box, Card, Link, Typography, Stack } from '@mui/material';
+import { Box, Card, Link, Typography, Stack, MenuItem } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
-// utils
-
 // components
 import Label from '../../components/Label';
 import Image from '../../components/Image';
+import Iconify from '../../components/Iconify';
+import DeleteModal from '../../components/widgets/DeleteModal';
 import CameraName from '../cameras/CameraName';
 import useLocales from '../../hooks/useLocales';
 import useAuth from '../../hooks/useAuth';
 import { formatUTCDateString } from '../../utils/formatTime';
+import { dispatch } from '../../redux/store';
+import { deleteAlert } from '../../redux/slices/alerts';
+import { ADMIN_ROLE } from '../common/CommonConstants';
 
 const useStyles = makeStyles({
   root: {
@@ -30,6 +35,8 @@ AlertCard.propTypes = {
 };
 
 export default function AlertCard({ alert }) {
+  const [showModal, setShowModal] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
   const { id, cameraName, alertTime, preSignedUrl, severity, streamUrl, cameraLocation, hasRead, type } = alert;
   const { translate } = useLocales();
@@ -53,6 +60,25 @@ export default function AlertCard({ alert }) {
     }
     return '-';
   };
+
+  const showWarningModal = () => {
+    setShowModal(true);
+  };
+
+  const handleDelete = useCallback(
+    async (alertId) => {
+      try {
+        dispatch(deleteAlert(alertId));
+        enqueueSnackbar(translate('app.alert-delete-success'));
+        setShowModal(false);
+      } catch (err) {
+        enqueueSnackbar(err?.message, {
+          variant: 'error',
+        });
+      }
+    },
+    [dispatch]
+  );
 
   return (
     <Card>
@@ -109,10 +135,24 @@ export default function AlertCard({ alert }) {
           <b>{translate('app.alert-location-details')}:</b> {cameraLocation}
         </Typography>
 
-        <Typography variant="subtitle2" noWrap>
-          <b>{translate('app.activity-type')}:</b> {getActivityName(type)}
-        </Typography>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Typography variant="subtitle2" noWrap>
+            <b>{translate('app.activity-type')}:</b> {getActivityName(type)}
+          </Typography>
+          {ADMIN_ROLE.includes(user?.role) && (
+            <MenuItem onClick={(id) => showWarningModal(id)} sx={{ color: 'error.main', borderRadius: 5, px: 1 }}>
+              <Iconify icon={'eva:trash-2-outline'} sx={{ width: 20, height: 20 }} />
+            </MenuItem>
+          )}
+        </Stack>
       </Stack>
+      <DeleteModal
+        isOpen={showModal}
+        handleClose={() => setShowModal(false)}
+        type="Alert"
+        recordId={id}
+        handleDelete={handleDelete}
+      />
     </Card>
   );
 }

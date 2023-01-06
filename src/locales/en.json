@@ -293,6 +293,11 @@
     "code-required-label": "Code is required",
     "region-required-label": "Region is required",
     "tenants-add-header-label": "Create a new Site",
-    "tenants-edit-header-label": "Edit Site"
+    "tenants-edit-header-label": "Edit Site",
+    "ADMIN": "Site Admin",
+    "USER": "User",
+    "ORG_ADMIN": "Organization Admin",
+    "SUPER_ADMIN": "Super Admin",
+    "alert-delete-success": "Alert deleted successfully"
   }
 }

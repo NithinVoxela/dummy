@@ -293,6 +293,11 @@
     "code-required-label": "コードが必要です",
     "region-required-label": "地域が必要です",
     "tenants-add-header-label": "新しいサイトを作成する",
-    "tenants-edit-header-label": "サイトを編集"
+    "tenants-edit-header-label": "サイトを編集",
+    "ADMIN": "サイト管理者",
+    "USER": "ユーザー",
+    "ORG_ADMIN": "組織管理者",
+    "SUPER_ADMIN": "スーパー管理者",
+    "alert-delete-success": "アラートが正常に削除されました"
   }
 }
