@@ -300,6 +300,7 @@
     "SUPER_ADMIN": "Super Admin",
     "alert-delete-success": "Alert deleted successfully",
     "created-label": "Created On",
-    "apiAuthKey-label": "Api Authorization Key"
+    "apiAuthKey-label": "Api Authorization Key",
+    "tenant-parent-label": "Parent Site"
   }
 }

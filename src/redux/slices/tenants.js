@@ -59,6 +59,11 @@ export function getTenants(queryParams, payload = {}) {
   };
 }
 
+export async function getTenantsForAutoComplete(queryParams, payload = {}) {
+  const searchParams = new URLSearchParams(queryParams).toString();
+  return axios.post(`tenant/search?${searchParams}`, payload);
+}
+
 export function resetTenantDetails() {
   return () => {
     dispatch(slice.actions.resetTenantDetails());
@@ -78,10 +83,11 @@ export async function patchTenant(payload) {
   await axios.put('tenant/patch', payload);
 }
 
-export function getTenantDetails(id) {
+export function getTenantDetails(id, queryParams) {
   return async () => {
     try {
-      const response = await axios.get(`tenant/${id}`);
+      const urlParams = queryParams ? `?${new URLSearchParams(queryParams).toString()}` : '';
+      const response = await axios.get(`tenant/${id}${urlParams}`);
       dispatch(slice.actions.getTenantDetails(response));
     } catch (error) {
       dispatch(slice.actions.hasError(error));

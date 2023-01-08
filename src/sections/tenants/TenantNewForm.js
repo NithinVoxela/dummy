@@ -1,13 +1,19 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { debounce } from 'lodash';
+
 // form
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Box, Button, Card, Grid, Stack } from '@mui/material';
-// utils
+import { Autocomplete, Box, Button, Card, Chip, Grid, Stack, TextField } from '@mui/material';
+
+import useAuth from '../../hooks/useAuth';
+
+// redux
+import { getTenantsForAutoComplete } from '../../redux/slices/tenants';
 
 // components
 import { FormProvider, RHFSelect, RHFTextField } from '../../components/hook-form';
@@ -24,10 +30,14 @@ TenantNewForm.propTypes = {
 };
 
 export default function TenantNewForm({ isEdit, currentTenant, translate, handleSave, onCancel }) {
+  const [parents, setParents] = useState([]);
+  const { user } = useAuth();
   const newTenantSchema = Yup.object().shape({
     tenantName: Yup.string().required(translate('app.name-required-label')),
     tenantCode: Yup.string().required(translate('app.code-required-label')),
     region: Yup.string().required(translate('app.region-required-label')),
+    apiAuthKey: Yup.string().nullable(true).default(null),
+    parent: Yup.object().nullable(true).default(null),
   });
 
   const defaultValues = useMemo(
@@ -35,6 +45,7 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
       tenantName: currentTenant?.tenantName || '',
       tenantCode: currentTenant?.tenantCode || '',
       region: currentTenant?.region || '',
+      parent: currentTenant?.parent || null,
     }),
     [currentTenant]
   );
@@ -58,7 +69,25 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
     if (isEdit) {
       data = { ...currentTenant, ...data };
     }
+
+    if (data?.apiAuthKey) {
+      data.apiAuthKey = Buffer.from(data.apiAuthKey, 'utf8').toString('base64');
+    }
+
     await handleSave(data);
+  };
+
+  const searchHandler = async (searchStr) => {
+    const response = await getTenantsForAutoComplete({ pageSize: 20 }, { tenantName: searchStr });
+    if (response?.data?.records) {
+      setParents(response.data.records);
+    }
+  };
+
+  const debounceSearchHandler = useCallback(debounce(searchHandler, 1000), []);
+
+  const handleNameChange = (value) => {
+    debounceSearchHandler(value);
   };
 
   return (
@@ -90,6 +119,46 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
                   </option>
                 ))}
               </RHFSelect>
+
+              <RHFTextField
+                name="apiAuthKey"
+                onFocus={isEdit ? (e) => (e.target.value = '') : () => {}}
+                onBlur={isEdit ? (e) => (e.target.value = '••••••••') : () => {}}
+                label={translate('app.apiAuthKey-label')}
+                defaultValue={isEdit ? '••••••••' : null}
+              />
+
+              <Controller
+                name="parent"
+                render={({ field, fieldState: { error } }) => (
+                  <Autocomplete
+                    {...field}
+                    disabled={user?.role !== 'SUPER_ADMIN'}
+                    size="small"
+                    sx={{ minWidth: 300, ml: 1 }}
+                    options={parents || []}
+                    onChange={(event, value) => field.onChange(value)}
+                    filterOptions={(x) => x}
+                    getOptionLabel={(option) => `${option.tenantName}`}
+                    onInputChange={(event, newInputValue) => {
+                      handleNameChange(newInputValue);
+                    }}
+                    renderTags={(value, getTagProps) =>
+                      value.map((option, index) => (
+                        <Chip
+                          {...getTagProps({ index })}
+                          key={`parent-${option.id}`}
+                          size="small"
+                          label={`${option.tenantName}`}
+                        />
+                      ))
+                    }
+                    renderInput={(params) => (
+                      <TextField label={translate('app.tenant-parent-label')} {...params} error={!!error} />
+                    )}
+                  />
+                )}
+              />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
