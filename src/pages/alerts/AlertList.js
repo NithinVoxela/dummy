@@ -118,12 +118,11 @@ const AlertList = () => {
     setIsPageLoading(false);
   }, [location]);
 
-  useEffect(
-    () => () => {
-      dispatch(resetAlertList());
-    },
-    []
-  );
+  useEffect(() => {
+    return () => {
+      resetAlertList();
+    };
+  }, []);
 
   const isDefault = Object.keys(params).length === 0;
 

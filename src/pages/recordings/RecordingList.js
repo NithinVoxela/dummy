@@ -86,12 +86,11 @@ const RecordingList = () => {
     getRecordingData(0, isAscending, {});
   };
 
-  useEffect(
-    () => () => {
-      dispatch(resetRecordingList());
-    },
-    []
-  );
+  useEffect(() => {
+    return () => {
+      resetRecordingList();
+    };
+  }, []);
 
   const isDefault = Object.keys(params).length === 0;
 
