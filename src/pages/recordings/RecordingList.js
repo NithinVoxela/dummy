@@ -81,6 +81,7 @@ const RecordingList = () => {
 
   const handleResetFilter = () => {
     setParams({});
+    sessionStorage.setItem('recording-filter', JSON.stringify({}));
     handleCloseFilter();
     setClearData(true);
     getRecordingData(0, isAscending, {});
@@ -88,9 +89,12 @@ const RecordingList = () => {
 
   useEffect(() => {
     return () => {
+      if (!/recordings/.test(window.location.href)) {
+        sessionStorage.setItem('recording-filter', JSON.stringify({}));
+      }
       resetRecordingList();
     };
-  }, []);
+  });
 
   const isDefault = Object.keys(params).length === 0;
 

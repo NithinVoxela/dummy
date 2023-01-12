@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { Box, Stack, Button, Drawer, Divider, IconButton, Typography, TextField } from '@mui/material';
 import { DesktopDateTimePicker } from '@mui/x-date-pickers/DesktopDateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import moment from "moment-timezone"
-import MomentUtils from "@date-io/moment"
+import moment from 'moment-timezone';
+import MomentUtils from '@date-io/moment';
 // @types
 import { useEffect, useMemo, useState } from 'react';
 import { NAVBAR } from '../../config';
@@ -26,7 +26,7 @@ RecordingFilterSidebar.propTypes = {
   params: PropTypes.object,
   setClearData: PropTypes.func,
   sortDirection: PropTypes.bool,
-  locale: PropTypes.string
+  locale: PropTypes.string,
 };
 
 export default function RecordingFilterSidebar({
@@ -40,7 +40,7 @@ export default function RecordingFilterSidebar({
   setParams,
   setClearData,
   sortDirection,
-  locale
+  locale,
 }) {
   const allOptionLabel = translate('app.all-option-label');
 
@@ -51,7 +51,7 @@ export default function RecordingFilterSidebar({
     const cameras = [{ id: allOptionLabel, name: allOptionLabel }];
     let result = [];
     if (cameraList.length > 0) {
-      result = cameraList.map(item => ({ publicId: item.publicId, name: item.name }));
+      result = cameraList.map((item) => ({ publicId: item.publicId, name: item.name }));
     }
     return cameras.concat(result);
   }, [cameraList]);
@@ -61,7 +61,7 @@ export default function RecordingFilterSidebar({
     const newParams = { ...params };
     setCameraText(filteredValue);
     if (filteredValue?.length > 0 && filteredValue !== allOptionLabel) {
-      newParams.cameraName = filteredValue;            
+      newParams.cameraName = filteredValue;
     } else {
       delete newParams.cameraName;
     }
@@ -75,33 +75,41 @@ export default function RecordingFilterSidebar({
   };
 
   const handleStartDate = (value) => {
-    if(value) {
-      value.set({minute:0,second:0,millisecond:0});
+    if (value) {
+      value.set({ minute: 0, second: 0, millisecond: 0 });
     }
 
-    if((!value && !startDate) || (value && startDate && startDate.isSame(value))) {
+    if ((!value && !startDate) || (value && startDate && startDate.isSame(value))) {
       return;
     }
 
     setStartDate(value);
-    if(!value || value.isValid()) {
+    if (!value || value.isValid()) {
       const newParams = { ...params };
       newParams.startDate = value;
       applyFilter(newParams);
     }
   };
 
-  const applyFilter = (newParams) => {    
-    setParams({...newParams});
+  const applyFilter = (newParams) => {
+    setParams({ ...newParams });
     setClearData(true);
     if (newParams.startDate) {
       newParams.dateRange = {};
-      newParams.dateRange.startDate = moment(newParams.startDate).utc().format("yyyy-MM-DDTHH:mm:ss");
-      newParams.dateRange.endDate = moment(newParams.startDate).add(1, 'hours').utc().format("yyyy-MM-DDTHH:mm:ss");
+      newParams.dateRange.startDate = moment(newParams.startDate).utc().format('yyyy-MM-DDTHH:mm:ss');
+      newParams.dateRange.endDate = moment(newParams.startDate).add(1, 'hours').utc().format('yyyy-MM-DDTHH:mm:ss');
       delete newParams.startDate;
     }
+    sessionStorage.setItem('recording-filter', JSON.stringify(newParams));
     getRecordingData(0, sortDirection, newParams);
   };
+
+  useEffect(() => {
+    if (JSON.parse(window.sessionStorage.getItem('recording-filter')) !== null) {
+      const filterDataParsed = JSON.parse(window.sessionStorage.getItem('recording-filter'));
+      applyFilter(filterDataParsed);
+    }
+  }, []);
 
   useEffect(() => {
     setCameraText(allOptionLabel);
@@ -113,7 +121,7 @@ export default function RecordingFilterSidebar({
     if (params?.startDate) {
       setStartDate(params.startDate);
     }
-  }, [params]);  
+  }, [params]);
 
   return (
     <LocalizationProvider dateLibInstance={moment} dateAdapter={MomentUtils} adapterLocale={locale}>
@@ -168,7 +176,7 @@ export default function RecordingFilterSidebar({
                 value={startDate}
                 onChange={handleStartDate}
                 size="small"
-                views={["year", "month", "day", "hours"]}
+                views={['year', 'month', 'day', 'hours']}
                 disableFuture
                 renderInput={(params) => (
                   <TextField

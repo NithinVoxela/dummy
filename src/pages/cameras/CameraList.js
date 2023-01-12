@@ -145,6 +145,7 @@ const CameraList = () => {
         <Card>
           <Searchbar placeholder={translate('app.name-search-txt-label')} onSearchTextChange={handleQueryChange} />
           <TableWidget
+            tableName="camera"
             tableMetaData={tableMetaData}
             tableData={cameraDataList}
             callback={getCameraData}

@@ -86,6 +86,7 @@ const AlertList = () => {
 
   const handleResetFilter = () => {
     setParams({});
+    sessionStorage.setItem('alert-filter', JSON.stringify({}));
     handleCloseFilter();
     setClearData(true);
     getAlertData(0, isAscending, {});
@@ -120,6 +121,9 @@ const AlertList = () => {
 
   useEffect(() => {
     return () => {
+      if (!/alerts/.test(window.location.href)) {
+        sessionStorage.setItem('alert-filter', JSON.stringify({}));
+      }
       resetAlertList();
     };
   }, []);

@@ -21,6 +21,7 @@ import { AuthContext } from '../../contexts/JWTContext';
 import { fDateTimeTZSuffix } from '../../utils/formatTime';
 import Scrollbar from '../Scrollbar';
 import useLocales from '../../hooks/useLocales';
+import useAuth from '../../hooks/useAuth';
 
 const TableWidget = (props) => {
   const {
@@ -33,6 +34,7 @@ const TableWidget = (props) => {
     isLoading = false,
     defaultSelected = [],
     isMultiSelectDisabled = false,
+    tableName,
   } = props;
   const history = useNavigate();
   const { translate } = useLocales();
@@ -45,6 +47,7 @@ const TableWidget = (props) => {
 
   const [sortColumn, setSortColumn] = useState(null);
   const [order, setOrder] = useState('asc');
+  const { userConfiguration } = useAuth();
 
   const handleSort = (col) => {
     setOrder((prevOrder) => {
@@ -77,6 +80,17 @@ const TableWidget = (props) => {
 
     return queryParams;
   };
+
+  useEffect(() => {
+    if (userConfiguration?.pageSize[tableName]) {
+      setLimit(userConfiguration.pageSize[tableName]);
+    }
+  }, []);
+
+  useEffect(() => {
+    userConfiguration.pageSize[tableName] = limit;
+    localStorage.setItem('userConfiguration', JSON.stringify(userConfiguration));
+  }, [limit]);
 
   useEffect(() => {
     if (defaultSelected.length > 0) {

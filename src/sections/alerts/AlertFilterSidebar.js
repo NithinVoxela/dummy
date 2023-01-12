@@ -1,12 +1,22 @@
 import PropTypes from 'prop-types';
 // form
 // @mui
-import { Box, Stack, Button, Drawer, Divider, IconButton, Typography, TextField, FormControlLabel, Checkbox } from '@mui/material';
+import {
+  Box,
+  Stack,
+  Button,
+  Drawer,
+  Divider,
+  IconButton,
+  Typography,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+} from '@mui/material';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import moment from "moment-timezone"
-import MomentUtils from "@date-io/moment"
-import { format, isAfter, isValid } from 'date-fns';
+import moment from 'moment-timezone';
+import MomentUtils from '@date-io/moment';
 // @types
 import { useEffect, useMemo, useState } from 'react';
 import { NAVBAR } from '../../config';
@@ -29,7 +39,7 @@ AlertFilterSidebar.propTypes = {
   params: PropTypes.object,
   setClearData: PropTypes.func,
   sortDirection: PropTypes.bool,
-  locale: PropTypes.string
+  locale: PropTypes.string,
 };
 
 export default function AlertFilterSidebar({
@@ -43,7 +53,7 @@ export default function AlertFilterSidebar({
   setParams,
   setClearData,
   sortDirection,
-  locale
+  locale,
 }) {
   const allOptionLabel = translate('app.all-option-label');
   const SEVERITY = [
@@ -58,11 +68,11 @@ export default function AlertFilterSidebar({
   const [cameraText, setCameraText] = useState(allOptionLabel);
   const [severityValue, setSeverityValue] = useState(allOptionLabel);
   const [eventText, setEventText] = useState(allOptionLabel);
-  const [showUnread, setShowUnread] = useState(false);  
+  const [showUnread, setShowUnread] = useState(false);
 
   const eventTypes = useMemo(() => {
     const events = [{ id: allOptionLabel, label: allOptionLabel }];
-    const result = EVENT_TYPES.map(item => ({ id: item, label:translate(`app.app-name-${item.toLowerCase()}`) }));
+    const result = EVENT_TYPES.map((item) => ({ id: item, label: translate(`app.app-name-${item.toLowerCase()}`) }));
     return events.concat(result);
   }, [isOpen]);
 
@@ -70,7 +80,7 @@ export default function AlertFilterSidebar({
     const cameras = [{ id: allOptionLabel, name: allOptionLabel }];
     let result = [];
     if (cameraList.length > 0) {
-      result = cameraList.map(item => ({ publicId: item.publicId, name: item.name }));
+      result = cameraList.map((item) => ({ publicId: item.publicId, name: item.name }));
     }
     return cameras.concat(result);
   }, [cameraList]);
@@ -80,7 +90,7 @@ export default function AlertFilterSidebar({
     const newParams = { ...params };
     setCameraText(filteredValue);
     if (filteredValue?.length > 0 && filteredValue !== allOptionLabel) {
-      newParams.cameraName = filteredValue;            
+      newParams.cameraName = filteredValue;
     } else {
       delete newParams.cameraName;
     }
@@ -90,9 +100,9 @@ export default function AlertFilterSidebar({
   const handleEventTypeChange = (e) => {
     const filteredValue = e.target.value;
     const newParams = { ...params };
-    setEventText(filteredValue);   
+    setEventText(filteredValue);
     if (filteredValue?.length > 0 && filteredValue !== allOptionLabel) {
-      newParams.eventType = eventTypes.find(item => item.label === filteredValue)?.id;            
+      newParams.eventType = eventTypes.find((item) => item.label === filteredValue)?.id;
     } else {
       delete newParams.eventType;
     }
@@ -101,7 +111,7 @@ export default function AlertFilterSidebar({
 
   const handleRadioChange = (e, value) => {
     const newParams = { ...params };
-    if (value?.length > 0 && value !== allOptionLabel ) {
+    if (value?.length > 0 && value !== allOptionLabel) {
       const filteredValue = SEVERITY.find((item) => item.label === value);
       newParams.severity = filteredValue?.value;
       setSeverityValue(value);
@@ -122,19 +132,19 @@ export default function AlertFilterSidebar({
   };
 
   const handleStartDate = (value) => {
-    if(value) {
-      value.set({hour:0,minute:0,second:0,millisecond:0});
+    if (value) {
+      value.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
     }
 
-    if((!value && !startDate) || (value && startDate && startDate.isSame(value))) {
+    if ((!value && !startDate) || (value && startDate && startDate.isSame(value))) {
       return;
     }
 
     setStartDate(value);
-    if(!value || (value.isValid() && !(endDate && value.isAfter(endDate)))) {
+    if (!value || (value.isValid() && !(endDate && value.isAfter(endDate)))) {
       const newParams = { ...params };
       newParams.startDate = value;
-      if(endDate) {
+      if (endDate) {
         newParams.endDate = endDate;
       }
       applyFilter(newParams);
@@ -142,20 +152,20 @@ export default function AlertFilterSidebar({
   };
 
   const handleEndDate = (value) => {
-    if(value) {
-      value.set({hour:0,minute:0,second:0,millisecond:0});
+    if (value) {
+      value.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
     }
 
-    if((!value && !endDate) || (value && endDate && endDate.isSame(value))) {
+    if ((!value && !endDate) || (value && endDate && endDate.isSame(value))) {
       return;
     }
 
     setEndDate(value);
 
-    if(!value || (value.isValid() && !(startDate && value.isBefore(startDate)))) {
+    if (!value || (value.isValid() && !(startDate && value.isBefore(startDate)))) {
       const newParams = { ...params };
       newParams.endDate = value;
-      if(startDate) {
+      if (startDate) {
         newParams.startDate = startDate;
       }
       applyFilter(newParams);
@@ -170,8 +180,8 @@ export default function AlertFilterSidebar({
     applyFilter(newParams);
   };
 
-  const applyFilter = (newParams) => {    
-    setParams({...newParams});
+  const applyFilter = (newParams) => {
+    setParams({ ...newParams });
     setClearData(true);
     if (newParams.startDate || newParams.endDate) {
       newParams.dateRange = {};
@@ -184,8 +194,16 @@ export default function AlertFilterSidebar({
         delete newParams.endDate;
       }
     }
+    sessionStorage.setItem('alert-filter', JSON.stringify(newParams));
     getAlertData(0, sortDirection, newParams);
   };
+
+  useEffect(() => {
+    if (JSON.parse(window.sessionStorage.getItem('alert-filter')) !== null) {
+      const filterDataParsed = JSON.parse(window.sessionStorage.getItem('alert-filter'));
+      applyFilter(filterDataParsed);
+    }
+  }, []);
 
   useEffect(() => {
     setCameraText(allOptionLabel);
@@ -199,12 +217,12 @@ export default function AlertFilterSidebar({
       setCameraText(params.cameraName);
     }
     if (params?.severity) {
-      const filteredValue = SEVERITY.find((item) => item.value === params.severity);      
-      setSeverityValue(filteredValue.label);      
-    } 
+      const filteredValue = SEVERITY.find((item) => item.value === params.severity);
+      setSeverityValue(filteredValue.label);
+    }
     if (params?.startDate) {
       setStartDate(params.startDate);
-    } 
+    }
     if (params?.endDate) {
       setEndDate(params.endDate);
     }
@@ -216,7 +234,7 @@ export default function AlertFilterSidebar({
     if (params.hasOwnProperty('hasRead') && params.hasRead === false) {
       setShowUnread(true);
     }
-  }, [params]);  
+  }, [params]);
 
   return (
     <LocalizationProvider dateLibInstance={moment} dateAdapter={MomentUtils} adapterLocale={locale}>
@@ -266,13 +284,7 @@ export default function AlertFilterSidebar({
 
             <Stack spacing={1}>
               <Typography variant="subtitle1">{translate('app.event-type-label')}</Typography>
-              <RHFSelect
-                name="eventType"
-                label=""                
-                size="small"
-                onChange={handleEventTypeChange}
-                value={eventText}
-              >
+              <RHFSelect name="eventType" label="" size="small" onChange={handleEventTypeChange} value={eventText}>
                 <option value="" />
                 {eventTypes.map((option) => (
                   <option key={option.id} value={option.label}>
@@ -323,7 +335,7 @@ export default function AlertFilterSidebar({
                   <TextField
                     {...params}
                     size="small"
-                    inputProps={{ ...params.inputProps, placeholder: translate('app.select-date-label') }}                   
+                    inputProps={{ ...params.inputProps, placeholder: translate('app.select-date-label') }}
                   />
                 )}
               />
@@ -335,13 +347,7 @@ export default function AlertFilterSidebar({
             </Stack>
             <Stack spacing={1}>
               <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={showUnread}
-                    onChange={handleDeskAlertChange}
-                    name="unread"               
-                  />
-                }
+                control={<Checkbox checked={showUnread} onChange={handleDeskAlertChange} name="unread" />}
                 label={translate('app.show-only-unread-label')}
               />
             </Stack>

@@ -14,25 +14,28 @@ const initialState = {
   isAuthenticated: false,
   isInitialized: false,
   user: null,
+  userConfiguration: null,
 };
 
 const handlers = {
   INITIALIZE: (state, action) => {
-    const { isAuthenticated, user } = action.payload;
+    const { isAuthenticated, user, userConfiguration } = action.payload;
     return {
       ...state,
       isAuthenticated,
       isInitialized: true,
       user,
+      userConfiguration,
     };
   },
   LOGIN: (state, action) => {
-    const { user } = action.payload;
+    const { user, userConfiguration } = action.payload;
 
     return {
       ...state,
       isAuthenticated: true,
       user,
+      userConfiguration,
     };
   },
   LOGOUT: (state) => ({
@@ -84,7 +87,7 @@ function AuthProvider({ children }) {
       try {
         let user = JSON.parse(window.localStorage.getItem('user'));
         let isAuthenticated = false;
-
+        const userConfiguration = JSON.parse(window.localStorage.getItem('userConfiguration'));
         if (user) {
           if (user.token && isValidToken(user.token)) {
             setSession(user.token);
@@ -104,6 +107,7 @@ function AuthProvider({ children }) {
           payload: {
             isAuthenticated,
             user,
+            userConfiguration,
           },
         });
       } catch (err) {
@@ -113,6 +117,7 @@ function AuthProvider({ children }) {
           payload: {
             isAuthenticated: false,
             user: null,
+            userConfiguration: null,
           },
         });
       }
@@ -129,6 +134,14 @@ function AuthProvider({ children }) {
     const user = response.data;
     initializeUserSettings(user);
 
+    const userConfiguration = {
+      pageSize: {
+        default: 10,
+      },
+    };
+
+    localStorage.setItem('userConfiguration', JSON.stringify(userConfiguration));
+
     const firebaseToken = window.sessionStorage.getItem('messagingToken');
 
     if (firebaseToken) {
@@ -143,6 +156,7 @@ function AuthProvider({ children }) {
       type: 'LOGIN',
       payload: {
         user,
+        userConfiguration,
       },
     });
   };
