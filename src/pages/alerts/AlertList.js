@@ -4,6 +4,9 @@ import { useLocation } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 // @mui
 import { Box, Button, Container, Stack, Typography } from '@mui/material';
+
+import moment from 'moment-timezone';
+
 // routes
 import { useForm } from 'react-hook-form';
 import { PATH_DASHBOARD } from '../../routes/paths';
@@ -40,7 +43,7 @@ const AlertList = () => {
   const { cameraDataList } = useSelector((state) => state.cameras);
 
   const getAlertData = useCallback(
-    async (currentPage = 0, sortAscending = false, payload = {}) => {
+    async (currentPage = 0, sortAscending = false, params = {}) => {
       try {
         const queryParams = {
           pageNumber: currentPage,
@@ -48,6 +51,20 @@ const AlertList = () => {
           sortAscending,
           requireVideoUrl: false,
         };
+
+        const payload = { ...params };
+        if (payload.startDate || payload.endDate) {
+          payload.dateRange = {};
+          if (payload.startDate) {
+            payload.dateRange.startDate = moment(payload.startDate).utc().format('yyyy-MM-DDTHH:mm:ss');
+            delete payload.startDate;
+          }
+          if (payload.endDate) {
+            payload.dateRange.endDate = moment(payload.endDate).add(1, 'days').utc().format('yyyy-MM-DDTHH:mm:ss');
+            delete payload.endDate;
+          }
+        }
+
         await dispatch(getAlerts(queryParams, payload));
       } catch (err) {
         console.error(err);

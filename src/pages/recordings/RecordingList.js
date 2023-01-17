@@ -2,7 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { Oval } from 'react-loader-spinner';
 
 // @mui
-import { Box, Button, Container, Stack, Typography } from '@mui/material';
+import { Box, Container, Stack, Typography } from '@mui/material';
+import moment from 'moment-timezone';
+
 // routes
 import { useForm } from 'react-hook-form';
 import { PATH_DASHBOARD } from '../../routes/paths';
@@ -35,7 +37,7 @@ const RecordingList = () => {
   const { cameraDataList } = useSelector((state) => state.cameras);
 
   const getRecordingData = useCallback(
-    async (currentPage = 0, sortAscending = false, payload = {}) => {
+    async (currentPage = 0, sortAscending = false, params = {}) => {
       try {
         const queryParams = {
           pageNumber: currentPage,
@@ -43,6 +45,15 @@ const RecordingList = () => {
           sortAscending,
           requireThumbnailUrl: true,
         };
+
+        const payload = { ...params };
+        if (payload.startDate) {
+          payload.dateRange = {};
+          payload.dateRange.startDate = moment(payload.startDate).utc().format('yyyy-MM-DDTHH:mm:ss');
+          payload.dateRange.endDate = moment(payload.startDate).add(1, 'hours').utc().format('yyyy-MM-DDTHH:mm:ss');
+          delete payload.startDate;
+        }
+
         await dispatch(getRecordings(queryParams, payload));
       } catch (err) {
         console.error(err);
