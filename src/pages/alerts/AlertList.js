@@ -136,7 +136,37 @@ const AlertList = () => {
   }, [location]);
 
   useEffect(() => {
+    let alertFilter = {};
+    const alertFilterInSession = sessionStorage.getItem('alert-filter');
+    if (alertFilterInSession) {
+      alertFilter = JSON.parse(alertFilterInSession);
+
+      if (alertFilter.startDate) {
+        alertFilter.startDate = moment(alertFilter.startDate);
+      }
+
+      if (alertFilter.endDate) {
+        alertFilter.endDate = moment(alertFilter.endDate);
+      }
+
+      setParams(alertFilter);
+    }
+    getAlertData(0, isAscending, alertFilter);
+  }, []);
+
+  useEffect(() => {
+    if (params && Object.keys(params).length > 0) {
+      sessionStorage.setItem('alert-filter', JSON.stringify(params));
+    } else {
+      sessionStorage.removeItem('alert-filter');
+    }
+  }, [params]);
+
+  useEffect(() => {
     return () => {
+      if (!/alerts/.test(window.location.href)) {
+        sessionStorage.removeItem('alert-filter');
+      }
       resetAlertList();
     };
   }, []);

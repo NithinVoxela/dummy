@@ -5,7 +5,7 @@ import moment from 'moment-timezone';
 
 // utils
 import axios from '../utils/axios';
-import { isValidToken, setSession } from '../utils/jwt';
+import { isValidToken, shuoldRefreshToken, setSession } from '../utils/jwt';
 import { registerDevice } from '../redux/slices/auth';
 
 // ----------------------------------------------------------------------
@@ -14,25 +14,28 @@ const initialState = {
   isAuthenticated: false,
   isInitialized: false,
   user: null,
+  userConfiguration: null,
 };
 
 const handlers = {
   INITIALIZE: (state, action) => {
-    const { isAuthenticated, user } = action.payload;
+    const { isAuthenticated, user, userConfiguration } = action.payload;
     return {
       ...state,
       isAuthenticated,
       isInitialized: true,
       user,
+      userConfiguration,
     };
   },
   LOGIN: (state, action) => {
-    const { user } = action.payload;
+    const { user, userConfiguration } = action.payload;
 
     return {
       ...state,
       isAuthenticated: true,
       user,
+      userConfiguration,
     };
   },
   LOGOUT: (state) => ({
@@ -84,12 +87,13 @@ function AuthProvider({ children }) {
       try {
         let user = JSON.parse(window.localStorage.getItem('user'));
         let isAuthenticated = false;
-
         if (user) {
           if (user.token && isValidToken(user.token)) {
-            setSession(user.token);
-            const response = await axios.put('refreshToken', {});
-            user = response.data;
+            if (shuoldRefreshToken(user.token)) {
+              setSession(user.token);
+              const response = await axios.put('refreshToken', {});
+              user = response.data;
+            }
 
             initializeUserSettings(user);
             isAuthenticated = true;
@@ -99,11 +103,17 @@ function AuthProvider({ children }) {
           }
         }
 
+        let userConfiguration = JSON.parse(window.localStorage.getItem('userConfiguration'));
+        if (!userConfiguration) {
+          userConfiguration = initializeUserConfiguration();
+        }
+
         dispatch({
           type: 'INITIALIZE',
           payload: {
             isAuthenticated,
             user,
+            userConfiguration,
           },
         });
       } catch (err) {
@@ -113,6 +123,7 @@ function AuthProvider({ children }) {
           payload: {
             isAuthenticated: false,
             user: null,
+            userConfiguration: null,
           },
         });
       }
@@ -128,6 +139,7 @@ function AuthProvider({ children }) {
     });
     const user = response.data;
     initializeUserSettings(user);
+    const userConfiguration = initializeUserConfiguration();
 
     const firebaseToken = window.sessionStorage.getItem('messagingToken');
 
@@ -143,6 +155,7 @@ function AuthProvider({ children }) {
       type: 'LOGIN',
       payload: {
         user,
+        userConfiguration,
       },
     });
   };
@@ -187,6 +200,17 @@ function AuthProvider({ children }) {
     window.localStorage.setItem('user', JSON.stringify(user));
     i18n.changeLanguage(user.locale);
     moment.tz.setDefault(user.timezone);
+  };
+
+  const initializeUserConfiguration = () => {
+    const userConfiguration = {
+      pageSize: {
+        default: 10,
+      },
+    };
+
+    localStorage.setItem('userConfiguration', JSON.stringify(userConfiguration));
+    return userConfiguration;
   };
 
   const clearUserSettings = () => {

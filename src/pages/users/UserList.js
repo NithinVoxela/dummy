@@ -120,6 +120,7 @@ const UserList = () => {
         />
         <Card>
           <TableWidget
+            tableName="user"
             tableMetaData={tableMetaData}
             tableData={userList}
             callback={getUsersData}

@@ -98,10 +98,35 @@ const RecordingList = () => {
   };
 
   useEffect(() => {
+    let recordingFilter = {};
+    const recordingFilterInSession = sessionStorage.getItem('recording-filter');
+    if (recordingFilterInSession) {
+      recordingFilter = JSON.parse(recordingFilterInSession);
+      if (recordingFilter.startDate) {
+        recordingFilter.startDate = moment(recordingFilter.startDate);
+      }
+      setParams(recordingFilter);
+    }
+
+    getRecordingData(0, isAscending, recordingFilter);
+  }, []);
+
+  useEffect(() => {
     return () => {
+      if (!/recordings/.test(window.location.href)) {
+        sessionStorage.removeItem('recording-filter');
+      }
       resetRecordingList();
     };
   }, []);
+
+  useEffect(() => {
+    if (params && Object.keys(params).length > 0) {
+      sessionStorage.setItem('recording-filter', JSON.stringify(params));
+    } else {
+      sessionStorage.removeItem('recording-filter');
+    }
+  }, [params]);
 
   const isDefault = Object.keys(params).length === 0;
 

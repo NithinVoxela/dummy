@@ -145,6 +145,7 @@ const TenantList = () => {
           </RootStyle>
 
           <TableWidget
+            tableName="tenant"
             tableMetaData={tableMetaData}
             tableData={tenantDataList}
             callback={getTenantData}

@@ -10,12 +10,22 @@ const isValidToken = (accessToken) => {
     return false;
   }
 
-  // ----------------------------------------------------------------------
-
   const decoded = jwtDecode(accessToken);
   const currentTime = Date.now() / 1000;
 
   return decoded.exp > currentTime;
+};
+
+/**
+ *
+ * @param {*} accessToken
+ * @returns true if token expires in 10 days
+ */
+const shuoldRefreshToken = (accessToken) => {
+  const decoded = jwtDecode(accessToken);
+  const currentTime = Date.now() / 1000;
+
+  return decoded.exp - currentTime < 864000;
 };
 
 const setSession = (accessToken) => {
@@ -28,4 +38,4 @@ const setSession = (accessToken) => {
   }
 };
 
-export { isValidToken, setSession, verify, sign };
+export { isValidToken, setSession, verify, sign, shuoldRefreshToken };
