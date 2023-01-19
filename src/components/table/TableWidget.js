@@ -39,7 +39,8 @@ const TableWidget = (props) => {
   const history = useNavigate();
   const { translate } = useLocales();
   const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(tableMetaData.pageSize || 10);
+  const { userConfiguration } = useAuth();
+  const [limit, setLimit] = useState(userConfiguration.pageSize[tableName] || userConfiguration.pageSize.default || 10);
   const [selectedRecords, setSelectedRecords] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [activeRecord, setActiveRecord] = useState(null);
@@ -47,7 +48,6 @@ const TableWidget = (props) => {
 
   const [sortColumn, setSortColumn] = useState(null);
   const [order, setOrder] = useState('asc');
-  const { userConfiguration } = useAuth();
 
   const handleSort = (col) => {
     setOrder((prevOrder) => {
@@ -80,12 +80,6 @@ const TableWidget = (props) => {
 
     return queryParams;
   };
-
-  useEffect(() => {
-    if (userConfiguration?.pageSize[tableName]) {
-      setLimit(userConfiguration.pageSize[tableName]);
-    }
-  }, []);
 
   useEffect(() => {
     userConfiguration.pageSize[tableName] = limit;
