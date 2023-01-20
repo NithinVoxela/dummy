@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import { Oval } from 'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
 import _ from 'lodash';
@@ -48,6 +48,7 @@ const TableWidget = (props) => {
 
   const [sortColumn, setSortColumn] = useState(null);
   const [order, setOrder] = useState('asc');
+  const firstRender = useRef(true);
 
   const handleSort = (col) => {
     setOrder((prevOrder) => {
@@ -99,7 +100,7 @@ const TableWidget = (props) => {
   }, [sortColumn, order, limit, page]);
 
   useEffect(() => {
-    if (callback) {
+    if (callback && !firstRender.current) {
       if (page > 0) {
         setPage(0);
       } else {
@@ -115,6 +116,7 @@ const TableWidget = (props) => {
     if (refreshTable) {
       setSelectedRecords([]);
     }
+    firstRender.current = false;
   }, [refreshTable]);
 
   const handlePageChange = (event, newPage) => {
