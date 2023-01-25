@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { useEffect, useRef, useState } from 'react';
 import { MapContainer, FeatureGroup, ImageOverlay } from 'react-leaflet';
-import { Oval } from  'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import { Box, Button, Card, Stack, Typography } from '@mui/material';
@@ -15,16 +15,15 @@ L.CRS.MySimple = L.extend({}, L.CRS.Simple, {
   transformation: new L.Transformation(1, 0, 1, 0),
 });
 
-
 const bounds = [
   [0, 0],
   [1000, 1000],
 ];
 const coordinates = [150, 300];
-const style = { height: '68vh', width: '75vw' };
+const style = { height: '68vh' };
 
 export default function AnnotationTab(props) {
-  const { currentCamera, translate, handleSave, frameUrl, appId, onCancel, setIsFormUpdated } = props;  
+  const { currentCamera, translate, handleSave, frameUrl, appId, onCancel, setIsFormUpdated } = props;
   const [mapLayers, setMapLayers] = useState([]);
 
   const [map, setMap] = useState(null);
@@ -54,97 +53,97 @@ export default function AnnotationTab(props) {
             title: translate('app.undo-title-label'),
             text: translate('app.undo-text-label'),
           },
-          buttons: {            
-            polygon: translate('app.polyline-draw-label'),            
-          }
+          buttons: {
+            polygon: translate('app.polyline-draw-label'),
+          },
         },
         handlers: {
           circle: {
             tooltip: {
-              start: translate('app.circle-tooltip-start-label')
+              start: translate('app.circle-tooltip-start-label'),
             },
-            radius: translate('app.circle-radius-label')
+            radius: translate('app.circle-radius-label'),
           },
           circlemarker: {
             tooltip: {
-              start: translate('app.circlemarker-tooltip-start-label')
-            }
+              start: translate('app.circlemarker-tooltip-start-label'),
+            },
           },
           marker: {
             tooltip: {
-              start: translate('app.marker-tooltip-start-label')
-            }
+              start: translate('app.marker-tooltip-start-label'),
+            },
           },
           polygon: {
             tooltip: {
               start: translate('app.polygon-tooltip-start-label'),
               cont: translate('app.polygon-tooltip-cont-label'),
-              end: translate('app.polygon-tooltip-end-label')
-            }
+              end: translate('app.polygon-tooltip-end-label'),
+            },
           },
           polyline: {
             error: translate('app.polyline-error-label'),
             tooltip: {
               start: translate('app.polyline-tooltip-start-label'),
               cont: translate('app.polyline-tooltip-cont-label'),
-              end: translate('app.polyline-tooltip-end-label')
-            }
+              end: translate('app.polyline-tooltip-end-label'),
+            },
           },
           rectangle: {
             tooltip: {
-              start: translate('app.rectangle-tooltip-start-label')
-            }
+              start: translate('app.rectangle-tooltip-start-label'),
+            },
           },
           simpleshape: {
             tooltip: {
-              end: translate('app.simple-shape-tooltip-end-label')
-            }
-          }
-        }
+              end: translate('app.simple-shape-tooltip-end-label'),
+            },
+          },
+        },
       },
       edit: {
         toolbar: {
           actions: {
             save: {
               title: translate('app.save-title-label'),
-              text: translate('app.save-text-label')
+              text: translate('app.save-text-label'),
             },
             cancel: {
               title: translate('app.cancel-title-label'),
-              text: translate('app.cancel-text-label')
+              text: translate('app.cancel-text-label'),
             },
             clearAll: {
               title: translate('app.clearall-title-label'),
-              text: translate('app.clearall-text-label')
-            }
+              text: translate('app.clearall-text-label'),
+            },
           },
           buttons: {
             edit: translate('app.edit-layer-label'),
             editDisabled: translate('app.no-edit-layer-label'),
             remove: translate('app.delete-layer-label'),
-            removeDisabled: translate('app.no-delete-layer-label')
-          }
+            removeDisabled: translate('app.no-delete-layer-label'),
+          },
         },
         handlers: {
           edit: {
             tooltip: {
               text: translate('app.cancel-handler-text-tooltip-label'),
-              subtext: translate('app.cancel-handler-subtext-tooltip-label')
-            }
+              subtext: translate('app.cancel-handler-subtext-tooltip-label'),
+            },
           },
           remove: {
             tooltip: {
-              text: translate('app.tooltip-remove-label')
-            }
-          }
-        }
-      }
+              text: translate('app.tooltip-remove-label'),
+            },
+          },
+        },
+      },
     };
   };
 
   useEffect(() => {
     setIsLoading(true);
-    initializeLocale();       
+    initializeLocale();
   }, []);
 
   useEffect(() => {
@@ -193,7 +192,7 @@ export default function AnnotationTab(props) {
   const getGeoJson = (regionOfInterest) => {
     let features = [];
     features = regionOfInterest?.map((region) => {
-      const coordinates = region?.map((item) => [item[0] * width, item[1] * height]);      
+      const coordinates = region?.map((item) => [item[0] * width, item[1] * height]);
       return {
         type: 'Feature',
         properties: {},
@@ -247,10 +246,10 @@ export default function AnnotationTab(props) {
       const layerLatLngs = item?.getLatLngs();
       return layerLatLngs?.length > 0
         ? layerLatLngs[0].map((latlngs) => {
-          const x = (latlngs.lng / width);
-          const y = (latlngs.lat / height);
-          return [x, y];
-        })
+            const x = latlngs.lng / width;
+            const y = latlngs.lat / height;
+            return [x, y];
+          })
         : [];
     });
     return cords;
@@ -277,7 +276,7 @@ export default function AnnotationTab(props) {
           <Oval
             color="#626262"
             secondaryColor="#e7e4e4"
-            wrapperStyle={{ justifyContent: "center", alignItems: "center", height: "100%" }}
+            wrapperStyle={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}
             height={36}
             width={36}
           />
@@ -313,7 +312,9 @@ export default function AnnotationTab(props) {
           </MapContainer>
           <Stack spacing={3} alignItems="flex-end">
             <Box sx={{ display: 'flex', marginTop: 2, marginRight: 2 }}>
-              <Button sx={{ marginRight: 1 }} onClick={onCancel}>{translate('app.camera-cancel-label')}</Button>
+              <Button sx={{ marginRight: 1 }} onClick={onCancel}>
+                {translate('app.camera-cancel-label')}
+              </Button>
               <Button variant="contained" onClick={handleSaveClick}>
                 {translate('app.camera-save-label')}
               </Button>
