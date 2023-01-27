@@ -9,6 +9,7 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useSettings from '../../hooks/useSettings';
 import useLocales from '../../hooks/useLocales';
+import useAuth from '../../hooks/useAuth';
 // components
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
@@ -34,6 +35,7 @@ const UserList = () => {
   const [showModal, setShowModal] = useState(false);
   const [recordId, setRecordId] = useState(null);
   const { userList, isLoading } = useSelector((state) => state.users);
+  const { user } = useAuth();
 
   const getUsersData = useCallback(
     async (queryParams = {}) => {
@@ -71,13 +73,25 @@ const UserList = () => {
     [dispatch]
   );
 
-  const getMenuItems = (id) => {
+  const authenticateDelete = (id, cellData) => {
+    if (user.id === id) {
+      return false;
+    }
+    if (user.role === 'ADMIN') {
+      return cellData.role === 'USER' || cellData.role === 'ADMIN';
+    }
+    return cellData.role !== 'SUPER_ADMIN';
+  };
+
+  const getMenuItems = (id, cellData) => {
     return (
       <>
-        <MenuItem onClick={() => showWarningModal(id)} sx={{ color: 'error.main' }}>
-          <Iconify icon={'eva:trash-2-outline'} sx={{ ...ICON }} />
-          {translate('app.camera-delete-label')}
-        </MenuItem>
+        {authenticateDelete(id, cellData) && (
+          <MenuItem onClick={() => showWarningModal(id)} sx={{ color: 'error.main' }}>
+            <Iconify icon={'eva:trash-2-outline'} sx={{ ...ICON }} />
+            {translate('app.camera-delete-label')}
+          </MenuItem>
+        )}
 
         <MenuItem component={RouterLink} to={`${PATH_DASHBOARD.users.root}/edit/${id}`}>
           <Iconify icon={'eva:edit-fill'} sx={{ ...ICON }} />
@@ -93,7 +107,7 @@ const UserList = () => {
       text: '',
       dataKey: 'id',
       type: 'widget',
-      renderWidget: (col, cellData, value) => <ListMenu getMenuItems={() => getMenuItems(value)} />,
+      renderWidget: (col, cellData, value) => <ListMenu getMenuItems={() => getMenuItems(value, cellData)} />,
     };
     return metaData;
   }, []);
