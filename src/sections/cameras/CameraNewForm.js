@@ -12,6 +12,7 @@ import { Box, Button, Card, Grid, Stack } from '@mui/material';
 
 // components
 import { FormProvider, RHFSelect, RHFTextField, RHFDateField, RHFCheckbox } from '../../components/hook-form';
+import useAuth from '../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
@@ -33,6 +34,7 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
     brand: Yup.string().required(translate('app.camera-brand-required-label')),
     model: Yup.string().required(translate('app.camera-model-required-label')),
     streamUrl: Yup.string().required(translate('app.camera-stream-required-label')),
+    streamingId: Yup.string().required(translate('app.camera-streaming-id-required-label')),
     location: Yup.string().required(translate('app.camera-location-required-label')),
     installationDate: Yup.date().required('Installation Date is required'),
     passPhrase: Yup.string().required(translate('app.camera-pass-required-label')),
@@ -43,6 +45,7 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
   });
 
   const tomiliseconds = (hrs, min, sec) => (hrs * 60 * 60 + min * 60 + sec) * 1000;
+  const { user } = useAuth();
 
   const defaultValues = useMemo(
     () => ({
@@ -52,6 +55,7 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
       brand: currentCamera?.brand || '',
       model: currentCamera?.model || '',
       streamUrl: currentCamera?.streamUrl || '',
+      streamingId: currentCamera?.streamingId || '',
       installationDate: currentCamera?.installationDate || new Date(),
       location: currentCamera?.location || '',
       passPhrase: currentCamera?.passPhrase || '',
@@ -137,6 +141,9 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
 
               <RHFTextField name="location" label={translate('app.camera-location-label')} />
               <RHFTextField name="passPhrase" label={translate('app.camera-pass-label')} />
+              {user.role === 'SUPER_ADMIN' && (
+                <RHFTextField name="streamingId" label={translate('app.camera-streaming-id-label')} />
+              )}
               {isEdit && (
                 <RHFTextField
                   name="publicId"
