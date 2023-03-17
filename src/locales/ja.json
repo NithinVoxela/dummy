@@ -181,6 +181,8 @@
     "users-lastName-label": "姓",
     "users-mobileNo-label": "モバイル番号",
     "users-timeZone-label": "タイムゾーン",
+    "users-mobile-registered-label": "モバイル登録",
+    "users-web-registered-label": "Web登録",
     "alerts-label": "アラート",
     "recordings-label": "録画",
     "dashboard-label": "ダッシュボード",

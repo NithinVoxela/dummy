@@ -181,6 +181,8 @@
     "users-lastName-label": "Last Name",
     "users-mobileNo-label": "Mobile No",
     "users-timeZone-label": "Time zone",
+    "users-mobile-registered-label": "Mobile Registered",
+    "users-web-registered-label": "Web Registered",
     "alerts-label": "alerts",
     "recordings-label": "Recordings",
     "dashboard-label": "dashboard",

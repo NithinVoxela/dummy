@@ -59,7 +59,7 @@ export function getUsers(queryParams, payload = {}) {
     dispatch(slice.actions.startLoading());
     try {
       const searchParams = new URLSearchParams(queryParams).toString();
-      const response = await axios.get(`user?${searchParams}`, payload);
+      const response = await axios.get(`user?${searchParams}&requireDeviceRegistered=true`, payload);
       dispatch(slice.actions.getUserSuccess(response));
     } catch (error) {
       dispatch(slice.actions.hasError(error));

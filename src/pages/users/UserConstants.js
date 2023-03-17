@@ -1,4 +1,5 @@
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
+import Label from '../../components/Label';
 
 export const USERS_TABLE_META = {
   size: 'medium',
@@ -38,6 +39,42 @@ export const USERS_TABLE_META = {
     {
       text: 'app.users-mobileNo-label',
       dataKey: 'mobileNo',
+    },
+    {
+      text: 'app.users-mobile-registered-label',
+      dataKey: 'isMobileRegistered',
+      type: 'widget',
+      renderWidget: (col, cellData, value, translate) => (
+        <>
+          {value ? (
+            <Label variant="ghost" color="success">
+              {'✓'}
+            </Label>
+          ) : (
+            <Label variant="ghost" color="error">
+              {'✗'}
+            </Label>
+          )}
+        </>
+      ),
+    },
+    {
+      text: 'app.users-web-registered-label',
+      dataKey: 'isWebRegistered',
+      type: 'widget',
+      renderWidget: (col, cellData, value, translate) => (
+        <>
+          {value ? (
+            <Label variant="ghost" color="success">
+              {'✓'}
+            </Label>
+          ) : (
+            <Label variant="ghost" color="error">
+              {'✗'}
+            </Label>
+          )}
+        </>
+      ),
     },
     {
       text: '',
