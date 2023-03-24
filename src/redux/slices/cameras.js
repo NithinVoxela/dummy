@@ -103,10 +103,11 @@ export function updateCamera(payload) {
   };
 }
 
-export function getCameraDetails(publicId) {
+export function getCameraDetails(publicId, queryParams) {
   return async () => {
     try {
-      const response = await axios.get(`camera/view/${publicId}`);
+      const urlParams = queryParams ? `?${new URLSearchParams(queryParams).toString()}` : '';
+      const response = await axios.get(`camera/view/${publicId}${urlParams}`);
       dispatch(slice.actions.getCamerasDetails(response));
     } catch (error) {
       throw new Error(error);
@@ -171,4 +172,9 @@ export function getCamerasLatestFrame(cameraId) {
       throw new Error(error);
     }
   };
+}
+
+export async function getCamerasForAutoComplete(queryParams, payload = {}) {
+  const searchParams = new URLSearchParams(queryParams).toString();
+  return axios.post(`camera/view/search?${searchParams}`, payload);
 }

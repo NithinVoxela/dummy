@@ -47,6 +47,7 @@ const navConfig = [
   {
     subheader: 'management',
     items: [
+      { title: 'agents', path: PATH_DASHBOARD.general.agents, icon: ICONS.kanban, role: ['SUPER_ADMIN'] },
       { title: 'cameras', path: PATH_DASHBOARD.general.cameras, icon: ICONS.kanban },
       { title: 'users', path: PATH_DASHBOARD.general.users, icon: ICONS.user, role: ADMIN_ROLE },
       {

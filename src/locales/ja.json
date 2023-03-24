@@ -305,6 +305,18 @@
     "alert-delete-success": "アラートが正常に削除されました",
     "created-label": "作成日",
     "apiAuthKey-label": "API 認証キー",
-    "tenant-parent-label": "上位サイト"
+    "tenant-parent-label": "上位サイト",
+    "agent-registration-status-label": "登録状況",
+    "agent-macIds-label": "MAC ID",
+    "agent-add-success": "エージェントが正常に作成されました",
+    "agent-update-success": "エージェントが正常に更新されました",
+    "agents-label": "エージェント",
+    "agents-new-agent-label":  "新しいエージェント",
+    "agents-add-header-label": "新しいエージェントを作成する",
+    "agents-edit-header-label": "エージェントの編集",
+    "agents-list-header-label": "エージェント一覧",
+    "agent-public-id-label": "エージェント ID",
+    "agent-ipAddress-label": "エージェントの IP アドレス",
+    "agent-label": "エージェント"
   }
 }

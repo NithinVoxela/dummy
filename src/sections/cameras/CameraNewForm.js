@@ -1,18 +1,21 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
+import { debounce } from 'lodash';
 import { format } from 'date-fns';
 // form
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Box, Button, Card, Grid, Stack } from '@mui/material';
+import { Autocomplete, Chip, Box, Button, Card, Grid, Stack, TextField } from '@mui/material';
 // utils
 
 // components
 import { FormProvider, RHFSelect, RHFTextField, RHFDateField, RHFCheckbox } from '../../components/hook-form';
 import useAuth from '../../hooks/useAuth';
+
+import { getAgentsForAutoComplete } from '../../redux/slices/agents';
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +30,7 @@ CameraNewForm.propTypes = {
 const cameraTypes = [{ label: 'IP Camera', value: 'IPCamera' }];
 
 export default function CameraNewForm({ isEdit, currentCamera, translate, handleSave, onCancel }) {
+  const [agentList, setAgentList] = useState([]);
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required(translate('app.camera-name-required-label')),
     description: Yup.string().required(translate('app.camera-desc-required-label')),
@@ -34,7 +38,7 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
     brand: Yup.string().required(translate('app.camera-brand-required-label')),
     model: Yup.string().required(translate('app.camera-model-required-label')),
     streamUrl: Yup.string().required(translate('app.camera-stream-required-label')),
-    streamingId: Yup.string().required(translate('app.camera-streaming-id-required-label')),
+    streamingId: Yup.string().nullable(true).default(null),
     location: Yup.string().required(translate('app.camera-location-required-label')),
     installationDate: Yup.date().required('Installation Date is required'),
     passPhrase: Yup.string().required(translate('app.camera-pass-required-label')),
@@ -42,6 +46,7 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
       .min(1, translate('app.camera-min-idle-validation-label'))
       .max(9999999999, translate('app.camera-pass-required-label'))
       .required(translate('app.camera-min-idle-required-label')),
+    agent: Yup.object().nullable(true).default(null),
   });
 
   const tomiliseconds = (hrs, min, sec) => (hrs * 60 * 60 + min * 60 + sec) * 1000;
@@ -62,6 +67,7 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
       publicId: currentCamera?.publicId || '',
       minIdleTime: currentCamera?.minIdleTime ? Math.floor(currentCamera?.minIdleTime / 60000) : 1440,
       enableIdleAlert: currentCamera?.enableIdleAlert || false,
+      agent: currentCamera?.agent || null,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentCamera]
@@ -105,6 +111,21 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
     }
   };
 
+  const agentChangeHandlerHandler = async (searchStr) => {
+    const response = await getAgentsForAutoComplete({ pageSize: 20 }, { name: searchStr });
+    if (response?.data?.records) {
+      setAgentList(response.data.records);
+    }
+  };
+
+  const debounceAgentChangeHandler = useCallback(debounce(agentChangeHandlerHandler, 1000), []);
+
+  const handleAgentChange = (value) => {
+    if (value) {
+      debounceAgentChangeHandler(value);
+    }
+  };
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
@@ -141,9 +162,6 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
 
               <RHFTextField name="location" label={translate('app.camera-location-label')} />
               <RHFTextField name="passPhrase" label={translate('app.camera-pass-label')} />
-              {user.role === 'SUPER_ADMIN' && (
-                <RHFTextField name="streamingId" label={translate('app.camera-streaming-id-label')} />
-              )}
               {isEdit && (
                 <RHFTextField
                   name="publicId"
@@ -153,6 +171,45 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
                   }}
                 />
               )}
+
+              {user.role === 'SUPER_ADMIN' && isEdit && (
+                <RHFTextField name="streamingId" disabled label={translate('app.camera-streaming-id-label')} />
+              )}
+              {user.role === 'SUPER_ADMIN' && (
+                <Controller
+                  name="agent"
+                  render={({ field, fieldState: { error } }) => (
+                    <Autocomplete
+                      {...field}
+                      size="medium"
+                      sx={{ minWidth: 300, ml: 1 }}
+                      options={agentList || []}
+                      onChange={(event, value) => field.onChange(value)}
+                      filterOptions={(x) => x}
+                      filterSelectedOptions
+                      getOptionLabel={(option) => `${option.name}`}
+                      isOptionEqualToValue={(option, value) => option.id === value.id}
+                      onInputChange={(event, newInputValue) => {
+                        handleAgentChange(newInputValue);
+                      }}
+                      renderTags={(value, getTagProps) =>
+                        value.map((option, index) => (
+                          <Chip
+                            {...getTagProps({ index })}
+                            key={`agent-${option.id}`}
+                            size="small"
+                            label={`${option.name}`}
+                          />
+                        ))
+                      }
+                      renderInput={(params) => (
+                        <TextField label={translate('app.agent-label')} {...params} error={!!error} />
+                      )}
+                    />
+                  )}
+                />
+              )}
+
               <RHFCheckbox name="enableIdleAlert" label={translate('app.camera-enable-idle-alert')} />
               {watchEnableIdleAlert && (
                 <RHFTextField

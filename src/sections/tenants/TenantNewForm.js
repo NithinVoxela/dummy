@@ -134,7 +134,7 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
                   <Autocomplete
                     {...field}
                     disabled={user?.role !== 'SUPER_ADMIN'}
-                    size="small"
+                    size="medium"
                     sx={{ minWidth: 300, ml: 1 }}
                     options={parents || []}
                     onChange={(event, value) => field.onChange(value)}

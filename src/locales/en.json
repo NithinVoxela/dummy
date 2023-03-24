@@ -305,6 +305,18 @@
     "alert-delete-success": "Alert deleted successfully",
     "created-label": "Created On",
     "apiAuthKey-label": "Api Authorization Key",
-    "tenant-parent-label": "Parent Site"
+    "tenant-parent-label": "Parent Site",
+    "agent-registration-status-label": "Registration Status",
+    "agent-macIds-label": "MAC Ids",
+    "agent-add-success": "Agent created successfully",
+    "agent-update-success": "Agent updated successfully",
+    "agents-label": "Agents",
+    "agents-new-agent-label":  "New Agent",
+    "agents-add-header-label": "Create a new Agent",
+    "agents-edit-header-label": "Edit Agent",
+    "agents-list-header-label": "Agents List",
+    "agent-public-id-label": "Agent Id",
+    "agent-ipAddress-label": "IP Address",
+    "agent-label": "Agent"
   }
 }

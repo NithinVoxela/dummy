@@ -98,6 +98,15 @@ export default function Router() {
           ],
         },
         {
+          path: 'agents',
+          children: [
+            { element: <Navigate to="/cortexa/agents/list" replace />, index: true },
+            { path: 'list', element: <AgentList /> },
+            { path: 'new', element: <AgentCreate /> },
+            { path: 'edit/:agentId', element: <AgentCreate /> },
+          ],
+        },
+        {
           path: 'alerts',
           children: [
             { element: <Navigate to="/cortexa/alerts/list" replace />, index: true },
@@ -157,7 +166,8 @@ const UserList = Loadable(lazy(() => import('../pages/users/UserList')));
 const UserCreate = Loadable(lazy(() => import('../pages/users/UserCreate')));
 const TenantList = Loadable(lazy(() => import('../pages/tenant/TenantList')));
 const TenantCreate = Loadable(lazy(() => import('../pages/tenant/TenantCreate')));
-// Main
+const AgentList = Loadable(lazy(() => import('../pages/agent/AgentList')));
+const AgentCreate = Loadable(lazy(() => import('../pages/agent/AgentCreate')));
 
 const Maintenance = Loadable(lazy(() => import('../pages/Maintenance')));
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));

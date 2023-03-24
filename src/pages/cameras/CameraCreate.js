@@ -35,7 +35,7 @@ export default function CameraCreate() {
 
   const getCamera = useCallback(async () => {
     try {
-      await dispatch(getCameraDetails(cameraId));
+      await dispatch(getCameraDetails(cameraId, { requireAgent: true }));
     } catch (err) {
       enqueueSnackbar(err?.message, {
         variant: 'error',

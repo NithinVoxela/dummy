@@ -7,6 +7,7 @@ import recordingsReducer from './slices/recordings';
 import authReducer from './slices/auth';
 import userReducer from './slices/users';
 import tenantReducer from './slices/tenants';
+import agentReducer from './slices/agents';
 import analyticsReducer from './slices/analytics';
 
 // ----------------------------------------------------------------------
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   users: userReducer,
   analytics: analyticsReducer,
   tenants: tenantReducer,
+  agents: agentReducer,
 });
 
 export { rootPersistConfig, rootReducer };
