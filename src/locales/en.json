@@ -278,6 +278,7 @@
     "mlapp-type-A003": "Wakeup Detection",
     "mlapp-type-A004": "Fall Detection",
     "mlapp-type-A005": "Continuous Recording",
+    "mlapp-type-A006": "Camera Streaming",
     "recordings-list-label": "Recording List",
     "recordings-found-label": "recordings found",
     "recordings-details-label": "Recording Details",

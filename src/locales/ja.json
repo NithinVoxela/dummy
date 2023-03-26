@@ -278,6 +278,7 @@
     "mlapp-type-A003": "離床検知",
     "mlapp-type-A004": "転倒検知",
     "mlapp-type-A005": "連続記録",
+    "mlapp-type-A006": "カメラストリーミング",
     "recordings-list-label": "録画リスト",
     "recordings-found-label": "録画が見つかりました",
     "recordings-details-label": "録画の詳細",
