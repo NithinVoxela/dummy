@@ -43,7 +43,7 @@ export default function TenantCreate() {
         if (isEdit) {
           await patchTenant(payload);
         } else {
-          await saveTenant(payload, { createTenantUser: true });
+          await saveTenant(payload, { createTenantResource: true });
         }
         enqueueSnackbar(!isEdit ? translate('app.tenant-add-success') : translate('app.tenant-update-success'));
         navigate(PATH_DASHBOARD.tenants.list);
