@@ -185,6 +185,17 @@ export function getDashboardCameraAlertLog() {
   };
 }
 
+export function sendTestAlert(payload) {
+  return async () => {
+    try {
+      const url = `alert/view/sendSampleNotification`;
+      await axios.post(url, payload);
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+}
+
 export function cleanDashboardAlertLogs() {
   return async () => {
     try {

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from 'react';
 // @mui
 import {
   Autocomplete,
@@ -15,10 +15,17 @@ import {
   Stack,
   Switch,
   TextField,
-  TextareaAutosize,  
+  TextareaAutosize,
   RadioGroup,
   Radio,
+  IconButton,
+  Tooltip,
 } from '@mui/material';
+
+import { blue } from '@mui/material/colors';
+import { useDispatch } from '../../redux/store';
+import { sendTestAlert } from '../../redux/slices/alerts';
+import useAuth from '../../hooks/useAuth';
 
 // components
 // ----------------------------------------------------------------------
@@ -26,14 +33,13 @@ import {
 const marks = [
   {
     value: 0,
-    label: "0"
+    label: '0',
   },
   {
     value: 100,
-    label: "100"
-  }
+    label: '100',
+  },
 ];
-
 
 AppGeneralSettingsTab.propTypes = {
   currentCamera: PropTypes.object,
@@ -41,27 +47,27 @@ AppGeneralSettingsTab.propTypes = {
   handleSave: PropTypes.func,
   onCancel: PropTypes.func,
   appId: PropTypes.string,
-  userList: PropTypes.object
+  userList: PropTypes.object,
 };
 
 // ----------------------------------------------------------------------
 
 export default function AppGeneralSettingsTab(props) {
-  const { onCancel, translate, appId, currentCamera, handleSave, userList={}, setIsFormUpdated } = props;
+  const { onCancel, translate, appId, currentCamera, handleSave, userList = {}, setIsFormUpdated } = props;
 
   const [camera, setCamera] = useState({
-    name: "",
-    description: "",
-    cameraType: "",
-    brand: "",
-    model: "",
-    streamUrl: "",
-    passPhrase: "",
-    location: "",
-    installationDate: "",
+    name: '',
+    description: '',
+    cameraType: '',
+    brand: '',
+    model: '',
+    streamUrl: '',
+    passPhrase: '',
+    location: '',
+    installationDate: '',
     appDtos: [],
     isPrivacyEnabled: false,
-    severity: ""
+    severity: '',
   });
   const [mlApp, setMlApp] = useState(null);
   const [sensitivity, setSensitivity] = useState(80);
@@ -69,20 +75,21 @@ export default function AppGeneralSettingsTab(props) {
   const [mobileAlert, setMobileAlert] = useState(false);
   const [isPrivacyEnabled, setIsPrivacyEnabled] = useState(false);
   const [email, setEmail] = useState(false);
-  const [emailList, setEmailList] = useState("");
-  const [extraConfig, setExtraConfig] = useState("");
+  const [emailList, setEmailList] = useState('');
+  const [extraConfig, setExtraConfig] = useState('');
   const [desktopSubscribers, setDesktopSubscribers] = useState([]);
   const [mobileSubscribers, setMobileSubscribers] = useState([]);
   const [emailSubscribers, setEmailSubscribers] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
   const [severityValue, setSeverityValue] = useState('Low');
+  const dispatch = useDispatch();
+  const { user } = useAuth();
 
   const SEVERITY = [
     { value: 'High', label: translate('app.alert-high-label') },
     { value: 'Medium', label: translate('app.alert-medium-label') },
     { value: 'Low', label: translate('app.alert-low-label') },
   ];
-
 
   useEffect(() => {
     setCamera(currentCamera);
@@ -95,13 +102,12 @@ export default function AppGeneralSettingsTab(props) {
     setMobileAlert(app?.config?.allowMobileAlert);
     setEmailList(app?.config?.notifyEmails);
     setExtraConfig(app?.config?.customJsonData);
-    setIsPrivacyEnabled(app?.config?.isPrivacyEnabled || false);        
-    setSeverityValue(app?.config?.severity || "Low");
+    setIsPrivacyEnabled(app?.config?.isPrivacyEnabled || false);
+    setSeverityValue(app?.config?.severity || 'Low');
   }, [currentCamera]);
 
-
   const handleSensitivityChange = (event, value) => {
-    setSensitivity(value === "" ? "" : Number(value));
+    setSensitivity(value === '' ? '' : Number(value));
     setIsFormUpdated(true);
   };
 
@@ -120,7 +126,6 @@ export default function AppGeneralSettingsTab(props) {
     setIsFormUpdated(true);
   };
 
- 
   const handleExtraConfigChange = (event) => {
     setExtraConfig(event.target.value);
     setIsFormUpdated(true);
@@ -142,7 +147,7 @@ export default function AppGeneralSettingsTab(props) {
   const handleEmailSubscriber = (e, values) => {
     setEmailSubscribers(values);
     setIsFormUpdated(true);
-  }
+  };
 
   const handleRadioChange = (e, value) => {
     setSeverityValue(value);
@@ -157,33 +162,32 @@ export default function AppGeneralSettingsTab(props) {
         setMobileSubscribers(mlApp?.config?.mobileSubscribers?.userDtos || []);
         setEmailSubscribers(mlApp?.config?.emailSubscribers?.userDtos || []);
       }
-    }    
+    }
   }, [userList, mlApp]);
 
   const getSubscriberPayload = (list) => {
     const payload = [];
     if (list?.length > 0) {
-      list.map(item => payload.push({ id: item.id }));
+      list.map((item) => payload.push({ id: item.id }));
     }
-    return payload; 
-  } 
+    return payload;
+  };
 
   const handleSubmit = () => {
     if (mlApp?.config) {
-
       const desktop = {
-        "type" : "FIREBASE_DESKTOP",
-        "userDtos" : getSubscriberPayload(desktopSubscribers)
+        type: 'FIREBASE_DESKTOP',
+        userDtos: getSubscriberPayload(desktopSubscribers),
       };
 
       const mobile = {
-        "type" : "FIREBASE_MOBILE",
-        "userDtos" : getSubscriberPayload(mobileSubscribers)
+        type: 'FIREBASE_MOBILE',
+        userDtos: getSubscriberPayload(mobileSubscribers),
       };
 
       const emailSubList = {
-        "type" : "EMAIL",
-        "userDtos" : getSubscriberPayload(emailSubscribers)
+        type: 'EMAIL',
+        userDtos: getSubscriberPayload(emailSubscribers),
       };
       const payload = {
         ...mlApp.config,
@@ -199,48 +203,72 @@ export default function AppGeneralSettingsTab(props) {
         emailSubscribers: emailSubList,
         mobileSubscribers: mobile,
         deskTopSubscribers: desktop,
-        severity: severityValue
-      };      
-      handleSave(payload);    
-      setIsFormUpdated(false);  
+        severity: severityValue,
+      };
+      handleSave(payload);
+      setIsFormUpdated(false);
     }
   };
 
   const isDisabled = () => {
-    if ((desktopAlert && desktopSubscribers?.length === 0) || (mobileAlert && mobileSubscribers?.length === 0) || (email && emailSubscribers?.length === 0)) {
+    if (
+      (desktopAlert && desktopSubscribers?.length === 0) ||
+      (mobileAlert && mobileSubscribers?.length === 0) ||
+      (email && emailSubscribers?.length === 0)
+    ) {
       return true;
     }
     return false;
   };
 
-
   const renderAutoComplete = (handler, value, label, type) => (
-    
-      <FormControlLabel
-        control={
-          <Autocomplete            
-            multiple            
-            size="small"
-            sx={{ minWidth: 300, ml: 1 }}
-            onChange={handler}
-            options={subscribers || []}
-            getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
-            renderTags={(value, getTagProps) => value.map((option, index) => (
-                <Chip {...getTagProps({ index })} key={`${type}-${option.id}`} size="small" label={`${option.firstName} ${option.lastName}`} />
-              ))
-            }
-            renderInput={(params) => <TextField label="" {...params} error={value.length === 0} helperText={value.length === 0 ? translate('app.subscriber-validation-label'): ""} />}
-            value={value}
-          />
-        }
-        label={`${translate(label)}:`}
-        labelPlacement="start"
-        sx={{ ml: 5, mb: 2, justifyContent: "start" }}
-      />         
+    <FormControlLabel
+      control={
+        <Autocomplete
+          multiple
+          size="small"
+          sx={{ minWidth: 300, ml: 1 }}
+          onChange={handler}
+          options={subscribers || []}
+          getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
+          renderTags={(value, getTagProps) =>
+            value.map((option, index) => (
+              <Chip
+                {...getTagProps({ index })}
+                key={`${type}-${option.id}`}
+                size="small"
+                label={`${option.firstName} ${option.lastName}`}
+              />
+            ))
+          }
+          renderInput={(params) => (
+            <TextField
+              label=""
+              {...params}
+              error={value.length === 0}
+              helperText={value.length === 0 ? translate('app.subscriber-validation-label') : ''}
+            />
+          )}
+          value={value}
+        />
+      }
+      label={`${translate(label)}:`}
+      labelPlacement="start"
+      sx={{ ml: 5, mb: 2, justifyContent: 'start' }}
+    />
   );
+  const handleTestAlertPress = () => {
+    const payload = {};
+    payload.cameraId = currentCamera.publicId;
+    payload.appId = mlApp.app.id;
+    dispatch(sendTestAlert(payload));
+  };
 
   return (
-    <Card sx={{ padding: "24px 40px" }}>
+    <Card sx={{ padding: '24px 40px' }}>
+      {/* <Box sx={{ mt: 3, mb: 3, ml: -1, border: 2, borderRadius: 10, borderColor: blue[600], width: 85 }}>
+        
+      </Box> */}
       <Box>
         <FormControl component="fieldset">
           <FormLabel component="label" color="primary">
@@ -268,13 +296,15 @@ export default function AppGeneralSettingsTab(props) {
               <Switch checked={isPrivacyEnabled} onChange={handlePrivacyChange} color="primary" name="privacy" />
             }
             label={
-              isPrivacyEnabled ? translate('app.camera-privacy-enabled-label') : translate('app.camera-privacy-disabled-label')
+              isPrivacyEnabled
+                ? translate('app.camera-privacy-enabled-label')
+                : translate('app.camera-privacy-disabled-label')
             }
           />
         </FormControl>
       </Box>
       <Box sx={{ mt: 3 }}>
-      <FormControl component="fieldset">
+        <FormControl component="fieldset">
           <FormLabel component="label" color="primary">
             {translate('app.alerts-severity-label')}:{' '}
           </FormLabel>
@@ -285,42 +315,62 @@ export default function AppGeneralSettingsTab(props) {
             onChange={handleRadioChange}
             value={severityValue}
           >
-            {SEVERITY.map((item) => <FormControlLabel key={item.value} value={item.value} control={<Radio />} label={item.label} />)}            
-          </RadioGroup>          
-        </FormControl>        
+            {SEVERITY.map((item) => (
+              <FormControlLabel key={item.value} value={item.value} control={<Radio />} label={item.label} />
+            ))}
+          </RadioGroup>
+        </FormControl>
       </Box>
       <Box sx={{ mt: 3 }}>
         <FormControl component="fieldset">
-          <FormLabel component="label" color="primary">
-            {translate('app.camera-notifications-header-label')}:{' '}
-          </FormLabel>
+          <div>
+            <FormLabel component="label" color="primary">
+              {translate('app.camera-notifications-header-label')}
+            </FormLabel>
+            {user?.role === 'SUPER_ADMIN' && (
+              <Tooltip title="Send Test Alert Notification">
+                <IconButton
+                  sx={{ ml: 2, border: 1, borderColor: blue[600], borderRadius: 5, width: 40, height: 30 }}
+                  onClick={handleTestAlertPress}
+                >
+                  <img
+                    height={20}
+                    width={20}
+                    src="https://cdn-icons-png.flaticon.com/512/2227/2227762.png"
+                    alt="Send Test Alert Notification"
+                  />
+                </IconButton>
+              </Tooltip>
+            )}
+          </div>
           <FormControlLabel
-            control={
-              <Checkbox
-                checked={desktopAlert}
-                onChange={handleDeskAlertChange}
-                name="desktop"               
-              />
-            }
+            control={<Checkbox checked={desktopAlert} onChange={handleDeskAlertChange} name="desktop" />}
             label={translate('app.camera-desktop-label')}
           />
-          { desktopAlert && renderAutoComplete(handleDesktopSubscriber, desktopSubscribers, 'app.camera-desktop-subscribers-label', 'desktop') }
-           <FormControlLabel
-            control={
-              <Checkbox
-                checked={mobileAlert}
-                onChange={handleMobileAlertChange}
-                name="desktop"               
-              />
-            }
+          {desktopAlert &&
+            renderAutoComplete(
+              handleDesktopSubscriber,
+              desktopSubscribers,
+              'app.camera-desktop-subscribers-label',
+              'desktop'
+            )}
+          <FormControlLabel
+            control={<Checkbox checked={mobileAlert} onChange={handleMobileAlertChange} name="desktop" />}
             label={translate('app.camera-mobile-label')}
           />
-          { mobileAlert && renderAutoComplete(handleMobileSubscriber, mobileSubscribers, 'app.camera-mobile-subscribers-label', 'mobile') }          
+          {mobileAlert &&
+            renderAutoComplete(
+              handleMobileSubscriber,
+              mobileSubscribers,
+              'app.camera-mobile-subscribers-label',
+              'mobile'
+            )}
           <FormControlLabel
             control={<Checkbox checked={email} onChange={handleEmailAlertChange} name="email" />}
             label={translate('app.camera-email-label')}
           />
-          { email && renderAutoComplete(handleEmailSubscriber, emailSubscribers, 'app.camera-email-subscribers-label', 'email') }          
+          {email &&
+            renderAutoComplete(handleEmailSubscriber, emailSubscribers, 'app.camera-email-subscribers-label', 'email')}
         </FormControl>
       </Box>
       <Box sx={{ mt: 3, display: 'flex', alignItems: 'center' }}>
@@ -335,7 +385,7 @@ export default function AppGeneralSettingsTab(props) {
             style={{ minHeight: 30, minWidth: 350, marginTop: 8 }}
             onChange={handleExtraConfigChange}
           />
-        </FormControl>       
+        </FormControl>
       </Box>
       <Stack spacing={3} alignItems="flex-end">
         <Box sx={{ display: 'flex' }}>

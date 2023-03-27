@@ -20,7 +20,14 @@ import ConfirmationModalConfig from '../../components/widgets/ConfirmationModalC
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getCameraDetails, getAppSchedule, resetSchedule, updateCameraApp, updateAppSchedule, getCamerasLatestFrame } from '../../redux/slices/cameras';
+import {
+  getCameraDetails,
+  getAppSchedule,
+  resetSchedule,
+  updateCameraApp,
+  updateAppSchedule,
+  getCamerasLatestFrame,
+} from '../../redux/slices/cameras';
 import { getUsers, resetUserList } from '../../redux/slices/users';
 
 // sections
@@ -64,13 +71,13 @@ const CameraAppSettings = () => {
     } catch (err) {
       enqueueSnackbar(err?.message, {
         variant: 'error',
-      });      
+      });
     }
   }, [dispatch]);
 
-  const getCameraAppSchedule = async() => {
+  const getCameraAppSchedule = async () => {
     try {
-      await dispatch(getAppSchedule({appId}));
+      await dispatch(getAppSchedule({ appId }));
     } catch (err) {
       enqueueSnackbar(err?.message, {
         variant: 'error',
@@ -81,36 +88,42 @@ const CameraAppSettings = () => {
 
   const resetCameraAppSchedule = () => {
     resetSchedule();
-  }
+  };
 
   const resetUsers = () => {
     resetUserList();
-  }
+  };
 
-  const handleSaveApp = useCallback(async (payload) => {
-    try {
-      await dispatch(updateCameraApp(payload));
-      enqueueSnackbar(translate('app.camera-app-update-success'));
-      navigate(`${PATH_DASHBOARD.cameras.root}/apps/${cameraId}`);
-    } catch (err) {
-      enqueueSnackbar(err?.message, {
-        variant: 'error',
-      });
-      throw new Error(err?.message);
-    }
-  }, [dispatch]);
+  const handleSaveApp = useCallback(
+    async (payload) => {
+      try {
+        await dispatch(updateCameraApp(payload));
+        enqueueSnackbar(translate('app.camera-app-update-success'));
+        navigate(`${PATH_DASHBOARD.cameras.root}/apps/${cameraId}`);
+      } catch (err) {
+        enqueueSnackbar(err?.message, {
+          variant: 'error',
+        });
+        throw new Error(err?.message);
+      }
+    },
+    [dispatch]
+  );
 
-  const updateAppScheduleRequest = useCallback(async (payload) => {
-    try {
-      await dispatch(updateAppSchedule(payload));
-      enqueueSnackbar(translate('app.schedule-updated-label'));   
-    } catch (err) {
-      enqueueSnackbar(err?.message, {
-        variant: 'error',
-      });
-      throw new Error(err?.message);
-    }
-  }, [dispatch]);
+  const updateAppScheduleRequest = useCallback(
+    async (payload) => {
+      try {
+        await dispatch(updateAppSchedule(payload));
+        enqueueSnackbar(translate('app.schedule-updated-label'));
+      } catch (err) {
+        enqueueSnackbar(err?.message, {
+          variant: 'error',
+        });
+        throw new Error(err?.message);
+      }
+    },
+    [dispatch]
+  );
 
   const getCameraFrameDetails = useCallback(async () => {
     try {
@@ -118,7 +131,7 @@ const CameraAppSettings = () => {
     } catch (err) {
       enqueueSnackbar(err?.message, {
         variant: 'error',
-      });      
+      });
     }
   }, [dispatch]);
 
@@ -138,28 +151,25 @@ const CameraAppSettings = () => {
   }, [cameraDetails]);
 
   useEffect(() => {
-    return () => {      
-      resetCameraAppSchedule();     
+    return () => {
+      resetCameraAppSchedule();
       resetUsers();
       setIsFormUpdated(false);
     };
   }, []);
-  
-  const handleTabConfirmation = async() => {
+
+  const handleTabConfirmation = async () => {
     const config = ConfirmationModalConfig(theme);
-    const settings = {...config};
+    const settings = { ...config };
     settings.confirmationButtonProps.color = 'error';
     settings.confirmationText = translate('app.leave-btn-label');
     settings.cancellationText = translate('app.camera-cancel-label');
     settings.title = (
-      <Typography
-        color="textPrimary"
-        variant="h6"
-      >
-        {translate('app.annotation-confirmation-label')} 
+      <Typography color="textPrimary" variant="h6">
+        {translate('app.annotation-confirmation-label')}
       </Typography>
     );
-    
+
     try {
       await confirm({
         ...settings,
@@ -169,23 +179,23 @@ const CameraAppSettings = () => {
       return true;
     } catch (err) {
       return false;
-    }     
+    }
   };
-  const onCancel = async() => {
-    if (currentTab === 'region' || currentTab === 'schedule' && isFormUpdated) {
+  const onCancel = async () => {
+    if (currentTab === 'region' || (currentTab === 'schedule' && isFormUpdated)) {
       const canNaviagte = await handleTabConfirmation();
       if (canNaviagte) {
         navigate(`${PATH_DASHBOARD.cameras.root}/apps/${cameraId}`);
       }
     } else {
       navigate(`${PATH_DASHBOARD.cameras.root}/apps/${cameraId}`);
-    }        
+    }
   };
 
-  const handleTabChange = async(e, value) => {
+  const handleTabChange = async (e, value) => {
     let canNaviagte = true;
     if (isFormUpdated) {
-      canNaviagte = await handleTabConfirmation();      
+      canNaviagte = await handleTabConfirmation();
     }
     if (canNaviagte) {
       setCurrentTab(value);
@@ -197,10 +207,10 @@ const CameraAppSettings = () => {
         getCameraAppSchedule();
       }
     }
-  }
+  };
 
   const isBlocking = () => isFormUpdated;
-  
+
   const APP_TABS = [
     {
       value: 'general',
@@ -212,9 +222,9 @@ const CameraAppSettings = () => {
           translate={translate}
           handleSave={handleSaveApp}
           onCancel={onCancel}
-          appId={appId} 
-          userList={userList}      
-          setIsFormUpdated={setIsFormUpdated}   
+          appId={appId}
+          userList={userList}
+          setIsFormUpdated={setIsFormUpdated}
         />
       ),
     },
@@ -225,7 +235,7 @@ const CameraAppSettings = () => {
       component: (
         <AppScheduleTab
           translate={translate}
-          updateAppScheduleRequest={updateAppScheduleRequest}          
+          updateAppScheduleRequest={updateAppScheduleRequest}
           appId={appId}
           schedularList={schedularList}
           resetSchedule={resetCameraAppSchedule}
@@ -239,7 +249,15 @@ const CameraAppSettings = () => {
       label: translate('app.camera-region-of-intrest'),
       icon: <Iconify icon={'carbon:area-custom'} width={20} height={20} />,
       component: (
-        <AnnotationTab translate={translate} frameUrl={cameraLatestFrame} handleSave={handleSaveApp} currentCamera={cameraDetails} appId={appId} onCancel={onCancel} setIsFormUpdated={setIsFormUpdated} />          
+        <AnnotationTab
+          translate={translate}
+          frameUrl={cameraLatestFrame}
+          handleSave={handleSaveApp}
+          currentCamera={cameraDetails}
+          appId={appId}
+          onCancel={onCancel}
+          setIsFormUpdated={setIsFormUpdated}
+        />
       ),
     },
   ];
