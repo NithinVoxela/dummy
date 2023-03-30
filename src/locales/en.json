@@ -278,7 +278,7 @@
     "mlapp-type-A003": "Wakeup Detection",
     "mlapp-type-A004": "Fall Detection",
     "mlapp-type-A005": "Continuous Recording",
-    "mlapp-type-A006": "Camera Streaming",
+    "mlapp-type-A006": "Live Streaming",
     "recordings-list-label": "Recording List",
     "recordings-found-label": "recordings found",
     "recordings-details-label": "Recording Details",
@@ -309,15 +309,15 @@
     "tenant-parent-label": "Parent Site",
     "agent-registration-status-label": "Registration Status",
     "agent-macIds-label": "MAC Ids",
-    "agent-add-success": "Agent created successfully",
-    "agent-update-success": "Agent updated successfully",
-    "agents-label": "Agents",
-    "agents-new-agent-label":  "New Agent",
-    "agents-add-header-label": "Create a new Agent",
-    "agents-edit-header-label": "Edit Agent",
-    "agents-list-header-label": "Agents List",
-    "agent-public-id-label": "Agent Id",
+    "agent-add-success": "Hub created successfully",
+    "agent-update-success": "Hub updated successfully",
+    "agents-label": "Hubs",
+    "agents-new-agent-label":  "New Hub",
+    "agents-add-header-label": "Create a new Hub",
+    "agents-edit-header-label": "Edit Hub",
+    "agents-list-header-label": "Hub List",
+    "agent-public-id-label": "Hub Id",
     "agent-ipAddress-label": "IP Address",
-    "agent-label": "Agent"
+    "agent-label": "Hub"
   }
 }

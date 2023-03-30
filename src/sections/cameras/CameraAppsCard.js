@@ -86,11 +86,7 @@ const CameraAppsCard = (props) => {
         }}
       >
         {(loading ? [...Array(12)] : dataList).map((app, index) =>
-          app ? (
-            (app.app.code !== 'A005' || user?.role === 'SUPER_ADMIN') && renderAppCard(app)
-          ) : (
-            <SkeletonAlertItem key={index} />
-          )
+          app ? renderAppCard(app) : <SkeletonAlertItem key={index} />
         )}
       </Box>
       {!loading && dataList?.length === 0 && (

@@ -38,7 +38,7 @@ const navConfig = [
       { title: 'dashboard', path: PATH_DASHBOARD.general.dashboard, icon: ICONS.dashboard },
       { title: 'analytics', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
       { title: 'alerts', path: PATH_DASHBOARD.general.alerts, icon: ICONS.alerts, info: <AlertCountLabel /> },
-      { title: 'recordings', path: PATH_DASHBOARD.general.recordings, icon: ICONS.recordings, role: ['SUPER_ADMIN'] },
+      { title: 'recordings', path: PATH_DASHBOARD.general.recordings, icon: ICONS.recordings },
     ],
   },
 

@@ -41,8 +41,8 @@ export default function AgentNewForm({ isEdit, currentAgent, translate, handleSa
     () => ({
       name: currentAgent?.name || '',
       registrationStatus: currentAgent?.registrationStatus || undefined,
-      ipAddress: currentAgent?.ipAddress || undefined,
-      publicId: currentAgent?.publicId || undefined,
+      ipAddress: currentAgent?.ipAddress || '',
+      publicId: currentAgent?.publicId || '',
       cameras: currentAgent?.cameras || [],
       macIds: currentAgent?.macIds || [],
     }),
