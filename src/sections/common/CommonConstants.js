@@ -6,3 +6,4 @@ export const registrationStatuses = [
   { label: 'REGISTRATION_INITIATED', value: 'REGISTRATION_INITIATED' },
   { label: 'REGISTRATION_COMPLETE', value: 'REGISTRATION_COMPLETE' },
 ];
+export const externalSystemsList = ['BlueOcean'];

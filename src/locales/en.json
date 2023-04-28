@@ -312,12 +312,14 @@
     "agent-add-success": "Hub created successfully",
     "agent-update-success": "Hub updated successfully",
     "agents-label": "Hubs",
-    "agents-new-agent-label":  "New Hub",
+    "agents-new-agent-label": "New Hub",
     "agents-add-header-label": "Create a new Hub",
     "agents-edit-header-label": "Edit Hub",
     "agents-list-header-label": "Hub List",
     "agent-public-id-label": "Hub Id",
     "agent-ipAddress-label": "IP Address",
-    "agent-label": "Hub"
+    "agent-label": "Hub",
+    "tenant-external-system": "External Systems Support",
+    "tenant-external-system-subscribers-label": "External System Subscribers"
   }
 }

@@ -34,7 +34,7 @@ export default function TenantCreate() {
   const { tenantDetails, error } = useSelector((state) => state.tenants);
 
   const getTenant = useCallback(async () => {
-    dispatch(getTenantDetails(tenantId, { requireParent: true }));
+    dispatch(getTenantDetails(tenantId, { requireParent: true, requireExternalSystemsSupport: true }));
   }, [dispatch]);
 
   const handleSaveTenant = useCallback(

@@ -312,12 +312,14 @@
     "agent-add-success": "ハブが正常に作成されました",
     "agent-update-success": "ハブが正常に更新されました",
     "agents-label": "ハブ",
-    "agents-new-agent-label":  "新しいハブ",
+    "agents-new-agent-label": "新しいハブ",
     "agents-add-header-label": "新しいハブを作成する",
     "agents-edit-header-label": "編集ハブ",
     "agents-list-header-label": "ハブ一覧",
     "agent-public-id-label": "ハブ ID",
     "agent-ipAddress-label": "IPアドレス",
-    "agent-label": "ハブ"
+    "agent-label": "ハブ",
+    "tenant-external-system": "External Systems Support",
+    "tenant-external-system-subscribers-label": "External System Subscribers"
   }
 }

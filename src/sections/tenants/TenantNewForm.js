@@ -8,7 +8,18 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Autocomplete, Box, Button, Card, Chip, Grid, Stack, TextField } from '@mui/material';
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Card,
+  Chip,
+  Grid,
+  Stack,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+} from '@mui/material';
 
 import useAuth from '../../hooks/useAuth';
 
@@ -17,7 +28,7 @@ import { getTenantsForAutoComplete } from '../../redux/slices/tenants';
 
 // components
 import { FormProvider, RHFSelect, RHFTextField } from '../../components/hook-form';
-import { regions } from '../common/CommonConstants';
+import { regions, externalSystemsList } from '../common/CommonConstants';
 
 // ----------------------------------------------------------------------
 
@@ -50,6 +61,61 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
     [currentTenant]
   );
 
+  const [externalSubscribers, setExternalSubscribers] = useState([]);
+  const [externalSystemAlert, setExternalSystemAlert] = useState(false);
+
+  const renderAutoComplete = (handler, value, type) => (
+    <FormControlLabel
+      control={
+        <Autocomplete
+          multiple
+          size="small"
+          sx={{ minWidth: 300, ml: 0 }}
+          onChange={handler}
+          options={externalSystemsList || []}
+          getOptionLabel={(option) => `${option}`}
+          renderTags={(value, getTagProps) =>
+            value.map((option, index) => (
+              <Chip {...getTagProps({ index })} key={`${type}-${option}`} size="small" label={`${option}`} />
+            ))
+          }
+          renderInput={(params) => (
+            <TextField
+              label={translate('app.tenant-external-system-subscribers-label')}
+              {...params}
+              error={value.length === 0}
+              helperText={value.length === 0 ? translate('app.subscriber-validation-label') : ''}
+            />
+          )}
+          value={value}
+        />
+      }
+      labelPlacement="start"
+      sx={{ mb: 2, justifyContent: 'start' }}
+    />
+  );
+
+  const handleExternalSystemAlertChange = (event) => {
+    setExternalSystemAlert(event.target.checked);
+    if (!event.target.checked) {
+      setExternalSubscribers([]);
+    }
+  };
+
+  const handleExternalSubscriber = (e, values) => {
+    setExternalSubscribers(values);
+  };
+
+  useEffect(() => {
+    if (currentTenant.externalSystemsSupport) {
+      setExternalSystemAlert(Object.keys(currentTenant.externalSystemsSupport).length > 0);
+    }
+  }, [currentTenant]);
+
+  useMemo(() => {
+    setExternalSubscribers(currentTenant.externalSystemsSupport || []);
+  }, [currentTenant]);
+
   const methods = useForm({
     resolver: yupResolver(newTenantSchema),
     defaultValues,
@@ -66,6 +132,7 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
   }, [isEdit, currentTenant]);
 
   const onSubmit = async (data) => {
+    data.externalSystemsSupport = externalSubscribers;
     if (isEdit) {
       data = { ...currentTenant, ...data };
     }
@@ -135,7 +202,7 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
                     {...field}
                     disabled={user?.role !== 'SUPER_ADMIN'}
                     size="medium"
-                    sx={{ minWidth: 300, ml: 1 }}
+                    sx={{ minWidth: 300 }}
                     options={parents || []}
                     onChange={(event, value) => field.onChange(value)}
                     filterOptions={(x) => x}
@@ -160,7 +227,27 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
                 )}
               />
             </Box>
-
+            <Box
+              sx={{
+                display: 'grid',
+                columnGap: 2,
+                rowGap: 1,
+                gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(1, 1fr)' },
+              }}
+            >
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={externalSystemAlert}
+                    onChange={handleExternalSystemAlertChange}
+                    name="External System Config"
+                  />
+                }
+                sx={{ mt: 3 }}
+                label={translate('app.tenant-external-system')}
+              />
+              {externalSystemAlert && renderAutoComplete(handleExternalSubscriber, externalSubscribers, 'desktop')}
+            </Box>
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <Box sx={{ display: 'flex' }}>
                 <Button onClick={onCancel} sx={{ mr: 1 }}>
