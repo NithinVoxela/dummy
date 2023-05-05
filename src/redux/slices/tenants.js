@@ -76,7 +76,20 @@ export function resetTenantList() {
 
 export async function saveTenant(payload, queryParams) {
   const urlParams = queryParams ? `?${new URLSearchParams(queryParams).toString()}` : '';
-  await axios.post(`tenant${urlParams}`, payload);
+  const response = await axios.post(`tenant${urlParams}`, payload);
+  return response;
+}
+
+export async function saveExternalSystemConfig(payload) {
+  await axios.post('externalSystemConfig', payload);
+}
+
+export async function getExternalConfigDetails(id) {
+  return axios.get(`externalSystemConfig/BlueOcean/TENANT/${id}`);
+}
+
+export async function deleteExternalSystemConfig(id) {
+  await axios.delete(`externalSystemConfig/TENANT/${id}`);
 }
 
 export async function patchTenant(payload) {

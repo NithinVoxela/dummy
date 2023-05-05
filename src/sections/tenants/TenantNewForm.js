@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { debounce } from 'lodash';
+import { debounce, isEqual } from 'lodash';
 
 // form
 import { useForm, Controller } from 'react-hook-form';
@@ -24,11 +24,18 @@ import {
 import useAuth from '../../hooks/useAuth';
 
 // redux
-import { getTenantsForAutoComplete } from '../../redux/slices/tenants';
+import {
+  getTenantsForAutoComplete,
+  getExternalConfigDetails,
+  deleteExternalSystemConfig,
+} from '../../redux/slices/tenants';
 
 // components
 import { FormProvider, RHFSelect, RHFTextField } from '../../components/hook-form';
 import { regions, externalSystemsList } from '../common/CommonConstants';
+
+// sections
+import BlueOcean from '../externalConfigSystems/BlueOcean';
 
 // ----------------------------------------------------------------------
 
@@ -63,6 +70,29 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
 
   const [externalSubscribers, setExternalSubscribers] = useState([]);
   const [externalSystemAlert, setExternalSystemAlert] = useState(false);
+  const [watchEnableBlueOceanSupport, setWatchEnableBlueOceanSupport] = useState(false);
+  const [externalConfigForm, setExternalConfigForm] = useState({
+    corporationCd: '',
+    jigCode: '',
+    authAccessKey: '',
+    formatKbn: '',
+  });
+  const [editExternalConfig, setEditExternalConfig] = useState({
+    corporationCd: '',
+    jigCode: '',
+    authAccessKey: '',
+    formatKbn: '',
+  });
+  const [externalConfigAlreadyExist, setExternalConfigAlreadyExist] = useState(false);
+
+  const handleExternalConfigSubmit = (e) => {
+    const { name, value } = e.target;
+
+    setExternalConfigForm({
+      ...externalConfigForm,
+      [name]: value,
+    });
+  };
 
   const renderAutoComplete = (handler, value, type) => (
     <FormControlLabel
@@ -95,6 +125,10 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
     />
   );
 
+  useEffect(() => {
+    setWatchEnableBlueOceanSupport(externalSubscribers.includes('BlueOcean'));
+  }, [externalSubscribers]);
+
   const handleExternalSystemAlertChange = (event) => {
     setExternalSystemAlert(event.target.checked);
     if (!event.target.checked) {
@@ -107,8 +141,9 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
   };
 
   useEffect(() => {
-    if (currentTenant.externalSystemsSupport) {
+    if (currentTenant.externalSystemsSupport && isEdit) {
       setExternalSystemAlert(Object.keys(currentTenant.externalSystemsSupport).length > 0);
+      if (Object.keys(currentTenant.externalSystemsSupport).length > 0) getExternalConfigHandler();
     }
   }, [currentTenant]);
 
@@ -140,14 +175,38 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
     if (data?.apiAuthKey) {
       data.apiAuthKey = Buffer.from(data.apiAuthKey, 'utf8').toString('base64');
     }
+    let payload = null;
+    if (
+      (isEdit && !isEqual(externalConfigForm, editExternalConfig)) ||
+      (!isEdit && externalSubscribers.includes('BlueOcean'))
+    ) {
+      payload = {
+        tenantId: currentTenant?.id,
+        externalSystem: 'BlueOcean',
+        resourceType: 'TENANT',
+        config: externalConfigForm,
+      };
+    }
+    if (isEdit && externalConfigAlreadyExist && !externalSubscribers.includes('BlueOcean')) {
+      await deleteExternalSystemConfig(currentTenant?.id);
+    }
 
-    await handleSave(data);
+    await handleSave(data, payload);
   };
 
   const searchHandler = async (searchStr) => {
     const response = await getTenantsForAutoComplete({ pageSize: 20 }, { tenantName: searchStr });
     if (response?.data?.records) {
       setParents(response.data.records);
+    }
+  };
+
+  const getExternalConfigHandler = async () => {
+    const response = await getExternalConfigDetails(currentTenant?.id);
+    if (response?.data?.config) {
+      setExternalConfigForm(response?.data?.config);
+      setEditExternalConfig(response?.data?.config);
+      setExternalConfigAlreadyExist(true);
     }
   };
 
@@ -240,7 +299,7 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
                   <Checkbox
                     checked={externalSystemAlert}
                     onChange={handleExternalSystemAlertChange}
-                    name="External System Config"
+                    name="externalSystemConfig"
                   />
                 }
                 sx={{ mt: 3 }}
@@ -248,6 +307,14 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
               />
               {externalSystemAlert && renderAutoComplete(handleExternalSubscriber, externalSubscribers, 'desktop')}
             </Box>
+
+            {watchEnableBlueOceanSupport && (
+              <BlueOcean
+                translate={translate}
+                handleExternalConfigSubmit={handleExternalConfigSubmit}
+                externalConfigForm={externalConfigForm}
+              />
+            )}
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <Box sx={{ display: 'flex' }}>
                 <Button onClick={onCancel} sx={{ mr: 1 }}>

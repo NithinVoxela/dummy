@@ -320,6 +320,10 @@
     "agent-ipAddress-label": "IP Address",
     "agent-label": "Hub",
     "tenant-external-system": "External Systems Support",
-    "tenant-external-system-subscribers-label": "External System Subscribers"
+    "tenant-external-system-subscribers-label": "External System Subscribers",
+    "tenant-external-system-corporation-code": "Corporation Code",
+    "tenant-external-system-jig-code": "Jig Code",
+    "tenant-external-system-auth-access-key": "Auth Access Key",
+    "tenant-external-system-format-kbn": "Format Kbn"
   }
 }

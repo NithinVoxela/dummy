@@ -277,8 +277,8 @@
     "mlapp-type-A002": "動作検知",
     "mlapp-type-A003": "離床検知",
     "mlapp-type-A004": "転倒検知",
-    "mlapp-type-A005": "連続記録",
-    "mlapp-type-A006": "生放送",
+    "mlapp-type-A005": "録画",
+    "mlapp-type-A006": "ライブビュー",
     "recordings-list-label": "録画リスト",
     "recordings-found-label": "録画が見つかりました",
     "recordings-details-label": "録画の詳細",
@@ -319,7 +319,11 @@
     "agent-public-id-label": "ハブ ID",
     "agent-ipAddress-label": "IPアドレス",
     "agent-label": "ハブ",
-    "tenant-external-system": "External Systems Support",
-    "tenant-external-system-subscribers-label": "External System Subscribers"
+    "tenant-external-system": "外部システムサポート",
+    "tenant-external-system-subscribers-label": "外部システムサブスクライバー",
+    "tenant-external-system-corporation-code": "法人コード",
+    "tenant-external-system-jig-code": "事業所コード",
+    "tenant-external-system-auth-access-key": "認証アクセスキー",
+    "tenant-external-system-format-kbn": "フォーマット区分"
   }
 }

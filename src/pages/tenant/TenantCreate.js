@@ -11,7 +11,13 @@ import useLocales from '../../hooks/useLocales';
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getTenantDetails, resetTenantDetails, saveTenant, patchTenant } from '../../redux/slices/tenants';
+import {
+  getTenantDetails,
+  resetTenantDetails,
+  saveTenant,
+  patchTenant,
+  saveExternalSystemConfig,
+} from '../../redux/slices/tenants';
 
 // components
 import Page from '../../components/Page';
@@ -38,12 +44,18 @@ export default function TenantCreate() {
   }, [dispatch]);
 
   const handleSaveTenant = useCallback(
-    async (payload = {}) => {
+    async (payload = {}, externalConfigPayload = {}) => {
       try {
         if (isEdit) {
           await patchTenant(payload);
         } else {
-          await saveTenant(payload, { createTenantResource: true });
+          const response = await saveTenant(payload, { createTenantResource: true });
+          if (response.status === 200 && externalConfigPayload != null) {
+            externalConfigPayload.tenantId = response?.data?.id;
+          }
+        }
+        if (externalConfigPayload != null) {
+          await saveExternalSystemConfig(externalConfigPayload);
         }
         enqueueSnackbar(!isEdit ? translate('app.tenant-add-success') : translate('app.tenant-update-success'));
         navigate(PATH_DASHBOARD.tenants.list);
@@ -64,9 +76,12 @@ export default function TenantCreate() {
     }
   }, [tenantId]);
 
-  useEffect(() => {
-    dispatch(resetTenantDetails());
-  }, []);
+  useEffect(
+    () => () => {
+      dispatch(resetTenantDetails());
+    },
+    []
+  );
 
   const onCancel = () => {
     navigate(PATH_DASHBOARD.tenants.list);
