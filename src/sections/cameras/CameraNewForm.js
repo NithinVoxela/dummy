@@ -19,6 +19,7 @@ import { getAgentsForAutoComplete } from '../../redux/slices/agents';
 import { SUPER_ADMIN_ROLE, EXTERNAL_SYSTEM_BLUEOCEAN } from '../common/CommonConstants';
 import BlueOceanCameraConfig from './BlueOceanCameraConfig';
 import { getExternalSystemConfig } from '../../api/externalSystemConfig';
+import { hasExternalSystemIntegration } from '../../utils/commonUtil';
 
 // ----------------------------------------------------------------------
 
@@ -55,10 +56,7 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
   const tomiliseconds = (hrs, min, sec) => (hrs * 60 * 60 + min * 60 + sec) * 1000;
   const { user } = useAuth();
 
-  const [blueOceanCameraConfig, setBlueOceanCameraConfig] = useState({
-    unitCd: '',
-    resCode: '',
-  });
+  const [blueOceanCameraConfig, setBlueOceanCameraConfig] = useState(null);
 
   const defaultValues = useMemo(
     () => ({
@@ -107,9 +105,11 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
   }, [isEdit, currentCamera]);
 
   const blueOceanCameraConfigHandler = async () => {
-    const response = await getExternalSystemConfig(currentCamera?.publicId, 'CAMERA', EXTERNAL_SYSTEM_BLUEOCEAN);
-    if (response?.data?.config) {
-      setBlueOceanCameraConfig(response?.data?.config);
+    if (user.role === SUPER_ADMIN_ROLE && hasExternalSystemIntegration(user, EXTERNAL_SYSTEM_BLUEOCEAN)) {
+      const response = await getExternalSystemConfig(currentCamera?.publicId, 'CAMERA', EXTERNAL_SYSTEM_BLUEOCEAN);
+      if (response?.data?.config) {
+        setBlueOceanCameraConfig(response?.data?.config);
+      }
     }
   };
 

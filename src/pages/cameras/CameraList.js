@@ -27,6 +27,7 @@ import { saveExternalSystemConfig } from '../../api/externalSystemConfig';
 import { CAMERA_TABLE_META } from './CameraConstants';
 import ListMenu, { ICON } from '../../sections/common/ListMenu';
 import { ADMIN_ROLES, SUPER_ADMIN_ROLE, EXTERNAL_SYSTEM_BLUEOCEAN } from '../../sections/common/CommonConstants';
+import { hasExternalSystemIntegration } from '../../utils/commonUtil';
 
 const CameraList = () => {
   const { themeStretch } = useSettings();
@@ -143,7 +144,7 @@ const CameraList = () => {
           ]}
           action={
             <>
-              {SUPER_ADMIN_ROLE === user?.role && (
+              {SUPER_ADMIN_ROLE === user?.role && hasExternalSystemIntegration(user, EXTERNAL_SYSTEM_BLUEOCEAN) && (
                 <Button
                   variant="contained"
                   startIcon={<Iconify icon={'ic:outline-refresh'} />}

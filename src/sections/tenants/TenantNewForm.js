@@ -31,7 +31,7 @@ import { renderExternalSystemsAutoComplete } from '../common/CommonUIHelper';
 
 // components
 import { FormProvider, RHFSelect, RHFTextField } from '../../components/hook-form';
-import { regions, EXTERNAL_SYSTEM_BLUEOCEAN } from '../common/CommonConstants';
+import { regions, EXTERNAL_SYSTEM_BLUEOCEAN, externalSystemsList } from '../common/CommonConstants';
 
 // sections
 import BlueOceanTenantConfig from './BlueOceanTenantConfig';
@@ -282,7 +282,8 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
                   handleExternalSubscriber,
                   externalSubscribers,
                   'externalSystem',
-                  translate
+                  translate,
+                  externalSystemsList
                 )}
             </Box>
 

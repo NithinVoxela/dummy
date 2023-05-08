@@ -91,7 +91,7 @@ function AuthProvider({ children }) {
           if (user.token && isValidToken(user.token)) {
             if (shuoldRefreshToken(user.token)) {
               setSession(user.token);
-              const response = await axios.put('refreshToken', {});
+              const response = await axios.put('refreshToken?requireExternalSystemsSupport=true', {});
               user = response.data;
             }
 
@@ -133,7 +133,7 @@ function AuthProvider({ children }) {
   }, []);
 
   const login = async (email, password) => {
-    const response = await axios.post('login', {
+    const response = await axios.post('login?requireExternalSystemsSupport=true', {
       userName: email,
       userPassword: Buffer.from(password, 'utf8').toString('base64'),
     });
@@ -161,7 +161,7 @@ function AuthProvider({ children }) {
   };
 
   const impersonate = async (tenantId) => {
-    const response = await axios.post('impersonate', {
+    const response = await axios.post('impersonate?requireExternalSystemsSupport=true', {
       tenantId,
     });
     const user = response.data;

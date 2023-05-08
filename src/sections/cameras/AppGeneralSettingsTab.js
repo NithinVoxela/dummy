@@ -27,6 +27,7 @@ import { useDispatch } from '../../redux/store';
 import { sendTestAlert } from '../../redux/slices/alerts';
 import useAuth from '../../hooks/useAuth';
 import { renderExternalSystemsAutoComplete } from '../common/CommonUIHelper';
+import { getExternalSystems } from '../../utils/commonUtil';
 
 // components
 // ----------------------------------------------------------------------
@@ -406,7 +407,8 @@ export default function AppGeneralSettingsTab(props) {
               handleExternalSystemTypes,
               externalSystemTypes,
               'externalSystem',
-              translate
+              translate,
+              getExternalSystems(user)
             )}
         </FormControl>
       </Box>

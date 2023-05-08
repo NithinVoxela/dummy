@@ -1,7 +1,6 @@
 import { Autocomplete, Chip, TextField, FormControlLabel } from '@mui/material';
-import { externalSystemsList } from './CommonConstants';
 
-export const renderExternalSystemsAutoComplete = (handler, value, type, translate) => (
+export const renderExternalSystemsAutoComplete = (handler, value, type, translate, externalSystemsList) => (
   <FormControlLabel
     control={
       <Autocomplete
