@@ -64,9 +64,12 @@ export default function AgentCreate() {
     }
   }, [agentId]);
 
-  useEffect(() => {
-    dispatch(resetAgentDetails());
-  }, []);
+  useEffect(
+    () => () => {
+      dispatch(resetAgentDetails());
+    },
+    []
+  );
 
   const onCancel = () => {
     navigate(PATH_DASHBOARD.agents.list);

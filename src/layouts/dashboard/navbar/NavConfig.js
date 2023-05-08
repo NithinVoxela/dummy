@@ -7,7 +7,7 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
 import SvgIconStyle from '../../../components/SvgIconStyle';
 import AlertCountLabel from '../../../sections/alerts/AlertCountLabel';
-import { ADMIN_ROLE, MULTIPLE_TENANT_ACCESS_ROLE } from '../../../sections/common/CommonConstants';
+import { ADMIN_ROLES, MULTIPLE_TENANT_ACCESS_ROLES, SUPER_ADMIN_ROLE } from '../../../sections/common/CommonConstants';
 // ----------------------------------------------------------------------
 
 const getIcon = (name) => <SvgIconStyle src={`/icons/${name}.svg`} sx={{ width: 1, height: 1 }} />;
@@ -47,14 +47,14 @@ const navConfig = [
   {
     subheader: 'management',
     items: [
-      { title: 'agents', path: PATH_DASHBOARD.general.agents, icon: ICONS.kanban, role: ['SUPER_ADMIN'] },
+      { title: 'agents', path: PATH_DASHBOARD.general.agents, icon: ICONS.kanban, role: [SUPER_ADMIN_ROLE] },
       { title: 'cameras', path: PATH_DASHBOARD.general.cameras, icon: ICONS.kanban },
-      { title: 'users', path: PATH_DASHBOARD.general.users, icon: ICONS.user, role: ADMIN_ROLE },
+      { title: 'users', path: PATH_DASHBOARD.general.users, icon: ICONS.user, role: ADMIN_ROLES },
       {
         title: 'tenants',
         path: PATH_DASHBOARD.general.tenants,
         icon: ICONS.organization,
-        role: MULTIPLE_TENANT_ACCESS_ROLE,
+        role: MULTIPLE_TENANT_ACCESS_ROLES,
       },
     ],
   },

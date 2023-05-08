@@ -16,6 +16,9 @@ import { FormProvider, RHFSelect, RHFTextField, RHFDateField, RHFCheckbox } from
 import useAuth from '../../hooks/useAuth';
 
 import { getAgentsForAutoComplete } from '../../redux/slices/agents';
+import { SUPER_ADMIN_ROLE, EXTERNAL_SYSTEM_BLUEOCEAN } from '../common/CommonConstants';
+import BlueOceanCameraConfig from './BlueOceanCameraConfig';
+import { getExternalSystemConfig } from '../../api/externalSystemConfig';
 
 // ----------------------------------------------------------------------
 
@@ -51,6 +54,11 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
 
   const tomiliseconds = (hrs, min, sec) => (hrs * 60 * 60 + min * 60 + sec) * 1000;
   const { user } = useAuth();
+
+  const [blueOceanCameraConfig, setBlueOceanCameraConfig] = useState({
+    unitCd: '',
+    resCode: '',
+  });
 
   const defaultValues = useMemo(
     () => ({
@@ -90,12 +98,20 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
   useEffect(() => {
     if (isEdit && currentCamera) {
       reset(defaultValues);
+      blueOceanCameraConfigHandler();
     }
     if (!isEdit) {
       reset(defaultValues);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentCamera]);
+
+  const blueOceanCameraConfigHandler = async () => {
+    const response = await getExternalSystemConfig(currentCamera?.publicId, 'CAMERA', EXTERNAL_SYSTEM_BLUEOCEAN);
+    if (response?.data?.config) {
+      setBlueOceanCameraConfig(response?.data?.config);
+    }
+  };
 
   const onSubmit = async (data) => {
     try {
@@ -111,14 +127,14 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
     }
   };
 
-  const agentChangeHandlerHandler = async (searchStr) => {
+  const agentChangeHandler = async (searchStr) => {
     const response = await getAgentsForAutoComplete({ pageSize: 20 }, { name: searchStr });
     if (response?.data?.records) {
       setAgentList(response.data.records);
     }
   };
 
-  const debounceAgentChangeHandler = useCallback(debounce(agentChangeHandlerHandler, 1000), []);
+  const debounceAgentChangeHandler = useCallback(debounce(agentChangeHandler, 1000), []);
 
   const handleAgentChange = (value) => {
     if (value) {
@@ -172,10 +188,10 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
                 />
               )}
 
-              {user.role === 'SUPER_ADMIN' && isEdit && (
+              {user.role === SUPER_ADMIN_ROLE && isEdit && (
                 <RHFTextField name="streamingId" disabled label={translate('app.camera-streaming-id-label')} />
               )}
-              {user.role === 'SUPER_ADMIN' && (
+              {user.role === SUPER_ADMIN_ROLE && (
                 <Controller
                   name="agent"
                   render={({ field, fieldState: { error } }) => (
@@ -220,6 +236,10 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
                 />
               )}
             </Box>
+
+            {user.role === SUPER_ADMIN_ROLE && isEdit && blueOceanCameraConfig && (
+              <BlueOceanCameraConfig translate={translate} blueOceanCameraConfig={blueOceanCameraConfig} />
+            )}
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <Box sx={{ display: 'flex' }}>

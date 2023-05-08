@@ -11,13 +11,8 @@ import useLocales from '../../hooks/useLocales';
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import {
-  getTenantDetails,
-  resetTenantDetails,
-  saveTenant,
-  patchTenant,
-  saveExternalSystemConfig,
-} from '../../redux/slices/tenants';
+import { getTenantDetails, resetTenantDetails, saveTenant, patchTenant } from '../../redux/slices/tenants';
+import { saveExternalSystemConfig } from '../../api/externalSystemConfig';
 
 // components
 import Page from '../../components/Page';
@@ -44,7 +39,7 @@ export default function TenantCreate() {
   }, [dispatch]);
 
   const handleSaveTenant = useCallback(
-    async (payload = {}, externalConfigPayload = {}) => {
+    async (payload, externalConfigPayload) => {
       try {
         if (isEdit) {
           await patchTenant(payload);

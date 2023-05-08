@@ -26,6 +26,7 @@ import { blue } from '@mui/material/colors';
 import { useDispatch } from '../../redux/store';
 import { sendTestAlert } from '../../redux/slices/alerts';
 import useAuth from '../../hooks/useAuth';
+import { renderExternalSystemsAutoComplete } from '../common/CommonUIHelper';
 
 // components
 // ----------------------------------------------------------------------
@@ -73,6 +74,7 @@ export default function AppGeneralSettingsTab(props) {
   const [sensitivity, setSensitivity] = useState(80);
   const [desktopAlert, setDesktopAlert] = useState(false);
   const [mobileAlert, setMobileAlert] = useState(false);
+  const [externalSystemAlert, setExternalSystemAlert] = useState(false);
   const [isPrivacyEnabled, setIsPrivacyEnabled] = useState(false);
   const [email, setEmail] = useState(false);
   const [emailList, setEmailList] = useState('');
@@ -80,6 +82,7 @@ export default function AppGeneralSettingsTab(props) {
   const [desktopSubscribers, setDesktopSubscribers] = useState([]);
   const [mobileSubscribers, setMobileSubscribers] = useState([]);
   const [emailSubscribers, setEmailSubscribers] = useState([]);
+  const [externalSystemTypes, setExternalSystemTypes] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
   const [severityValue, setSeverityValue] = useState('Low');
   const dispatch = useDispatch();
@@ -100,10 +103,12 @@ export default function AppGeneralSettingsTab(props) {
     setDesktopAlert(app?.config?.allowDesktopAlert);
     setEmail(app?.config?.allowEmailAlert);
     setMobileAlert(app?.config?.allowMobileAlert);
+    setExternalSystemAlert(app?.config?.allowExternalSystemAlert);
     setEmailList(app?.config?.notifyEmails);
     setExtraConfig(app?.config?.customJsonData);
     setIsPrivacyEnabled(app?.config?.isPrivacyEnabled || false);
     setSeverityValue(app?.config?.severity || 'Low');
+    setExternalSystemTypes(app?.config?.externalSystemNotificationTypes || []);
   }, [currentCamera]);
 
   const handleSensitivityChange = (event, value) => {
@@ -123,6 +128,14 @@ export default function AppGeneralSettingsTab(props) {
 
   const handleEmailAlertChange = (event) => {
     setEmail(event.target.checked);
+    setIsFormUpdated(true);
+  };
+
+  const handlExternalSystemAlertChange = (event) => {
+    setExternalSystemAlert(event.target.checked);
+    if (!event.target.checked) {
+      setExternalSystemTypes([]);
+    }
     setIsFormUpdated(true);
   };
 
@@ -146,6 +159,11 @@ export default function AppGeneralSettingsTab(props) {
   };
   const handleEmailSubscriber = (e, values) => {
     setEmailSubscribers(values);
+    setIsFormUpdated(true);
+  };
+
+  const handleExternalSystemTypes = (e, values) => {
+    setExternalSystemTypes(values);
     setIsFormUpdated(true);
   };
 
@@ -197,12 +215,14 @@ export default function AppGeneralSettingsTab(props) {
         allowDesktopAlert: desktopAlert,
         allowMobileAlert: mobileAlert,
         allowEmailAlert: email,
+        allowExternalSystemAlert: externalSystemAlert,
         notifyEmails: emailList,
         customJsonData: extraConfig,
         isPrivacyEnabled,
         emailSubscribers: emailSubList,
         mobileSubscribers: mobile,
         deskTopSubscribers: desktop,
+        externalSystemNotificationTypes: externalSystemTypes,
         severity: severityValue,
       };
       handleSave(payload);
@@ -214,7 +234,8 @@ export default function AppGeneralSettingsTab(props) {
     if (
       (desktopAlert && desktopSubscribers?.length === 0) ||
       (mobileAlert && mobileSubscribers?.length === 0) ||
-      (email && emailSubscribers?.length === 0)
+      (email && emailSubscribers?.length === 0) ||
+      (externalSystemAlert && externalSystemTypes?.length === 0)
     ) {
       return true;
     }
@@ -243,7 +264,7 @@ export default function AppGeneralSettingsTab(props) {
           }
           renderInput={(params) => (
             <TextField
-              label=""
+              label={translate(label)}
               {...params}
               error={value.length === 0}
               helperText={value.length === 0 ? translate('app.subscriber-validation-label') : ''}
@@ -252,9 +273,8 @@ export default function AppGeneralSettingsTab(props) {
           value={value}
         />
       }
-      label={`${translate(label)}:`}
       labelPlacement="start"
-      sx={{ ml: 5, mb: 2, justifyContent: 'start' }}
+      sx={{ mb: 2, justifyContent: 'start' }}
     />
   );
   const handleTestAlertPress = () => {
@@ -371,6 +391,23 @@ export default function AppGeneralSettingsTab(props) {
           />
           {email &&
             renderAutoComplete(handleEmailSubscriber, emailSubscribers, 'app.camera-email-subscribers-label', 'email')}
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={externalSystemAlert}
+                onChange={handlExternalSystemAlertChange}
+                name="externalSystemAlert"
+              />
+            }
+            label={translate('app.camera-external-system-alert-label')}
+          />
+          {externalSystemAlert &&
+            renderExternalSystemsAutoComplete(
+              handleExternalSystemTypes,
+              externalSystemTypes,
+              'externalSystem',
+              translate
+            )}
         </FormControl>
       </Box>
       <Box sx={{ mt: 3, display: 'flex', alignItems: 'center' }}>

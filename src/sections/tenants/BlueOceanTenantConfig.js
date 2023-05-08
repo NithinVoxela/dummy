@@ -1,6 +1,6 @@
 import { Box, Card, TextField } from '@mui/material';
 
-export default function BlueOcean({ translate, handleExternalConfigSubmit, externalConfigForm }) {
+export default function BlueOceanTenantConfig({ translate, handleExternalConfigSubmit, externalConfigForm }) {
   return (
     <Card
       sx={{

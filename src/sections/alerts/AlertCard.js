@@ -18,7 +18,7 @@ import useAuth from '../../hooks/useAuth';
 import { formatUTCDateString } from '../../utils/formatTime';
 import { dispatch } from '../../redux/store';
 import { deleteAlert } from '../../redux/slices/alerts';
-import { ADMIN_ROLE } from '../common/CommonConstants';
+import { ADMIN_ROLES } from '../common/CommonConstants';
 
 const useStyles = makeStyles({
   root: {
@@ -139,7 +139,7 @@ export default function AlertCard({ alert }) {
           <Typography variant="subtitle2" noWrap>
             <b>{translate('app.activity-type')}:</b> {getActivityName(type)}
           </Typography>
-          {ADMIN_ROLE.includes(user?.role) && (
+          {ADMIN_ROLES.includes(user?.role) && (
             <MenuItem onClick={(id) => showWarningModal(id)} sx={{ color: 'error.main', borderRadius: 5, px: 1 }}>
               <Iconify icon={'eva:trash-2-outline'} sx={{ width: 20, height: 20 }} />
             </MenuItem>

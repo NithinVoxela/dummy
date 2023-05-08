@@ -24,18 +24,17 @@ import {
 import useAuth from '../../hooks/useAuth';
 
 // redux
-import {
-  getTenantsForAutoComplete,
-  getExternalConfigDetails,
-  deleteExternalSystemConfig,
-} from '../../redux/slices/tenants';
+import { getTenantsForAutoComplete } from '../../redux/slices/tenants';
+
+import { getExternalSystemConfig, deleteExternalSystemConfig } from '../../api/externalSystemConfig';
+import { renderExternalSystemsAutoComplete } from '../common/CommonUIHelper';
 
 // components
 import { FormProvider, RHFSelect, RHFTextField } from '../../components/hook-form';
-import { regions, externalSystemsList } from '../common/CommonConstants';
+import { regions, EXTERNAL_SYSTEM_BLUEOCEAN } from '../common/CommonConstants';
 
 // sections
-import BlueOcean from '../externalConfigSystems/BlueOcean';
+import BlueOceanTenantConfig from './BlueOceanTenantConfig';
 
 // ----------------------------------------------------------------------
 
@@ -94,39 +93,8 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
     });
   };
 
-  const renderAutoComplete = (handler, value, type) => (
-    <FormControlLabel
-      control={
-        <Autocomplete
-          multiple
-          size="small"
-          sx={{ minWidth: 300, ml: 0 }}
-          onChange={handler}
-          options={externalSystemsList || []}
-          getOptionLabel={(option) => `${option}`}
-          renderTags={(value, getTagProps) =>
-            value.map((option, index) => (
-              <Chip {...getTagProps({ index })} key={`${type}-${option}`} size="small" label={`${option}`} />
-            ))
-          }
-          renderInput={(params) => (
-            <TextField
-              label={translate('app.tenant-external-system-subscribers-label')}
-              {...params}
-              error={value.length === 0}
-              helperText={value.length === 0 ? translate('app.subscriber-validation-label') : ''}
-            />
-          )}
-          value={value}
-        />
-      }
-      labelPlacement="start"
-      sx={{ mb: 2, justifyContent: 'start' }}
-    />
-  );
-
   useEffect(() => {
-    setWatchEnableBlueOceanSupport(externalSubscribers.includes('BlueOcean'));
+    setWatchEnableBlueOceanSupport(externalSubscribers.includes(EXTERNAL_SYSTEM_BLUEOCEAN));
   }, [externalSubscribers]);
 
   const handleExternalSystemAlertChange = (event) => {
@@ -142,8 +110,11 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
 
   useEffect(() => {
     if (currentTenant.externalSystemsSupport && isEdit) {
-      setExternalSystemAlert(Object.keys(currentTenant.externalSystemsSupport).length > 0);
-      if (Object.keys(currentTenant.externalSystemsSupport).length > 0) getExternalConfigHandler();
+      const atleastOneExternalSystemConfigured = Object.keys(currentTenant.externalSystemsSupport).length > 0;
+      setExternalSystemAlert(atleastOneExternalSystemConfigured);
+      if (atleastOneExternalSystemConfigured) {
+        externalSystemConfigHandler();
+      }
     }
   }, [currentTenant]);
 
@@ -178,17 +149,18 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
     let payload = null;
     if (
       (isEdit && !isEqual(externalConfigForm, editExternalConfig)) ||
-      (!isEdit && externalSubscribers.includes('BlueOcean'))
+      (!isEdit && externalSubscribers.includes(EXTERNAL_SYSTEM_BLUEOCEAN))
     ) {
       payload = {
         tenantId: currentTenant?.id,
-        externalSystem: 'BlueOcean',
+        externalSystem: EXTERNAL_SYSTEM_BLUEOCEAN,
         resourceType: 'TENANT',
         config: externalConfigForm,
       };
     }
-    if (isEdit && externalConfigAlreadyExist && !externalSubscribers.includes('BlueOcean')) {
-      await deleteExternalSystemConfig(currentTenant?.id);
+
+    if (isEdit && externalConfigAlreadyExist && !externalSubscribers.includes(EXTERNAL_SYSTEM_BLUEOCEAN)) {
+      await deleteExternalSystemConfig(currentTenant?.id, 'TENANT');
     }
 
     await handleSave(data, payload);
@@ -201,8 +173,8 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
     }
   };
 
-  const getExternalConfigHandler = async () => {
-    const response = await getExternalConfigDetails(currentTenant?.id);
+  const externalSystemConfigHandler = async () => {
+    const response = await getExternalSystemConfig(currentTenant?.id, 'TENANT', EXTERNAL_SYSTEM_BLUEOCEAN);
     if (response?.data?.config) {
       setExternalConfigForm(response?.data?.config);
       setEditExternalConfig(response?.data?.config);
@@ -305,11 +277,17 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
                 sx={{ mt: 3 }}
                 label={translate('app.tenant-external-system')}
               />
-              {externalSystemAlert && renderAutoComplete(handleExternalSubscriber, externalSubscribers, 'desktop')}
+              {externalSystemAlert &&
+                renderExternalSystemsAutoComplete(
+                  handleExternalSubscriber,
+                  externalSubscribers,
+                  'externalSystem',
+                  translate
+                )}
             </Box>
 
             {watchEnableBlueOceanSupport && (
-              <BlueOcean
+              <BlueOceanTenantConfig
                 translate={translate}
                 handleExternalConfigSubmit={handleExternalConfigSubmit}
                 externalConfigForm={externalConfigForm}

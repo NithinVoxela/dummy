@@ -20,10 +20,13 @@ import DeleteModal from '../../components/widgets/DeleteModal';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getCameras, deleteCamera } from '../../redux/slices/cameras';
+
+import { saveExternalSystemConfig } from '../../api/externalSystemConfig';
+
 // sections
 import { CAMERA_TABLE_META } from './CameraConstants';
 import ListMenu, { ICON } from '../../sections/common/ListMenu';
-import { ADMIN_ROLE } from '../../sections/common/CommonConstants';
+import { ADMIN_ROLES, SUPER_ADMIN_ROLE, EXTERNAL_SYSTEM_BLUEOCEAN } from '../../sections/common/CommonConstants';
 
 const CameraList = () => {
   const { themeStretch } = useSettings();
@@ -85,6 +88,17 @@ const CameraList = () => {
     [dispatch]
   );
 
+  const syncBlueOceanData = async () => {
+    try {
+      await saveExternalSystemConfig({ externalSystem: EXTERNAL_SYSTEM_BLUEOCEAN, resourceType: 'CAMERA' });
+      enqueueSnackbar(translate('app.camera-sync-blueocean-data-success'));
+    } catch (err) {
+      enqueueSnackbar(err?.message, {
+        variant: 'error',
+      });
+    }
+  };
+
   const getMenuItems = (id) => {
     return (
       <>
@@ -108,7 +122,7 @@ const CameraList = () => {
 
   const tableMetaData = useMemo(() => {
     const metaData = cloneDeep(CAMERA_TABLE_META);
-    metaData.columns[metaData.columns.length - 1] = ADMIN_ROLE.includes(user?.role)
+    metaData.columns[metaData.columns.length - 1] = ADMIN_ROLES.includes(user?.role)
       ? {
           text: '',
           dataKey: 'publicId',
@@ -129,7 +143,17 @@ const CameraList = () => {
           ]}
           action={
             <>
-              {ADMIN_ROLE.includes(user?.role) && (
+              {SUPER_ADMIN_ROLE === user?.role && (
+                <Button
+                  variant="contained"
+                  startIcon={<Iconify icon={'ic:outline-refresh'} />}
+                  onClick={syncBlueOceanData}
+                  sx={{ mr: 1 }}
+                >
+                  {translate('app.camera-sync-blueocean-data')}
+                </Button>
+              )}
+              {ADMIN_ROLES.includes(user?.role) && (
                 <Button
                   variant="contained"
                   component={RouterLink}

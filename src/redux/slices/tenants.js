@@ -80,18 +80,6 @@ export async function saveTenant(payload, queryParams) {
   return response;
 }
 
-export async function saveExternalSystemConfig(payload) {
-  await axios.post('externalSystemConfig', payload);
-}
-
-export async function getExternalConfigDetails(id) {
-  return axios.get(`externalSystemConfig/BlueOcean/TENANT/${id}`);
-}
-
-export async function deleteExternalSystemConfig(id) {
-  await axios.delete(`externalSystemConfig/TENANT/${id}`);
-}
-
 export async function patchTenant(payload) {
   await axios.put('tenant/patch', payload);
 }

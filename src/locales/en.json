@@ -324,6 +324,11 @@
     "tenant-external-system-corporation-code": "Corporation Code",
     "tenant-external-system-jig-code": "Jig Code",
     "tenant-external-system-auth-access-key": "Auth Access Key",
-    "tenant-external-system-format-kbn": "Format Kbn"
+    "tenant-external-system-format-kbn": "Format Kbn",
+    "camera-sync-blueocean-data": "Sync With BlueOcean",
+    "camera-sync-blueocean-data-success": "Sync With BlueOcean completed successfully",
+    "camera-external-system-alert-label": "External System Alert",
+    "camera-bo-external-system-unit-code": "Unit Code",
+    "camera-bo-external-system-res-code": "Res Code"
   }
 }
