@@ -176,7 +176,7 @@ function AuthProvider({ children }) {
   };
 
   const impersonateLogout = async () => {
-    const response = await axios.post('impersonate/logout');
+    const response = await axios.post('impersonate/logout?requireExternalSystemsSupport=true');
     const user = response.data;
     initializeUserSettings(user);
 
