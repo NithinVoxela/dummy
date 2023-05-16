@@ -1,6 +1,6 @@
 import { Box, Card, TextField } from '@mui/material';
 
-export default function BlueOceanTenantConfig({ translate, handleExternalConfigSubmit, externalConfigForm }) {
+export default function BlueOceanTenantConfig({ translate, handleExternalConfigSubmit, externalConfigForm, isEdit }) {
   return (
     <Card
       sx={{
@@ -36,10 +36,12 @@ export default function BlueOceanTenantConfig({ translate, handleExternalConfigS
         <TextField
           size="small"
           sx={{ maxWidth: 300 }}
-          value={externalConfigForm.authAccessKey}
           onChange={handleExternalConfigSubmit}
           name="authAccessKey"
           label={translate('app.tenant-external-system-auth-access-key')}
+          onFocus={isEdit ? (e) => (e.target.value = '') : () => {}}
+          onBlur={isEdit ? (e) => (e.target.value = '••••••••') : () => {}}
+          defaultValue={isEdit ? '••••••••' : null}
         />
         <TextField
           size="small"

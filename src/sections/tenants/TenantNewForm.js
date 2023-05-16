@@ -85,8 +85,11 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
   const [externalConfigAlreadyExist, setExternalConfigAlreadyExist] = useState(false);
 
   const handleExternalConfigSubmit = (e) => {
-    const { name, value } = e.target;
-
+    const { name } = e.target;
+    let { value } = e.target;
+    if (name === 'authAccessKey') {
+      value = Buffer.from(value, 'utf8').toString('base64');
+    }
     setExternalConfigForm({
       ...externalConfigForm,
       [name]: value,
@@ -292,6 +295,7 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
                 translate={translate}
                 handleExternalConfigSubmit={handleExternalConfigSubmit}
                 externalConfigForm={externalConfigForm}
+                isEdit={isEdit}
               />
             )}
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
