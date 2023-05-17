@@ -8,6 +8,6 @@ export async function getExternalSystemConfig(resourceId, resourceType, external
   return axios.get(`externalSystemConfig/${externalSystem}/${resourceType}/${resourceId}`);
 }
 
-export async function deleteExternalSystemConfig(resourceId, resourceType) {
-  await axios.delete(`externalSystemConfig/${resourceType}/${resourceId}`);
+export async function deleteExternalSystemConfig(tenantId, externalSystem) {
+  await axios.delete(`externalSystemConfig/${tenantId}/${externalSystem}`);
 }

@@ -163,7 +163,7 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
     }
 
     if (isEdit && externalConfigAlreadyExist && !externalSubscribers.includes(EXTERNAL_SYSTEM_BLUEOCEAN)) {
-      await deleteExternalSystemConfig(currentTenant?.id, 'TENANT');
+      await deleteExternalSystemConfig(currentTenant?.id, EXTERNAL_SYSTEM_BLUEOCEAN);
     }
 
     await handleSave(data, payload);

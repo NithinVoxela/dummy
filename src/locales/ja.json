@@ -325,10 +325,10 @@
     "tenant-external-system-jig-code": "事業所コード",
     "tenant-external-system-auth-access-key": "認証アクセスキー",
     "tenant-external-system-format-kbn": "フォーマット区分",
-    "camera-sync-blueocean-data": "Sync With BlueOcean",
-    "camera-sync-blueocean-data-success": "Sync With BlueOcean completed successfully",
-    "camera-external-system-alert-label": "External System Alert",
-    "camera-bo-external-system-unit-code": "Unit Code",
-    "camera-bo-external-system-res-code": "Res Code"
+    "camera-sync-blueocean-data": "BlueOceanと同期する",
+    "camera-sync-blueocean-data-success": "BlueOceanとの同期が正常に完了しました",
+    "camera-external-system-alert-label": "外部システムのアラート",
+    "camera-bo-external-system-unit-code": "単位コード",
+    "camera-bo-external-system-res-code": "リソースコード"
   }
 }

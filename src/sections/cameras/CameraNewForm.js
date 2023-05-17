@@ -105,7 +105,11 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
   }, [isEdit, currentCamera]);
 
   const blueOceanCameraConfigHandler = async () => {
-    if (user.role === SUPER_ADMIN_ROLE && hasExternalSystemIntegration(user, EXTERNAL_SYSTEM_BLUEOCEAN)) {
+    if (
+      user.role === SUPER_ADMIN_ROLE &&
+      hasExternalSystemIntegration(user, EXTERNAL_SYSTEM_BLUEOCEAN) &&
+      currentCamera?.publicId
+    ) {
       const response = await getExternalSystemConfig(currentCamera?.publicId, 'CAMERA', EXTERNAL_SYSTEM_BLUEOCEAN);
       if (response?.data?.config) {
         setBlueOceanCameraConfig(response?.data?.config);

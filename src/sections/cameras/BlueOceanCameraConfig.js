@@ -1,5 +1,6 @@
-import { Box, Card } from '@mui/material';
+import { Box, Card, Typography } from '@mui/material';
 import { RHFTextField } from '../../components/hook-form';
+import { EXTERNAL_SYSTEM_BLUEOCEAN } from '../common/CommonConstants';
 
 export default function BlueOceanCameraConfig({ translate, blueOceanCameraConfig }) {
   return (
@@ -9,6 +10,9 @@ export default function BlueOceanCameraConfig({ translate, blueOceanCameraConfig
         maxWidth: 660,
       }}
     >
+      <Box sx={{ marginBottom: 3 }}>
+        <Typography variant="h6">{EXTERNAL_SYSTEM_BLUEOCEAN}</Typography>
+      </Box>
       <Box
         sx={{
           maxWidth: 640,
