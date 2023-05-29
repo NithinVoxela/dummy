@@ -1,50 +1,59 @@
 import PropTypes from 'prop-types';
-import { Box, IconButton, TextField, Tooltip, Typography } from "@mui/material";
-import { isAfter, isBefore, isValid } from "date-fns";
-import React, { useEffect, useState } from "react";
+import { Box, IconButton, TextField, Tooltip, Typography } from '@mui/material';
+import { isAfter, isBefore, isValid } from 'date-fns';
+import React, { useEffect, useState } from 'react';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
+import { isEqual } from 'lodash';
 
 import Iconify from '../../components/Iconify';
 
-
 const TimePickerCmp = (props) => {
-  const { cmpKey, handleTimeRemove, isAlreadyExists, timeItemIndex, weekDayIndex, time, updateSchedule, translate, setIsFormUpdated, setHasTimeUpdated, validateTime, hasRangeValidationError} = props;
+  const {
+    cmpKey,
+    handleTimeRemove,
+    isAlreadyExists,
+    timeItemIndex,
+    weekDayIndex,
+    time,
+    updateSchedule,
+    translate,
+    setIsFormUpdated,
+    setHasTimeUpdated,
+    validateTime,
+    hasRangeValidationError,
+  } = props;
+
   const [startTime, setStartTime] = useState(time.startTime);
   const [endTime, setEndTime] = useState(time.endTime);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const handleDateValidation = () => {
     let hasError = true;
     if (!isValid(startTime)) {
-      setError(translate("app.invalid-start-time-error-lable"));
+      setError(translate('app.invalid-start-time-error-lable'));
     } else if (!isValid(endTime)) {
-      setError(translate("app.invalid-end-time-error-lable"));
+      setError(translate('app.invalid-end-time-error-lable'));
     } else if (isAfter(startTime, endTime)) {
-      setError(
-        translate("app.start-time-error-lable")
-      );
+      setError(translate('app.start-time-error-lable'));
     } else if (isBefore(endTime, startTime)) {
-      setError(
-        translate("app.end-time-error-lable")
-      );
-    } 
-    else if (validateTime( weekDayIndex, timeItemIndex, startTime, endTime)) {
+      setError(translate('app.end-time-error-lable'));
+    } else if (validateTime(weekDayIndex, timeItemIndex, startTime, endTime)) {
       hasError = true;
     } else {
-      setError("");
+      setError('');
       hasError = false;
     }
     updateSchedule(weekDayIndex, timeItemIndex, startTime, endTime, hasError);
     return hasError;
   };
 
-  const handleStartDateChange = date => {
+  const handleStartDateChange = (date) => {
     setStartTime(date);
     setHasTimeUpdated(true);
     setIsFormUpdated(true);
   };
 
-  const handleEndDateChange = date => {
+  const handleEndDateChange = (date) => {
     setEndTime(date);
     setHasTimeUpdated(true);
     setIsFormUpdated(true);
@@ -57,10 +66,8 @@ const TimePickerCmp = (props) => {
     }
     const timeObject = { startTime, endTime };
     const hasRangeError = isAlreadyExists(timeObject, timeItemIndex, weekDayIndex);
-    if (hasRangeError) {      
-      setError(
-        translate("app.time-overlap-lable")
-      );
+    if (hasRangeError) {
+      setError(translate('app.time-overlap-lable'));
       updateSchedule(weekDayIndex, timeItemIndex, startTime, endTime, true);
     }
   };
@@ -69,66 +76,68 @@ const TimePickerCmp = (props) => {
     handleTimeRange();
   }, [startTime, endTime]);
 
-
   useEffect(() => {
     if (hasRangeValidationError) {
-      setError(
-        translate("app.time-overlap-lable")
-      );
+      setError(translate('app.time-overlap-lable'));
     } else {
-      setError("");
+      setError('');
     }
   }, [hasRangeValidationError]);
 
+  useEffect(() => {
+    if (!isEqual(time.startTime, startTime)) setStartTime(time.startTime);
+    if (!isEqual(time.endTime, endTime)) setEndTime(time.endTime);
+  }, [time.startTime, time.endTime]);
+
   return (
-    <Box key={cmpKey} sx={{ padding: "8px 0px" }}>
-      <Box style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>        
+    <Box key={cmpKey} sx={{ padding: '8px 0px' }}>
+      <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <MobileTimePicker
           margin="normal"
-          label={translate("app.start-time-lable")}
+          label={translate('app.start-time-lable')}
           inputVariant="outlined"
           value={startTime}
           onChange={handleStartDateChange}
           KeyboardButtonProps={{
-            "aria-label": "change time"
+            'aria-label': 'change time',
           }}
           inputProps={{
-            style: { width: 250 }
+            style: { width: 250 },
           }}
           error={error.length > 0}
           renderInput={(params) => <TextField {...params} size="small" />}
         />
-        <Box style={{ padding: "0px 8px" }}>-</Box>
+        <Box style={{ padding: '0px 8px' }}>-</Box>
         <MobileTimePicker
           margin="normal"
-          label={translate("app.end-time-lable")}
+          label={translate('app.end-time-lable')}
           value={endTime}
           onChange={handleEndDateChange}
           inputVariant="outlined"
           inputProps={{
-            style: { width: 250 }
+            style: { width: 250 },
           }}
           error={error.length > 0}
           renderInput={(params) => <TextField {...params} size="small" />}
-        />                  
-        <Box style={{ padding: "0px 4px" }}>
-          <Tooltip title={translate("app.remove-interval-lable")}>
+        />
+        <Box style={{ padding: '0px 4px' }}>
+          <Tooltip title={translate('app.remove-interval-lable')}>
             <IconButton component="span" onClick={handleTimeRemove}>
-                <Iconify icon={'fluent:delete-20-regular'} />
+              <Iconify icon={'fluent:delete-20-regular'} />
             </IconButton>
           </Tooltip>
         </Box>
       </Box>
       {error?.length > 0 && (
-        <Box style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Typography color="error">{error}</Typography>
         </Box>
       )}
-    </Box>    
+    </Box>
   );
 };
 
-TimePickerCmp.propTypes = {  
+TimePickerCmp.propTypes = {
   cmpKey: PropTypes.string,
   isAlreadyExists: PropTypes.func,
   currentCamera: PropTypes.object,
