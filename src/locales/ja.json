@@ -337,6 +337,9 @@
     "camera-sync-blueocean-data-success": "BlueOceanとの同期が正常に完了しました",
     "camera-external-system-alert-label": "外部システムのアラート",
     "camera-bo-external-system-unit-code": "単位コード",
-    "camera-bo-external-system-res-code": "リソースコード"
+    "camera-bo-external-system-res-code": "リソースコード",
+    "full-clip-label": "前後の録画",
+    "archive-label": "保存",
+    "full-clip-prompt": "前後の録画を再生しますか？"
   }
 }

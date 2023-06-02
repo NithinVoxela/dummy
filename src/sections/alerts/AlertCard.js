@@ -1,10 +1,11 @@
 import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 // @mui
 import { Box, Card, Link, Typography, Stack, MenuItem } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import EmergencyRecordingOutlinedIcon from '@mui/icons-material/EmergencyRecordingOutlined';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // components
@@ -12,6 +13,7 @@ import Label from '../../components/Label';
 import Image from '../../components/Image';
 import Iconify from '../../components/Iconify';
 import DeleteModal from '../../components/widgets/DeleteModal';
+import DialogModal from '../../components/widgets/DialogModal';
 import CameraName from '../cameras/CameraName';
 import useLocales from '../../hooks/useLocales';
 import useAuth from '../../hooks/useAuth';
@@ -19,6 +21,7 @@ import { formatUTCDateString } from '../../utils/formatTime';
 import { dispatch } from '../../redux/store';
 import { deleteAlert } from '../../redux/slices/alerts';
 import { ADMIN_ROLES } from '../common/CommonConstants';
+import ListMenu, { ICON } from '../common/ListMenu';
 
 const useStyles = makeStyles({
   root: {
@@ -36,11 +39,13 @@ AlertCard.propTypes = {
 
 export default function AlertCard({ alert }) {
   const [showModal, setShowModal] = useState(false);
+  const [showDialogModal, setShowDialogModal] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
   const { id, cameraName, alertTime, preSignedUrl, severity, streamUrl, cameraLocation, hasRead, type } = alert;
   const { translate } = useLocales();
   const classes = useStyles();
+  const navigate = useNavigate();
 
   const linkTo = `${PATH_DASHBOARD.alerts.root}/detail/${id}`;
   const getColor = () => {
@@ -65,6 +70,10 @@ export default function AlertCard({ alert }) {
     setShowModal(true);
   };
 
+  const showWarningDialogModal = () => {
+    setShowDialogModal(true);
+  };
+
   const handleDelete = useCallback(
     async (alertId) => {
       try {
@@ -79,6 +88,27 @@ export default function AlertCard({ alert }) {
     },
     [dispatch]
   );
+
+  const handleFullClip = () => {
+    navigate(`${PATH_DASHBOARD.recordings.list}`, { state: { cameraName, alertTime } });
+  };
+
+  const getMenuItems = () => {
+    return (
+      <>
+        <MenuItem onClick={() => showWarningDialogModal()}>
+          <EmergencyRecordingOutlinedIcon sx={{ ...ICON }} />
+          {translate('app.full-clip-label')}
+        </MenuItem>
+        {ADMIN_ROLES.includes(user?.role) && (
+          <MenuItem onClick={(id) => showWarningModal(id)} sx={{ color: 'error.main' }}>
+            <Iconify icon={'eva:trash-2-outline'} sx={{ ...ICON }} />
+            {translate('app.camera-delete-label')}
+          </MenuItem>
+        )}
+      </>
+    );
+  };
 
   return (
     <Card>
@@ -139,11 +169,7 @@ export default function AlertCard({ alert }) {
           <Typography variant="subtitle2" noWrap>
             <b>{translate('app.activity-type')}:</b> {getActivityName(type)}
           </Typography>
-          {ADMIN_ROLES.includes(user?.role) && (
-            <MenuItem onClick={(id) => showWarningModal(id)} sx={{ color: 'error.main', borderRadius: 5, px: 1 }}>
-              <Iconify icon={'eva:trash-2-outline'} sx={{ width: 20, height: 20 }} />
-            </MenuItem>
-          )}
+          <ListMenu getMenuItems={() => getMenuItems()} />
         </Stack>
       </Stack>
       <DeleteModal
@@ -152,6 +178,14 @@ export default function AlertCard({ alert }) {
         type="Alert"
         recordId={id}
         handleDelete={handleDelete}
+      />
+      <DialogModal
+        isOpen={showDialogModal}
+        handleClose={() => setShowDialogModal(false)}
+        promptText={translate('app.full-clip-prompt')}
+        type={translate('app.full-clip-label')}
+        handleConfirm={handleFullClip}
+        icon={<Iconify icon={'feather:video'} />}
       />
     </Card>
   );

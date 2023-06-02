@@ -44,6 +44,7 @@ export default function RecordingFilterSidebar({
   const allOptionLabel = translate('app.all-option-label');
 
   const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [cameraText, setCameraText] = useState(allOptionLabel);
 
   const cameraDataList = useMemo(() => {
@@ -70,12 +71,13 @@ export default function RecordingFilterSidebar({
   const resetFilter = () => {
     setCameraText(allOptionLabel);
     setStartDate(null);
+    setEndDate(null);
     applyFilter({});
   };
 
   const handleStartDate = (value) => {
     if (value) {
-      value.set({ minute: 0, second: 0, millisecond: 0 });
+      value.set({ second: 0, millisecond: 0 });
     }
 
     if ((!value && !startDate) || (value && startDate && startDate.isSame(value))) {
@@ -83,9 +85,12 @@ export default function RecordingFilterSidebar({
     }
 
     setStartDate(value);
+    setEndDate(value.clone().add(30, 'minutes'));
+
     if (!value || value.isValid()) {
       const newParams = { ...params };
       newParams.startDate = value;
+      newParams.endDate = value.clone().add(30, 'minutes');
       applyFilter(newParams);
     }
   };
@@ -99,12 +104,16 @@ export default function RecordingFilterSidebar({
   useEffect(() => {
     setCameraText(allOptionLabel);
     setStartDate(null);
+    setEndDate(null);
 
     if (params?.cameraName) {
       setCameraText(params.cameraName);
     }
     if (params?.startDate) {
       setStartDate(params.startDate);
+    }
+    if (params?.endDate) {
+      setEndDate(params.endDate);
     }
   }, [params]);
 
@@ -161,8 +170,27 @@ export default function RecordingFilterSidebar({
                 value={startDate}
                 onChange={handleStartDate}
                 size="small"
-                views={['year', 'month', 'day', 'hours']}
+                views={['year', 'month', 'day', 'hours', 'minutes']}
                 disableFuture
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    size="small"
+                    inputProps={{ ...params.inputProps, placeholder: translate('app.select-date-label') }}
+                  />
+                )}
+              />
+            </Stack>
+
+            <Stack spacing={1}>
+              <Typography variant="subtitle1">{translate('app.end-date-lable')}</Typography>
+              <DesktopDateTimePicker
+                inputFormat="DD MMMM yyyy hh:mm a"
+                value={endDate}
+                size="small"
+                views={['year', 'month', 'day', 'hours', 'minutes']}
+                disableFuture
+                readOnly
                 renderInput={(params) => (
                   <TextField
                     {...params}

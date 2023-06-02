@@ -337,6 +337,9 @@
     "camera-sync-blueocean-data-success": "Sync With BlueOcean completed successfully",
     "camera-external-system-alert-label": "External System Alert",
     "camera-bo-external-system-unit-code": "Unit Code",
-    "camera-bo-external-system-res-code": "Res Code"
+    "camera-bo-external-system-res-code": "Res Code",
+    "full-clip-label": "Full Clip",
+    "archive-label": "Archive",
+    "full-clip-prompt": "Are you sure you want to view Full Clip"
   }
 }

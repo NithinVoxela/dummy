@@ -31,7 +31,7 @@ export default function RecordingTagFiltered({
   translate,
   sortDirection,
 }) {
-  const { cameraName, startDate } = filters;
+  const { cameraName, startDate, endDate } = filters;
 
   const applyFilter = (newParams) => {
     setParams(newParams);
@@ -70,6 +70,20 @@ export default function RecordingTagFiltered({
               size="small"
               label={moment(startDate).format('DD MMMM yyyy hh:mm a')}
               onDelete={() => onRemoveParam('startDate')}
+              sx={{ m: 0.5 }}
+            />
+          </Stack>
+        </WrapperStyle>
+      )}
+
+      {endDate && (
+        <WrapperStyle>
+          <LabelStyle>{translate('app.end-date-lable')}</LabelStyle>
+          <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
+            <Chip
+              size="small"
+              label={moment(endDate).format('DD MMMM yyyy hh:mm a')}
+              onDelete={() => onRemoveParam('endDate')}
               sx={{ m: 0.5 }}
             />
           </Stack>

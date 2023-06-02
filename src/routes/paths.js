@@ -79,6 +79,7 @@ export const PATH_DASHBOARD = {
   },
   recordings: {
     root: path(ROOTS_DASHBOARD, '/recordings'),
+    list: path(ROOTS_DASHBOARD, '/recordings/list'),
     getById: path(ROOTS_DASHBOARD, '/recordings/:id'),
   },
 };

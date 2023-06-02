@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Oval } from 'react-loader-spinner';
 
 // @mui
@@ -12,6 +13,7 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 import useSettings from '../../hooks/useSettings';
 import { FormProvider } from '../../components/hook-form';
 import useLocales from '../../hooks/useLocales';
+import useAuth from '../../hooks/useAuth';
 
 // components
 import Page from '../../components/Page';
@@ -25,6 +27,8 @@ import { getCameras } from '../../redux/slices/cameras';
 // sections
 import { RecordingFilterSidebar, RecordingSort, RecordingTagFiltered, RecordingGrid } from '../../sections/recordings';
 
+import { formatUTCDateString } from '../../utils/formatTime';
+
 const RecordingList = () => {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
@@ -35,6 +39,9 @@ const RecordingList = () => {
   const [params, setParams] = useState({});
   const { recordingDataList, isLoading } = useSelector((state) => state.recordings);
   const { cameraDataList } = useSelector((state) => state.cameras);
+  const { state } = useLocation();
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   const getRecordingData = useCallback(
     async (currentPage = 0, sortAscending = false, params = {}) => {
@@ -47,11 +54,16 @@ const RecordingList = () => {
         };
 
         const payload = { ...params };
-        if (payload.startDate) {
+        if (payload.startDate || payload.endDate) {
           payload.dateRange = {};
-          payload.dateRange.startDate = moment(payload.startDate).utc().format('yyyy-MM-DDTHH:mm:ss');
-          payload.dateRange.endDate = moment(payload.startDate).add(1, 'hours').utc().format('yyyy-MM-DDTHH:mm:ss');
-          delete payload.startDate;
+          if (payload.startDate) {
+            payload.dateRange.startDate = moment(payload.startDate).utc().format('yyyy-MM-DDTHH:mm:ss');
+            delete payload.startDate;
+          }
+          if (payload.endDate) {
+            payload.dateRange.endDate = moment(payload.endDate).utc().format('yyyy-MM-DDTHH:mm:ss');
+            delete payload.endDate;
+          }
         }
 
         await dispatch(getRecordings(queryParams, payload));
@@ -92,6 +104,7 @@ const RecordingList = () => {
 
   const handleResetFilter = () => {
     setParams({});
+    navigate('.', { replace: true });
     handleCloseFilter();
     setClearData(true);
     getRecordingData(0, isAscending, {});
@@ -100,11 +113,23 @@ const RecordingList = () => {
   useEffect(() => {
     let recordingFilter = {};
     const recordingFilterInSession = sessionStorage.getItem('recording-filter');
-    if (recordingFilterInSession) {
+    if (state != null && state.alertTime && state.cameraName) {
+      const alertTimeInUserTimeZone = formatUTCDateString(state.alertTime, user?.timezone, "yyyy-MM-dd'T'HH:mm:ss");
+      recordingFilter = {
+        startDate: moment(alertTimeInUserTimeZone).subtract(15, 'minutes'),
+        endDate: moment(alertTimeInUserTimeZone).add(15, 'minutes'),
+        cameraName: state.cameraName,
+      };
+      setParams(recordingFilter);
+    } else if (recordingFilterInSession) {
       recordingFilter = JSON.parse(recordingFilterInSession);
       if (recordingFilter.startDate) {
         recordingFilter.startDate = moment(recordingFilter.startDate);
       }
+      if (recordingFilter.endDate) {
+        recordingFilter.endDate = moment(recordingFilter.endDate);
+      }
+
       setParams(recordingFilter);
     }
 
