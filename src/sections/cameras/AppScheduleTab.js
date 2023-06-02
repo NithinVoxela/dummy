@@ -453,7 +453,7 @@ export default function AppScheduleTab(props) {
               </IconButton>
             </Tooltip>
             <MenuPopover
-              openCopyDayScheduleForm={Boolean(openCopyDayScheduleForm)}
+              open={Boolean(openCopyDayScheduleForm)}
               anchorEl={openCopyDayScheduleForm}
               onClose={handleClose}
               direction="left"
