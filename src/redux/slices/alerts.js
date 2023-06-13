@@ -152,14 +152,12 @@ export function getAlertDetails(id) {
   };
 }
 
-export function markAsRead(id) {
-  return async () => {
-    try {
-      await axios.put(`alert/${id}/markRead`);
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
-  };
+export async function patchAlert(payload) {
+  try {
+    await axios.put('alert/patch', payload);
+  } catch (error) {
+    dispatch(slice.actions.hasError(error));
+  }
 }
 
 export function getDashboardAlertLog() {
@@ -206,14 +204,12 @@ export function cleanDashboardAlertLogs() {
   };
 }
 
-export function markAllAsRead() {
-  return async () => {
-    try {
-      await axios.put(`alert/markAllAlertsAsRead`);
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
-  };
+export async function markAllAsRead() {
+  try {
+    await axios.put(`alert/markAllAlertsAsRead`);
+  } catch (error) {
+    dispatch(slice.actions.hasError(error));
+  }
 }
 
 export function resetAlertList() {

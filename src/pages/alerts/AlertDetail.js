@@ -20,7 +20,7 @@ import CameraName from '../../sections/cameras/CameraName';
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getUnreadAlertCount, getAlertDetails, markAsRead } from '../../redux/slices/alerts';
+import { getUnreadAlertCount, getAlertDetails, patchAlert } from '../../redux/slices/alerts';
 
 // sections
 
@@ -59,7 +59,7 @@ const AlertDetail = () => {
   const markAsReadRequest = useCallback(
     async (id) => {
       try {
-        await dispatch(markAsRead(id));
+        await patchAlert({ id, hasRead: true });
         await dispatch(getUnreadAlertCount());
       } catch (err) {
         console.error(err);

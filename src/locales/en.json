@@ -312,6 +312,8 @@
     "ORG_ADMIN": "Organization Admin",
     "SUPER_ADMIN": "Super Admin",
     "alert-delete-success": "Alert deleted successfully",
+    "alert-archive-success": "Alert archived successfully",
+    "alert-unarchive-success": "Alert unarchived successfully",
     "created-label": "Created On",
     "apiAuthKey-label": "Api Authorization Key",
     "tenant-parent-label": "Parent Site",
@@ -340,6 +342,7 @@
     "camera-bo-external-system-res-code": "Res Code",
     "full-clip-label": "Full Clip",
     "archive-label": "Archive",
+    "unarchive-label": "Unarchive",
     "full-clip-prompt": "Are you sure you want to view Full Clip"
   }
 }

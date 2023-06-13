@@ -13,7 +13,7 @@ import {
   FormControlLabel,
   Checkbox,
 } from '@mui/material';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { DesktopDateTimePicker } from '@mui/x-date-pickers/DesktopDateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import moment from 'moment-timezone';
 import MomentUtils from '@date-io/moment';
@@ -133,7 +133,7 @@ export default function AlertFilterSidebar({
 
   const handleStartDate = (value) => {
     if (value) {
-      value.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+      value.set({ second: 0, millisecond: 0 });
     }
 
     if ((!value && !startDate) || (value && startDate && startDate.isSame(value))) {
@@ -153,7 +153,7 @@ export default function AlertFilterSidebar({
 
   const handleEndDate = (value) => {
     if (value) {
-      value.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+      value.set({ second: 0, millisecond: 0 });
     }
 
     if ((!value && !endDate) || (value && endDate && endDate.isSame(value))) {
@@ -288,12 +288,14 @@ export default function AlertFilterSidebar({
 
             <Stack spacing={1}>
               <Typography variant="subtitle1">{translate('app.start-date-lable')}</Typography>
-              <DesktopDatePicker
-                inputFormat="DD MMMM yyyy"
+              <DesktopDateTimePicker
+                inputFormat="DD MMMM yyyy hh:mm a"
                 value={startDate}
                 onChange={handleStartDate}
+                minDate={moment().subtract(1, 'month')}
                 disableFuture
                 size="small"
+                views={['year', 'month', 'day', 'hours', 'minutes']}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -306,12 +308,14 @@ export default function AlertFilterSidebar({
 
             <Stack spacing={1}>
               <Typography variant="subtitle1">{translate('app.end-date-lable')}</Typography>
-              <DesktopDatePicker
-                inputFormat="DD MMMM yyyy"
-                placeholder={translate('app.select-date-label')}
+              <DesktopDateTimePicker
+                inputFormat="DD MMMM yyyy hh:mm a"
                 value={endDate}
                 onChange={handleEndDate}
+                minDate={moment().subtract(1, 'month')}
                 disableFuture
+                size="small"
+                views={['year', 'month', 'day', 'hours', 'minutes']}
                 renderInput={(params) => (
                   <TextField
                     {...params}

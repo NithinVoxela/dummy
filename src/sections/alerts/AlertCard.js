@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
@@ -6,6 +6,7 @@ import { useSnackbar } from 'notistack';
 import { Box, Card, Link, Typography, Stack, MenuItem } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmergencyRecordingOutlinedIcon from '@mui/icons-material/EmergencyRecordingOutlined';
+import BookmarksTwoToneIcon from '@mui/icons-material/BookmarksTwoTone';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // components
@@ -19,7 +20,7 @@ import useLocales from '../../hooks/useLocales';
 import useAuth from '../../hooks/useAuth';
 import { formatUTCDateString } from '../../utils/formatTime';
 import { dispatch } from '../../redux/store';
-import { deleteAlert } from '../../redux/slices/alerts';
+import { deleteAlert, patchAlert } from '../../redux/slices/alerts';
 import { ADMIN_ROLES } from '../common/CommonConstants';
 import ListMenu, { ICON } from '../common/ListMenu';
 
@@ -37,12 +38,13 @@ AlertCard.propTypes = {
   alert: PropTypes.object,
 };
 
-export default function AlertCard({ alert }) {
+export default function AlertCard({ alert, handlePageRefresh }) {
   const [showModal, setShowModal] = useState(false);
   const [showDialogModal, setShowDialogModal] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
-  const { id, cameraName, alertTime, preSignedUrl, severity, streamUrl, cameraLocation, hasRead, type } = alert;
+  const { id, cameraName, alertTime, preSignedUrl, severity, streamUrl, cameraLocation, hasRead, type, isArchived } =
+    alert;
   const { translate } = useLocales();
   const classes = useStyles();
   const navigate = useNavigate();
@@ -93,6 +95,23 @@ export default function AlertCard({ alert }) {
     navigate(`${PATH_DASHBOARD.recordings.list}`, { state: { cameraName, alertTime } });
   };
 
+  const handleArchive = useCallback(
+    async (alertId, value) => {
+      try {
+        const payload = { id: alertId, isArchived: value };
+        await patchAlert(payload);
+        enqueueSnackbar(translate(`app.alert-${value ? 'archive' : 'unarchive'}-success`));
+        setShowDialogModal(false);
+      } catch (err) {
+        enqueueSnackbar(err?.message, {
+          variant: 'error',
+        });
+      }
+      handlePageRefresh();
+    },
+    [dispatch]
+  );
+
   const getMenuItems = () => {
     return (
       <>
@@ -100,8 +119,12 @@ export default function AlertCard({ alert }) {
           <EmergencyRecordingOutlinedIcon sx={{ ...ICON }} />
           {translate('app.full-clip-label')}
         </MenuItem>
+        <MenuItem onClick={() => handleArchive(id, !isArchived)}>
+          <BookmarksTwoToneIcon sx={{ ...ICON }} />
+          {translate(`app.${isArchived ? 'unarchive' : 'archive'}-label`)}
+        </MenuItem>
         {ADMIN_ROLES.includes(user?.role) && (
-          <MenuItem onClick={(id) => showWarningModal(id)} sx={{ color: 'error.main' }}>
+          <MenuItem onClick={() => showWarningModal(id)} sx={{ color: 'error.main' }}>
             <Iconify icon={'eva:trash-2-outline'} sx={{ ...ICON }} />
             {translate('app.camera-delete-label')}
           </MenuItem>
@@ -169,7 +192,7 @@ export default function AlertCard({ alert }) {
           <Typography variant="subtitle2" noWrap>
             <b>{translate('app.activity-type')}:</b> {getActivityName(type)}
           </Typography>
-          <ListMenu getMenuItems={() => getMenuItems()} />
+          <ListMenu sx={{ mr: 1, width: 20, height: 20 }} getMenuItems={() => getMenuItems()} />
         </Stack>
       </Stack>
       <DeleteModal

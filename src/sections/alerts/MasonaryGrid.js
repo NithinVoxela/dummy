@@ -8,7 +8,7 @@ import { SkeletonAlertItem } from '../../components/skeleton';
 // redux
 
 const MasonaryGrid = (props) => {
-  const { alertList, totalCount, nextPageCallback, clearData, setClearData } = props;
+  const { alertList, totalCount, nextPageCallback, clearData, setClearData, handlePageRefresh } = props;
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(0);
@@ -58,7 +58,7 @@ const MasonaryGrid = (props) => {
         }}
       >
         {items?.map((alert) => (
-          <AlertCard key={alert.id} alert={alert} />
+          <AlertCard key={alert.id} alert={alert} handlePageRefresh={handlePageRefresh} />
         ))}
       </Box>
     </InfiniteScroll>

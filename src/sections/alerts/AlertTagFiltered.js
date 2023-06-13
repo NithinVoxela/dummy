@@ -86,7 +86,7 @@ export default function AlertTagFiltered({
           <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
             <Chip
               size="small"
-              label={moment(startDate).format('DD MMMM yyyy')}
+              label={moment(startDate).format('DD MMMM yyyy hh:mm a')}
               onDelete={() => onRemoveParam('startDate')}
               sx={{ m: 0.5 }}
             />
@@ -100,7 +100,7 @@ export default function AlertTagFiltered({
           <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
             <Chip
               size="small"
-              label={moment(endDate).format('DD MMMM yyyy')}
+              label={moment(endDate).format('DD MMMM yyyy hh:mm a')}
               onDelete={() => onRemoveParam('endDate')}
               sx={{ m: 0.5 }}
             />

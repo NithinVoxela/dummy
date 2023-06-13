@@ -1,24 +1,17 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import { Oval } from 'react-loader-spinner';
 import { useLocation } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 // @mui
-import { Box, Button, Container, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 
 import moment from 'moment-timezone';
 
 // routes
 import { useForm } from 'react-hook-form';
-import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
-import useSettings from '../../hooks/useSettings';
 import { FormProvider } from '../../components/hook-form';
 import useLocales from '../../hooks/useLocales';
-
-// components
-import Page from '../../components/Page';
-import Iconify from '../../components/Iconify';
-import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
@@ -28,8 +21,7 @@ import { getCameras } from '../../redux/slices/cameras';
 // sections
 import { AlertFilterSidebar, AlertSort, AlertTagFiltered, MasonaryGrid } from '../../sections/alerts';
 
-const AlertList = () => {
-  const { themeStretch } = useSettings();
+const AlertList = forwardRef(({ currentTab, alertSessionFilter }, ref) => {
   const dispatch = useDispatch();
   const { translate, langStorage } = useLocales();
   const location = useLocation();
@@ -52,7 +44,8 @@ const AlertList = () => {
           requireVideoUrl: false,
         };
 
-        const payload = { ...params };
+        let payload = { ...params };
+        if (currentTab === 'archive') payload = { ...payload, isArchived: true };
         if (payload.startDate || payload.endDate) {
           payload.dateRange = {};
           if (payload.startDate) {
@@ -60,7 +53,7 @@ const AlertList = () => {
             delete payload.startDate;
           }
           if (payload.endDate) {
-            payload.dateRange.endDate = moment(payload.endDate).add(1, 'days').utc().format('yyyy-MM-DDTHH:mm:ss');
+            payload.dateRange.endDate = moment(payload.endDate).utc().format('yyyy-MM-DDTHH:mm:ss');
             delete payload.endDate;
           }
         }
@@ -75,7 +68,7 @@ const AlertList = () => {
 
   const getCameraData = useCallback(async () => {
     try {
-      await dispatch(getCameras({ pageSize: 1000 }));
+      dispatch(getCameras({ pageSize: 1000 }));
     } catch (err) {
       console.error(err);
     }
@@ -115,8 +108,8 @@ const AlertList = () => {
 
   const handleMarkAsRead = async () => {
     try {
-      await dispatch(markAllAsRead());
-      await dispatch(getUnreadAlertCount());
+      await markAllAsRead();
+      dispatch(getUnreadAlertCount());
       handleRefresh();
       enqueueSnackbar(translate('app.alert-status-updated-label'));
     } catch (err) {
@@ -125,6 +118,11 @@ const AlertList = () => {
       });
     }
   };
+
+  useImperativeHandle(ref, () => ({
+    handleMarkAsRead,
+    handleRefresh,
+  }));
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);
@@ -137,7 +135,7 @@ const AlertList = () => {
 
   useEffect(() => {
     let alertFilter = {};
-    const alertFilterInSession = sessionStorage.getItem('alert-filter');
+    const alertFilterInSession = sessionStorage.getItem(alertSessionFilter);
     if (alertFilterInSession) {
       alertFilter = JSON.parse(alertFilterInSession);
 
@@ -156,16 +154,16 @@ const AlertList = () => {
 
   useEffect(() => {
     if (params && Object.keys(params).length > 0) {
-      sessionStorage.setItem('alert-filter', JSON.stringify(params));
+      sessionStorage.setItem(alertSessionFilter, JSON.stringify({ ...params, currentTab }));
     } else {
-      sessionStorage.removeItem('alert-filter');
+      sessionStorage.removeItem(alertSessionFilter);
     }
   }, [params]);
 
   useEffect(() => {
     return () => {
       if (!/alerts/.test(window.location.href)) {
-        sessionStorage.removeItem('alert-filter');
+        sessionStorage.removeItem(alertSessionFilter);
       }
       resetAlertList();
     };
@@ -174,112 +172,88 @@ const AlertList = () => {
   const isDefault = Object.keys(params).length === 0;
 
   return (
-    <Page title={translate('app.alerts-list-label')}>
-      <Container maxWidth={themeStretch ? false : 'lg'}>
-        <HeaderBreadcrumbs
-          heading={translate('app.alerts-list-label')}
-          links={[
-            { name: translate('app.dashboard-header-label'), href: PATH_DASHBOARD.root },
-            { name: translate('app.alerts-header-label') },
-          ]}
-          action={
-            <>
-              <Button
-                variant="outlined"
-                startIcon={<Iconify icon={'mdi:check-all'} />}
-                onClick={handleMarkAsRead}
-                sx={{ mr: 1 }}
-              >
-                {translate('app.mark-all-read-label')}
-              </Button>
-              <Button variant="contained" startIcon={<Iconify icon={'ic:outline-refresh'} />} onClick={handleRefresh}>
-                {translate('app.alert-refresh-label')}
-              </Button>
-            </>
-          }
-        />
-
-        <Stack
-          spacing={2}
-          direction={{ xs: 'column', sm: 'row' }}
-          alignItems={{ sm: 'center' }}
-          justifyContent="flex-end"
-          sx={{ mb: 1 }}
-        >
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <FormProvider methods={methods}>
-              <AlertFilterSidebar
-                onResetAll={handleResetFilter}
-                isOpen={openFilter}
-                onOpen={handleOpenFilter}
-                onClose={handleCloseFilter}
-                translate={translate}
-                cameraList={cameraDataList?.data || []}
-                getAlertData={getAlertData}
-                params={params}
-                setParams={setParams}
-                setClearData={setClearData}
-                sortDirection={isAscending}
-                locale={langStorage}
-              />
-            </FormProvider>
-
-            <AlertSort setIsAscending={setIsAscending} handleSort={handleSort} translate={translate} />
-          </Stack>
-        </Stack>
-
-        <Stack sx={{ mb: 2 }}>
-          {!isDefault && (
-            <>
-              <Typography variant="body2" gutterBottom>
-                <strong>{alertDataList?.total}</strong>
-                &nbsp;{translate('app.alerts-found-label')}
-              </Typography>
-
-              <AlertTagFiltered
-                filters={params}
-                isShowReset={!isDefault && !openFilter}
-                setParams={setParams}
-                setClearData={setClearData}
-                getAlertData={getAlertData}
-                onResetAll={handleResetFilter}
-                translate={translate}
-                sortDirection={isAscending}
-              />
-            </>
-          )}
-        </Stack>
-
-        {!isPageLoading && (
-          <MasonaryGrid
-            isLoading={isLoading}
-            alertList={alertDataList?.data}
-            totalCount={alertDataList?.total}
-            nextPageCallback={(page) => getAlertData(page, isAscending, params)}
-            currentPage={alertDataList?.currentPage || 0}
-            clearData={clearData}
-            setClearData={setClearData}
-          />
-        )}
-        {isLoading && (
-          <Box sx={{ mt: 15 }}>
-            <Oval
-              color="#626262"
-              secondaryColor="#e7e4e4"
-              wrapperStyle={{ justifyContent: 'center' }}
-              height={36}
-              width={36}
+    <>
+      <Stack
+        spacing={2}
+        direction={{ xs: 'column', sm: 'row' }}
+        alignItems={{ sm: 'center' }}
+        justifyContent="flex-end"
+        sx={{ mb: 1 }}
+      >
+        <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
+          <FormProvider methods={methods}>
+            <AlertFilterSidebar
+              onResetAll={handleResetFilter}
+              isOpen={openFilter}
+              onOpen={handleOpenFilter}
+              onClose={handleCloseFilter}
+              translate={translate}
+              cameraList={cameraDataList?.data || []}
+              getAlertData={getAlertData}
+              params={params}
+              setParams={setParams}
+              setClearData={setClearData}
+              sortDirection={isAscending}
+              locale={langStorage}
             />
-          </Box>
+          </FormProvider>
+
+          <AlertSort setIsAscending={setIsAscending} handleSort={handleSort} translate={translate} />
+        </Stack>
+      </Stack>
+
+      <Stack sx={{ mb: 2 }}>
+        {!isDefault && (
+          <>
+            <Typography variant="body2" gutterBottom>
+              <strong>{alertDataList?.total}</strong>
+              &nbsp;{translate('app.alerts-found-label')}
+            </Typography>
+
+            <AlertTagFiltered
+              filters={params}
+              isShowReset={!isDefault && !openFilter}
+              setParams={setParams}
+              setClearData={setClearData}
+              getAlertData={getAlertData}
+              onResetAll={handleResetFilter}
+              translate={translate}
+              sortDirection={isAscending}
+            />
+          </>
         )}
-        {!isLoading && alertDataList?.data?.length === 0 && (
-          <Typography variant="body1" color="textSecondary" sx={{ textAlign: 'center' }}>
-            {translate('app.global-no-results-label')}
-          </Typography>
-        )}
-      </Container>
-    </Page>
+      </Stack>
+
+      {!isPageLoading && (
+        <MasonaryGrid
+          isLoading={isLoading}
+          alertList={alertDataList?.data}
+          totalCount={alertDataList?.total}
+          nextPageCallback={(page) => getAlertData(page, isAscending, params)}
+          currentPage={alertDataList?.currentPage || 0}
+          clearData={clearData}
+          setClearData={setClearData}
+          handlePageRefresh={handleRefresh}
+        />
+      )}
+      {isLoading && (
+        <Box sx={{ mt: 15 }}>
+          <Oval
+            color="#626262"
+            secondaryColor="#e7e4e4"
+            wrapperStyle={{ justifyContent: 'center' }}
+            height={36}
+            width={36}
+          />
+        </Box>
+      )}
+      {!isLoading && alertDataList?.data?.length === 0 && (
+        <Typography variant="body1" color="textSecondary" sx={{ textAlign: 'center' }}>
+          {translate('app.global-no-results-label')}
+        </Typography>
+      )}
+    </>
   );
-};
+});
 
 export default AlertList;

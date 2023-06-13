@@ -312,6 +312,8 @@
     "ORG_ADMIN": "組織管理者",
     "SUPER_ADMIN": "スーパー管理者",
     "alert-delete-success": "アラートが正常に削除されました",
+    "alert-archive-success": "Alert archived successfully",
+    "alert-unarchive-success": "Alert unarchived successfully",
     "created-label": "作成日",
     "apiAuthKey-label": "API 認証キー",
     "tenant-parent-label": "上位サイト",
@@ -340,6 +342,7 @@
     "camera-bo-external-system-res-code": "リソースコード",
     "full-clip-label": "前後の録画",
     "archive-label": "保存",
+    "unarchive-label": "Unarchive",
     "full-clip-prompt": "前後の録画を再生しますか？"
   }
 }

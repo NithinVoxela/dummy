@@ -18,7 +18,7 @@ export const ICON = {
   height: 20,
 };
 
-export default function ListMenu({ getMenuItems }) {
+export default function ListMenu({ getMenuItems, sx = { ...ICON } }) {
   const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {
@@ -32,7 +32,7 @@ export default function ListMenu({ getMenuItems }) {
   return (
     <>
       <IconButton onClick={handleOpen}>
-        <Iconify icon={'eva:more-vertical-fill'} sx={{ ...ICON }} />
+        <Iconify icon={'eva:more-vertical-fill'} sx={{ ...sx }} />
       </IconButton>
 
       <MenuPopover
