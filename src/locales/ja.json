@@ -312,8 +312,8 @@
     "ORG_ADMIN": "組織管理者",
     "SUPER_ADMIN": "スーパー管理者",
     "alert-delete-success": "アラートが正常に削除されました",
-    "alert-archive-success": "Alert archived successfully",
-    "alert-unarchive-success": "Alert unarchived successfully",
+    "alert-archive-success": "アラートは保存されました",
+    "alert-unarchive-success": "保管は取り消されました",
     "created-label": "作成日",
     "apiAuthKey-label": "API 認証キー",
     "tenant-parent-label": "上位サイト",
@@ -341,8 +341,8 @@
     "camera-bo-external-system-unit-code": "単位コード",
     "camera-bo-external-system-res-code": "リソースコード",
     "full-clip-label": "前後の録画",
-    "archive-label": "保存",
-    "unarchive-label": "Unarchive",
+    "archive-label": "保管する",
+    "unarchive-label": "保管を取り消す",
     "full-clip-prompt": "前後の録画を再生しますか？"
   }
 }
