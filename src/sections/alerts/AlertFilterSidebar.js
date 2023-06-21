@@ -54,6 +54,7 @@ export default function AlertFilterSidebar({
   setClearData,
   sortDirection,
   locale,
+  currentTab,
 }) {
   const allOptionLabel = translate('app.all-option-label');
   const SEVERITY = [
@@ -292,7 +293,7 @@ export default function AlertFilterSidebar({
                 inputFormat="DD MMMM yyyy hh:mm a"
                 value={startDate}
                 onChange={handleStartDate}
-                minDate={moment().subtract(1, 'month')}
+                minDate={currentTab !== 'archive' ? moment().subtract(1, 'month') : null}
                 disableFuture
                 size="small"
                 views={['year', 'month', 'day', 'hours', 'minutes']}
@@ -312,7 +313,7 @@ export default function AlertFilterSidebar({
                 inputFormat="DD MMMM yyyy hh:mm a"
                 value={endDate}
                 onChange={handleEndDate}
-                minDate={moment().subtract(1, 'month')}
+                minDate={currentTab !== 'archive' ? moment().subtract(1, 'month') : null}
                 disableFuture
                 size="small"
                 views={['year', 'month', 'day', 'hours', 'minutes']}

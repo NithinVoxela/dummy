@@ -195,6 +195,7 @@ const AlertList = forwardRef(({ currentTab, alertSessionFilter }, ref) => {
               setClearData={setClearData}
               sortDirection={isAscending}
               locale={langStorage}
+              currentTab={currentTab}
             />
           </FormProvider>
 
