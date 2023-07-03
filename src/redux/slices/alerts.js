@@ -112,14 +112,12 @@ export function getAlerts(queryParams, payload = {}, countRequest = false) {
   };
 }
 
-export function deleteAlert(alertId) {
-  return async () => {
-    try {
-      await axios.delete(`alert/${alertId}`);
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
-  };
+export async function deleteAlert(alertId) {
+  try {
+    await axios.delete(`alert/${alertId}`);
+  } catch (error) {
+    dispatch(slice.actions.hasError(error));
+  }
 }
 
 export function getUnreadAlertCount(payload = {}) {

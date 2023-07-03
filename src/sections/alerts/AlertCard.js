@@ -79,7 +79,7 @@ export default function AlertCard({ alert, handlePageRefresh }) {
   const handleDelete = useCallback(
     async (alertId) => {
       try {
-        dispatch(deleteAlert(alertId));
+        await deleteAlert(alertId);
         enqueueSnackbar(translate('app.alert-delete-success'));
         setShowModal(false);
       } catch (err) {
@@ -87,6 +87,7 @@ export default function AlertCard({ alert, handlePageRefresh }) {
           variant: 'error',
         });
       }
+      handlePageRefresh();
     },
     [dispatch]
   );
