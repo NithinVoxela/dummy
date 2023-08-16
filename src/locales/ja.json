@@ -343,6 +343,7 @@
     "full-clip-label": "前後の録画",
     "archive-label": "保管する",
     "unarchive-label": "保管を取り消す",
-    "full-clip-prompt": "前後の録画を再生しますか？"
+    "full-clip-prompt": "前後の録画を再生しますか？",
+    "tenantAuthKey-label": "サイト認証キー"
   }
 }

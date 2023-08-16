@@ -55,6 +55,7 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
     region: Yup.string().required(translate('app.region-required-label')),
     apiAuthKey: Yup.string().nullable(true).default(null),
     parent: Yup.object().nullable(true).default(null),
+    tenantAuthKey: Yup.string().nullable(true).default(null),
   });
 
   const defaultValues = useMemo(
@@ -63,6 +64,7 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
       tenantCode: currentTenant?.tenantCode || '',
       region: currentTenant?.region || '',
       parent: currentTenant?.parent || null,
+      tenantAuthKey: currentTenant?.tenantAuthKey || '',
     }),
     [currentTenant]
   );
@@ -228,6 +230,8 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
                 label={translate('app.apiAuthKey-label')}
                 defaultValue={isEdit ? '••••••••' : null}
               />
+
+              {isEdit && <RHFTextField name="tenantAuthKey" disabled label={translate('app.tenantAuthKey-label')} />}
 
               <Controller
                 name="parent"

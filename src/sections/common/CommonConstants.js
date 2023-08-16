@@ -9,3 +9,5 @@ export const registrationStatuses = [
 ];
 export const EXTERNAL_SYSTEM_BLUEOCEAN = 'BlueOcean';
 export const externalSystemsList = [EXTERNAL_SYSTEM_BLUEOCEAN];
+export const CAMERA_LOCATIONS = ['ROOM', 'HALLWAY', 'DINING'];
+export const CAMERA_BRANDS = ['QWATCH', 'AXIS'];

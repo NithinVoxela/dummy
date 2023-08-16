@@ -16,7 +16,12 @@ import { FormProvider, RHFSelect, RHFTextField, RHFDateField, RHFCheckbox } from
 import useAuth from '../../hooks/useAuth';
 
 import { getAgentsForAutoComplete } from '../../redux/slices/agents';
-import { SUPER_ADMIN_ROLE, EXTERNAL_SYSTEM_BLUEOCEAN } from '../common/CommonConstants';
+import {
+  SUPER_ADMIN_ROLE,
+  EXTERNAL_SYSTEM_BLUEOCEAN,
+  CAMERA_BRANDS,
+  CAMERA_LOCATIONS,
+} from '../common/CommonConstants';
 import BlueOceanCameraConfig from './BlueOceanCameraConfig';
 import { getExternalSystemConfig } from '../../api/externalSystemConfig';
 import { hasExternalSystemIntegration } from '../../utils/commonUtil';
@@ -174,13 +179,37 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
                 ))}
               </RHFSelect>
 
-              <RHFTextField name="brand" label={translate('app.camera-brand-label')} />
+              {user.role === SUPER_ADMIN_ROLE && (
+                <RHFSelect
+                  name="brand"
+                  label={translate('app.camera-brand-label')}
+                  placeholder={translate('app.camera-brand-label')}
+                >
+                  {CAMERA_BRANDS.map((brand) => (
+                    <option key={brand} value={brand}>
+                      {brand}
+                    </option>
+                  ))}
+                </RHFSelect>
+              )}
               <RHFTextField name="model" label={translate('app.camera-model-label')} />
 
               <RHFDateField name="installationDate" label={translate('app.camera-installation-label')} />
               <RHFTextField name="streamUrl" label={translate('app.camera-stream-label')} />
 
-              <RHFTextField name="location" label={translate('app.camera-location-label')} />
+              {user.role === SUPER_ADMIN_ROLE && (
+                <RHFSelect
+                  name="location"
+                  label={translate('app.camera-location-label')}
+                  placeholder={translate('app.camera-location-label')}
+                >
+                  {CAMERA_LOCATIONS.map((location) => (
+                    <option key={location} value={location}>
+                      {location}
+                    </option>
+                  ))}
+                </RHFSelect>
+              )}
               <RHFTextField name="passPhrase" label={translate('app.camera-pass-label')} />
               {isEdit && (
                 <RHFTextField
