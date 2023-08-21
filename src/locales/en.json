@@ -344,6 +344,7 @@
     "archive-label": "Archive",
     "unarchive-label": "Unarchive",
     "full-clip-prompt": "Are you sure you want to view Full Clip",
-    "tenantAuthKey-label": "Site Authorization Key"
+    "tenantAuthKey-label": "Site Authorization Key",
+    "camera-locationType-label": "Location Type"
   }
 }

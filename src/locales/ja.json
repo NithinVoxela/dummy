@@ -344,6 +344,7 @@
     "archive-label": "保管する",
     "unarchive-label": "保管を取り消す",
     "full-clip-prompt": "前後の録画を再生しますか？",
-    "tenantAuthKey-label": "サイト認証キー"
+    "tenantAuthKey-label": "サイト認証キー",
+    "camera-locationType-label": "場所の種類"
   }
 }

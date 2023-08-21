@@ -44,11 +44,12 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
     name: Yup.string().required(translate('app.camera-name-required-label')),
     description: Yup.string().required(translate('app.camera-desc-required-label')),
     cameraType: Yup.string().required(translate('app.camera-type-required-label')),
-    brand: Yup.string().required(translate('app.camera-brand-required-label')),
+    brand: Yup.string().required(translate('app.camera-brand-required-label')).default('UNKNOWN'),
     model: Yup.string().required(translate('app.camera-model-required-label')),
     streamUrl: Yup.string().required(translate('app.camera-stream-required-label')),
     streamingId: Yup.string().nullable(true).default(null),
     location: Yup.string().required(translate('app.camera-location-required-label')),
+    locationType: Yup.string().default('UNKNOWN'),
     installationDate: Yup.date().required('Installation Date is required'),
     passPhrase: Yup.string().required(translate('app.camera-pass-required-label')),
     minIdleTime: Yup.number()
@@ -68,12 +69,13 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
       name: currentCamera?.name || '',
       description: currentCamera?.description || '',
       cameraType: currentCamera?.cameraType || '',
-      brand: currentCamera?.brand || '',
+      brand: currentCamera?.brand || 'UNKNOWN',
       model: currentCamera?.model || '',
       streamUrl: currentCamera?.streamUrl || '',
       streamingId: currentCamera?.streamingId || '',
       installationDate: currentCamera?.installationDate || new Date(),
       location: currentCamera?.location || '',
+      locationType: currentCamera?.locationType || 'UNKNOWN',
       passPhrase: currentCamera?.passPhrase || '',
       publicId: currentCamera?.publicId || '',
       minIdleTime: currentCamera?.minIdleTime ? Math.floor(currentCamera?.minIdleTime / 60000) : 1440,
@@ -197,15 +199,16 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
               <RHFDateField name="installationDate" label={translate('app.camera-installation-label')} />
               <RHFTextField name="streamUrl" label={translate('app.camera-stream-label')} />
 
+              <RHFTextField name="location" label={translate('app.camera-location-label')} />
               {user.role === SUPER_ADMIN_ROLE && (
                 <RHFSelect
-                  name="location"
-                  label={translate('app.camera-location-label')}
-                  placeholder={translate('app.camera-location-label')}
+                  name="locationType"
+                  label={translate('app.camera-locationType-label')}
+                  placeholder={translate('app.camera-locationType-label')}
                 >
-                  {CAMERA_LOCATIONS.map((location) => (
-                    <option key={location} value={location}>
-                      {location}
+                  {CAMERA_LOCATIONS.map((locationType) => (
+                    <option key={locationType} value={locationType}>
+                      {locationType}
                     </option>
                   ))}
                 </RHFSelect>
