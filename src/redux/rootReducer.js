@@ -7,6 +7,7 @@ import recordingsReducer from './slices/recordings';
 import authReducer from './slices/auth';
 import userReducer from './slices/users';
 import tenantReducer from './slices/tenants';
+import unitReducer from './slices/units';
 import agentReducer from './slices/agents';
 import analyticsReducer from './slices/analytics';
 
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   users: userReducer,
   analytics: analyticsReducer,
   tenants: tenantReducer,
+  units: unitReducer,
   agents: agentReducer,
 });
 

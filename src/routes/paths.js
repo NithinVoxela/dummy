@@ -45,6 +45,7 @@ export const PATH_DASHBOARD = {
     tenants: path(ROOTS_DASHBOARD, '/tenants/list'),
     agents: path(ROOTS_DASHBOARD, '/agents/list'),
     dashboard: path(ROOTS_DASHBOARD, '/dashboard'),
+    units: path(ROOTS_DASHBOARD, '/units/list'),
   },
   cameras: {
     root: path(ROOTS_DASHBOARD, '/cameras'),
@@ -66,6 +67,12 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/tenants/list'),
     new: path(ROOTS_DASHBOARD, '/tenants/new'),
     editById: path(ROOTS_DASHBOARD, '/tenants/edit/:tenantId'),
+  },
+  units: {
+    root: path(ROOTS_DASHBOARD, '/units'),
+    list: path(ROOTS_DASHBOARD, '/units/list'),
+    new: path(ROOTS_DASHBOARD, '/units/new'),
+    editById: path(ROOTS_DASHBOARD, '/units/edit/:unitId'),
   },
   agents: {
     root: path(ROOTS_DASHBOARD, '/agents'),

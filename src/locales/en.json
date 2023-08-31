@@ -345,6 +345,14 @@
     "unarchive-label": "Unarchive",
     "full-clip-prompt": "Are you sure you want to view Full Clip",
     "tenantAuthKey-label": "Site Authorization Key",
-    "camera-locationType-label": "Location Type"
+    "camera-locationType-label": "Location Type",
+    "units-label": "Units",
+    "units-list-header-label": "Units List",
+    "units-new-unit-label": "New Unit",
+    "units-add-header-label": "Create a new Unit",
+    "units-edit-header-label": "Edit Unit",
+    "unit-add-success": "Unit created successfully",
+    "unit-update-success": "Unit updated successfully",
+    "unit-delete-success": "Unit deleted Successfully"
   }
 }

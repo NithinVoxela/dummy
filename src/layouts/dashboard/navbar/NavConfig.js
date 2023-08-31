@@ -56,6 +56,7 @@ const navConfig = [
         icon: ICONS.organization,
         role: MULTIPLE_TENANT_ACCESS_ROLES,
       },
+      { title: 'units', path: PATH_DASHBOARD.general.units, icon: ICONS.kanban, role: [SUPER_ADMIN_ROLE] },
     ],
   },
 ];

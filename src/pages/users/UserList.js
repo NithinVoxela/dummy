@@ -67,7 +67,6 @@ const UserList = () => {
         enqueueSnackbar(err?.message, {
           variant: 'error',
         });
-        console.error(err);
       }
     },
     [dispatch]

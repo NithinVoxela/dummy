@@ -345,6 +345,14 @@
     "unarchive-label": "保管を取り消す",
     "full-clip-prompt": "前後の録画を再生しますか？",
     "tenantAuthKey-label": "サイト認証キー",
-    "camera-locationType-label": "場所の種類"
+    "camera-locationType-label": "場所の種類",
+    "units-label": "単位",
+    "units-list-header-label": "単位一覧",
+    "units-new-unit-label": "新ユニット",
+    "units-add-header-label": "新しいユニットを作成する",
+    "units-edit-header-label": "ユニットの編集",
+    "unit-add-success": "ユニットが正常に作成されました",
+    "unit-update-success": "ユニットは正常に更新されました",
+    "unit-delete-success": "ユニットは正常に削除されました"
   }
 }
