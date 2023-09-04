@@ -19,13 +19,13 @@ const isValidToken = (accessToken) => {
 /**
  *
  * @param {*} accessToken
- * @returns true if token expires in 300 days
+ * @returns true if token expires in 365 days
  */
 const shuoldRefreshToken = (accessToken) => {
   const decoded = jwtDecode(accessToken);
   const currentTime = Date.now() / 1000;
 
-  return decoded.exp - currentTime < 25920000;
+  return decoded.exp - currentTime < 31536000;
 };
 
 const setSession = (accessToken) => {
