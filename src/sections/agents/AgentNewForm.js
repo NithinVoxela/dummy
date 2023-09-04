@@ -14,7 +14,7 @@ import { Autocomplete, Box, Button, Card, Chip, Grid, Stack, TextField } from '@
 import { FormProvider, RHFSelect, RHFTextField } from '../../components/hook-form';
 import { registrationStatuses } from '../common/CommonConstants';
 
-import { getCamerasForAutoComplete } from '../../redux/slices/cameras';
+import { searchCameras } from '../../redux/slices/cameras';
 
 // ----------------------------------------------------------------------
 
@@ -73,7 +73,7 @@ export default function AgentNewForm({ isEdit, currentAgent, translate, handleSa
   };
 
   const cameraChangeHandlerHandler = async (searchStr) => {
-    const response = await getCamerasForAutoComplete({ pageSize: 20 }, { name: searchStr });
+    const response = await searchCameras({ pageSize: 20 }, { name: searchStr });
     if (response?.data?.records) {
       setCameraList(response.data.records);
     }

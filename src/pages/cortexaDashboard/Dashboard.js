@@ -1,11 +1,11 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // @mui
 import { Card, Container, Grid, Typography, Box, CardContent } from '@mui/material';
-import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
-import AirlineSeatFlatAngledIcon from "@mui/icons-material/AirlineSeatFlatAngled";
-import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
-import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
+import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
+import AirlineSeatFlatAngledIcon from '@mui/icons-material/AirlineSeatFlatAngled';
+import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
+import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
 import AccessibilityNewOutlinedIcon from '@mui/icons-material/AccessibilityNewOutlined';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
@@ -17,22 +17,22 @@ import useLocales from '../../hooks/useLocales';
 import Page from '../../components/Page';
 import Label from '../../components/Label';
 // redux
-import { useDispatch, useSelector } from '../../redux/store';
-import { getDashboardAlertLog, getDashboardCameraAlertLog, cleanDashboardAlertLogs } from '../../redux/slices/alerts';
+import { getDashboardAlertLog } from '../../redux/slices/alerts';
+import { searchCameras } from '../../redux/slices/cameras';
 // sections
-import { VideoPreview } from "../../sections/cameras";
+import { VideoPreview } from '../../sections/cameras';
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
 
 function Dashboard() {
   const { themeStretch } = useSettings();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { translate } = useLocales();
-  const { dashboardAlerts, dashboardCameraAlerts } = useSelector((state) => state.alerts);
+  const [dashboardAlerts, setDashboardAlerts] = useState([]);
+  const [cameraList, setCameraList] = useState([]);
 
-  const handleCardClick = id => {
+  const handleCardClick = (id) => {
     if (id) {
       navigate(`${PATH_DASHBOARD.alerts.root}/detail/${id}`);
     }
@@ -40,111 +40,107 @@ function Dashboard() {
 
   const getColor = (severity) => {
     const value = severity?.toLowerCase();
-    if (value === "high") {
-      return "error";
+    if (value === 'high') {
+      return 'error';
     }
-    
-    if (value === "medium") {
-      return "warning";
-    } 
-    return "info";    
+
+    if (value === 'medium') {
+      return 'warning';
+    }
+    return 'info';
   };
 
-  const getDashboardAlertRequest = useCallback(async() => {
-    try {      
-      await dispatch(getDashboardAlertLog());      
-    } catch (err) {
-      console.error(err);
+  const getDashboardAlertRequest = async () => {
+    const response = await getDashboardAlertLog();
+    if (response?.data) {
+      setDashboardAlerts(response.data);
     }
-  }, [dispatch]);
+  };
 
-  const getDashboardCameraAlertRequest = useCallback(async() => {
-    try {      
-      await dispatch(getDashboardCameraAlertLog());      
-    } catch (err) {
-      console.error(err);
+  const getCameraList = async () => {
+    const response = await searchCameras(
+      {
+        pageSize: 5,
+        sortAscending: false,
+        sortColumn: 'cameraLatestAlert.latestAlert.alertTime',
+        requireLatestAlert: true,
+      },
+      {}
+    );
+    if (response?.data?.records) {
+      setCameraList(response.data.records);
     }
-  }, [dispatch]);
-
-  const cleanAlertLogs = useCallback(async() => {
-    try {      
-      await dispatch(cleanDashboardAlertLogs());      
-    } catch (err) {
-      console.error(err);
-    }
-  }, [dispatch]);
+  };
 
   useEffect(() => {
     getDashboardAlertRequest();
-  }, [getDashboardAlertRequest]);
-
-  useEffect(() => {
-    getDashboardCameraAlertRequest();
-  }, [getDashboardCameraAlertRequest]);
-
-  useEffect(() => () => {
-      cleanAlertLogs();
-    }, [cleanAlertLogs]);
+    getCameraList();
+  }, []);
 
   const getActivityName = (activity) => {
     if (activity) {
       return translate(`app.app-name-${activity.toLowerCase()}`) || activity;
     }
     return translate('app.no-activity-label');
-  }  
+  };
 
-  const renderIcon = type => {
-    if (type === "motion") {
+  const renderIcon = (type) => {
+    if (type === 'motion') {
       return <DirectionsWalkIcon fontSize="large" />;
-    } if (type === "fall") {
+    }
+    if (type === 'fall') {
       return <AirlineSeatFlatAngledIcon fontSize="large" />;
-    } if (type === "person") {
+    }
+    if (type === 'person') {
       return <AccountBoxOutlinedIcon fontSize="large" />;
-    } if (type === "wakeup") {
+    }
+    if (type === 'wakeup') {
       return <AccessibilityNewOutlinedIcon fontSize="large" />;
-    } 
+    }
     return <WbSunnyOutlinedIcon fontSize="large" />;
-    
   };
 
   const renderLatetAlerts = (item, prefix, index) => (
-      <Grid item xs={6} md={3} xl={2} key={`${prefix}-${item?.cameraId}-${index}`}>
-        <VideoPreview 
-          name={item?.name}
-          thumbnailUrl={item?.thumbnailUrl}
-          mediaUrl={item?.mediaUrl}         
-          childCmp={(
-            <Card sx={{ cursor: item.alertId ? "pointer" : "default" }} onClick={() => handleCardClick(item?.alertId)}>
-              <CardContent style={{ textAlign: "center", padding: 8 }}>
-                <Box style={{ display: "flex", justifyContent: "flex-end", minHeight: 25 }}>
-                  <Typography component="div">
-                    {item?.severity && (
-                      <Label
-                        variant="filled"
-                        color={getColor(item?.severity)}
-                        sx={{
-                          textTransform: 'uppercase',
-                        }}
-                      >
-                        {item?.severity}
-                      </Label>
-                    )}
-                  </Typography>
-                </Box>
-                <Box style={{ display: "flex", justifyContent: "center", minHeight: 25 }}>{renderIcon(item?.displayName?.toLowerCase())}</Box>
-                <Typography color="textSecondary" variant="button" gutterBottom>
-                  {item?.cameraName}
+    <Grid item xs={6} md={3} xl={2} key={`${prefix}-${item?.publicId}-${index}`}>
+      <VideoPreview
+        name={item?.name}
+        thumbnailUrl={item?.latestAlertThumbnailUrl}
+        mediaUrl={item?.latestAlertMediaUrl}
+        childCmp={
+          <Card
+            sx={{ cursor: item?.alertDto?.id ? 'pointer' : 'default' }}
+            onClick={() => handleCardClick(item?.alertDto?.id)}
+          >
+            <CardContent style={{ textAlign: 'center', padding: 8 }}>
+              <Box style={{ display: 'flex', justifyContent: 'flex-end', minHeight: 25 }}>
+                <Typography component="div">
+                  {item?.alertDto?.severity && (
+                    <Label
+                      variant="filled"
+                      color={getColor(item?.alertDto?.severity)}
+                      sx={{
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      {item?.alertDto?.severity}
+                    </Label>
+                  )}
                 </Typography>
-    
-                <Typography color="textSecondary">
-                  {getActivityName(item?.displayName)}
-                </Typography>
-              </CardContent>
-            </Card>
-          )}
-        />
-      </Grid>
-    );
+              </Box>
+              <Box style={{ display: 'flex', justifyContent: 'center', minHeight: 25 }}>
+                {renderIcon(item?.alertDto?.type?.toLowerCase())}
+              </Box>
+              <Typography color="textSecondary" variant="button" gutterBottom>
+                {item?.name}
+              </Typography>
+
+              <Typography color="textSecondary">{getActivityName(item?.alertDto?.type)}</Typography>
+            </CardContent>
+          </Card>
+        }
+      />
+    </Grid>
+  );
 
   return (
     <Page title={translate('app.dashboard-header-label')}>
@@ -162,9 +158,9 @@ function Dashboard() {
           </Typography>
         </Box>
         <Box style={{ marginTop: 8, width: '100%' }}>
-          {dashboardAlerts?.data?.length > 0 ? (
+          {dashboardAlerts?.length > 0 ? (
             <Grid container spacing={3}>
-              {dashboardAlerts.data.map((item, index) => renderLatetAlerts(item, 'latest-alert', index))}
+              {dashboardAlerts.map((item, index) => renderLatetAlerts(item, 'latest-alert', index))}
             </Grid>
           ) : (
             <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -180,9 +176,9 @@ function Dashboard() {
           </Typography>
         </Box>
         <Box style={{ marginTop: 8, width: '100%' }}>
-          {dashboardCameraAlerts?.data?.length > 0 ? (
+          {cameraList?.length > 0 ? (
             <Grid container spacing={3}>
-              {dashboardCameraAlerts.data.map((item, index) => renderLatetAlerts(item, 'camera-alert', index))}
+              {cameraList.map((item, index) => renderLatetAlerts(item, 'camera-alert', index))}
             </Grid>
           ) : (
             <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

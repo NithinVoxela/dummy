@@ -13,14 +13,6 @@ const initialState = {
     data: [],
   },
   alertDetails: {},
-  dashboardAlerts: {
-    data: [],
-    total: 0,
-  },
-  dashboardCameraAlerts: {
-    data: [],
-    total: 0,
-  },
   alertCountDataList: {
     total: 0,
     currentPage: 0,
@@ -59,21 +51,6 @@ const slice = createSlice({
       const { data } = action.payload;
       state.isLoading = false;
       state.dashboardAlerts = { total: data.length, data };
-    },
-
-    getDashboardCameraAlertsSuccess(state, action) {
-      const { data } = action.payload;
-      state.isLoading = false;
-      state.dashboardCameraAlerts = { total: data.length, data };
-    },
-
-    cleanDashboardAlertLogs(state) {
-      const emptyResponse = {
-        data: [],
-        total: 0,
-      };
-      state.dashboardAlerts = emptyResponse;
-      state.dashboardCameraAlerts = emptyResponse;
     },
 
     getAlertCountSuccess(state, action) {
@@ -158,27 +135,8 @@ export async function patchAlert(payload) {
   }
 }
 
-export function getDashboardAlertLog() {
-  return async () => {
-    try {
-      const response = await axios.get(`alert/view/camera-alert/dashboard/latest-alerts`);
-      dispatch(slice.actions.getDashboardAlertsSuccess(response));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
-  };
-}
-
-export function getDashboardCameraAlertLog() {
-  return async () => {
-    try {
-      const response = await axios.get(`alert/view/camera-alert/dashboard`);
-      dispatch(slice.actions.getDashboardCameraAlertsSuccess(response));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-      throw error;
-    }
-  };
+export async function getDashboardAlertLog() {
+  return axios.get(`alert/view/camera-alert/dashboard/latest-alerts`);
 }
 
 export function sendTestAlert(payload) {
@@ -188,16 +146,6 @@ export function sendTestAlert(payload) {
       await axios.post(url, payload);
     } catch (error) {
       throw new Error(error);
-    }
-  };
-}
-
-export function cleanDashboardAlertLogs() {
-  return async () => {
-    try {
-      dispatch(slice.actions.cleanDashboardAlertLogs());
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
     }
   };
 }

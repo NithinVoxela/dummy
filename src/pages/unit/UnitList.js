@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { cloneDeep, debounce } from 'lodash';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 // @mui
 import { Button, Card, Container, MenuItem } from '@mui/material';

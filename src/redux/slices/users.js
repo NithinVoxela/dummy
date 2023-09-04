@@ -106,7 +106,7 @@ export async function patchUser(payload) {
   await axios.put('user/patch', payload);
 }
 
-export async function getUsersForAutoComplete(queryParams, payload = {}) {
+export async function searchUsers(queryParams, payload = {}) {
   const searchParams = new URLSearchParams(queryParams).toString();
   return axios.post(`user/search?${searchParams}`, payload);
 }

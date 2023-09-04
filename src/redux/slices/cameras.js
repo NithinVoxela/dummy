@@ -174,7 +174,7 @@ export function getCamerasLatestFrame(cameraId) {
   };
 }
 
-export async function getCamerasForAutoComplete(queryParams, payload = {}) {
+export async function searchCameras(queryParams, payload = {}) {
   const searchParams = new URLSearchParams(queryParams).toString();
   return axios.post(`camera/view/search?${searchParams}`, payload);
 }

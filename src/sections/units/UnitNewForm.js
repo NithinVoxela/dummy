@@ -12,8 +12,8 @@ import { Autocomplete, Box, Button, Card, Chip, Grid, Stack, TextField } from '@
 
 // components
 import { FormProvider, RHFTextField } from '../../components/hook-form';
-import { getCamerasForAutoComplete } from '../../redux/slices/cameras';
-import { getUsersForAutoComplete } from '../../redux/slices/users';
+import { searchCameras } from '../../redux/slices/cameras';
+import { searchUsers } from '../../redux/slices/users';
 // ----------------------------------------------------------------------
 
 UnitNewForm.propTypes = {
@@ -66,7 +66,7 @@ export default function UnitNewForm({ isEdit, currentUnit, translate, handleSave
   };
 
   const cameraChangeHandlerHandler = async (searchStr) => {
-    const response = await getCamerasForAutoComplete({ pageSize: 20 }, { name: searchStr });
+    const response = await searchCameras({ pageSize: 20 }, { name: searchStr });
     if (response?.data?.records) {
       setCameraList(response.data.records);
     }
@@ -81,7 +81,7 @@ export default function UnitNewForm({ isEdit, currentUnit, translate, handleSave
   };
 
   const userChangeHandlerHandler = async (searchStr) => {
-    const response = await getUsersForAutoComplete({ pageSize: 20 }, { userName: searchStr });
+    const response = await searchUsers({ pageSize: 20 }, { userName: searchStr });
     if (response?.data?.records) {
       setUserList(response.data.records);
     }
