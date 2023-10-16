@@ -7,14 +7,13 @@ import { dispatch } from '../store';
 const initialState = {
   isLoading: false,
   error: null,
-  userList : {
+  userList: {
     total: 0,
-    data: []
-  },  
+    data: [],
+  },
   cameraStats: {},
   severityStats: {},
   alertStats: {},
-  bucketSize: {}
 };
 
 const slice = createSlice({
@@ -31,34 +30,26 @@ const slice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
-    
+
     getCameraStats(state, action) {
-      const { data } = action.payload;      
+      const { data } = action.payload;
       state.cameraStats = data;
-    },    
-    
+    },
+
     getCameraSeverityStats(state, action) {
-      const { data } = action.payload;      
+      const { data } = action.payload;
       state.severityStats = data;
-    }, 
+    },
 
     getAlertsStats(state, action) {
-      const { data } = action.payload;      
+      const { data } = action.payload;
       state.alertStats = data;
-    }, 
-
-    getS3Stats(state, action) {
-      const { data } = action.payload;      
-      state.bucketSize = {
-        size: data?.size || 0
-      };
-    }, 
+    },
 
     resetAnalytics(state) {
       state.cameraStats = {};
       state.severityStats = {};
       state.alertStats = {};
-      state.bucketSize = {};
     },
   },
 });
@@ -66,11 +57,10 @@ const slice = createSlice({
 // Reducer
 export default slice.reducer;
 
-
 export function getCameraSeverityStats(params = {}) {
-  return async () => {    
-    try {            
-      const response = await axios.get(`alert/view/by-severity/dashboard`, {params});
+  return async () => {
+    try {
+      const response = await axios.get(`alert/view/by-severity/dashboard`, { params });
       dispatch(slice.actions.getCameraSeverityStats(response));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -79,9 +69,9 @@ export function getCameraSeverityStats(params = {}) {
 }
 
 export function getCameraStats(params = {}) {
-  return async () => {    
-    try {      
-      const response = await axios.get(`camera/view/by-status/dashboard`, {params});
+  return async () => {
+    try {
+      const response = await axios.get(`camera/view/by-status/dashboard`, { params });
       dispatch(slice.actions.getCameraStats(response));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -90,9 +80,9 @@ export function getCameraStats(params = {}) {
 }
 
 export function getAlertsStats(params = {}) {
-  return async () => {    
-    try {      
-      const response = await axios.get(`alert/view/by-camera/dashboard`, {params});
+  return async () => {
+    try {
+      const response = await axios.get(`alert/view/by-camera/dashboard`, { params });
       dispatch(slice.actions.getAlertsStats(response));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -100,20 +90,6 @@ export function getAlertsStats(params = {}) {
   };
 }
 
-export function getS3Stats(params = {}) {
-  return async () => {    
-    try {      
-      const response = await axios.get(`aws/content-size`, {params});
-      dispatch(slice.actions.getS3Stats(response));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
-  };
-}
-
 export function resetAnalytics() {
-  dispatch(slice.actions.resetAnalytics()); 
-};
-
-
-
+  dispatch(slice.actions.resetAnalytics());
+}

@@ -11,28 +11,28 @@ import useLocales from '../../hooks/useLocales';
 import Page from '../../components/Page';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getAlertsStats, getCameraStats, getCameraSeverityStats, resetAnalytics, getS3Stats } from '../../redux/slices/analytics';
+import { getAlertsStats, getCameraStats, getCameraSeverityStats, resetAnalytics } from '../../redux/slices/analytics';
 // sections
-import { AnalyticsCameraPieChart, AppAlertsPieChart, AppWidgetSummary } from "../../sections/analytics";
+import { AnalyticsCameraPieChart, AppAlertsPieChart, AppWidgetSummary } from '../../sections/analytics';
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
 
-const ALERT_CHART_OPTIONS = [ 'day', 'week', 'month']; 
+const ALERT_CHART_OPTIONS = ['day', 'week', 'month'];
 
 function Analytics() {
   const { themeStretch } = useSettings();
-  const dispatch = useDispatch();  
-  const { enqueueSnackbar } = useSnackbar();  
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
-  const { cameraStats, severityStats, alertStats, bucketSize } = useSelector((state) => state.analytics);
+  const { cameraStats, severityStats, alertStats } = useSelector((state) => state.analytics);
 
-  const [seriesData, setSeriesData] = useState("month");
+  const [seriesData, setSeriesData] = useState('month');
   const [activeCameraCount, setActiveCameraCount] = useState(0);
   const [offlineCameraCount, setOfflineCameraCount] = useState(0);
 
   const handleChangeSeriesData = (event) => {
-    const {value} = event.target;
+    const { value } = event.target;
     setSeriesData(value);
     let days = 30;
     if (value === 'week') {
@@ -44,22 +44,8 @@ function Analytics() {
   };
 
   const getCameraStatDetails = useCallback(async () => {
-    try {      
-      await dispatch(getCameraStats());      
-    } catch (err) {
-      enqueueSnackbar(err?.message, {
-        variant: 'error',
-      });
-      throw new Error(err?.message);
-    }
-  }, [dispatch]);
-
-  const getSeverityStatDetails = useCallback(async (params={}) => {
     try {
-      if (!params.days) {
-        params.days = 30;
-      }      
-      await dispatch(getCameraSeverityStats(params));      
+      await dispatch(getCameraStats());
     } catch (err) {
       enqueueSnackbar(err?.message, {
         variant: 'error',
@@ -68,27 +54,36 @@ function Analytics() {
     }
   }, [dispatch]);
 
-  const getAlertStatDetails = useCallback(async (params={}) => {
-    try {         
-      await dispatch(getAlertsStats(params));      
-    } catch (err) {
-      enqueueSnackbar(err?.message, {
-        variant: 'error',
-      });
-      throw new Error(err?.message);
-    }
-  }, [dispatch]);
+  const getSeverityStatDetails = useCallback(
+    async (params = {}) => {
+      try {
+        if (!params.days) {
+          params.days = 30;
+        }
+        await dispatch(getCameraSeverityStats(params));
+      } catch (err) {
+        enqueueSnackbar(err?.message, {
+          variant: 'error',
+        });
+        throw new Error(err?.message);
+      }
+    },
+    [dispatch]
+  );
 
-  const getAlertS3StatDetails = useCallback(async (params={}) => {
-    try {         
-      await dispatch(getS3Stats(params));      
-    } catch (err) {
-      enqueueSnackbar(err?.message, {
-        variant: 'error',
-      });
-      throw new Error(err?.message);
-    }
-  }, [dispatch]);
+  const getAlertStatDetails = useCallback(
+    async (params = {}) => {
+      try {
+        await dispatch(getAlertsStats(params));
+      } catch (err) {
+        enqueueSnackbar(err?.message, {
+          variant: 'error',
+        });
+        throw new Error(err?.message);
+      }
+    },
+    [dispatch]
+  );
 
   const formatBytes = (bytes, decimals = 2) => {
     if (!bytes || bytes === 0) return '0';
@@ -100,13 +95,13 @@ function Analytics() {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
 
     // eslint-disable-next-line no-restricted-properties
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))  } ${  sizes[i]}`;
-};
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+  };
 
   useEffect(() => {
     if (cameraStats?.length > 0) {
-      setActiveCameraCount(cameraStats.find(item => item.status === "ONLINE")?.groupCount);
-      setOfflineCameraCount(cameraStats.find(item => item.status === "OFFLINE")?.groupCount);
+      setActiveCameraCount(cameraStats.find((item) => item.status === 'ONLINE')?.groupCount);
+      setOfflineCameraCount(cameraStats.find((item) => item.status === 'OFFLINE')?.groupCount);
     }
   }, [cameraStats]);
 
@@ -114,9 +109,8 @@ function Analytics() {
     getCameraStatDetails();
     getSeverityStatDetails();
     getAlertStatDetails();
-    getAlertS3StatDetails();
-    return () => {      
-      resetAnalytics();     
+    return () => {
+      resetAnalytics();
     };
   }, []);
 
@@ -153,8 +147,8 @@ function Analytics() {
         </option>
       ))}
     </TextField>
-  )
- 
+  );
+
   return (
     <Page title={translate('app.analytics-label')}>
       <Container maxWidth={themeStretch ? false : 'xl'}>
@@ -166,31 +160,21 @@ function Analytics() {
           </Grid>
         </Grid>
         <Grid container spacing={3} sx={{ marginTop: 2 }}>
-          <Grid item xs={12} md={4}>
-            <AppWidgetSummary
-              title={translate('app.total-active-devices-label')}              
-              total={activeCameraCount}              
-            />
+          <Grid item xs={12} md={6}>
+            <AppWidgetSummary title={translate('app.total-active-devices-label')} total={activeCameraCount} />
           </Grid>
 
-          <Grid item xs={12} md={4}>
-            <AppWidgetSummary
-              title={translate('app.total-offline-devices')}              
-              total={offlineCameraCount}              
-            />
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <Card sx={{ display: 'flex', alignItems: 'center', p: 3 }}>
-              <Box sx={{ flexGrow: 1 }}>
-                <Typography variant="subtitle2">{translate('app.storage-utilization')}</Typography>
-                <Typography variant="h3">{formatBytes(bucketSize?.size)}</Typography>
-              </Box>      
-            </Card>            
+          <Grid item xs={12} md={6}>
+            <AppWidgetSummary title={translate('app.total-offline-devices')} total={offlineCameraCount} />
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
-            <AppAlertsPieChart title={translate('app.alert-generated-by-time')} actions={getAlertActions} data={severityStats} translate={translate} />
+            <AppAlertsPieChart
+              title={translate('app.alert-generated-by-time')}
+              actions={getAlertActions}
+              data={severityStats}
+              translate={translate}
+            />
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>
