@@ -64,7 +64,6 @@ export default function AppGeneralSettingsTab(props) {
     brand: '',
     model: '',
     streamUrl: '',
-    passPhrase: '',
     location: '',
     installationDate: '',
     appDtos: [],
@@ -78,7 +77,6 @@ export default function AppGeneralSettingsTab(props) {
   const [externalSystemAlert, setExternalSystemAlert] = useState(false);
   const [isPrivacyEnabled, setIsPrivacyEnabled] = useState(false);
   const [email, setEmail] = useState(false);
-  const [emailList, setEmailList] = useState('');
   const [extraConfig, setExtraConfig] = useState('');
   const [desktopSubscribers, setDesktopSubscribers] = useState([]);
   const [mobileSubscribers, setMobileSubscribers] = useState([]);
@@ -100,15 +98,14 @@ export default function AppGeneralSettingsTab(props) {
     const app = currentCamera.appDtos?.find((item) => item?.id?.toString() === appId);
     setMlApp(app);
     // eslint-disable-next-line radix
-    setSensitivity(app?.config?.sensitivity ? parseInt(app.config.sensitivity * 100) : 0);
-    setDesktopAlert(app?.config?.allowDesktopAlert);
-    setEmail(app?.config?.allowEmailAlert);
-    setMobileAlert(app?.config?.allowMobileAlert);
-    setExternalSystemAlert(app?.config?.allowExternalSystemAlert);
-    setEmailList(app?.config?.notifyEmails);
-    setExtraConfig(app?.config?.customJsonData);
-    setIsPrivacyEnabled(app?.config?.isPrivacyEnabled || false);
-    setSeverityValue(app?.config?.severity || 'Low');
+    setSensitivity(app?.config?.appSettings?.sensitivity ? parseInt(app.config.appSettings.sensitivity * 100) : 0);
+    setDesktopAlert(app?.config?.appSettings?.allowDesktopAlert);
+    setEmail(app?.config?.appSettings?.allowEmailAlert);
+    setMobileAlert(app?.config?.appSettings?.allowMobileAlert);
+    setExternalSystemAlert(app?.config?.appSettings?.allowExternalSystemAlert);
+    setExtraConfig(app?.config?.appSettings?.customJsonData);
+    setIsPrivacyEnabled(app?.config?.appSettings?.isPrivacyEnabled || false);
+    setSeverityValue(app?.config?.appSettings?.severity || 'Low');
     setExternalSystemTypes(app?.config?.externalSystemNotificationTypes || []);
   }, [currentCamera]);
 
@@ -212,19 +209,21 @@ export default function AppGeneralSettingsTab(props) {
         ...mlApp.config,
         cameraId: currentCamera?.publicId,
         appId: mlApp.app.id,
-        sensitivity: sensitivity / 100,
-        allowDesktopAlert: desktopAlert,
-        allowMobileAlert: mobileAlert,
-        allowEmailAlert: email,
-        allowExternalSystemAlert: externalSystemAlert,
-        notifyEmails: emailList,
-        customJsonData: extraConfig,
-        isPrivacyEnabled,
         emailSubscribers: emailSubList,
         mobileSubscribers: mobile,
         deskTopSubscribers: desktop,
         externalSystemNotificationTypes: externalSystemTypes,
-        severity: severityValue,
+        appSettings: {
+          ...mlApp.config?.appSettings,
+          sensitivity: sensitivity / 100,
+          allowDesktopAlert: desktopAlert,
+          allowMobileAlert: mobileAlert,
+          allowEmailAlert: email,
+          allowExternalSystemAlert: externalSystemAlert,
+          customJsonData: extraConfig,
+          isPrivacyEnabled,
+          severity: severityValue,
+        },
       };
       handleSave(payload);
       setIsFormUpdated(false);
@@ -287,26 +286,25 @@ export default function AppGeneralSettingsTab(props) {
 
   return (
     <Card sx={{ padding: '24px 40px' }}>
-      {/* <Box sx={{ mt: 3, mb: 3, ml: -1, border: 2, borderRadius: 10, borderColor: blue[600], width: 85 }}>
-        
-      </Box> */}
-      <Box>
-        <FormControl component="fieldset">
-          <FormLabel component="label" color="primary">
-            {translate('app.camera-sensitivity-header-label')}:{' '}
-          </FormLabel>
-          <Slider
-            defaultValue={80}
-            aria-labelledby="discrete-slider-always"
-            step={1}
-            valueLabelDisplay="auto"
-            marks={marks}
-            onChange={handleSensitivityChange}
-            style={{ width: 200 }}
-            value={sensitivity}
-          />
-        </FormControl>
-      </Box>
+      {user?.role === 'SUPER_ADMIN' && (
+        <Box>
+          <FormControl component="fieldset">
+            <FormLabel component="label" color="primary">
+              {translate('app.camera-sensitivity-header-label')}:{' '}
+            </FormLabel>
+            <Slider
+              defaultValue={80}
+              aria-labelledby="discrete-slider-always"
+              step={1}
+              valueLabelDisplay="auto"
+              marks={marks}
+              onChange={handleSensitivityChange}
+              style={{ width: 200 }}
+              value={sensitivity}
+            />
+          </FormControl>
+        </Box>
+      )}
       <Box sx={{ mt: 3 }}>
         <FormControl component="fieldset">
           <FormLabel component="label" color="primary">
@@ -412,20 +410,22 @@ export default function AppGeneralSettingsTab(props) {
             )}
         </FormControl>
       </Box>
-      <Box sx={{ mt: 3, display: 'flex', alignItems: 'center' }}>
-        <FormControl component="fieldset">
-          <FormLabel component="label" color="primary">
-            {translate('app.camera-extra-config-label')}:{' '}
-          </FormLabel>
-          <TextareaAutosize
-            aria-label="extra-config"
-            minRows={3}
-            value={extraConfig}
-            style={{ minHeight: 30, minWidth: 350, marginTop: 8 }}
-            onChange={handleExtraConfigChange}
-          />
-        </FormControl>
-      </Box>
+      {user?.role === 'SUPER_ADMIN' && (
+        <Box sx={{ mt: 3, display: 'flex', alignItems: 'center' }}>
+          <FormControl component="fieldset">
+            <FormLabel component="label" color="primary">
+              {translate('app.camera-extra-config-label')}:{' '}
+            </FormLabel>
+            <TextareaAutosize
+              aria-label="extra-config"
+              minRows={3}
+              value={extraConfig}
+              style={{ minHeight: 30, minWidth: 350, marginTop: 8 }}
+              onChange={handleExtraConfigChange}
+            />
+          </FormControl>
+        </Box>
+      )}
       <Stack spacing={3} alignItems="flex-end">
         <Box sx={{ display: 'flex' }}>
           <Button onClick={onCancel} sx={{ mr: 1 }}>

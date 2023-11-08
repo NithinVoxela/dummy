@@ -4,7 +4,6 @@ import { green } from '@mui/material/colors';
 import { withStyles } from '@mui/styles';
 import React from 'react';
 
-import useAuth from '../../hooks/useAuth';
 import { SkeletonAlertItem } from '../../components/skeleton';
 
 const GreenSwitch = withStyles({
@@ -26,10 +25,10 @@ const GreenSwitch = withStyles({
 
 const CameraAppsCard = (props) => {
   const { loading, dataList, translate, handleAppsClick, handleAppEnable } = props;
-  const { user } = useAuth();
 
-  const isAppEnabled = (item) => (item.config ? item.config.isEnabled : false);
-  const isNonMLApp = (item) => item.app.appType !== 'ML';
+  const isAppEnabled = (item) => item.status === 'ACTIVE';
+  const isSettingsDisabled = (item) => item.app.appType !== 'ML' && item.app.code !== 'A005';
+  const isAppSubscribed = (item) => item.status !== 'UNSUBSCRIBED';
 
   const renderAppCard = (item) => (
     <Grid item md={12} xs={12} key={`${item.app.id}`}>
@@ -43,12 +42,12 @@ const CameraAppsCard = (props) => {
           </Typography>
         </CardContent>
         <CardActions style={{ padding: '8px 16px', justifyContent: 'space-between' }}>
-          {!item.config && (
-            <Button variant="contained" color="primary" onClick={() => handleAppEnable(item)} size="small">
+          {!isAppSubscribed(item) && (
+            <Button variant="contained" color="primary" onClick={() => handleAppEnable(item, 'ACTIVE')} size="small">
               {translate('app.camera-subscribe-label')}
             </Button>
           )}
-          {item.config && (
+          {isAppSubscribed(item) && (
             <>
               <FormControlLabel
                 control={
@@ -56,12 +55,17 @@ const CameraAppsCard = (props) => {
                     name={item.app.name}
                     value={isAppEnabled(item)}
                     checked={isAppEnabled(item)}
-                    onChange={() => handleAppEnable(item)}
+                    onChange={(event) => handleAppEnable(item, event.target.checked ? 'ACTIVE' : 'INACTIVE')}
                   />
                 }
                 label={translate('app.camera-active-label')}
               />
-              <Button size="small" color="primary" disabled={isNonMLApp(item)} onClick={() => handleAppsClick(item)}>
+              <Button
+                size="small"
+                color="primary"
+                disabled={isSettingsDisabled(item)}
+                onClick={() => handleAppsClick(item)}
+              >
                 {translate('app.camera-settings-label')}
               </Button>
             </>

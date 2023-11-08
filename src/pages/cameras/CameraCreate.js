@@ -35,7 +35,7 @@ export default function CameraCreate() {
 
   const getCamera = useCallback(async () => {
     try {
-      await dispatch(getCameraDetails(cameraId, { requireAgent: true }));
+      dispatch(getCameraDetails(cameraId, { requireAgent: true, requireCameraSettings: true }));
     } catch (err) {
       enqueueSnackbar(err?.message, {
         variant: 'error',
@@ -48,9 +48,9 @@ export default function CameraCreate() {
     async (payload = {}) => {
       try {
         if (!isEdit) {
-          await dispatch(saveCamera(payload));
+          dispatch(saveCamera(payload));
         } else {
-          await dispatch(updateCamera(payload));
+          dispatch(updateCamera(payload));
         }
         enqueueSnackbar(!isEdit ? translate('app.camera-add-success') : translate('app.camera-update-success'));
         navigate(PATH_DASHBOARD.cameras.list);

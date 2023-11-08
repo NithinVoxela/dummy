@@ -31,7 +31,7 @@ import {
 import { getUsers, resetUserList } from '../../redux/slices/users';
 
 // sections
-import { AppGeneralSettingsTab, AnnotationTab } from '../../sections/cameras';
+import { AppGeneralSettingsTab, AnnotationTab, RecordingGeneralSettingsTab } from '../../sections/cameras';
 import AppScheduleTab from '../../sections/cameras/AppScheduleTab';
 
 // ----------------------------------------------------------------------
@@ -40,7 +40,7 @@ import AppScheduleTab from '../../sections/cameras/AppScheduleTab';
 
 const CameraAppSettings = () => {
   const { themeStretch } = useSettings();
-  const { cameraId = '', appId = '' } = useParams();
+  const { cameraId = '', appId = '', appCode = '' } = useParams();
   const { translate } = useLocales();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -56,7 +56,7 @@ const CameraAppSettings = () => {
 
   const getCamera = useCallback(async () => {
     try {
-      await dispatch(getCameraDetails(cameraId));
+      dispatch(getCameraDetails(cameraId, { requireCameraAppConfigs: true }));
     } catch (err) {
       enqueueSnackbar(err?.message, {
         variant: 'error',
@@ -138,8 +138,11 @@ const CameraAppSettings = () => {
   useEffect(() => {
     if (cameraId) {
       getCamera();
-      getUserList();
-      getCameraFrameDetails();
+
+      if (appCode === 'A001' || appCode === 'A003' || appCode === 'A004') {
+        getUserList();
+        getCameraFrameDetails();
+      }
     }
   }, [cameraId]);
 
@@ -211,56 +214,75 @@ const CameraAppSettings = () => {
 
   const isBlocking = () => isFormUpdated;
 
-  const APP_TABS = [
-    {
-      value: 'general',
-      label: translate('app.camera-app-general-tab'),
-      icon: <Iconify icon={'codicon:settings'} width={20} height={20} />,
-      component: (
-        <AppGeneralSettingsTab
-          currentCamera={cameraDetails}
-          translate={translate}
-          handleSave={handleSaveApp}
-          onCancel={onCancel}
-          appId={appId}
-          userList={userList}
-          setIsFormUpdated={setIsFormUpdated}
-        />
-      ),
-    },
-    {
-      value: 'schedule',
-      label: translate('app.camera-app-schedule-tab'),
-      icon: <Iconify icon={'mdi:calendar-clock'} width={20} height={20} />,
-      component: (
-        <AppScheduleTab
-          translate={translate}
-          updateAppScheduleRequest={updateAppScheduleRequest}
-          appId={appId}
-          schedularList={schedularList}
-          resetSchedule={resetCameraAppSchedule}
-          onCancel={onCancel}
-          setIsFormUpdated={setIsFormUpdated}
-        />
-      ),
-    },
-    {
-      value: 'region',
-      label: translate('app.camera-region-of-intrest'),
-      icon: <Iconify icon={'carbon:area-custom'} width={20} height={20} />,
-      component: (
-        <AnnotationTab
-          translate={translate}
-          frameUrl={cameraLatestFrame}
-          handleSave={handleSaveApp}
-          currentCamera={cameraDetails}
-          appId={appId}
-          onCancel={onCancel}
-          setIsFormUpdated={setIsFormUpdated}
-        />
-      ),
-    },
-  ];
+  const APP_TABS =
+    appCode === 'A001' || appCode === 'A003' || appCode === 'A004'
+      ? [
+          {
+            value: 'general',
+            label: translate('app.camera-app-general-tab'),
+            icon: <Iconify icon={'codicon:settings'} width={20} height={20} />,
+            component: (
+              <AppGeneralSettingsTab
+                currentCamera={cameraDetails}
+                translate={translate}
+                handleSave={handleSaveApp}
+                onCancel={onCancel}
+                appId={appId}
+                userList={userList}
+                setIsFormUpdated={setIsFormUpdated}
+              />
+            ),
+          },
+          {
+            value: 'schedule',
+            label: translate('app.camera-app-schedule-tab'),
+            icon: <Iconify icon={'mdi:calendar-clock'} width={20} height={20} />,
+            component: (
+              <AppScheduleTab
+                translate={translate}
+                updateAppScheduleRequest={updateAppScheduleRequest}
+                appId={appId}
+                schedularList={schedularList}
+                resetSchedule={resetCameraAppSchedule}
+                onCancel={onCancel}
+                setIsFormUpdated={setIsFormUpdated}
+              />
+            ),
+          },
+          {
+            value: 'region',
+            label: translate('app.camera-region-of-intrest'),
+            icon: <Iconify icon={'carbon:area-custom'} width={20} height={20} />,
+            component: (
+              <AnnotationTab
+                translate={translate}
+                frameUrl={cameraLatestFrame}
+                handleSave={handleSaveApp}
+                currentCamera={cameraDetails}
+                appId={appId}
+                onCancel={onCancel}
+                setIsFormUpdated={setIsFormUpdated}
+              />
+            ),
+          },
+        ]
+      : [
+          {
+            value: 'general',
+            label: translate('app.camera-app-general-tab'),
+            icon: <Iconify icon={'codicon:settings'} width={20} height={20} />,
+            component: (
+              <RecordingGeneralSettingsTab
+                currentCamera={cameraDetails}
+                translate={translate}
+                handleSave={handleSaveApp}
+                onCancel={onCancel}
+                appId={appId}
+                setIsFormUpdated={setIsFormUpdated}
+              />
+            ),
+          },
+        ];
 
   const cameraName = cameraDetails?.name ? cameraDetails.name : '';
   usePrompt(translate('app.annotation-confirmation-text-label'), isBlocking());

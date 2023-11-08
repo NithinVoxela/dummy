@@ -51,12 +51,48 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
     location: Yup.string().required(translate('app.camera-location-required-label')),
     locationType: Yup.string().default('UNKNOWN'),
     installationDate: Yup.date().required('Installation Date is required'),
-    passPhrase: Yup.string().required(translate('app.camera-pass-required-label')),
     minIdleTime: Yup.number()
       .min(1, translate('app.camera-min-idle-validation-label'))
-      .max(9999999999, translate('app.camera-pass-required-label'))
+      .max(9999999999, translate('app.camera-min-idle-validation-label'))
       .required(translate('app.camera-min-idle-required-label')),
     agent: Yup.object().nullable(true).default(null),
+    cameraConfigDto: Yup.object()
+      .nullable(true)
+      .default(null)
+      .shape({
+        username: Yup.string().nullable(true).default(null),
+        password: Yup.string().nullable(true).default(null),
+        additionalSettings: Yup.object()
+          .nullable(true)
+          .default(null)
+          .shape({
+            width: Yup.number()
+              .nullable(true)
+              .default(null)
+              .transform((value, original) => (original === '' ? null : value)),
+            height: Yup.number()
+              .nullable(true)
+              .default(null)
+              .transform((value, original) => (original === '' ? null : value)),
+            angle: Yup.string().nullable(true).default(null),
+            pixel_change: Yup.number()
+              .nullable(true)
+              .default(null)
+              .transform((value, original) => (original === '' ? null : value)),
+            sequence_duration: Yup.number()
+              .nullable(true)
+              .default(null)
+              .transform((value, original) => (original === '' ? null : value)),
+            motion_duration: Yup.number()
+              .nullable(true)
+              .default(null)
+              .transform((value, original) => (original === '' ? null : value)),
+            frame_rate: Yup.number()
+              .nullable(true)
+              .default(null)
+              .transform((value, original) => (original === '' ? null : value)),
+          }),
+      }),
   });
 
   const tomiliseconds = (hrs, min, sec) => (hrs * 60 * 60 + min * 60 + sec) * 1000;
@@ -76,11 +112,23 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
       installationDate: currentCamera?.installationDate || new Date(),
       location: currentCamera?.location || '',
       locationType: currentCamera?.locationType || 'UNKNOWN',
-      passPhrase: currentCamera?.passPhrase || '',
       publicId: currentCamera?.publicId || '',
       minIdleTime: currentCamera?.minIdleTime ? Math.floor(currentCamera?.minIdleTime / 60000) : 1440,
       enableIdleAlert: currentCamera?.enableIdleAlert || false,
       agent: currentCamera?.agent || null,
+      cameraConfigDto: currentCamera?.cameraConfigDto || {
+        username: '',
+        password: '',
+        additionalSettings: {
+          width: '',
+          height: '',
+          angle: '',
+          pixel_change: '',
+          sequence_duration: '',
+          motion_duration: '',
+          frame_rate: '',
+        },
+      },
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentCamera]
@@ -213,7 +261,6 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
                   ))}
                 </RHFSelect>
               )}
-              <RHFTextField name="passPhrase" label={translate('app.camera-pass-label')} />
               {isEdit && (
                 <RHFTextField
                   name="publicId"
@@ -272,6 +319,50 @@ export default function CameraNewForm({ isEdit, currentCamera, translate, handle
                 />
               )}
             </Box>
+
+            {user.role === SUPER_ADMIN_ROLE && (
+              <Card
+                sx={{
+                  p: 3,
+                  maxWidth: 660,
+                }}
+              >
+                <Box
+                  sx={{
+                    maxWidth: 640,
+                    display: 'grid',
+                    columnGap: 2,
+                    rowGap: 2,
+                    gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
+                  }}
+                >
+                  <RHFTextField name="cameraConfigDto.username" label={translate('app.camera-username')} />
+                  <RHFTextField name="cameraConfigDto.password" label={translate('app.camera-password')} />
+                  <RHFTextField name="cameraConfigDto.additionalSettings.width" label={translate('app.camera-width')} />
+                  <RHFTextField
+                    name="cameraConfigDto.additionalSettings.height"
+                    label={translate('app.camera-height')}
+                  />
+                  <RHFTextField name="cameraConfigDto.additionalSettings.angle" label={translate('app.camera-angle')} />
+                  <RHFTextField
+                    name="cameraConfigDto.additionalSettings.pixel_change"
+                    label={translate('app.camera-pixel-change')}
+                  />
+                  <RHFTextField
+                    name="cameraConfigDto.additionalSettings.sequence_duration"
+                    label={translate('app.camera-sequence-duration')}
+                  />
+                  <RHFTextField
+                    name="cameraConfigDto.additionalSettings.motion_duration"
+                    label={translate('app.camera-motion-duration')}
+                  />
+                  <RHFTextField
+                    name="cameraConfigDto.additionalSettings.frame_rate"
+                    label={translate('app.camera-frame-rate')}
+                  />
+                </Box>
+              </Card>
+            )}
 
             {user.role === SUPER_ADMIN_ROLE && isEdit && blueOceanCameraConfig && (
               <BlueOceanCameraConfig translate={translate} blueOceanCameraConfig={blueOceanCameraConfig} />

@@ -76,7 +76,7 @@ export default function Router() {
             { path: 'new', element: <CameraCreate /> },
             { path: 'edit/:cameraId', element: <CameraCreate /> },
             { path: 'apps/:cameraId', element: <CameraApps /> },
-            { path: 'apps/:cameraId/settings/:appId', element: <CameraAppSettings /> },
+            { path: 'apps/:cameraId/settings/:appId/:appCode', element: <CameraAppSettings /> },
           ],
         },
         {

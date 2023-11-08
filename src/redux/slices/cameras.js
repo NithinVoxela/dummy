@@ -117,19 +117,16 @@ export function getCameraDetails(publicId, queryParams) {
 
 export function updateCameraApp(payload) {
   return async () => {
-    const url = `camera/${payload.cameraId}/mlapp/${payload.appId}/configure`;
+    const url = `camera/app/configure/${payload.cameraId}/${payload.appId}`;
     delete payload.cameraId;
     delete payload.appId;
     await axios.post(url, payload);
   };
 }
 
-export function addCameraApp(payload) {
-  return async () => {
-    const url = `camera/${payload.cameraId}/add/mlapp`;
-    delete payload.cameraId;
-    await axios.post(url, payload);
-  };
+export async function updateCameraAppStatus(cameraId, payload) {
+  const url = `camera/app/updateStatus/${cameraId}`;
+  return axios.post(url, payload);
 }
 
 export function getAppSchedule(payload) {

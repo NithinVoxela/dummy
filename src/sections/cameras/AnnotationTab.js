@@ -174,7 +174,7 @@ export default function AnnotationTab(props) {
   useEffect(() => {
     if (!map || !mlApp || !mlApp.config) return;
     try {
-      const regionOfInterest = JSON.parse(mlApp.config?.regionOfInterest);
+      const regionOfInterest = JSON.parse(mlApp.config?.appSettings?.regionOfInterest);
       const geoJsonData = getGeoJson(regionOfInterest);
       if (geoJsonData) {
         let leafletGeoJSON = new L.GeoJSON(geoJsonData);
@@ -260,7 +260,10 @@ export default function AnnotationTab(props) {
     if (mlApp?.config) {
       const payload = {
         ...mlApp.config,
-        regionOfInterest: JSON.stringify(data),
+        appSettings: {
+          ...mlApp.config?.appSettings,
+          regionOfInterest: JSON.stringify(data),
+        },
         cameraId: currentCamera?.publicId,
         appId: mlApp.app.id,
       };
