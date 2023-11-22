@@ -43,6 +43,14 @@ const handlers = {
     isAuthenticated: false,
     user: null,
   }),
+  UPDATE_TENANT_CONFIG: (state, action) => {
+    const { user } = action.payload;
+
+    return {
+      ...state,
+      user,
+    };
+  },
   IMPERSONATE: (state, action) => {
     const { user } = action.payload;
 
@@ -68,6 +76,7 @@ const AuthContext = createContext({
   method: 'jwt',
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
+  updateTenantConfig: () => Promise.resolve(),
   impersonate: () => Promise.resolve(),
   impersonateLogout: () => Promise.resolve(),
 });
@@ -160,6 +169,21 @@ function AuthProvider({ children }) {
     });
   };
 
+  const updateTenantConfig = (isRecordingEnabled, isLiveStreamingEnabled) => {
+    const user = { ...state.user };
+    const tenantInfo = user.applicationTenant;
+    tenantInfo.isRecordingEnabled = isRecordingEnabled;
+    tenantInfo.isLiveStreamingEnabled = isLiveStreamingEnabled;
+    initializeUserSettings(user);
+
+    dispatch({
+      type: 'UPDATE_TENANT_CONFIG',
+      payload: {
+        user,
+      },
+    });
+  };
+
   const impersonate = async (tenantId) => {
     const response = await axios.post('impersonate?requireExternalSystemsSupport=true', {
       tenantId,
@@ -224,6 +248,7 @@ function AuthProvider({ children }) {
         method: 'jwt',
         login,
         logout,
+        updateTenantConfig,
         impersonate,
         impersonateLogout,
       }}

@@ -47,7 +47,8 @@ export default function NavSectionVertical({ navConfig, isCollapse = false, tran
             {translate(`app.${group.subheader}-label`)}
           </ListSubheaderStyle>
           {group.items.map((list) =>
-            !list.role || list.role.includes(user?.role) ? ( // check if user has access to the group item
+            (!list.role || list.role.includes(user?.role)) &&
+            (list.title !== 'recordings' || user?.applicationTenant?.isRecordingEnabled) ? ( // check if user has access to the group item
               <NavListRoot key={list.title} list={list} isCollapse={isCollapse} translate={translate} />
             ) : null
           )}

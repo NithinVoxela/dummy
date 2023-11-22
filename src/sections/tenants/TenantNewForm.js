@@ -30,7 +30,7 @@ import { getExternalSystemConfig, deleteExternalSystemConfig } from '../../api/e
 import { renderExternalSystemsAutoComplete } from '../common/CommonUIHelper';
 
 // components
-import { FormProvider, RHFSelect, RHFTextField } from '../../components/hook-form';
+import { FormProvider, RHFSelect, RHFTextField, RHFCheckbox } from '../../components/hook-form';
 import { regions, EXTERNAL_SYSTEM_BLUEOCEAN, externalSystemsList } from '../common/CommonConstants';
 
 // sections
@@ -48,7 +48,7 @@ TenantNewForm.propTypes = {
 
 export default function TenantNewForm({ isEdit, currentTenant, translate, handleSave, onCancel }) {
   const [parents, setParents] = useState([]);
-  const { user } = useAuth();
+  const { user, updateTenantConfig } = useAuth();
   const newTenantSchema = Yup.object().shape({
     tenantName: Yup.string().required(translate('app.name-required-label')),
     tenantCode: Yup.string().required(translate('app.code-required-label')),
@@ -65,6 +65,8 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
       region: currentTenant?.region || '',
       parent: currentTenant?.parent || null,
       tenantAuthKey: currentTenant?.tenantAuthKey || '',
+      isRecordingEnabled: currentTenant?.isRecordingEnabled !== false,
+      isLiveStreamingEnabled: currentTenant?.isLiveStreamingEnabled !== false,
     }),
     [currentTenant]
   );
@@ -168,6 +170,9 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
       await deleteExternalSystemConfig(currentTenant?.id, EXTERNAL_SYSTEM_BLUEOCEAN);
     }
 
+    if (currentTenant.id === user?.applicationTenant.id)
+      await updateTenantConfig(data.isRecordingEnabled, data.isLiveStreamingEnabled);
+
     await handleSave(data, payload);
   };
 
@@ -264,6 +269,8 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
                   />
                 )}
               />
+              <RHFCheckbox name="isRecordingEnabled" label={translate('app.tenant-is-recording-enabled')} />
+              <RHFCheckbox name="isLiveStreamingEnabled" label={translate('app.tenant-is-live-streaming-enabled')} />
             </Box>
             <Box
               sx={{
@@ -281,7 +288,7 @@ export default function TenantNewForm({ isEdit, currentTenant, translate, handle
                     name="externalSystemConfig"
                   />
                 }
-                sx={{ mt: 3 }}
+                sx={{ mt: 1 }}
                 label={translate('app.tenant-external-system')}
               />
               {externalSystemAlert &&

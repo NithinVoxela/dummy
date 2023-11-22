@@ -314,6 +314,8 @@
     "region-required-label": "地域が必要です",
     "tenants-add-header-label": "新しいサイトを作成",
     "tenants-edit-header-label": "サイトを編集",
+    "tenant-is-recording-enabled": "24時間録画を有効にする",
+    "tenant-is-live-streaming-enabled": "ライブ視聴を有効にする",
     "ADMIN": "サイト管理者",
     "USER": "ユーザー",
     "ORG_ADMIN": "組織管理者",

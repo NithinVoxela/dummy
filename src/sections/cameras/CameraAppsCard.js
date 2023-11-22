@@ -4,6 +4,7 @@ import { green } from '@mui/material/colors';
 import { withStyles } from '@mui/styles';
 import React from 'react';
 
+import useAuth from '../../hooks/useAuth';
 import { SkeletonAlertItem } from '../../components/skeleton';
 
 const GreenSwitch = withStyles({
@@ -26,6 +27,7 @@ const GreenSwitch = withStyles({
 const CameraAppsCard = (props) => {
   const { loading, dataList, translate, handleAppsClick, handleAppEnable } = props;
 
+  const { user } = useAuth();
   const isAppEnabled = (item) => item.status === 'ACTIVE';
   const isSettingsDisabled = (item) => item.app.appType !== 'ML' && item.app.code !== 'A005';
   const isAppSubscribed = (item) => item.status !== 'UNSUBSCRIBED';
@@ -90,7 +92,13 @@ const CameraAppsCard = (props) => {
         }}
       >
         {(loading ? [...Array(12)] : dataList).map((app, index) =>
-          app ? renderAppCard(app) : <SkeletonAlertItem key={index} />
+          app ? (
+            (app.app.code !== 'A006' || user?.applicationTenant?.isLiveStreamingEnabled) &&
+            (app.app.code !== 'A005' || user?.applicationTenant?.isRecordingEnabled) &&
+            renderAppCard(app)
+          ) : (
+            <SkeletonAlertItem key={index} />
+          )
         )}
       </Box>
       {!loading && dataList?.length === 0 && (
