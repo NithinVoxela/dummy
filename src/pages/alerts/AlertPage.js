@@ -95,7 +95,7 @@ const AlertPage = () => {
           ))}
         </Tabs>
 
-        <Box sx={{ mb: 1 }} />
+        {/* <Box sx={{ mb: 1 }} /> */}
 
         {APP_TABS.map((tab) => {
           const isMatched = tab.value === currentTab;
