@@ -141,7 +141,7 @@ const CameraAppSettings = () => {
 
       if (appCode === 'A001' || appCode === 'A003' || appCode === 'A004') {
         getUserList();
-        // getCameraFrameDetails();
+        getCameraFrameDetails();
       }
     }
   }, [cameraId]);
@@ -255,13 +255,13 @@ const CameraAppSettings = () => {
             icon: <Iconify icon={'carbon:area-custom'} width={20} height={20} />,
             component: (
               <AnnotationTab
-                translate={translate} 
+                translate={translate}
+                frameUrl={cameraLatestFrame}
                 handleSave={handleSaveApp}
                 currentCamera={cameraDetails}
                 appId={appId}
                 onCancel={onCancel}
                 setIsFormUpdated={setIsFormUpdated}
-                camId={cameraId}
               />
             ),
           },
