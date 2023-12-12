@@ -26,7 +26,7 @@ import {
   resetSchedule,
   updateCameraApp,
   updateAppSchedule,
-  // getCamerasLatestFrame,
+  getCamerasLatestFrame,
 } from '../../redux/slices/cameras';
 import { getUsers, resetUserList } from '../../redux/slices/users';
 
@@ -49,7 +49,7 @@ const CameraAppSettings = () => {
   const theme = useTheme();
   const [mlApp, setMlApp] = useState(null);
   const [isFormUpdated, setIsFormUpdated] = useState(false);
-  const { cameraDetails, schedularList } = useSelector((state) => state.cameras);
+  const { cameraDetails, schedularList, cameraLatestFrame } = useSelector((state) => state.cameras);
   const { userList } = useSelector((state) => state.users);
 
   const [currentTab, setCurrentTab] = useState('general');
@@ -125,15 +125,15 @@ const CameraAppSettings = () => {
     [dispatch]
   );
 
-  // const getCameraFrameDetails = useCallback(async () => {
-  //   try {
-  //     await dispatch(getCamerasLatestFrame(cameraId));
-  //   } catch (err) {
-  //     enqueueSnackbar(err?.message, {
-  //       variant: 'error',
-  //     });
-  //   }
-  // }, [dispatch]);
+  const getCameraFrameDetails = useCallback(async () => {
+    try {
+      await dispatch(getCamerasLatestFrame(cameraId));
+    } catch (err) {
+      enqueueSnackbar(err?.message, {
+        variant: 'error',
+      });
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     if (cameraId) {
