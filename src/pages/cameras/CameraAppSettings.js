@@ -26,7 +26,6 @@ import {
   resetSchedule,
   updateCameraApp,
   updateAppSchedule,
-  getCamerasLatestFrame,
 } from '../../redux/slices/cameras';
 import { getUsers, resetUserList } from '../../redux/slices/users';
 
@@ -49,7 +48,7 @@ const CameraAppSettings = () => {
   const theme = useTheme();
   const [mlApp, setMlApp] = useState(null);
   const [isFormUpdated, setIsFormUpdated] = useState(false);
-  const { cameraDetails, schedularList, cameraLatestFrame } = useSelector((state) => state.cameras);
+  const { cameraDetails, schedularList } = useSelector((state) => state.cameras);
   const { userList } = useSelector((state) => state.users);
 
   const [currentTab, setCurrentTab] = useState('general');
@@ -124,24 +123,11 @@ const CameraAppSettings = () => {
     },
     [dispatch]
   );
-
-  const getCameraFrameDetails = useCallback(async () => {
-    try {
-      await dispatch(getCamerasLatestFrame(cameraId));
-    } catch (err) {
-      enqueueSnackbar(err?.message, {
-        variant: 'error',
-      });
-    }
-  }, [dispatch]);
-
   useEffect(() => {
     if (cameraId) {
       getCamera();
-
       if (appCode === 'A001' || appCode === 'A003' || appCode === 'A004') {
         getUserList();
-        getCameraFrameDetails();
       }
     }
   }, [cameraId]);
@@ -255,13 +241,13 @@ const CameraAppSettings = () => {
             icon: <Iconify icon={'carbon:area-custom'} width={20} height={20} />,
             component: (
               <AnnotationTab
-                translate={translate}
-                frameUrl={cameraLatestFrame}
+                translate={translate} 
                 handleSave={handleSaveApp}
                 currentCamera={cameraDetails}
                 appId={appId}
                 onCancel={onCancel}
                 setIsFormUpdated={setIsFormUpdated}
+                camId={cameraId}
               />
             ),
           },

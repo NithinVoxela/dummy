@@ -7,7 +7,7 @@ import 'leaflet-draw/dist/leaflet.draw.css';
 import { Box, Button, Card, Stack, Typography } from '@mui/material';
 import L from 'leaflet';
 import { EditControl } from 'react-leaflet-draw';
-
+import axios from '../../utils/axios';
 L.CRS.MySimple = L.extend({}, L.CRS.Simple, {
   // At zoom 0, tile 268x268px should represent the entire "world" of size 8576x8576.
   // scale is therefore 8576 / 268 = 32 (use the reverse in transformation, i.e. 1/32).
@@ -23,17 +23,16 @@ const coordinates = [150, 300];
 const style = { height: '68vh' };
 
 export default function AnnotationTab(props) {
-  const { currentCamera, translate, handleSave, frameUrl, appId, onCancel, setIsFormUpdated } = props;
+  const { currentCamera, translate, handleSave, appId, onCancel, setIsFormUpdated,camId } = props;
   const [mapLayers, setMapLayers] = useState([]);
-
   const [map, setMap] = useState(null);
-  const [url, setUrl] = useState(null);
   const [mlApp, setMlApp] = useState(null);
   const [imgBounds, setImgBounds] = useState(bounds);
   const [height, setHeight] = useState(null);
   const [width, setWidth] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const featureGroupRef = useRef();
+  const [frameUrl,setFrameUrl] = useState(null);
 
   const initializeLocale = () => {
     L.drawLocal = {
@@ -144,33 +143,31 @@ export default function AnnotationTab(props) {
   useEffect(() => {
     setIsLoading(true);
     initializeLocale();
+
   }, []);
+  useEffect(() => { 
 
-  useEffect(() => {
-    const app = currentCamera.appDtos?.find((item) => item?.id?.toString() === appId);
-    setMlApp(app);
-  }, [currentCamera]);
-
-  useEffect(() => {
-    if (frameUrl) {
-      const img = new Image();
-      img.src = frameUrl;
-      img.onload = function () {
-        setHeight(this.height);
-        setWidth(this.width);
-        const bounds = [
-          [0, 0],
-          [this.height, this.width],
-        ];
-        setImgBounds(bounds);
-        setUrl(frameUrl);
+  const fetchUrl = async () => {
+    
+  setIsLoading(true);
+    try {
+      const response = await axios.get(`camera/latest-frame/${camId}`);
+        if (response && response.data.fileUrl) {
+          setFrameUrl(response.data.fileUrl);
+        } else {
+          setFrameUrl('File does not exist');
+        }
+    } catch (error) { 
+        setFrameUrl('File does not exist');
+        // handle error or throw a new Error(error); 
+    }finally{
         setIsLoading(false);
-      };
-    } else {
-      setIsLoading(false);
     }
-  }, [frameUrl]);
-
+  };
+  fetchUrl();
+  const app = currentCamera.appDtos?.find((item) => item?.id?.toString() === appId);
+  setMlApp(app);
+}, [currentCamera, appId]);
   useEffect(() => {
     if (!map || !mlApp || !mlApp.config) return;
     try {
@@ -188,7 +185,6 @@ export default function AnnotationTab(props) {
       console.log(err);
     }
   }, [map, mlApp]);
-
   const getGeoJson = (regionOfInterest) => {
     let features = [];
     features = regionOfInterest?.map((region) => {
@@ -285,7 +281,7 @@ export default function AnnotationTab(props) {
           />
         </Box>
       )}
-      {!isLoading && url && (
+      {!isLoading && frameUrl!=='File does not exist' && (
         <>
           <MapContainer
             center={coordinates}
@@ -295,7 +291,7 @@ export default function AnnotationTab(props) {
             bounds={imgBounds}
             style={style}
           >
-            <ImageOverlay bounds={imgBounds} url={url} />
+            <ImageOverlay bounds={imgBounds} url={frameUrl} />
             <FeatureGroup ref={featureGroupRef}>
               <EditControl
                 position="topright"
@@ -325,7 +321,7 @@ export default function AnnotationTab(props) {
           </Stack>
         </>
       )}
-      {!isLoading && !url && (
+      {!isLoading && frameUrl==='File does not exist' && (
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 500 }}>
           <Typography color="textSecondary" variant="subtitle2">
             {translate('app.annotation-tab-empty-placeholder')}
