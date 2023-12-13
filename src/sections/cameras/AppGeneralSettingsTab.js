@@ -21,10 +21,10 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material';
-
 import { blue } from '@mui/material/colors';
 import { useDispatch } from '../../redux/store';
 import { sendTestAlert } from '../../redux/slices/alerts';
+import { searchUsers } from '../../redux/slices/users';
 import useAuth from '../../hooks/useAuth';
 import { renderExternalSystemsAutoComplete } from '../common/CommonUIHelper';
 import { getExternalSystems } from '../../utils/commonUtil';
@@ -56,7 +56,6 @@ AppGeneralSettingsTab.propTypes = {
 
 export default function AppGeneralSettingsTab(props) {
   const { onCancel, translate, appId, currentCamera, handleSave, userList = {}, setIsFormUpdated } = props;
-
   const [camera, setCamera] = useState({
     name: '',
     description: '',
@@ -169,10 +168,15 @@ export default function AppGeneralSettingsTab(props) {
     setSeverityValue(value);
     setIsFormUpdated(true);
   };
-
-  useMemo(() => {
+  const fetchSubscribers = async (e = {}, name = '') => {
+    const response = await searchUsers({ pageSize: 50 }, { userName: name });
+    if (response?.data?.records) {
+      setSubscribers(response.data.records);
+    }
+  };
+  useMemo(async () => {
     if (userList?.data?.length > 0) {
-      setSubscribers(userList?.data);
+      fetchSubscribers();
       if (mlApp) {
         setDesktopSubscribers(mlApp?.config?.deskTopSubscribers?.userDtos || []);
         setMobileSubscribers(mlApp?.config?.mobileSubscribers?.userDtos || []);
@@ -241,7 +245,6 @@ export default function AppGeneralSettingsTab(props) {
     }
     return false;
   };
-
   const renderAutoComplete = (handler, value, label, type) => (
     <FormControlLabel
       control={
@@ -250,6 +253,7 @@ export default function AppGeneralSettingsTab(props) {
           size="small"
           sx={{ minWidth: 300, ml: 1 }}
           onChange={handler}
+          onInputChange={fetchSubscribers}
           options={subscribers || []}
           getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
           renderTags={(value, getTagProps) =>

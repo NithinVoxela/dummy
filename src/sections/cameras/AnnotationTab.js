@@ -23,7 +23,7 @@ const coordinates = [150, 300];
 const style = { height: '68vh' };
 
 export default function AnnotationTab(props) {
-  const { currentCamera, translate, handleSave, appId, onCancel, setIsFormUpdated,camId } = props;
+  const { currentCamera, translate, handleSave, appId, onCancel, setIsFormUpdated, camId } = props;
   const [mapLayers, setMapLayers] = useState([]);
   const [map, setMap] = useState(null);
   const [mlApp, setMlApp] = useState(null);
@@ -32,8 +32,7 @@ export default function AnnotationTab(props) {
   const [width, setWidth] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const featureGroupRef = useRef();
-  const [frameUrl,setFrameUrl] = useState(null);
-
+  const [frameUrl, setFrameUrl] = useState('File does not exist');
   const initializeLocale = () => {
     L.drawLocal = {
       draw: {
@@ -139,35 +138,10 @@ export default function AnnotationTab(props) {
       },
     };
   };
-
   useEffect(() => {
-    setIsLoading(true);
-    initializeLocale();
-
-  }, []);
-  useEffect(() => { 
-
-  const fetchUrl = async () => {
-    
-  setIsLoading(true);
-    try {
-      const response = await axios.get(`camera/latest-frame/${camId}`);
-        if (response && response.data.fileUrl) {
-          setFrameUrl(response.data.fileUrl);
-        } else {
-          setFrameUrl('File does not exist');
-        }
-    } catch (error) { 
-        setFrameUrl('File does not exist');
-        // handle error or throw a new Error(error); 
-    }finally{
-        setIsLoading(false);
-    }
-  };
-  fetchUrl();
-  const app = currentCamera.appDtos?.find((item) => item?.id?.toString() === appId);
-  setMlApp(app);
-}, [currentCamera, appId]);
+    const app = currentCamera.appDtos?.find((item) => item?.id?.toString() === appId);
+    setMlApp(app);
+  }, [currentCamera, appId]);
   useEffect(() => {
     if (!map || !mlApp || !mlApp.config) return;
     try {
@@ -176,7 +150,6 @@ export default function AnnotationTab(props) {
       if (geoJsonData) {
         let leafletGeoJSON = new L.GeoJSON(geoJsonData);
         let leafletFG = featureGroupRef?.current;
-
         leafletGeoJSON.eachLayer((layer) => {
           leafletFG.addLayer(layer);
         });
@@ -184,7 +157,44 @@ export default function AnnotationTab(props) {
     } catch (err) {
       console.log(err);
     }
-  }, [map, mlApp]);
+  }, [map, mlApp, imgBounds]);
+  useEffect(() => {
+    setIsLoading(true);
+    initializeLocale();
+    const fetchUrl = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(`camera/latest-frame/${camId}`);
+        if (response && response.data.fileUrl) {
+          setFrameUrl(response.data.fileUrl);
+          if (response.data.fileUrl != 'File does not exist') {
+            getImgDimensions(response.data.fileUrl);
+          }
+        } else {
+          setFrameUrl('File does not exist');
+        }
+      } catch (error) {
+        setFrameUrl('File does not exist');
+        // handle error or throw a new Error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchUrl();
+  }, []);
+  const getImgDimensions =(response)=>{
+     const img = new Image();
+     img.onload = function () {
+       setHeight(this.height);
+       setWidth(this.width);
+       const bounds = [
+         [0, 0],
+         [this.height, this.width],
+       ];
+       setImgBounds(bounds);
+     };
+     img.src = response;
+  }
   const getGeoJson = (regionOfInterest) => {
     let features = [];
     features = regionOfInterest?.map((region) => {
@@ -198,7 +208,6 @@ export default function AnnotationTab(props) {
         },
       };
     });
-
     return features;
   };
 
@@ -206,7 +215,6 @@ export default function AnnotationTab(props) {
     const { layerType, layer } = e;
     if (layerType === 'polygon') {
       const { _leaflet_id } = layer;
-
       setMapLayers((layers) => [...layers, { id: _leaflet_id, latlngs: layer.getLatLngs()[0] }]);
       setIsFormUpdated(true);
     }
@@ -216,7 +224,6 @@ export default function AnnotationTab(props) {
     const {
       layers: { _layers },
     } = e;
-
     Object.values(_layers).map(({ _leaflet_id, editing }) => {
       setMapLayers((layers) =>
         layers.map((l) => (l.id === _leaflet_id ? { ...l, latlngs: { ...editing.latlngs[0] } } : l))
@@ -267,7 +274,6 @@ export default function AnnotationTab(props) {
       setIsFormUpdated(false);
     }
   };
-
   return (
     <Card sx={{ p: 1, pb: 2 }}>
       {isLoading && (
@@ -281,7 +287,7 @@ export default function AnnotationTab(props) {
           />
         </Box>
       )}
-      {!isLoading && frameUrl!=='File does not exist' && (
+      {!isLoading && frameUrl && frameUrl !== 'File does not exist' && (
         <>
           <MapContainer
             center={coordinates}
@@ -321,7 +327,7 @@ export default function AnnotationTab(props) {
           </Stack>
         </>
       )}
-      {!isLoading && frameUrl==='File does not exist' && (
+      {!isLoading && frameUrl === 'File does not exist' && (
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 500 }}>
           <Typography color="textSecondary" variant="subtitle2">
             {translate('app.annotation-tab-empty-placeholder')}
