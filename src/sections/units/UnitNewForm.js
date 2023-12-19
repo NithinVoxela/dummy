@@ -81,7 +81,10 @@ export default function UnitNewForm({ isEdit, currentUnit, translate, handleSave
   };
 
   const userChangeHandlerHandler = async (searchStr) => {
-    const response = await searchUsers({ pageSize: 20 }, { userName: searchStr });
+    const response = await searchUsers(
+      { pageSize: 20 },
+      { filterType: 'OR', userName: searchStr, firstName: searchStr, lastName: searchStr }
+    );
     if (response?.data?.records) {
       setUserList(response.data.records);
     }

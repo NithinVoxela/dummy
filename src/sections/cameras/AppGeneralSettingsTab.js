@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
+import { debounce } from 'lodash';
 // @mui
 import {
   Autocomplete,
@@ -55,7 +56,7 @@ AppGeneralSettingsTab.propTypes = {
 // ----------------------------------------------------------------------
 
 export default function AppGeneralSettingsTab(props) {
-  const { onCancel, translate, appId, currentCamera, handleSave, userList = {}, setIsFormUpdated } = props;
+  const { onCancel, translate, appId, currentCamera, handleSave, setIsFormUpdated } = props;
   const [camera, setCamera] = useState({
     name: '',
     description: '',
@@ -91,6 +92,10 @@ export default function AppGeneralSettingsTab(props) {
     { value: 'Medium', label: translate('app.alert-medium-label') },
     { value: 'Low', label: translate('app.alert-low-label') },
   ];
+
+  useEffect(() => {
+    userChangeHandler();
+  }, []);
 
   useEffect(() => {
     setCamera(currentCamera);
@@ -168,22 +173,32 @@ export default function AppGeneralSettingsTab(props) {
     setSeverityValue(value);
     setIsFormUpdated(true);
   };
-  const fetchSubscribers = async (e = {}, name = '') => {
-    const response = await searchUsers({ pageSize: 50 }, { userName: name });
+
+  const userChangeHandler = async (searchStr) => {
+    const response = await searchUsers(
+      { pageSize: 50 },
+      searchStr ? { filterType: 'OR', userName: searchStr, firstName: searchStr, lastName: searchStr } : {}
+    );
     if (response?.data?.records) {
       setSubscribers(response.data.records);
     }
   };
-  useMemo(async () => {
-    if (userList?.data?.length > 0) {
-      fetchSubscribers();
-      if (mlApp) {
-        setDesktopSubscribers(mlApp?.config?.deskTopSubscribers?.userDtos || []);
-        setMobileSubscribers(mlApp?.config?.mobileSubscribers?.userDtos || []);
-        setEmailSubscribers(mlApp?.config?.emailSubscribers?.userDtos || []);
-      }
+
+  const debounceUserChangeHandler = useCallback(debounce(userChangeHandler, 1000), []);
+
+  const handleUserChange = (value) => {
+    if (value) {
+      debounceUserChangeHandler(value);
     }
-  }, [userList, mlApp]);
+  };
+
+  useMemo(async () => {
+    if (mlApp) {
+      setDesktopSubscribers(mlApp?.config?.deskTopSubscribers?.userDtos || []);
+      setMobileSubscribers(mlApp?.config?.mobileSubscribers?.userDtos || []);
+      setEmailSubscribers(mlApp?.config?.emailSubscribers?.userDtos || []);
+    }
+  }, [mlApp]);
 
   const getSubscriberPayload = (list) => {
     const payload = [];
@@ -253,8 +268,13 @@ export default function AppGeneralSettingsTab(props) {
           size="small"
           sx={{ minWidth: 300, ml: 1 }}
           onChange={handler}
-          onInputChange={fetchSubscribers}
+          onInputChange={(event, newInputValue) => {
+            handleUserChange(newInputValue);
+          }}
           options={subscribers || []}
+          filterOptions={(x) => x}
+          filterSelectedOptions
+          isOptionEqualToValue={(option, value) => option.id === value.id}
           getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
           renderTags={(value, getTagProps) =>
             value.map((option, index) => (

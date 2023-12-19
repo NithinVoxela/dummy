@@ -23,6 +23,7 @@ const coordinates = [150, 300];
 const style = { height: '68vh' };
 
 export default function AnnotationTab(props) {
+  const FILE_MISSING = 'FILE_MISSING';
   const { currentCamera, translate, handleSave, appId, onCancel, setIsFormUpdated, camId } = props;
   const [mapLayers, setMapLayers] = useState([]);
   const [map, setMap] = useState(null);
@@ -32,7 +33,7 @@ export default function AnnotationTab(props) {
   const [width, setWidth] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const featureGroupRef = useRef();
-  const [frameUrl, setFrameUrl] = useState('File does not exist');
+  const [frameUrl, setFrameUrl] = useState(FILE_MISSING);
   const initializeLocale = () => {
     L.drawLocal = {
       draw: {
@@ -138,10 +139,12 @@ export default function AnnotationTab(props) {
       },
     };
   };
+
   useEffect(() => {
     const app = currentCamera.appDtos?.find((item) => item?.id?.toString() === appId);
     setMlApp(app);
   }, [currentCamera, appId]);
+
   useEffect(() => {
     if (!map || !mlApp || !mlApp.config) return;
     try {
@@ -158,6 +161,7 @@ export default function AnnotationTab(props) {
       console.log(err);
     }
   }, [map, mlApp, imgBounds]);
+
   useEffect(() => {
     setIsLoading(true);
     initializeLocale();
@@ -165,36 +169,35 @@ export default function AnnotationTab(props) {
       setIsLoading(true);
       try {
         const response = await axios.get(`camera/latest-frame/${camId}`);
-        if (response && response.data.fileUrl) {
-          setFrameUrl(response.data.fileUrl);
-          if (response.data.fileUrl != 'File does not exist') {
-            getImgDimensions(response.data.fileUrl);
-          }
+        if (response && response.data.fileUrl && response.data.fileUrl != FILE_MISSING) {
+          setFrameProperties(response.data.fileUrl);
         } else {
-          setFrameUrl('File does not exist');
+          setFrameUrl(FILE_MISSING);
         }
       } catch (error) {
-        setFrameUrl('File does not exist');
-        // handle error or throw a new Error(error);
+        setFrameUrl(FILE_MISSING);
       } finally {
         setIsLoading(false);
       }
     };
     fetchUrl();
   }, []);
-  const getImgDimensions =(response)=>{
-     const img = new Image();
-     img.onload = function () {
-       setHeight(this.height);
-       setWidth(this.width);
-       const bounds = [
-         [0, 0],
-         [this.height, this.width],
-       ];
-       setImgBounds(bounds);
-     };
-     img.src = response;
-  }
+
+  const setFrameProperties = (imageUrl) => {
+    const img = new Image();
+    img.onload = function () {
+      setHeight(this.height);
+      setWidth(this.width);
+      const bounds = [
+        [0, 0],
+        [this.height, this.width],
+      ];
+      setImgBounds(bounds);
+      setFrameUrl(imageUrl);
+    };
+    img.src = imageUrl;
+  };
+
   const getGeoJson = (regionOfInterest) => {
     let features = [];
     features = regionOfInterest?.map((region) => {
@@ -287,7 +290,7 @@ export default function AnnotationTab(props) {
           />
         </Box>
       )}
-      {!isLoading && frameUrl && frameUrl !== 'File does not exist' && (
+      {!isLoading && frameUrl && frameUrl !== FILE_MISSING && (
         <>
           <MapContainer
             center={coordinates}
@@ -327,7 +330,7 @@ export default function AnnotationTab(props) {
           </Stack>
         </>
       )}
-      {!isLoading && frameUrl === 'File does not exist' && (
+      {!isLoading && frameUrl === FILE_MISSING && (
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 500 }}>
           <Typography color="textSecondary" variant="subtitle2">
             {translate('app.annotation-tab-empty-placeholder')}

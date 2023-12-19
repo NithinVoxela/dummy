@@ -27,7 +27,6 @@ import {
   updateCameraApp,
   updateAppSchedule,
 } from '../../redux/slices/cameras';
-import { getUsers, resetUserList } from '../../redux/slices/users';
 
 // sections
 import { AppGeneralSettingsTab, AnnotationTab, RecordingGeneralSettingsTab } from '../../sections/cameras';
@@ -49,7 +48,6 @@ const CameraAppSettings = () => {
   const [mlApp, setMlApp] = useState(null);
   const [isFormUpdated, setIsFormUpdated] = useState(false);
   const { cameraDetails, schedularList } = useSelector((state) => state.cameras);
-  const { userList } = useSelector((state) => state.users);
 
   const [currentTab, setCurrentTab] = useState('general');
 
@@ -61,16 +59,6 @@ const CameraAppSettings = () => {
         variant: 'error',
       });
       throw new Error(err?.message);
-    }
-  }, [dispatch]);
-
-  const getUserList = useCallback(async () => {
-    try {
-      await dispatch(getUsers({ pageSize: 1000 }));
-    } catch (err) {
-      enqueueSnackbar(err?.message, {
-        variant: 'error',
-      });
     }
   }, [dispatch]);
 
@@ -87,10 +75,6 @@ const CameraAppSettings = () => {
 
   const resetCameraAppSchedule = () => {
     resetSchedule();
-  };
-
-  const resetUsers = () => {
-    resetUserList();
   };
 
   const handleSaveApp = useCallback(
@@ -126,9 +110,6 @@ const CameraAppSettings = () => {
   useEffect(() => {
     if (cameraId) {
       getCamera();
-      if (appCode === 'A001' || appCode === 'A003' || appCode === 'A004') {
-        getUserList();
-      }
     }
   }, [cameraId]);
 
@@ -142,7 +123,6 @@ const CameraAppSettings = () => {
   useEffect(() => {
     return () => {
       resetCameraAppSchedule();
-      resetUsers();
       setIsFormUpdated(false);
     };
   }, []);
@@ -191,7 +171,6 @@ const CameraAppSettings = () => {
       setIsFormUpdated(false);
       if (value === 'general') {
         getCamera();
-        getUserList();
       } else if (value === 'schedule') {
         getCameraAppSchedule();
       }
@@ -214,7 +193,6 @@ const CameraAppSettings = () => {
                 handleSave={handleSaveApp}
                 onCancel={onCancel}
                 appId={appId}
-                userList={userList}
                 setIsFormUpdated={setIsFormUpdated}
               />
             ),
@@ -241,7 +219,7 @@ const CameraAppSettings = () => {
             icon: <Iconify icon={'carbon:area-custom'} width={20} height={20} />,
             component: (
               <AnnotationTab
-                translate={translate} 
+                translate={translate}
                 handleSave={handleSaveApp}
                 currentCamera={cameraDetails}
                 appId={appId}
