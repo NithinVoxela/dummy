@@ -48,9 +48,9 @@ export default function CameraCreate() {
     async (payload = {}) => {
       try {
         if (!isEdit) {
-          dispatch(saveCamera(payload));
+         await Promise.resolve(dispatch(saveCamera(payload)));
         } else {
-          dispatch(updateCamera(payload));
+          await Promise.resolve(dispatch(updateCamera(payload)));
         }
         enqueueSnackbar(!isEdit ? translate('app.camera-add-success') : translate('app.camera-update-success'));
         navigate(PATH_DASHBOARD.cameras.list);
