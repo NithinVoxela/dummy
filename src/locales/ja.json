@@ -323,6 +323,7 @@
     "ADMIN": "サイト管理者",
     "USER": "ユーザー",
     "ORG_ADMIN": "組織管理者",
+    "ANNOTATOR":"アノテーター",
     "SUPER_ADMIN": "スーパー管理者",
     "alert-delete-success": "アラートが正常に削除されました",
     "alert-archive-success": "アラートは保存されました",

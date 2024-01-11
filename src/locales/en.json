@@ -321,6 +321,7 @@
     "ADMIN": "Site Admin",
     "USER": "User",
     "ORG_ADMIN": "Organization Admin",
+    "ANNOTATOR":"Annotator",
     "SUPER_ADMIN": "Super Admin",
     "alert-delete-success": "Alert deleted successfully",
     "alert-archive-success": "Alert archived successfully",
