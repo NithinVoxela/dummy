@@ -329,6 +329,8 @@
     "alert-archive-success": "アラートは保存されました",
     "alert-unarchive-success": "保管は取り消されました",
     "created-label": "作成日",
+    "last-active-time":"最終アクティブ時間",
+    "agent-is-notification-enabled":"オフラインアラートを有効にする",
     "apiAuthKey-label": "API 認証キー",
     "tenant-parent-label": "上位サイト",
     "agent-registration-status-label": "登録状況",

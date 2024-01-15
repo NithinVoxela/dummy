@@ -327,6 +327,8 @@
     "alert-archive-success": "Alert archived successfully",
     "alert-unarchive-success": "Alert unarchived successfully",
     "created-label": "Created On",
+    "last-active-time":"Last Active Time",
+    "agent-is-notification-enabled":"Enable Inactive Alert",
     "apiAuthKey-label": "Api Authorization Key",
     "tenant-parent-label": "Parent Site",
     "tenant-is-recording-enabled": "Enable Continuous Recording",

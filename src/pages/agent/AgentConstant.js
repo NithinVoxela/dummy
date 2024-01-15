@@ -1,4 +1,4 @@
-import { formatEpochTime } from '../../utils/formatTime';
+import {  formatEpochTime } from '../../utils/formatTime';
 
 export const AGENT_TABLE_META = {
   size: 'medium',
@@ -22,6 +22,11 @@ export const AGENT_TABLE_META = {
       renderWidget: (col, cellData, value, translate, authContext) => (
         <>{value && value > 0 ? formatEpochTime(value, authContext?.user?.timezone) : ''}</>
       ),
+    },{
+      text:'app.last-active-time',
+      dataKey:'lastActiveTime',
+      sortable:false,
+      type: 'date'
     },
     {
       text: '',

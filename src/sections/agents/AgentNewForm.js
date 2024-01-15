@@ -11,7 +11,7 @@ import { LoadingButton } from '@mui/lab';
 import { Autocomplete, Box, Button, Card, Chip, Grid, Stack, TextField } from '@mui/material';
 
 // components
-import { FormProvider, RHFSelect, RHFTextField } from '../../components/hook-form';
+import { FormProvider, RHFSelect, RHFTextField, RHFCheckbox } from '../../components/hook-form';
 import { registrationStatuses } from '../common/CommonConstants';
 
 import { searchCameras } from '../../redux/slices/cameras';
@@ -35,6 +35,7 @@ export default function AgentNewForm({ isEdit, currentAgent, translate, handleSa
     ipAddress: Yup.string().nullable(true).default(null),
     cameras: Yup.array().nullable(true).default([]),
     macIds: Yup.array().nullable(true).default([]),
+    isNotificationEnabled:Yup.boolean().nullable(false).default(true).required()
   });
 
   const defaultValues = useMemo(
@@ -45,6 +46,7 @@ export default function AgentNewForm({ isEdit, currentAgent, translate, handleSa
       publicId: currentAgent?.publicId || '',
       cameras: currentAgent?.cameras || [],
       macIds: currentAgent?.macIds || [],
+      isNotificationEnabled:currentAgent?.isNotificationEnabled || false,
     }),
     [currentAgent]
   );
@@ -68,7 +70,6 @@ export default function AgentNewForm({ isEdit, currentAgent, translate, handleSa
     if (isEdit) {
       data = { ...currentAgent, ...data };
     }
-
     await handleSave(data);
   };
 
@@ -177,6 +178,8 @@ export default function AgentNewForm({ isEdit, currentAgent, translate, handleSa
                   />
                 )}
               />
+              
+              <RHFCheckbox name="isNotificationEnabled" label={translate('app.agent-is-notification-enabled')} />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
