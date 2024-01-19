@@ -6,6 +6,12 @@ import React from 'react';
 
 import useAuth from '../../hooks/useAuth';
 import { SkeletonAlertItem } from '../../components/skeleton';
+import {
+  RECORDING_APP_CODE,
+  STREAMING_APP_CODE,
+  REGION_EXIT_APP_CODE,
+  SUPER_ADMIN_ROLE,
+} from '../common/CommonConstants';
 
 const GreenSwitch = withStyles({
   switchBase: {
@@ -29,7 +35,7 @@ const CameraAppsCard = (props) => {
 
   const { user } = useAuth();
   const isAppEnabled = (item) => item.status === 'ACTIVE';
-  const isSettingsDisabled = (item) => item.app.appType !== 'ML' && item.app.code !== 'A005';
+  const isSettingsDisabled = (item) => item.app.code === STREAMING_APP_CODE;
   const isAppSubscribed = (item) => item.status !== 'UNSUBSCRIBED';
 
   const renderAppCard = (item) => (
@@ -93,8 +99,9 @@ const CameraAppsCard = (props) => {
       >
         {(loading ? [...Array(12)] : dataList).map((app, index) =>
           app ? (
-            (app.app.code !== 'A006' || user?.applicationTenant?.isLiveStreamingEnabled) &&
-            (app.app.code !== 'A005' || user?.applicationTenant?.isRecordingEnabled) &&
+            (app.app.code !== STREAMING_APP_CODE || user?.applicationTenant?.isLiveStreamingEnabled) &&
+            (app.app.code !== RECORDING_APP_CODE || user?.applicationTenant?.isRecordingEnabled) &&
+            (app.app.code !== REGION_EXIT_APP_CODE || SUPER_ADMIN_ROLE === user?.role) &&
             renderAppCard(app)
           ) : (
             <SkeletonAlertItem key={index} />

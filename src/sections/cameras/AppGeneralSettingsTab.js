@@ -21,6 +21,8 @@ import {
   Radio,
   IconButton,
   Tooltip,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { useDispatch } from '../../redux/store';
@@ -29,6 +31,7 @@ import { searchUsers } from '../../redux/slices/users';
 import useAuth from '../../hooks/useAuth';
 import { renderExternalSystemsAutoComplete } from '../common/CommonUIHelper';
 import { getExternalSystems } from '../../utils/commonUtil';
+import { REGION_EXIT_APP_CODE, SUPER_ADMIN_ROLE } from '../common/CommonConstants';
 
 // components
 // ----------------------------------------------------------------------
@@ -50,13 +53,14 @@ AppGeneralSettingsTab.propTypes = {
   handleSave: PropTypes.func,
   onCancel: PropTypes.func,
   appId: PropTypes.string,
+  appCode: PropTypes.string,
   userList: PropTypes.object,
 };
 
 // ----------------------------------------------------------------------
 
 export default function AppGeneralSettingsTab(props) {
-  const { onCancel, translate, appId, currentCamera, handleSave, setIsFormUpdated } = props;
+  const { onCancel, translate, appId, appCode, currentCamera, handleSave, setIsFormUpdated } = props;
   const [camera, setCamera] = useState({
     name: '',
     description: '',
@@ -71,19 +75,28 @@ export default function AppGeneralSettingsTab(props) {
     severity: '',
   });
   const [mlApp, setMlApp] = useState(null);
-  const [sensitivity, setSensitivity] = useState(80);
   const [desktopAlert, setDesktopAlert] = useState(false);
   const [mobileAlert, setMobileAlert] = useState(false);
   const [externalSystemAlert, setExternalSystemAlert] = useState(false);
-  const [isPrivacyEnabled, setIsPrivacyEnabled] = useState(false);
   const [email, setEmail] = useState(false);
-  const [extraConfig, setExtraConfig] = useState('');
+
   const [desktopSubscribers, setDesktopSubscribers] = useState([]);
   const [mobileSubscribers, setMobileSubscribers] = useState([]);
   const [emailSubscribers, setEmailSubscribers] = useState([]);
   const [externalSystemTypes, setExternalSystemTypes] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
+
+  const [sensitivity, setSensitivity] = useState(80);
   const [severityValue, setSeverityValue] = useState('Low');
+  const [extraConfig, setExtraConfig] = useState('');
+  const [isPrivacyEnabled, setIsPrivacyEnabled] = useState(false);
+
+  const [contourInsideROIThreshold, setContourInsideROIThreshold] = useState(null);
+  const [contourCrossROIThreshold, setContourCrossROIThreshold] = useState(null);
+  const [snooze, setSnooze] = useState(null);
+  const [maxMergedContours, setMaxMergedContours] = useState(null);
+  const [exitSides, setExitSides] = useState(null);
+
   const dispatch = useDispatch();
   const { user } = useAuth();
 
@@ -101,16 +114,26 @@ export default function AppGeneralSettingsTab(props) {
     setCamera(currentCamera);
     const app = currentCamera.appDtos?.find((item) => item?.id?.toString() === appId);
     setMlApp(app);
-    // eslint-disable-next-line radix
-    setSensitivity(app?.config?.appSettings?.sensitivity ? parseInt(app.config.appSettings.sensitivity * 100) : 0);
+
     setDesktopAlert(app?.config?.appSettings?.allowDesktopAlert);
     setEmail(app?.config?.appSettings?.allowEmailAlert);
     setMobileAlert(app?.config?.appSettings?.allowMobileAlert);
     setExternalSystemAlert(app?.config?.appSettings?.allowExternalSystemAlert);
-    setExtraConfig(app?.config?.appSettings?.customJsonData);
-    setIsPrivacyEnabled(app?.config?.appSettings?.isPrivacyEnabled || false);
-    setSeverityValue(app?.config?.appSettings?.severity || 'Low');
     setExternalSystemTypes(app?.config?.externalSystemNotificationTypes || []);
+
+    if (appCode === REGION_EXIT_APP_CODE) {
+      setContourInsideROIThreshold(app?.config?.appSettings?.contourInsideROIThreshold);
+      setContourCrossROIThreshold(app?.config?.appSettings?.contourCrossROIThreshold);
+      setSnooze(app?.config?.appSettings?.snooze);
+      setMaxMergedContours(app?.config?.appSettings?.maxMergedContours);
+      setExitSides(app?.config?.appSettings?.exitSides);
+    } else {
+      // eslint-disable-next-line radix
+      setSensitivity(app?.config?.appSettings?.sensitivity ? parseInt(app.config.appSettings.sensitivity * 100) : 0);
+      setIsPrivacyEnabled(app?.config?.appSettings?.isPrivacyEnabled || false);
+      setSeverityValue(app?.config?.appSettings?.severity || 'Low');
+      setExtraConfig(app?.config?.appSettings?.customJsonData);
+    }
   }, [currentCamera]);
 
   const handleSensitivityChange = (event, value) => {
@@ -174,6 +197,37 @@ export default function AppGeneralSettingsTab(props) {
     setIsFormUpdated(true);
   };
 
+  const handleContourInsideROIThresholdChange = (event) => {
+    setContourInsideROIThreshold(
+      event?.target?.value && !Number.isNaN(+event.target.value) ? Number(event.target.value) : null
+    );
+    setIsFormUpdated(true);
+  };
+
+  const handleContourCrossROIThresholdChange = (event) => {
+    setContourCrossROIThreshold(
+      event?.target?.value && !Number.isNaN(+event.target.value) ? Number(event.target.value) : null
+    );
+    setIsFormUpdated(true);
+  };
+
+  const handleSnoozeChange = (event) => {
+    setSnooze(event?.target?.value && !Number.isNaN(+event.target.value) ? Number(event.target.value) : null);
+    setIsFormUpdated(true);
+  };
+
+  const handleMaxMergedContoursChange = (event) => {
+    setMaxMergedContours(
+      event?.target?.value && !Number.isNaN(+event.target.value) ? Number(event.target.value) : null
+    );
+    setIsFormUpdated(true);
+  };
+
+  const handleExitSidesChange = (event) => {
+    setExitSides(event?.target?.value ? event.target.value : null);
+    setIsFormUpdated(true);
+  };
+
   const userChangeHandler = async (searchStr) => {
     const response = await searchUsers(
       { pageSize: 50 },
@@ -224,7 +278,8 @@ export default function AppGeneralSettingsTab(props) {
         type: 'EMAIL',
         userDtos: getSubscriberPayload(emailSubscribers),
       };
-      const payload = {
+
+      let payload = {
         ...mlApp.config,
         cameraId: currentCamera?.publicId,
         appId: mlApp.app.id,
@@ -234,16 +289,43 @@ export default function AppGeneralSettingsTab(props) {
         externalSystemNotificationTypes: externalSystemTypes,
         appSettings: {
           ...mlApp.config?.appSettings,
-          sensitivity: sensitivity / 100,
           allowDesktopAlert: desktopAlert,
           allowMobileAlert: mobileAlert,
           allowEmailAlert: email,
           allowExternalSystemAlert: externalSystemAlert,
-          customJsonData: extraConfig,
-          isPrivacyEnabled,
-          severity: severityValue,
+          contourInsideROIThreshold,
+          contourCrossROIThreshold,
+          snooze,
+          maxMergedContours,
+          exitSides,
         },
       };
+
+      if (appCode === REGION_EXIT_APP_CODE) {
+        payload = {
+          ...payload,
+          appSettings: {
+            ...payload.appSettings,
+            contourInsideROIThreshold,
+            contourCrossROIThreshold,
+            snooze,
+            maxMergedContours,
+            exitSides,
+          },
+        };
+      } else {
+        payload = {
+          ...payload,
+          appSettings: {
+            ...payload.appSettings,
+            sensitivity: sensitivity / 100,
+            customJsonData: extraConfig,
+            isPrivacyEnabled,
+            severity: severityValue,
+          },
+        };
+      }
+
       handleSave(payload);
       setIsFormUpdated(false);
     }
@@ -310,60 +392,141 @@ export default function AppGeneralSettingsTab(props) {
 
   return (
     <Card sx={{ padding: '24px 40px' }}>
-      {user?.role === 'SUPER_ADMIN' && (
-        <Box>
-          <FormControl component="fieldset">
-            <FormLabel component="label" color="primary">
-              {translate('app.camera-sensitivity-header-label')}:{' '}
-            </FormLabel>
-            <Slider
-              defaultValue={80}
-              aria-labelledby="discrete-slider-always"
-              step={1}
-              valueLabelDisplay="auto"
-              marks={marks}
-              onChange={handleSensitivityChange}
-              style={{ width: 200 }}
-              value={sensitivity}
-            />
-          </FormControl>
-        </Box>
+      {appCode === REGION_EXIT_APP_CODE && (
+        <>
+          <Box sx={{ mt: 3, display: 'flex', alignItems: 'center' }}>
+            <FormControl component="fieldset">
+              <FormLabel component="label" color="primary">
+                {translate('app.region-exit-contourInsideROIThreshold-label')}:{' '}
+              </FormLabel>
+              <TextField
+                aria-label="ContourInsideROIThreshold"
+                value={contourInsideROIThreshold}
+                onChange={handleContourInsideROIThresholdChange}
+              />
+            </FormControl>
+          </Box>
+          <Box sx={{ mt: 3, display: 'flex', alignItems: 'center' }}>
+            <FormControl component="fieldset">
+              <FormLabel component="label" color="primary">
+                {translate('app.region-exit-contourCrossROIThreshold-label')}:{' '}
+              </FormLabel>
+              <TextField
+                aria-label="ContourCrossROIThreshold"
+                value={contourCrossROIThreshold}
+                onChange={handleContourCrossROIThresholdChange}
+              />
+            </FormControl>
+          </Box>
+          <Box sx={{ mt: 3, display: 'flex', alignItems: 'center' }}>
+            <FormControl component="fieldset">
+              <FormLabel component="label" color="primary">
+                {translate('app.region-exit-snooze-label')}:{' '}
+              </FormLabel>
+              <TextField aria-label="Snooze" value={snooze} onChange={handleSnoozeChange} />
+            </FormControl>
+          </Box>
+          <Box sx={{ mt: 3, display: 'flex', alignItems: 'center' }}>
+            <FormControl component="fieldset">
+              <FormLabel component="label" color="primary">
+                {translate('app.region-exit-maxMergedContours-label')}:{' '}
+              </FormLabel>
+              <TextField
+                aria-label="MaxMergedContours"
+                value={maxMergedContours}
+                onChange={handleMaxMergedContoursChange}
+              />
+            </FormControl>
+          </Box>
+          <Box sx={{ mt: 3, display: 'flex', alignItems: 'center' }}>
+            <FormControl component="fieldset">
+              <FormLabel component="label" color="primary">
+                {translate('app.region-exit-exit-sides-label')}:{' '}
+              </FormLabel>
+              <Select aria-label="ExitSides" value={exitSides} onChange={handleExitSidesChange}>
+                <MenuItem value="all">all</MenuItem>
+                <MenuItem value="right">right</MenuItem>
+                <MenuItem value="left">left</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </>
       )}
-      <Box sx={{ mt: 3 }}>
-        <FormControl component="fieldset">
-          <FormLabel component="label" color="primary">
-            {translate('app.camera-privacy-label', 'Privacy')}:{' '}
-          </FormLabel>
-          <FormControlLabel
-            control={
-              <Switch checked={isPrivacyEnabled} onChange={handlePrivacyChange} color="primary" name="privacy" />
-            }
-            label={
-              isPrivacyEnabled
-                ? translate('app.camera-privacy-enabled-label')
-                : translate('app.camera-privacy-disabled-label')
-            }
-          />
-        </FormControl>
-      </Box>
-      <Box sx={{ mt: 3 }}>
-        <FormControl component="fieldset">
-          <FormLabel component="label" color="primary">
-            {translate('app.alerts-severity-label')}:{' '}
-          </FormLabel>
-          <RadioGroup
-            row
-            aria-labelledby="demo-row-radio-buttons-group-label"
-            name="row-radio-buttons-group"
-            onChange={handleRadioChange}
-            value={severityValue}
-          >
-            {SEVERITY.map((item) => (
-              <FormControlLabel key={item.value} value={item.value} control={<Radio />} label={item.label} />
-            ))}
-          </RadioGroup>
-        </FormControl>
-      </Box>
+      {appCode !== REGION_EXIT_APP_CODE && (
+        <>
+          {user?.role === SUPER_ADMIN_ROLE && (
+            <Box>
+              <FormControl component="fieldset">
+                <FormLabel component="label" color="primary">
+                  {translate('app.camera-sensitivity-header-label')}:{' '}
+                </FormLabel>
+                <Slider
+                  defaultValue={80}
+                  aria-labelledby="discrete-slider-always"
+                  step={1}
+                  valueLabelDisplay="auto"
+                  marks={marks}
+                  onChange={handleSensitivityChange}
+                  style={{ width: 200 }}
+                  value={sensitivity}
+                />
+              </FormControl>
+            </Box>
+          )}
+          <Box sx={{ mt: 3 }}>
+            <FormControl component="fieldset">
+              <FormLabel component="label" color="primary">
+                {translate('app.camera-privacy-label', 'Privacy')}:{' '}
+              </FormLabel>
+              <FormControlLabel
+                control={
+                  <Switch checked={isPrivacyEnabled} onChange={handlePrivacyChange} color="primary" name="privacy" />
+                }
+                label={
+                  isPrivacyEnabled
+                    ? translate('app.camera-privacy-enabled-label')
+                    : translate('app.camera-privacy-disabled-label')
+                }
+              />
+            </FormControl>
+          </Box>
+          <Box sx={{ mt: 3 }}>
+            <FormControl component="fieldset">
+              <FormLabel component="label" color="primary">
+                {translate('app.alerts-severity-label')}:{' '}
+              </FormLabel>
+              <RadioGroup
+                row
+                aria-labelledby="demo-row-radio-buttons-group-label"
+                name="row-radio-buttons-group"
+                onChange={handleRadioChange}
+                value={severityValue}
+              >
+                {SEVERITY.map((item) => (
+                  <FormControlLabel key={item.value} value={item.value} control={<Radio />} label={item.label} />
+                ))}
+              </RadioGroup>
+            </FormControl>
+          </Box>
+          {user?.role === 'SUPER_ADMIN' && (
+            <Box sx={{ mt: 3, display: 'flex', alignItems: 'center' }}>
+              <FormControl component="fieldset">
+                <FormLabel component="label" color="primary">
+                  {translate('app.camera-extra-config-label')}:{' '}
+                </FormLabel>
+                <TextareaAutosize
+                  aria-label="extra-config"
+                  minRows={3}
+                  value={extraConfig}
+                  style={{ minHeight: 30, minWidth: 350, marginTop: 8 }}
+                  onChange={handleExtraConfigChange}
+                />
+              </FormControl>
+            </Box>
+          )}
+        </>
+      )}
+
       <Box sx={{ mt: 3 }}>
         <FormControl component="fieldset">
           <div>
@@ -434,22 +597,6 @@ export default function AppGeneralSettingsTab(props) {
             )}
         </FormControl>
       </Box>
-      {user?.role === 'SUPER_ADMIN' && (
-        <Box sx={{ mt: 3, display: 'flex', alignItems: 'center' }}>
-          <FormControl component="fieldset">
-            <FormLabel component="label" color="primary">
-              {translate('app.camera-extra-config-label')}:{' '}
-            </FormLabel>
-            <TextareaAutosize
-              aria-label="extra-config"
-              minRows={3}
-              value={extraConfig}
-              style={{ minHeight: 30, minWidth: 350, marginTop: 8 }}
-              onChange={handleExtraConfigChange}
-            />
-          </FormControl>
-        </Box>
-      )}
       <Stack spacing={3} alignItems="flex-end">
         <Box sx={{ display: 'flex' }}>
           <Button onClick={onCancel} sx={{ mr: 1 }}>

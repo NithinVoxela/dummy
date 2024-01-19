@@ -371,6 +371,11 @@
     "unit-update-success": "ユニットは正常に更新されました",
     "unit-delete-success": "ユニットは正常に削除されました",
     "recording-duration-label": "録音",
-    "recording-bitrate-label": "ビットレート"
+    "recording-bitrate-label": "ビットレート",
+    "region-exit-contourInsideROIThreshold-label": "ROI しきい値の内側の輪郭",
+    "region-exit-contourCrossROIThreshold-label": "等高線クロス ROI しきい値",
+    "region-exit-snooze-label": "スヌーズ",
+    "region-exit-maxMergedContours-label": "最大結合輪郭数",
+    "region-exit-exit-sides-label": "出口側"
   }
 }

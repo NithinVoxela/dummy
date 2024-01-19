@@ -371,6 +371,11 @@
     "unit-update-success": "Unit updated successfully",
     "unit-delete-success": "Unit deleted Successfully",
     "recording-duration-label": "Recording",
-    "recording-bitrate-label": "Bitrate"
+    "recording-bitrate-label": "Bitrate",
+    "region-exit-contourInsideROIThreshold-label": "Contour Inside ROI Threshold",
+    "region-exit-contourCrossROIThreshold-label": "Contour Cross ROI Threshold",
+    "region-exit-snooze-label": "Snooze",
+    "region-exit-maxMergedContours-label": "Max Merged Contours",
+    "region-exit-exit-sides-label": "Exit Sides"
   }
 }

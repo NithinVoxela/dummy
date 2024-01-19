@@ -31,6 +31,13 @@ import {
 // sections
 import { AppGeneralSettingsTab, AnnotationTab, RecordingGeneralSettingsTab } from '../../sections/cameras';
 import AppScheduleTab from '../../sections/cameras/AppScheduleTab';
+import {
+  PERSON_APP_CODE,
+  WAKEUP_APP_CODE,
+  FALL_APP_CODE,
+  REGION_EXIT_APP_CODE,
+  RECORDING_APP_CODE,
+} from '../../sections/common/CommonConstants';
 
 // ----------------------------------------------------------------------
 
@@ -179,74 +186,92 @@ const CameraAppSettings = () => {
 
   const isBlocking = () => isFormUpdated;
 
-  const APP_TABS =
-    appCode === 'A001' || appCode === 'A003' || appCode === 'A004'
-      ? [
-          {
-            value: 'general',
-            label: translate('app.camera-app-general-tab'),
-            icon: <Iconify icon={'codicon:settings'} width={20} height={20} />,
-            component: (
-              <AppGeneralSettingsTab
-                currentCamera={cameraDetails}
-                translate={translate}
-                handleSave={handleSaveApp}
-                onCancel={onCancel}
-                appId={appId}
-                setIsFormUpdated={setIsFormUpdated}
-              />
-            ),
-          },
-          {
-            value: 'schedule',
-            label: translate('app.camera-app-schedule-tab'),
-            icon: <Iconify icon={'mdi:calendar-clock'} width={20} height={20} />,
-            component: (
-              <AppScheduleTab
-                translate={translate}
-                updateAppScheduleRequest={updateAppScheduleRequest}
-                appId={appId}
-                schedularList={schedularList}
-                resetSchedule={resetCameraAppSchedule}
-                onCancel={onCancel}
-                setIsFormUpdated={setIsFormUpdated}
-              />
-            ),
-          },
-          {
-            value: 'region',
-            label: translate('app.camera-region-of-intrest'),
-            icon: <Iconify icon={'carbon:area-custom'} width={20} height={20} />,
-            component: (
-              <AnnotationTab
-                translate={translate}
-                handleSave={handleSaveApp}
-                currentCamera={cameraDetails}
-                appId={appId}
-                onCancel={onCancel}
-                setIsFormUpdated={setIsFormUpdated}
-                camId={cameraId}
-              />
-            ),
-          },
-        ]
-      : [
-          {
-            value: 'general',
-            label: translate('app.camera-app-general-tab'),
-            icon: <Iconify icon={'codicon:settings'} width={20} height={20} />,
-            component: (
-              <RecordingGeneralSettingsTab
-                currentCamera={cameraDetails}
-                translate={translate}
-                handleSave={handleSaveApp}
-                onCancel={onCancel}
-                appId={appId}
-                setIsFormUpdated={setIsFormUpdated}
-              />
-            ),
-          },
-        ];
+  const getAppTabs = () => {
+    const APP_TABS = [];
+    if (
+      appCode === PERSON_APP_CODE ||
+      appCode === WAKEUP_APP_CODE ||
+      appCode === FALL_APP_CODE ||
+      appCode === REGION_EXIT_APP_CODE
+    ) {
+      APP_TABS.push({
+        value: 'general',
+        label: translate('app.camera-app-general-tab'),
+        icon: <Iconify icon={'codicon:settings'} width={20} height={20} />,
+        component: (
+          <AppGeneralSettingsTab
+            currentCamera={cameraDetails}
+            translate={translate}
+            handleSave={handleSaveApp}
+            onCancel={onCancel}
+            appId={appId}
+            appCode={appCode}
+            setIsFormUpdated={setIsFormUpdated}
+          />
+        ),
+      });
+    } else if (appCode === RECORDING_APP_CODE) {
+      APP_TABS.push({
+        value: 'general',
+        label: translate('app.camera-app-general-tab'),
+        icon: <Iconify icon={'codicon:settings'} width={20} height={20} />,
+        component: (
+          <RecordingGeneralSettingsTab
+            currentCamera={cameraDetails}
+            translate={translate}
+            handleSave={handleSaveApp}
+            onCancel={onCancel}
+            appId={appId}
+            setIsFormUpdated={setIsFormUpdated}
+          />
+        ),
+      });
+    }
+
+    if (
+      appCode === PERSON_APP_CODE ||
+      appCode === WAKEUP_APP_CODE ||
+      appCode === FALL_APP_CODE ||
+      appCode === REGION_EXIT_APP_CODE
+    ) {
+      APP_TABS.push({
+        value: 'schedule',
+        label: translate('app.camera-app-schedule-tab'),
+        icon: <Iconify icon={'mdi:calendar-clock'} width={20} height={20} />,
+        component: (
+          <AppScheduleTab
+            translate={translate}
+            updateAppScheduleRequest={updateAppScheduleRequest}
+            appId={appId}
+            schedularList={schedularList}
+            resetSchedule={resetCameraAppSchedule}
+            onCancel={onCancel}
+            setIsFormUpdated={setIsFormUpdated}
+          />
+        ),
+      });
+      APP_TABS.push({
+        value: 'region',
+        label: translate('app.camera-region-of-intrest'),
+        icon: <Iconify icon={'carbon:area-custom'} width={20} height={20} />,
+        component: (
+          <AnnotationTab
+            translate={translate}
+            handleSave={handleSaveApp}
+            currentCamera={cameraDetails}
+            appId={appId}
+            onCancel={onCancel}
+            setIsFormUpdated={setIsFormUpdated}
+            camId={cameraId}
+          />
+        ),
+      });
+    }
+
+    return APP_TABS;
+  };
+
+  const APP_TABS = getAppTabs();
 
   const cameraName = cameraDetails?.name ? cameraDetails.name : '';
   usePrompt(translate('app.annotation-confirmation-text-label'), isBlocking());
