@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Router from './routes';
 // theme
 import ThemeProvider from './theme';
+
 // components
 import RtlLayout from './components/RtlLayout';
 import { ChartStyle } from './components/chart';
